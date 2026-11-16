@@ -2,7 +2,7 @@
 
 > **สรุปภาษาไทย:** Hamster Nest คือเว็บรวมผลงานหัวกะทิของบริษัท Hamster Hub ให้ความรู้สึกแบบ itch.io มี 4 หมวด (Game, Web, IoT, Idea) ค้นหาง่ายสำหรับนักลงทุน ทุกผลงานต้องลงอัปเดตเรื่อย ๆ ("สายน้ำ ไม่ใช่หนองน้ำนิ่ง") งานที่อัปเดตบ่อยจะถูกดันขึ้นบน และหน้าโปรไฟล์ต้องทำให้คนอยากทักไปคุยกับเจ้าของผลงาน
 > ตอนนี้หน้าแรก, หน้าผลงาน และหน้าโปรไฟล์สร้างเสร็จและผ่านการอนุมัติแล้ว (ข้อมูลยังเป็นข้อมูลสมมติ ยังไม่มี backend)
-> session ใหม่: อ่านไฟล์นี้ให้จบก่อนเริ่มงาน แล้วทำงานตามวิธี "Manager / Researcher / Coder" ด้านล่าง
+> session ใหม่: อ่าน `docs/WORKFLOW.md` (ระบบและวิธีคิดทั้งหมด) และไฟล์นี้ให้จบก่อนเริ่มงาน
 
 Last updated: 16 Nov 2026. Branch: `claude/hamster-nest-portfolio-8gihhk`.
 
@@ -19,6 +19,8 @@ Last updated: 16 Nov 2026. Branch: `claude/hamster-nest-portfolio-8gihhk`.
 - **Maker profiles.** Show the latest update, past work, awards, background, and a personal motto that shows their attitude.
 
 ## 2. How the owner wants us to work (important)
+
+The full version, with the setup, tools, agent habits and the owner's own copy and design prompt, is in **`docs/WORKFLOW.md`**. Short version:
 
 Talk to the owner in **Thai** (ฉัน/คุณ). Work as three roles:
 
@@ -135,4 +137,6 @@ flow = Σ w(type) × 2^(−ageDays/14)
 - GitHub push works now. Earlier in the first session it failed with a 403 until access was fixed.
 - The owner's PC is DESKTOP-GEEKQH2, with the project folder at `D:\Hamster nest`. Cloud sessions could not attach that folder through Remote Control. To work on files there, run a session on that PC, or clone this branch into the folder.
 - Playwright and Chromium are pre-installed in cloud containers. Don't run `playwright install`.
+- The environment's setup script runs `npm ci` in the checkout, so a fresh session can build and test right away. It was saved at the end of the first session and hasn't been seen running on a fresh container yet. If `node_modules` is missing, run `npm ci`.
+- Screenshot and compare tools are in `tools/` (see `docs/WORKFLOW.md`, section 5).
 - Commit messages end with the attribution lines the harness gives you.

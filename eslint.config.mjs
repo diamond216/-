@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Dev scripts that run under plain Node with the pre-installed Playwright.
+    "tools/**",
   ]),
 ]);
 
