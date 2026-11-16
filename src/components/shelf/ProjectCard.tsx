@@ -1,16 +1,28 @@
 "use client";
 
 import { CardBody, CardContainer } from "@/components/ui/3d-card";
+import Link from "next/link";
+import type { ReactNode } from "react";
 import type { Listing } from "@/domain";
 import { ACTIVITY_WINDOW_DAYS } from "@/services/shelf";
 import { Avatar } from "../common/Avatar";
+import { paths } from "../common/links";
 import { TimeAgo } from "../common/TimeAgo";
 import { useLocalizer, useNest } from "../providers/NestProvider";
 import { ActivityStrip } from "./ActivityStrip";
 import { Cover } from "./Cover";
 
-/** A card in "Fresh updates". */
-export function ProjectCard({ listing }: { listing: Listing }) {
+/** A project card: in "Fresh updates" on the shelf, and on a maker's profile with a different footer. */
+export function ProjectCard({
+  listing,
+  footer,
+  tagLimit = 2,
+}: {
+  listing: Listing;
+  /** Replaces the maker line at the bottom. The latest update's time still shows. */
+  footer?: ReactNode;
+  tagLimit?: number;
+}) {
   const localizer = useLocalizer();
   const { clock } = useNest();
   const { project, maker, activity } = listing;
@@ -28,10 +40,10 @@ export function ProjectCard({ listing }: { listing: Listing }) {
           </Cover>
           <div className="card__body">
             <h3>
-              <a href="#">{project.name}</a>
+              <Link href={paths.project(project.id)}>{project.name}</Link>
               <span className="badge mono">{project.stage.badge}</span>
             </h3>
-            <p className="tags">{project.hashtags().join(" ")}</p>
+            <p className="tags">{project.hashtags().slice(0, tagLimit).join(" ")}</p>
             <p className="blurb">{localizer.text(project.blurb)}</p>
             <p className="pulse-row">
               <ActivityStrip days={activity.dailyStrip(ACTIVITY_WINDOW_DAYS, now)} />
@@ -41,8 +53,14 @@ export function ProjectCard({ listing }: { listing: Listing }) {
             </p>
           </div>
           <p className="by">
-            <Avatar maker={maker} />
-            <span>{maker.name}</span>
+            {footer ?? (
+              <>
+                <Avatar maker={maker} />
+                <Link className="by__name" href={paths.maker(maker.id)}>
+                  {maker.name}
+                </Link>
+              </>
+            )}
             {latest && <TimeAgo className="mono" at={latest.postedAt} />}
           </p>
         </article>

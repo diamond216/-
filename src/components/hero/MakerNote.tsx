@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
+import { paths } from "../common/links";
 import type { MakerSpotlight } from "@/services/shelf";
 import { Avatar } from "../common/Avatar";
 import { ContactDialog } from "../contact/ContactDialog";
@@ -20,7 +22,11 @@ export function MakerNote({ spotlight }: { spotlight: MakerSpotlight }) {
       <div className="who">
         <Avatar maker={maker} />
         <p>
-          <strong>{maker.name}</strong>
+          <strong>
+            <Link className="by__name" href={paths.maker(maker.id)}>
+              {maker.name}
+            </Link>
+          </strong>
           <span>
             {localizer.t("note.who", {
               role: localizer.text(maker.role),

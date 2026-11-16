@@ -1,9 +1,11 @@
 "use client";
 
 import { CardBody, CardContainer } from "@/components/ui/3d-card";
+import Link from "next/link";
 import type { Listing } from "@/domain";
 import { ACTIVITY_WINDOW_DAYS } from "@/services/shelf";
 import { Avatar } from "../common/Avatar";
+import { paths } from "../common/links";
 import { TimeAgo } from "../common/TimeAgo";
 import { useLocalizer, useNest } from "../providers/NestProvider";
 import { ActivityStrip } from "./ActivityStrip";
@@ -28,7 +30,7 @@ export function FeaturedCard({ listing, rank, big }: { listing: Listing; rank: n
           <div className="feat__body">
             <p className="mono meta">{meta}</p>
             <h3>
-              <a href="#">{project.name}</a>
+              <Link href={paths.project(project.id)}>{project.name}</Link>
             </h3>
             <p>{localizer.text(project.blurb)}</p>
             {big && (
@@ -45,7 +47,11 @@ export function FeaturedCard({ listing, rank, big }: { listing: Listing; rank: n
             <p className="by">
               <Avatar maker={maker} />
               <span>
-                <strong>{maker.name}</strong>
+                <strong>
+                  <Link className="by__name" href={paths.maker(maker.id)}>
+                    {maker.name}
+                  </Link>
+                </strong>
                 {big && localizer.t("card.byline", { name: maker.name, role: localizer.text(maker.role) })}
               </span>
               {latest && <TimeAgo className="mono" at={latest.postedAt} />}

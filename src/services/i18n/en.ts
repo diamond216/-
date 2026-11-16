@@ -1,6 +1,8 @@
 import type { RelativeAge } from "./RelativeAge";
 
 const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`;
+const DAY_WORDS: Readonly<Record<number, string>> = { 1: "a day", 2: "two days", 3: "three days", 7: "a week" };
+const dayWords = (days: number) => DAY_WORDS[days] ?? `${days} days`;
 
 /**
  * Every English string in the interface. This file is also the shape the Thai
@@ -14,6 +16,7 @@ export const en = {
   "brand.home": "Hamster Nest home",
   "brand.by": "from Hamster Hub",
   "skip.shelf": "Skip to the projects",
+  "skip.main": "Skip to the main content",
   "nav.label": "Main",
   "nav.browse": "Browse",
   "nav.makers": "Makers",
@@ -136,6 +139,76 @@ export const en = {
   "foot.contact": "Get in touch",
   "foot.note": "Design draft · projects, names and numbers are placeholders",
 
+  "page.project.title": (p: { name: string }) => `${p.name} — Hamster Nest`,
+  "page.maker.title": (p: { name: string }) => `${p.name} — Hamster Nest`,
+  "crumb.label": "You are here",
+
+  "project.status": (p: { count: number; days: number; ago: string }) =>
+    `${plural(p.count, "update", "updates")} in ${p.days} days · last one ${p.ago}`,
+  "project.quiet": "No updates yet",
+  "project.position": (p: { n: number }) => `No. ${p.n} this week`,
+  "project.demo": "Try the demo",
+  "project.follow": "Tell me when this updates",
+  "project.following": "You'll hear when this updates",
+  "project.followers": (p: { count: number }) => `${p.count} ${p.count === 1 ? "person follows" : "people follow"} this`,
+  "stream.title": "What's been happening",
+  "stream.filter": "Show updates of one kind",
+  "stream.all": (p: { count: number }) => `All ${p.count}`,
+  "stream.replies": (p: { count: number }): string => (p.count === 1 ? "reply" : "replies"),
+  "stream.readReply": "Read and reply",
+  "stream.older": (p: { count: number }) => `Show ${p.count} older ${p.count === 1 ? "update" : "updates"}`,
+  "money.title": "The money part",
+  "money.lead": "Written by the maker, checked by Hamster Hub. If a number changes, it shows up in the updates.",
+  "money.earns": "How it earns",
+  "money.owners": "Who owns what",
+  "money.raising": "Is it raising?",
+  "money.raisingYes": (p: { amount: string; purpose: string }) => `Yes. **${p.amount}** ${p.purpose}`,
+  "money.raisingNo": "Not right now.",
+  "money.spent": "Spent so far",
+  "money.earned": "Earned so far",
+  "money.checked": (p: { date: string }) => `Checked by Hamster Hub on ${p.date}.`,
+  "money.breakdown": "See the full breakdown",
+  "hub.title": "Hamster Hub's part in this",
+  "hub.what": "What we check before a project goes up",
+  "tried.title": "Who's tried it",
+  "tried.lead": "People who played it, used it, or put money in, and said we could name them.",
+  "maker.madeBy": "Made by",
+  "maker.roleYears": (p: { role: string; years: number }) => `${p.role} · ${plural(p.years, "year", "years")} at Hamster Hub`,
+  "maker.replyShort": (p: { days: number }) => `Usually writes back within ${dayWords(p.days)}`,
+  "maker.more": (p: { name: string }) => `More about ${p.name}`,
+  "facts.title": "The basics",
+  "facts.category": "Category",
+  "facts.genre": "Genre",
+  "facts.stage": "How far along",
+  "facts.started": "Started",
+  "facts.platforms": "Runs on",
+  "facts.team": "Team",
+
+  "profile.role": (p: { role: string; year: number }) => `Maker · ${p.role} · At Hamster Hub since ${p.year}`,
+  "profile.talk": "Things I'm happy to talk about",
+  "profile.topicPrefill": (p: { topic: string }) => `About “${p.topic}”: `,
+  "profile.portrait": "Photo goes here",
+  "profile.numbers": "In numbers",
+  "profile.projects": (p: { count: number }): string => (p.count === 1 ? "project" : "projects"),
+  "profile.updates": (p: { days: number }) => `updates in ${p.days} days`,
+  "profile.awardsCount": (p: { count: number }): string => (p.count === 1 ? "award" : "awards"),
+  "profile.latest": (p: { name: string }) => `Latest from ${p.name}`,
+  "profile.readUpdate": "Read the update",
+  "profile.posted": (p: { active: number; days: number }) => `Posted on ${p.active} of the last ${p.days} days`,
+  "profile.made": (p: { name: string }) => `What ${p.name}'s made`,
+  "profile.earlier": "Earlier",
+  "profile.status.building": "Working on it now",
+  "profile.status.live": "Out now, still patched",
+  "profile.status.paused": "Taking a break",
+  "profile.story": "How I got here",
+  "profile.awards": "Awards and mentions",
+  "profile.ask": (p: { name: string }) => `Got a question for ${p.name}? Ask it.`,
+  "profile.askBody": "A couple of lines is plenty. Hamster Hub gets a copy too, so nothing gets lost.",
+  "language.th": "Thai",
+  "language.en": "English",
+  "language.ja": "Japanese",
+  "language.zh": "Chinese",
+
   "contact.title": (p: { name: string }) => `Write to ${p.name}`,
   "contact.name": "Your name",
   "contact.reach": (p: { name: string }) => `Where can ${p.name} reach you?`,
@@ -169,6 +242,8 @@ export const en = {
         return "yesterday";
       case "day":
         return `${age.count} days ago`;
+      case "week":
+        return `${plural(age.count, "week", "weeks")} ago`;
     }
   },
   /** "40 min", for the feed, where space is tight. */
@@ -184,6 +259,8 @@ export const en = {
         return "Yesterday";
       case "day":
         return `${age.count} days`;
+      case "week":
+        return plural(age.count, "wk", "wks");
     }
   },
   /** "2 hrs ago", at the start of a sentence. */
@@ -199,6 +276,8 @@ export const en = {
         return "Yesterday";
       case "day":
         return `${age.count} days ago`;
+      case "week":
+        return `${plural(age.count, "week", "weeks")} ago`;
     }
   },
 };

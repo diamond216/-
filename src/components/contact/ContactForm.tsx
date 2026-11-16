@@ -14,10 +14,20 @@ import { useLocalizer, useNest } from "../providers/NestProvider";
 type Status = "writing" | "sending" | "sent" | "failed";
 
 /** The form itself. It only knows a validator and a MessageSender; where messages go is not its business. */
-export function ContactForm({ maker, noteId, onDone }: { maker: Maker; noteId: string; onDone(): void }) {
+export function ContactForm({
+  maker,
+  noteId,
+  initialBody = "",
+  onDone,
+}: {
+  maker: Maker;
+  noteId: string;
+  initialBody?: string;
+  onDone(): void;
+}) {
   const localizer = useLocalizer();
   const { contact } = useNest();
-  const [draft, setDraft] = useState<MessageDraft>(() => emptyDraft(maker.id));
+  const [draft, setDraft] = useState<MessageDraft>(() => ({ ...emptyDraft(maker.id), body: initialBody }));
   const [result, setResult] = useState<ValidationResult | null>(null);
   const [status, setStatus] = useState<Status>("writing");
   const fields = useRef<Partial<Record<MessageField, HTMLElement | null>>>({});

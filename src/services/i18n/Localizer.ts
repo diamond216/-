@@ -43,6 +43,25 @@ export class Localizer {
     return this.t(`time.${style}`, RelativeAge.between(then, now));
   }
 
+  /** "3 Nov 2026". Thai uses the Gregorian year too, so dates match the years on the timeline. */
+  date(value: Date): string {
+    return new Intl.DateTimeFormat(this.intlLocale(), { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(value);
+  }
+
+  /** "February 2026". */
+  monthYear(value: Date): string {
+    return new Intl.DateTimeFormat(this.intlLocale(), { month: "long", year: "numeric", timeZone: "UTC" }).format(value);
+  }
+
+  /** "Roguelike, Co-op". */
+  list(items: readonly string[]): string {
+    return items.join(", ");
+  }
+
+  private intlLocale(): string {
+    return this.locale === "th" ? "th-TH-u-ca-gregory" : "en-GB";
+  }
+
   /** Two digits, the way rank badges write numbers. */
   twoDigits(count: number): string {
     return String(count).padStart(2, "0");

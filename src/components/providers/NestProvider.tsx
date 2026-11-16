@@ -44,10 +44,9 @@ export function NestProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const root = document.documentElement;
     root.lang = locale;
-    document.title = preferences.localizer.t("meta.title");
     if (theme === "night") root.dataset.theme = "night";
     else delete root.dataset.theme;
-  }, [locale, theme, preferences.localizer]);
+  }, [locale, theme]);
 
   return (
     <NestContext.Provider value={nest}>

@@ -1,6 +1,9 @@
 import type { Messages } from "./en";
 import type { RelativeAge } from "./RelativeAge";
 
+const THAI_DAY_WORDS: Readonly<Record<number, string>> = { 1: "หนึ่งวัน", 2: "สองวัน", 3: "สามวัน", 7: "หนึ่งสัปดาห์" };
+const thaiDayWords = (days: number) => THAI_DAY_WORDS[days] ?? ` ${days} วัน`;
+
 /** Thai for every string in en.ts. Same keys, same shapes. */
 export const th: Messages = {
   "meta.title": "Hamster Nest — งานที่ยังไม่หยุดเดิน",
@@ -10,6 +13,7 @@ export const th: Messages = {
   "brand.home": "หน้าแรก Hamster Nest",
   "brand.by": "จาก Hamster Hub",
   "skip.shelf": "ข้ามไปดูผลงาน",
+  "skip.main": "ข้ามไปที่เนื้อหาหลัก",
   "nav.label": "เมนูหลัก",
   "nav.browse": "ดูผลงาน",
   "nav.makers": "คนทำงาน",
@@ -124,6 +128,75 @@ export const th: Messages = {
   "foot.contact": "ติดต่อเรา",
   "foot.note": "ฉบับร่างดีไซน์ · ผลงาน ชื่อ และตัวเลขเป็นข้อมูลสมมติ",
 
+  "page.project.title": (p) => `${p.name} — Hamster Nest`,
+  "page.maker.title": (p) => `${p.name} — Hamster Nest`,
+  "crumb.label": "ตอนนี้คุณอยู่ที่",
+
+  "project.status": (p) => `${p.count} อัปเดตใน ${p.days} วัน · ล่าสุด${p.ago}`,
+  "project.quiet": "ยังไม่มีอัปเดต",
+  "project.position": (p) => `อันดับ ${p.n} ของสัปดาห์นี้`,
+  "project.demo": "ลองเล่นเดโม",
+  "project.follow": "บอกฉันเมื่องานนี้มีอัปเดต",
+  "project.following": "คุณจะได้รู้ทุกครั้งที่งานนี้มีอัปเดต",
+  "project.followers": (p) => `มีคนติดตาม ${p.count} คน`,
+  "stream.title": "ช่วงนี้มีอะไรเกิดขึ้นบ้าง",
+  "stream.filter": "ดูเฉพาะอัปเดตบางประเภท",
+  "stream.all": (p) => `ทั้งหมด ${p.count}`,
+  "stream.replies": () => "ตอบกลับ",
+  "stream.readReply": "อ่านและตอบกลับ",
+  "stream.older": (p) => `ดูอัปเดตเก่ากว่านี้อีก ${p.count} รายการ`,
+  "money.title": "เรื่องเงิน",
+  "money.lead": "คนทำเป็นคนเขียน Hamster Hub เป็นคนตรวจ ถ้าตัวเลขไหนเปลี่ยน จะมีบอกไว้ในอัปเดต",
+  "money.earns": "หารายได้ยังไง",
+  "money.owners": "ใครถือส่วนไหน",
+  "money.raising": "กำลังระดมทุนไหม",
+  "money.raisingYes": (p) => `ใช่ **${p.amount}** ${p.purpose}`,
+  "money.raisingNo": "ตอนนี้ยังไม่ระดมทุน",
+  "money.spent": "ใช้ไปแล้ว",
+  "money.earned": "หาได้แล้ว",
+  "money.checked": (p) => `Hamster Hub ตรวจเมื่อ ${p.date}`,
+  "money.breakdown": "ดูรายละเอียดทั้งหมด",
+  "hub.title": "ส่วนที่ Hamster Hub ลงไป",
+  "hub.what": "เราตรวจอะไรบ้างก่อนงานขึ้นชั้น",
+  "tried.title": "ใครเคยลองแล้วบ้าง",
+  "tried.lead": "คนที่เคยเล่น เคยใช้ หรือลงเงินไปแล้ว และยินดีให้เราใส่ชื่อ",
+  "maker.madeBy": "ทำโดย",
+  "maker.roleYears": (p) => `${p.role} · อยู่ Hamster Hub มา ${p.years} ปี`,
+  "maker.replyShort": (p) => `ปกติตอบกลับภายใน${thaiDayWords(p.days)}`,
+  "maker.more": (p) => `ดูเพิ่มเติมเกี่ยวกับ${p.name}`,
+  "facts.title": "ข้อมูลพื้นฐาน",
+  "facts.category": "หมวด",
+  "facts.genre": "แนว",
+  "facts.stage": "งานไปถึงไหนแล้ว",
+  "facts.started": "เริ่มเมื่อ",
+  "facts.platforms": "ใช้ได้บน",
+  "facts.team": "ทีม",
+
+  "profile.role": (p) => `คนทำงาน · ${p.role} · อยู่ Hamster Hub ตั้งแต่ปี ${p.year}`,
+  "profile.talk": "เรื่องที่ยินดีคุยด้วย",
+  "profile.topicPrefill": (p) => `เรื่อง “${p.topic}”: `,
+  "profile.portrait": "รูปจะอยู่ตรงนี้",
+  "profile.numbers": "เป็นตัวเลข",
+  "profile.projects": () => "ผลงาน",
+  "profile.updates": (p) => `อัปเดตใน ${p.days} วัน`,
+  "profile.awardsCount": () => "รางวัล",
+  "profile.latest": (p) => `ล่าสุดจาก${p.name}`,
+  "profile.readUpdate": "อ่านอัปเดตนี้",
+  "profile.posted": (p) => `ลงอัปเดต ${p.active} วัน จาก ${p.days} วันที่ผ่านมา`,
+  "profile.made": (p) => `ผลงานของ${p.name}`,
+  "profile.earlier": "ก่อนหน้านี้",
+  "profile.status.building": "กำลังทำอยู่ตอนนี้",
+  "profile.status.live": "วางขายแล้ว ยังอัปเดตอยู่",
+  "profile.status.paused": "พักอยู่",
+  "profile.story": "เส้นทางที่ผ่านมา",
+  "profile.awards": "รางวัลและการกล่าวถึง",
+  "profile.ask": (p) => `มีอะไรอยากถาม${p.name}ไหม ถามได้เลย`,
+  "profile.askBody": "สองสามบรรทัดก็พอ Hamster Hub จะได้สำเนาด้วย ข้อความจะได้ไม่ตกหล่น",
+  "language.th": "ไทย",
+  "language.en": "อังกฤษ",
+  "language.ja": "ญี่ปุ่น",
+  "language.zh": "จีน",
+
   "contact.title": (p) => `เขียนถึง${p.name}`,
   "contact.name": "ชื่อของคุณ",
   "contact.reach": (p) => `ให้${p.name}ติดต่อกลับทางไหนดี`,
@@ -156,6 +229,8 @@ export const th: Messages = {
         return "เมื่อวาน";
       case "day":
         return `${age.count} วันที่แล้ว`;
+      case "week":
+        return `${age.count} สัปดาห์ที่แล้ว`;
     }
   },
   "time.short": (age: RelativeAge) => {
@@ -170,6 +245,8 @@ export const th: Messages = {
         return "เมื่อวาน";
       case "day":
         return `${age.count} วัน`;
+      case "week":
+        return `${age.count} สัปดาห์`;
     }
   },
   "time.sentence": (age: RelativeAge) => {
@@ -184,6 +261,8 @@ export const th: Messages = {
         return "เมื่อวาน";
       case "day":
         return `เมื่อ ${age.count} วันก่อน`;
+      case "week":
+        return `เมื่อ ${age.count} สัปดาห์ก่อน`;
     }
   },
 };

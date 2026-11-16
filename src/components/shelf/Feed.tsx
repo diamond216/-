@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import type { FeedEntry } from "@/services/shelf";
+import { paths } from "../common/links";
 import { TimeAgo } from "../common/TimeAgo";
 import { useLocalizer } from "../providers/NestProvider";
 import { RevealList } from "./RevealList";
@@ -29,7 +31,12 @@ export function Feed({ entries }: { entries: readonly FeedEntry[] }) {
               </span>
             </p>
             <p>
-              <strong>{listing.project.name}</strong> <span>{localizer.text(update.summary)}</span>
+              <strong>
+                <Link className="feed__link" href={paths.update(listing.project.id, update.id)}>
+                  {listing.project.name}
+                </Link>
+              </strong>{" "}
+              <span>{localizer.text(update.summary)}</span>
             </p>
           </>
         )}

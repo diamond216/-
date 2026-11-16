@@ -4,10 +4,10 @@ export type CategoryId = "game" | "web" | "iot" | "idea";
 
 /** One of the four shelves a project can sit on. */
 export class Category {
-  static readonly GAME = new Category("game", new LocalizedText("Games", "เกม"), "Game");
-  static readonly WEB = new Category("web", new LocalizedText("Web", "เว็บ"), "Web");
-  static readonly IOT = new Category("iot", LocalizedText.same("IoT"), "IoT");
-  static readonly IDEA = new Category("idea", new LocalizedText("Ideas", "ไอเดีย"), "Idea");
+  static readonly GAME = new Category("game", new LocalizedText("Games", "เกม"), "Game", new LocalizedText("Game", "เกม"));
+  static readonly WEB = new Category("web", new LocalizedText("Web", "เว็บ"), "Web", new LocalizedText("Web app", "เว็บแอป"));
+  static readonly IOT = new Category("iot", LocalizedText.same("IoT"), "IoT", new LocalizedText("IoT", "IoT"));
+  static readonly IDEA = new Category("idea", new LocalizedText("Ideas", "ไอเดีย"), "Idea", new LocalizedText("Idea", "ไอเดีย"));
 
   private static readonly registry: readonly Category[] = [
     Category.GAME,
@@ -22,6 +22,8 @@ export class Category {
     readonly label: LocalizedText,
     /** Singular chip shown on a cover. Stays in English in both languages. */
     readonly tag: string,
+    /** One of them, in a sentence or a facts table: "Game". */
+    readonly singular: LocalizedText,
   ) {}
 
   static all(): readonly Category[] {
