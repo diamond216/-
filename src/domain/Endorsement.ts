@@ -32,6 +32,8 @@ export interface EndorsementProps {
   author: LocalizedText;
   authorRole: LocalizedText;
   kind: EndorsementKind;
+  /** The same quote, trimmed for a page where the project is already named ("the demo" rather than "the Burrow Knights demo"). */
+  quoteInContext?: LocalizedText;
   /** The project they're talking about, when it's about one in particular. */
   projectId?: string;
   /** The maker they're talking about, for quotes about a person rather than a project. */
@@ -47,6 +49,7 @@ export class Endorsement {
   readonly author: LocalizedText;
   readonly authorRole: LocalizedText;
   readonly kind: EndorsementKind;
+  readonly quoteInContext: LocalizedText;
   readonly projectId?: string;
   readonly makerId?: string;
   readonly namedWithConsent: boolean;
@@ -57,6 +60,7 @@ export class Endorsement {
     this.author = props.author;
     this.authorRole = props.authorRole;
     this.kind = props.kind;
+    this.quoteInContext = props.quoteInContext ?? props.quote;
     this.projectId = props.projectId;
     this.makerId = props.makerId;
     this.namedWithConsent = props.namedWithConsent;

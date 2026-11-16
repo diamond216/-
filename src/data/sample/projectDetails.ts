@@ -43,8 +43,49 @@ export interface ProjectDetailSeed {
 const HUB: Bilingual = { en: "Hamster Hub", th: "Hamster Hub" };
 const ALL_CHECKS = ["team", "build", "money"] as const;
 
+export interface PostWording {
+  title: Bilingual;
+  body: Bilingual;
+}
+
+/** Extra wordings for the kinds of post that turn up most, so a stream doesn't repeat itself. */
+export const postVariants: Readonly<Partial<Record<UpdateTypeId, readonly PostWording[]>>> = {
+  patch: [
+    {
+      title: { en: "Fewer crashes on older phones", th: "แครชน้อยลงบนมือถือรุ่นเก่า" },
+      body: {
+        en: "Three people wrote in about the same crash. It's fixed, and the fix is in everyone's copy now.",
+        th: "มีสามคนเขียนมาบอกเรื่องแครชเดียวกัน แก้แล้ว และทุกคนได้ตัวแก้ไปแล้ว",
+      },
+    },
+    {
+      title: { en: "Tidying up after the last release", th: "เก็บงานหลังออกเวอร์ชันล่าสุด" },
+      body: {
+        en: "Nothing new to see. A few labels were wrong and one button did the opposite of what it said.",
+        th: "ไม่มีอะไรใหม่ให้ดู แค่ป้ายบางอันผิด และมีปุ่มหนึ่งที่ทำตรงข้ามกับที่เขียนไว้",
+      },
+    },
+  ],
+  devlog: [
+    {
+      title: { en: "What I'd do differently", th: "ถ้าเริ่มใหม่จะทำอะไรต่างไป" },
+      body: {
+        en: "Two weeks in the wrong direction, written down so I don't do it again.",
+        th: "สองสัปดาห์ที่เดินผิดทาง จดไว้จะได้ไม่พลาดซ้ำ",
+      },
+    },
+    {
+      title: { en: "Notes from this week's testers", th: "บันทึกจากคนทดสอบสัปดาห์นี้" },
+      body: {
+        en: "Five people tried it. Here's what they got stuck on, and what I changed because of it.",
+        th: "มีคนลองห้าคน มาเล่าว่าติดตรงไหนกันบ้าง และเปลี่ยนอะไรไปเพราะเรื่องนั้น",
+      },
+    },
+  ],
+};
+
 /** What a title and paragraph say when nobody wrote one specially. */
-export const postTemplates: Readonly<Record<UpdateTypeId, { title: Bilingual; body: Bilingual }>> = {
+export const postTemplates: Readonly<Record<UpdateTypeId, PostWording>> = {
   release: {
     title: { en: "A new version is out", th: "เวอร์ชันใหม่ออกแล้ว" },
     body: {

@@ -676,7 +676,8 @@
   .ask p { margin-top: 10px; font-size: 14.5px; }
 
   /* ---- additions for the built pages (not in the draft) ---- */
-  .chip { color: var(--ink); background: none; line-height: 1.4; }
+  .chip:not(.chip--accent) { color: var(--ink); background: none; }
+  .chip { line-height: 1.4; }
   button.chip { cursor: pointer; }
   .stream__head .chips .chip { padding: 3px 8px; }
   .stream .feed__meta { gap: 6px; }

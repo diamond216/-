@@ -17,7 +17,7 @@ export function TriedSection({ endorsements }: { endorsements: readonly Endorsem
         {endorsements.map((endorsement) => (
           <figure key={endorsement.id}>
             <span className="kind mono">{localizer.text(endorsement.kind.label)}</span>
-            <blockquote>“{localizer.text(endorsement.quote)}”</blockquote>
+            <blockquote>“{localizer.text(endorsement.quoteInContext)}”</blockquote>
             <figcaption>
               <strong>{localizer.text(endorsement.author)}</strong> · {localizer.text(endorsement.authorRole)}
             </figcaption>

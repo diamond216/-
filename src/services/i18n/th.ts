@@ -132,7 +132,7 @@ export const th: Messages = {
   "page.maker.title": (p) => `${p.name} — Hamster Nest`,
   "crumb.label": "ตอนนี้คุณอยู่ที่",
 
-  "project.status": (p) => `${p.count} อัปเดตใน ${p.days} วัน · ล่าสุด${p.ago}`,
+  "project.status": (p) => `${p.count} อัปเดตใน ${p.days} วัน · ล่าสุด ${p.ago}`,
   "project.quiet": "ยังไม่มีอัปเดต",
   "project.position": (p) => `อันดับ ${p.n} ของสัปดาห์นี้`,
   "project.demo": "ลองเล่นเดโม",

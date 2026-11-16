@@ -38,7 +38,7 @@ import {
 import type { Repositories } from "../repositories";
 import { sampleGenres } from "./genres";
 import { makerStories, type MakerStorySeed } from "./makerStories";
-import { type LedgerSeed, postTemplates, projectDetails, type ProjectDetailSeed } from "./projectDetails";
+import { type LedgerSeed, postTemplates, postVariants, projectDetails, type ProjectDetailSeed } from "./projectDetails";
 import {
   type Bilingual,
   endorsementSeeds,
@@ -74,6 +74,7 @@ class SampleCatalogue {
               ...seed,
               kind: required(EndorsementKind.byId(seed.kind), `endorsement kind ${seed.kind}`),
               quote: text(seed.quote),
+              quoteInContext: seed.quoteInContext && text(seed.quoteInContext),
               author: text(seed.author),
               authorRole: text(seed.authorRole),
             }),
@@ -191,20 +192,22 @@ class SampleCatalogue {
           replies: post.replies,
         }),
     );
-    const older = seed.history.map(
-      ([daysAgo, typeId], index) =>
-        new ProjectUpdate({
+    const older = seed.history.map(([daysAgo, typeId], index) => {
+      // Rotate through the wordings for this kind of post, so neighbours in a stream differ.
+      const wordings = [postTemplates[typeId], ...(postVariants[typeId] ?? [])];
+      const wording = wordings[(index + projectIndex) % wordings.length];
+      return new ProjectUpdate({
           id: `${seed.id}-${daysAgo}d`,
           projectId: seed.id,
           type: type(typeId),
           postedAt: postedDaysAgo(daysAgo),
           summary: text(historyTemplates[typeId]),
-          title: text(postTemplates[typeId].title),
-          body: text(postTemplates[typeId].body),
-          hearts: 2 + ((daysAgo + index * 3) % 9),
-          replies: (daysAgo + index) % 4,
-        }),
-    );
+        title: text(wording.title),
+        body: text(wording.body),
+        hearts: 2 + ((daysAgo + index * 3) % 9),
+        replies: (daysAgo + index) % 4,
+      });
+    });
     return [latest, ...written, ...older];
   }
 

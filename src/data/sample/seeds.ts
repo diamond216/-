@@ -57,6 +57,7 @@ export interface ProjectSeed {
 export interface EndorsementSeed {
   id: string;
   kind: "played" | "used" | "invested" | "colleague";
+  quoteInContext?: Bilingual;
   makerId?: string;
   quote: Bilingual;
   author: Bilingual;
@@ -172,8 +173,7 @@ export const projectSeeds: readonly ProjectSeed[] = [
     },
     history: [
       [1, "devlog"], [2, "patch"], [4, "field-test"], [5, "devlog"], [7, "feature"], [9, "patch"], [11, "devlog"],
-      [13, "media"], [15, "field-test"], [18, "release"], [21, "devlog"], [24, "patch"], [27, "devlog"],
-    ],
+      [13, "media"], [15, "field-test"], [18, "release"], [21, "devlog"], [24, "patch"], [27, "devlog"], [33, "devlog"], [38, "patch"], [44, "field-test"], [52, "devlog"], [61, "release"], [70, "devlog"], [83, "media"]],
   },
   {
     id: "nestboard",
@@ -201,8 +201,7 @@ export const projectSeeds: readonly ProjectSeed[] = [
     },
     history: [
       [1, "patch"], [3, "devlog"], [4, "patch"], [6, "release"], [8, "devlog"], [10, "patch"], [13, "feature"],
-      [16, "devlog"], [19, "patch"], [23, "devlog"], [27, "release"],
-    ],
+      [16, "devlog"], [19, "patch"], [23, "devlog"], [27, "release"], [34, "patch"], [41, "devlog"], [55, "release"], [68, "patch"], [80, "devlog"]],
   },
   {
     id: "burrow-knights",
@@ -262,8 +261,7 @@ export const projectSeeds: readonly ProjectSeed[] = [
     },
     history: [
       [2, "devlog"], [5, "feature"], [8, "patch"], [11, "devlog"], [14, "patch"], [18, "devlog"], [22, "feature"],
-      [26, "devlog"],
-    ],
+      [26, "devlog"], [36, "devlog"], [49, "feature"], [63, "devlog"]],
   },
   {
     id: "seed-dash",
@@ -294,8 +292,7 @@ export const projectSeeds: readonly ProjectSeed[] = [
     },
     history: [
       [3, "devlog"], [6, "devlog"], [9, "release"], [12, "feature"], [15, "media"], [19, "patch"], [23, "devlog"],
-      [27, "patch"],
-    ],
+      [27, "patch"], [35, "patch"], [42, "devlog"], [50, "patch"], [58, "media"], [66, "release"], [75, "patch"], [84, "devlog"]],
   },
   {
     id: "aquanode",
@@ -411,7 +408,7 @@ export const projectSeeds: readonly ProjectSeed[] = [
       hearts: 4,
       replies: 1,
     },
-    history: [[8, "release"], [14, "patch"], [20, "devlog"], [26, "patch"]],
+    history: [[8, "release"], [14, "patch"], [20, "devlog"], [26, "patch"], [39, "patch"], [57, "devlog"], [76, "release"]],
   },
   {
     id: "tunnel-tales",
@@ -644,6 +641,10 @@ export const endorsementSeeds: readonly EndorsementSeed[] = [
   {
     id: "voice-publisher",
     kind: "played",
+    quoteInContext: {
+      en: "I played the demo on a Friday and wrote to Pim on Monday. She'd already fixed the bug I found.",
+      th: "ผมเล่นเดโมวันศุกร์ แล้วเขียนไปหาพิมวันจันทร์ ปรากฏว่าบั๊กที่ผมเจอ เธอแก้ไปแล้ว",
+    },
     quote: {
       en: "I played the Burrow Knights demo on a Friday and wrote to Pim on Monday. She'd already fixed the bug I found.",
       th: "ผมเล่นเดโม Burrow Knights วันศุกร์ แล้วเขียนไปหาพิมวันจันทร์ ปรากฏว่าบั๊กที่ผมเจอ เธอแก้ไปแล้ว",
