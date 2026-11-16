@@ -30,12 +30,13 @@ export const th: Messages = {
   "search.hint": "กด / เพื่อค้นหา",
   "hero.busy": "หรือเริ่มจากแนวที่ช่วงนี้คึกคัก:",
 
-  "wheel.aria": (p) =>
-    `${p.updates} อัปเดตใน ${p.days} วันที่ผ่านมา มี ${p.today} ผลงานอัปเดตวันนี้ ${p.open} ผลงานเปิดรับการลงทุน และ ${p.paused} ผลงานพักอยู่`,
-  "wheel.caption": (p) => `อัปเดต / ${p.days} วัน`,
-  "wheel.today": "อัปเดตวันนี้",
-  "wheel.paused": "พักอยู่",
-  "wheel.open": "เปิดรับการลงทุน",
+  "donut.aria": (p) =>
+    `${p.updates} อัปเดตใน ${p.days} วันที่ผ่านมา มี ${p.today} ผลงานลงอัปเดตวันนี้ อีก ${p.open} ผลงานกำลังหานักลงทุน ${p.building} ผลงานกำลังก้มหน้าก้มตาทำ และ ${p.paused} ผลงานพักอยู่`,
+  "donut.caption": "อัปเดตเดือนนี้",
+  "donut.today": "ลงอัปเดตวันนี้",
+  "donut.open": "กำลังหานักลงทุน",
+  "donut.building": "ก้มหน้าก้มตาทำอยู่",
+  "donut.paused": "พักอยู่",
 
   "note.label": "โน้ตจากคนทำงาน",
   "note.who": (p) => `${p.role} · อยู่ Hamster Hub มา ${p.years} ปี · ${p.projects} ผลงาน`,

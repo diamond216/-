@@ -35,12 +35,13 @@ export const en = {
   "search.hint": "Press / to search",
   "hero.busy": "Or start with what's been busy lately:",
 
-  "wheel.aria": (p: { updates: number; days: number; today: number; open: number; paused: number }) =>
-    `${plural(p.updates, "update", "updates")} in the last ${p.days} days. ${plural(p.today, "project", "projects")} updated today, ${p.open} open to investment, ${p.paused} paused.`,
-  "wheel.caption": (p: { days: number }) => `UPDATES / ${p.days} DAYS`,
-  "wheel.today": "UPDATED TODAY",
-  "wheel.paused": "PAUSED",
-  "wheel.open": "OPEN TO INVESTMENT",
+  "donut.aria": (p: { updates: number; days: number; today: number; open: number; building: number; paused: number }) =>
+    `${plural(p.updates, "update", "updates")} in the last ${p.days} days. ${plural(p.today, "project", "projects")} posted something today, ${p.open} more are looking for investors, ${p.building} are heads down building, and ${p.paused} are taking a break.`,
+  "donut.caption": "updates this month",
+  "donut.today": "posted something today",
+  "donut.open": "looking for investors",
+  "donut.building": "heads down, building",
+  "donut.paused": "taking a break",
 
   "note.label": "A note from a maker",
   "note.who": (p: { role: string; years: number; projects: number }) =>

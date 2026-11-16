@@ -6,7 +6,7 @@ import { useLocalizer, useNest } from "../providers/NestProvider";
 import { HeroHeadline } from "./HeroHeadline";
 import { MakerNote } from "./MakerNote";
 import { SearchBox } from "./SearchBox";
-import { UpdateWheel } from "./UpdateWheel";
+import { UpdateDonut } from "./UpdateDonut";
 
 const BUSY_GENRES_SHOWN = 4;
 
@@ -16,7 +16,7 @@ export function Hero({ shelfQuery, onBrowse }: { shelfQuery: ShelfQueryControls;
   const { query, update } = shelfQuery;
 
   const stats = useMemo(() => digest.stats(), [digest]);
-  const ticks = useMemo(() => digest.wheel(), [digest]);
+  const momentum = useMemo(() => digest.momentum(), [digest]);
   const spotlight = useMemo(() => digest.spotlight(), [digest]);
   const busyGenres = useMemo(() => digest.busyGenres(BUSY_GENRES_SHOWN), [digest]);
 
@@ -47,7 +47,7 @@ export function Hero({ shelfQuery, onBrowse }: { shelfQuery: ShelfQueryControls;
       </div>
 
       <div className="hero__side">
-        <UpdateWheel ticks={ticks} stats={stats} />
+        <UpdateDonut slices={momentum} stats={stats} />
         {spotlight && <MakerNote spotlight={spotlight} />}
       </div>
     </section>

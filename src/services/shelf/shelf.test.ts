@@ -42,3 +42,13 @@ describe("Shelf with the sample data", () => {
     expect(nest.digest.spotlight()?.maker.name).toBe("Pim");
   });
 });
+
+describe("Hero donut slices", () => {
+  it("put every project in exactly one slice, in a fixed order", () => {
+    const slices = nest.digest.momentum();
+    expect(slices.map((s) => s.key)).toEqual(["today", "open", "building", "paused"]);
+    expect(slices.reduce((sum, s) => sum + s.count, 0)).toBe(nest.shelf.size());
+    const today = slices.find((s) => s.key === "today")!;
+    expect(today.count).toBe(nest.digest.stats().projectsUpdatedToday);
+  });
+});

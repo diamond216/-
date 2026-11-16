@@ -43,7 +43,7 @@ export class Localizer {
     return this.t(`time.${style}`, RelativeAge.between(then, now));
   }
 
-  /** Two digits, the way the wheel labels and rank badges write numbers. */
+  /** Two digits, the way rank badges write numbers. */
   twoDigits(count: number): string {
     return String(count).padStart(2, "0");
   }

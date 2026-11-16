@@ -30,12 +30,12 @@ export interface MakerSpotlight {
   listing: Listing;
 }
 
-/** One mark on the update wheel. */
-export interface WheelTick {
-  id: string;
-  today: boolean;
-  /** 0 to 1: how much this kind of update counts towards ranking. */
-  strength: number;
+export type MomentumKey = "today" | "open" | "building" | "paused";
+
+/** One slice of the hero donut. Slices never overlap, so they always add up to the whole shelf. */
+export interface MomentumSlice {
+  key: MomentumKey;
+  count: number;
 }
 
 /** The "what's been happening" numbers: totals, the latest posts, who posted last. */
@@ -86,15 +86,20 @@ export class ActivityDigest {
     };
   }
 
-  /** One tick per update in the window, oldest first. */
-  wheel(): WheelTick[] {
+  /**
+   * Splits every project into exactly one slice, checked in this order:
+   * posted today, then open to investment, then paused, and everything else is still building.
+   */
+  momentum(): MomentumSlice[] {
     const now = this.clock.now();
-    const heaviest = Math.max(...Object.values(this.flow.weights));
-    return [...this.recentUpdates()].reverse().map((update) => ({
-      id: update.id,
-      today: update.isWithinDays(1, now),
-      strength: this.flow.weights[update.type.weightClass] / heaviest,
-    }));
+    const counts: Record<MomentumKey, number> = { today: 0, open: 0, building: 0, paused: 0 };
+    for (const listing of this.directory.all()) {
+      if (listing.updatedWithin(1, now)) counts.today++;
+      else if (listing.project.openToInvestment) counts.open++;
+      else if (listing.project.paused) counts.paused++;
+      else counts.building++;
+    }
+    return (["today", "open", "building", "paused"] as const).map((key) => ({ key, count: counts[key] }));
   }
 
   /** Genres whose projects have the most going on right now. */
