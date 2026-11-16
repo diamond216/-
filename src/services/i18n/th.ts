@@ -1,0 +1,188 @@
+import type { Messages } from "./en";
+import type { RelativeAge } from "./RelativeAge";
+
+/** Thai for every string in en.ts. Same keys, same shapes. */
+export const th: Messages = {
+  "meta.title": "Hamster Nest — งานที่ยังไม่หยุดเดิน",
+  "meta.description":
+    "ที่ที่คนใน Hamster Hub เอาของที่กำลังทำมาวางไว้ ทุกงานมีอัปเดตให้ตามดู และทักไปคุยกับคนทำได้เลย",
+
+  "brand.home": "หน้าแรก Hamster Nest",
+  "brand.by": "จาก Hamster Hub",
+  "skip.shelf": "ข้ามไปดูผลงาน",
+  "nav.label": "เมนูหลัก",
+  "nav.browse": "ดูผลงาน",
+  "nav.makers": "คนทำงาน",
+  "nav.investors": "สำหรับนักลงทุน",
+  "nav.howWePick": "เราคัดงานยังไง",
+  "nav.post": "ลงผลงานของคุณ",
+  "lang.label": "ภาษา",
+  "theme.night": "โหมดกลางคืน",
+
+  "hero.count": (p) => `${p.projects} ผลงาน · ${p.updates} อัปเดตใน ${p.days} วันที่ผ่านมา`,
+  "hero.title.lead": "งานที่ยัง",
+  "hero.title.accent": "ไม่หยุดเดิน",
+  "hero.lede":
+    "Hamster Nest คือที่ที่คนใน Hamster Hub เอาของที่กำลังทำมาวางไว้ ทั้งเกม เว็บ ฮาร์ดแวร์ และไอเดียที่ยังไม่เสร็จดี ทุกงานมีอัปเดตให้ตามดูเรื่อย ๆ เจองานที่ชอบเมื่อไหร่ ทักไปคุยกับคนทำได้เลย",
+  "search.label": "กำลังมองหาอะไรอยู่",
+  "search.placeholder": "ลองพิมพ์ “roguelike เล่นสองคน” หรือ “เซนเซอร์วัดดิน”",
+  "search.submit": "ไปดูกัน",
+  "search.hint": "กด / เพื่อค้นหา",
+  "hero.busy": "หรือเริ่มจากแนวที่ช่วงนี้คึกคัก:",
+
+  "wheel.aria": (p) =>
+    `${p.updates} อัปเดตใน ${p.days} วันที่ผ่านมา มี ${p.today} ผลงานอัปเดตวันนี้ ${p.open} ผลงานเปิดรับการลงทุน และ ${p.paused} ผลงานพักอยู่`,
+  "wheel.caption": (p) => `อัปเดต / ${p.days} วัน`,
+  "wheel.today": "อัปเดตวันนี้",
+  "wheel.paused": "พักอยู่",
+  "wheel.open": "เปิดรับการลงทุน",
+
+  "note.label": "โน้ตจากคนทำงาน",
+  "note.who": (p) => `${p.role} · อยู่ Hamster Hub มา ${p.years} ปี · ${p.projects} ผลงาน`,
+  "note.last": (p) => `${p.ago}: ${p.project} ${p.what}`,
+  "note.cta": (p) => `ทักไปคุยกับ${p.name}`,
+
+  "tabs.label": "หมวดหมู่",
+  "tabs.everything": "ทั้งหมด",
+  "sort.label": "เรียงตาม",
+  "sort.active": "อัปเดตถี่สุด",
+  "sort.newest": "ใหม่ล่าสุด",
+  "sort.followed": "คนติดตามมากสุด",
+
+  "filters.label": "ตัวกรอง",
+  "filters.toggle": (p) => (p.active > 0 ? `ตัวกรอง (${p.active})` : "ตัวกรอง"),
+  "filters.genre": "แนว",
+  "filters.allGenres": (p) => `ดูทุกแนว (${p.count})`,
+  "filters.fewerGenres": "ดูน้อยลง",
+  "filters.stage": "งานไปถึงไหนแล้ว",
+  "filters.investing": "ถ้าคุณมาหางานลงทุน",
+  "filters.open": "เปิดรับการลงทุน",
+  "filters.hasDemo": "มีของให้ลองเล่น/ลองใช้",
+  "filters.week": "อัปเดตในสัปดาห์นี้",
+  "filters.help": "หาไม่เจอใช่ไหม",
+  "filters.helpLink": "บอกเราว่ากำลังหาอะไร",
+  "filters.clear": "ล้างตัวกรอง",
+
+  "shelf.label": "ผลงาน",
+  "busiest.title": "คึกคักที่สุดสัปดาห์นี้",
+  "busiest.sub": "เรียงจากงานที่ลงอัปเดตจริงบ่อยที่สุด ยิ่งอัปเดตสม่ำเสมอ ยิ่งขึ้นมาอยู่ข้างบน",
+  "busiest.link": "ดูวิธีจัดอันดับ",
+  "fresh.title": "อัปเดตล่าสุด",
+  "fresh.sub": (p) => `${p.scope} ${p.order}`,
+  "fresh.everyCategory": "ทุกหมวด",
+  "fresh.order.active": "เรียงจากงานที่อัปเดตถี่สุด",
+  "fresh.order.newest": "เรียงจากใหม่ไปเก่า",
+  "fresh.order.followed": "เรียงจากงานที่คนติดตามมากสุด",
+  "results.count": (p) =>
+    p.text ? `เจอ ${p.count} ผลงานที่ตรงกับ “${p.text}”` : `เจอ ${p.count} ผลงานที่ตรงกับตัวกรอง`,
+  "results.empty": "ยังไม่มีงานที่ตรงกับที่หา ลองใช้คำให้น้อยลง หรือเลือกดูตามหมวด",
+
+  "card.updates": (p) => `${p.count} อัปเดต`,
+  "card.updatesInWindow": (p) => `${p.count} อัปเดตใน ${p.days} วัน`,
+  "card.strip": (p) => `มีอัปเดต ${p.active} วัน จาก ${p.days} วันที่ผ่านมา`,
+  "card.paused": "พักอยู่",
+  "card.byline": (p) => `, ${p.role}`,
+  "more.button": "ขอดูอีก",
+
+  "feed.title": "เพิ่งลงเมื่อกี้",
+  "feed.reactions": (p) => `ถูกใจ ${p.hearts} ตอบกลับ ${p.replies}`,
+  "feed.all": "ดูอัปเดตทั้งหมด",
+  "feed.hub":
+    "ทุกงานที่นี่โยงกลับมาที่ Hamster Hub ได้ เราดูทั้งงานและทีมก่อนขึ้นชั้น และเขียนไว้ชัดเจนว่าแต่ละงานหาเงินยังไง",
+  "feed.hubLink": "อ่านวิธีคัดงานของเรา",
+
+  "trust.title": "ทำไมถึงเชื่อของบนชั้นนี้ได้",
+  "trust.lede": "เราอยากโชว์สิบงานที่กล้ารับรอง มากกว่าร้อยงานที่ไม่กล้า เลยมีกติกาอยู่ไม่กี่ข้อ",
+  "trust.cta": "อ่านเช็กลิสต์ฉบับเต็ม",
+  "trust.rule1.title": "มีคนของเราตรวจมาแล้ว",
+  "trust.rule1.body":
+    "ก่อนงานไหนจะขึ้นชั้น Hamster Hub ดูทั้งตัวงานและทีมที่ทำ เช็กลิสต์เปิดให้อ่านได้ คุณจะรู้เลยว่าเราดูอะไรบ้าง",
+  "trust.rule2.title": "เรื่องเงิน เขียนไว้ให้เห็น",
+  "trust.rule2.body":
+    "ทุกงานบอกว่าหารายได้ยังไง ใครถือส่วนไหน และกำลังระดมทุนอยู่หรือเปล่า ไม่ต้องไปขุดหาใน pitch deck",
+  "trust.rule3.title": "ดูมันเดินได้ด้วยตาตัวเอง",
+  "trust.rule3.body":
+    "แต่ละงานลงอัปเดตไปเรื่อย ๆ ถ้างานไหนเงียบ เราจะติดป้ายว่าพักอยู่ ไม่ปล่อยให้ดูเหมือนยังสดใหม่",
+  "trust.rule4.title": "ทุกงานโยงกลับมาหาเรา",
+  "trust.rule4.body":
+    "ทุกงานระบุว่า Hamster Hub ลงอะไรไปบ้าง จะเป็นคน เงิน หรือเวลา ถ้างานไปได้ดี คุณจะรู้ว่ามันมาจากไหน",
+
+  "voices.title": "คนที่เคยมาลองของที่นี่",
+  "voices.lede": "ผู้เล่น ลูกค้า และนักลงทุนบางคน เราอ้างคำพูดเฉพาะคนที่ยินดีให้ใส่ชื่อ",
+
+  "makers.title": "ทำงานที่ Hamster Hub ใช่ไหม เอางานมาวางบนชั้นสิ",
+  "makers.body":
+    "ลงสิ่งที่กำลังทำอยู่ แล้วก็ลงต่อไปเรื่อย ๆ อัปเดตสั้น ๆ ทุกหนึ่งหรือสองสัปดาห์ ได้ผลกว่าเปิดตัวใหญ่ปีละครั้ง แถมยังดันงานคุณขึ้นไปอยู่ข้างบนด้วย",
+  "makers.link": "ดูตัวอย่างอัปเดตที่ดี",
+
+  "foot.label": "ส่วนท้าย",
+  "foot.run": "Hamster Nest ดูแลโดย Hamster Hub",
+  "foot.howWePick": "เราคัดงานยังไง",
+  "foot.ranking": "วิธีจัดอันดับ",
+  "foot.investors": "สำหรับนักลงทุน",
+  "foot.contact": "ติดต่อเรา",
+  "foot.note": "ฉบับร่างดีไซน์ · ผลงาน ชื่อ และตัวเลขเป็นข้อมูลสมมติ",
+
+  "contact.title": (p) => `เขียนถึง${p.name}`,
+  "contact.name": "ชื่อของคุณ",
+  "contact.reach": (p) => `ให้${p.name}ติดต่อกลับทางไหนดี`,
+  "contact.reachPlaceholder": "อีเมลก็ได้",
+  "contact.reason": "มาที่นี่เพราะอะไร",
+  "contact.reason.play": "อยากลองเล่น",
+  "contact.reason.invest": "อาจจะสนใจลงทุน",
+  "contact.reason.collaborate": "อยากทำงานด้วยกัน",
+  "contact.reason.hello": "แค่แวะมาทักทาย",
+  "contact.body": "อยากบอกอะไร",
+  "contact.bodyPlaceholder": "สองสามบรรทัดก็พอ",
+  "contact.copyNote": "Hamster Hub จะได้สำเนาด้วย ข้อความจะได้ไม่ตกหล่น",
+  "contact.send": "ส่งเลย",
+  "contact.sending": "กำลังส่ง…",
+  "contact.sent": (p) => `ส่งแล้ว ปกติ${p.name}จะตอบกลับภายในสองสามวัน`,
+  "contact.close": "ปิด",
+  "contact.error.badEmail": "อีเมลดูไม่ค่อยถูก ลองเช็กอีกทีได้ไหม",
+  "contact.error.emptyMessage": "ดูเหมือนยังไม่ได้เขียนข้อความ บรรทัดเดียวก็ได้",
+  "contact.error.sendFailed": "ส่งไม่ผ่าน ข้อความของคุณยังอยู่ตรงนี้ ลองอีกครั้งในอีกสักครู่",
+
+  "time.long": (age: RelativeAge) => {
+    switch (age.unit) {
+      case "now":
+        return "เมื่อกี้";
+      case "minute":
+        return `${age.count} นาทีที่แล้ว`;
+      case "hour":
+        return `${age.count} ชม.ที่แล้ว`;
+      case "yesterday":
+        return "เมื่อวาน";
+      case "day":
+        return `${age.count} วันที่แล้ว`;
+    }
+  },
+  "time.short": (age: RelativeAge) => {
+    switch (age.unit) {
+      case "now":
+        return "เมื่อกี้";
+      case "minute":
+        return `${age.count} นาที`;
+      case "hour":
+        return `${age.count} ชม.`;
+      case "yesterday":
+        return "เมื่อวาน";
+      case "day":
+        return `${age.count} วัน`;
+    }
+  },
+  "time.sentence": (age: RelativeAge) => {
+    switch (age.unit) {
+      case "now":
+        return "เมื่อกี้";
+      case "minute":
+        return `เมื่อ ${age.count} นาทีก่อน`;
+      case "hour":
+        return `เมื่อ ${age.count} ชั่วโมงก่อน`;
+      case "yesterday":
+        return "เมื่อวาน";
+      case "day":
+        return `เมื่อ ${age.count} วันก่อน`;
+    }
+  },
+};

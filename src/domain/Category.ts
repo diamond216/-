@@ -1,0 +1,38 @@
+import { LocalizedText } from "./LocalizedText";
+
+export type CategoryId = "game" | "web" | "iot" | "idea";
+
+/** One of the four shelves a project can sit on. */
+export class Category {
+  static readonly GAME = new Category("game", new LocalizedText("Games", "เกม"), "Game");
+  static readonly WEB = new Category("web", new LocalizedText("Web", "เว็บ"), "Web");
+  static readonly IOT = new Category("iot", LocalizedText.same("IoT"), "IoT");
+  static readonly IDEA = new Category("idea", new LocalizedText("Ideas", "ไอเดีย"), "Idea");
+
+  private static readonly registry: readonly Category[] = [
+    Category.GAME,
+    Category.WEB,
+    Category.IOT,
+    Category.IDEA,
+  ];
+
+  private constructor(
+    readonly id: CategoryId,
+    /** Plural label used on the tab. */
+    readonly label: LocalizedText,
+    /** Singular chip shown on a cover. Stays in English in both languages. */
+    readonly tag: string,
+  ) {}
+
+  static all(): readonly Category[] {
+    return Category.registry;
+  }
+
+  static ids(): CategoryId[] {
+    return Category.registry.map((category) => category.id);
+  }
+
+  static byId(id: string): Category | undefined {
+    return Category.registry.find((category) => category.id === id);
+  }
+}
