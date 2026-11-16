@@ -10,6 +10,7 @@ Everything about specific projects, people, numbers and quotes is placeholder.
 
 ## Hero
 - Small line: 68 projects · 312 updates in the last 30 days
+- Wheel labels: 09 updated today · 21 open to investment · 03 paused · 312 updates / 30 days
 - Headline: **Work that's still moving.**
 - Intro: Hamster Nest is where people at Hamster Hub keep what they're building: games, web apps, hardware, and ideas that aren't finished yet. Every project here posts updates as it goes. See one you like? Write to the person who made it.
 - Search label: What are you looking for?
@@ -24,12 +25,15 @@ Everything about specific projects, people, numbers and quotes is placeholder.
 - Button: **Say hi to Pim**
 
 ## The shelf
-- Tabs: Everything · Games · Web · IoT · Ideas — Sorted by most active
+- Tabs: Everything · Games · Web · IoT · Ideas
+- Sort by: Most active · Newest · Most followed
 - Filters: Genre · How far along (Concept, Prototype, Beta, Live) · If you're investing (Open to investment, Has something to try, Updated this week)
 - Can't find it? Tell us what you're after
 - **Busiest this week** — Ranked by how often a project posts real updates. Post more, climb higher. How ranking works
 - **Fresh updates** — Every category, newest first.
-- Card labels: 9 updates · 3 hrs ago · Open to investment
+- Card labels: 9 updates · 3 hrs ago · Open to investment · Concept / Prototype / Beta / Live
+- Card one-liners (placeholders, but this is the tone): An online shop kit for neighbourhood pet stores. · Grab the sunflower seeds before the sun goes down. · Tells shrimp farmers when the pond water turns. · Group savings for freelancers with uneven income. · Turn the moon, line up the light, finish before dawn. · Writes your API docs from the code you already have.
+- Update types: Release · Feature · Demo · Field test · Patch
 - Button: **Show me more**
 - **Just posted** — See every update
 - Side note: Everything here leads back to Hamster Hub. We check the work and the team before it goes up, and we write down how each project makes money. Read how we pick

@@ -46,7 +46,10 @@
       <form class="search" role="search" action="#shelf">
         <label for="q" data-th="กำลังมองหาอะไรอยู่">What are you looking for?</label>
         <div class="search__row">
-          <input id="q" name="q" type="search" placeholder="Try “co-op roguelike” or “soil sensor”" data-th-placeholder="ลองพิมพ์ “roguelike เล่นสองคน” หรือ “เซนเซอร์วัดดิน”">
+          <span class="search__field">
+            <input id="q" name="q" type="search" placeholder="Try “co-op roguelike” or “soil sensor”" data-th-placeholder="ลองพิมพ์ “roguelike เล่นสองคน” หรือ “เซนเซอร์วัดดิน”">
+            <kbd class="mono" title="Press / to search">/</kbd>
+          </span>
           <button class="btn btn--ink" type="submit" data-th="ไปดูกัน">Have a look</button>
         </div>
       </form>
@@ -55,16 +58,21 @@
       </p>
     </div>
 
-    <aside class="note" aria-label="A note from a maker">
-      <p class="mono note__label" data-th="โน้ตจากคนทำงาน">A note from a maker</p>
-      <blockquote data-th="“เกมที่ดี คือเกมที่คนเล่นแล้วอยากเอาไปเล่าต่อ”">“A good game is one people can't help telling their friends about.”</blockquote>
-      <div class="who">
-        <span class="av av--clay" aria-hidden="true">P</span>
-        <p><strong>Pim</strong><span data-th="นักออกแบบเกม · อยู่ Hamster Hub มา 3 ปี · 4 ผลงาน">Game designer · 3 years at Hamster Hub · 4 projects</span></p>
-      </div>
-      <p class="note__last"><span class="dot" aria-hidden="true"></span><span data-th="เมื่อ 2 ชั่วโมงก่อน: Burrow Knights มีเดโมเล่นสองคนให้ลองแล้ว">2 hrs ago: Burrow Knights got a two-player demo.</span></p>
-      <a class="btn" href="#" data-th="ทักไปคุยกับพิม">Say hi to Pim</a>
-    </aside>
+    <div class="hero__side">
+      <figure class="wheel">
+        <svg id="wheel" viewBox="0 0 480 420" role="img" aria-label="312 updates in the last 30 days. 9 projects updated today, 21 open to investment, 3 paused."></svg>
+      </figure>
+      <aside class="note" aria-label="A note from a maker">
+        <p class="mono note__label" data-th="โน้ตจากคนทำงาน">A note from a maker</p>
+        <blockquote data-th="“เกมที่ดี คือเกมที่คนเล่นแล้วอยากเอาไปเล่าต่อ”">“A good game is one people can't help telling their friends about.”</blockquote>
+        <div class="who">
+          <span class="av av--clay" aria-hidden="true">P</span>
+          <p><strong>Pim</strong><span data-th="นักออกแบบเกม · อยู่ Hamster Hub มา 3 ปี · 4 ผลงาน">Game designer · 3 years at Hamster Hub · 4 projects</span></p>
+        </div>
+        <p class="note__last"><span class="dot" aria-hidden="true"></span><span data-th="เมื่อ 2 ชั่วโมงก่อน: Burrow Knights มีเดโมเล่นสองคนให้ลองแล้ว">2 hrs ago: Burrow Knights got a two-player demo.</span></p>
+        <a class="btn" href="#" data-th="ทักไปคุยกับพิม">Say hi to Pim</a>
+      </aside>
+    </div>
   </section>
 
   <section class="shelf" id="shelf" aria-label="Projects">
@@ -74,7 +82,7 @@
       <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18"/></svg><span data-th="เว็บ">Web</span> <small>18</small></a>
       <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 7V4M14 7V4M10 20v-3M14 20v-3M7 10H4M7 14H4M20 10h-3M20 14h-3"/></svg><span>IoT</span> <small>11</small></a>
       <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17h5M10.5 20h3M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2v.2h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span data-th="ไอเดีย">Ideas</span> <small>15</small></a>
-      <p class="tabs__sort"><span data-th="เรียงตาม">Sorted by</span> <button type="button" data-th="อัปเดตถี่สุด ▾">most active ▾</button></p>
+      <p class="tabs__sort"><span data-th="เรียงตาม">Sort by</span><a href="#" aria-current="true" data-th="อัปเดตถี่สุด">Most active</a><a href="#" data-th="ใหม่ล่าสุด">Newest</a><a href="#" data-th="คนติดตามมากสุด">Most followed</a></p>
     </nav>
 
     <div class="wrap shelf__grid">
@@ -148,39 +156,63 @@
 
         <div class="cards">
           <article class="card">
-            <div class="cover cover--web" style="--c:#b9785a"><span class="cover__title">Pawprint</span></div>
-            <p class="mono meta">Web · E-commerce · Beta</p>
-            <p class="pulse-row"><span class="pulse" data-pulse="001001010010010100100101001011"></span><span class="mono" data-th="9 อัปเดต">9 updates</span></p>
+            <div class="cover cover--web" style="--c:#b9785a"><span class="cat mono">Web</span></div>
+            <div class="card__body">
+              <h3><a href="#">Pawprint</a><span class="badge mono">Beta</span></h3>
+              <p class="tags">#Ecommerce #Pets</p>
+              <p class="blurb" data-th="ชุดเปิดร้านออนไลน์สำหรับร้านสัตว์เลี้ยงใกล้บ้าน">An online shop kit for neighbourhood pet stores.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="001001010010010100100101001011"></span><span class="mono" data-th="9 อัปเดต">9 updates</span></p>
+            </div>
             <p class="by"><span class="av av--plum" aria-hidden="true">F</span><span>Fahsai</span><time class="mono" data-th="3 ชม.ที่แล้ว">3 hrs ago</time></p>
           </article>
           <article class="card">
-            <div class="cover cover--game" style="--c:#c9553a"><span class="cover__title">Seed Dash</span></div>
-            <p class="mono meta">Game · Casual · Live</p>
-            <p class="pulse-row"><span class="pulse" data-pulse="100100100101001001001010010011"></span><span class="mono" data-th="9 อัปเดต">9 updates</span></p>
+            <div class="cover cover--game" style="--c:#c9553a"><span class="cat mono">Game</span></div>
+            <div class="card__body">
+              <h3><a href="#">Seed Dash</a><span class="badge mono">Live</span></h3>
+              <p class="tags">#Casual #Mobile</p>
+              <p class="blurb" data-th="เก็บเมล็ดทานตะวันให้ทันก่อนพระอาทิตย์ตก">Grab the sunflower seeds before the sun goes down.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="100100100101001001001010010011"></span><span class="mono" data-th="9 อัปเดต">9 updates</span></p>
+            </div>
             <p class="by"><span class="av av--clay" aria-hidden="true">P</span><span>Pim</span><time class="mono" data-th="5 ชม.ที่แล้ว">5 hrs ago</time></p>
           </article>
           <article class="card">
-            <div class="cover cover--iot" style="--c:#3d5a6c"><span class="cover__title">AquaNode</span><span class="tag" data-th="เปิดรับการลงทุน">Open to investment</span></div>
-            <p class="mono meta">IoT · Water · Prototype</p>
-            <p class="pulse-row"><span class="pulse" data-pulse="000100100010010010010100100110"></span><span class="mono" data-th="8 อัปเดต">8 updates</span></p>
+            <div class="cover cover--iot" style="--c:#3d5a6c"><span class="cat mono">IoT</span><span class="tag" data-th="เปิดรับการลงทุน">Open to investment</span></div>
+            <div class="card__body">
+              <h3><a href="#">AquaNode</a><span class="badge mono">Prototype</span></h3>
+              <p class="tags">#Water #Sensor</p>
+              <p class="blurb" data-th="บอกคนเลี้ยงกุ้งให้รู้ทันทีเมื่อน้ำในบ่อเริ่มเสีย">Tells shrimp farmers when the pond water turns.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="000100100010010010010100100110"></span><span class="mono" data-th="8 อัปเดต">8 updates</span></p>
+            </div>
             <p class="by"><span class="av av--moss" aria-hidden="true">M</span><span>Mind</span><time class="mono" data-th="เมื่อวาน">yesterday</time></p>
           </article>
           <article class="card">
-            <div class="cover cover--idea" style="--c:#d39a2f"><span class="cover__title">Sunflower Bank</span><span class="tag" data-th="เปิดรับการลงทุน">Open to investment</span></div>
-            <p class="mono meta">Idea · FinTech · Concept</p>
-            <p class="pulse-row"><span class="pulse" data-pulse="000010000100010000100100010010"></span><span class="mono" data-th="6 อัปเดต">6 updates</span></p>
+            <div class="cover cover--idea" style="--c:#d39a2f"><span class="cat mono">Idea</span><span class="tag" data-th="เปิดรับการลงทุน">Open to investment</span></div>
+            <div class="card__body">
+              <h3><a href="#">Sunflower Bank</a><span class="badge mono">Concept</span></h3>
+              <p class="tags">#FinTech #Savings</p>
+              <p class="blurb" data-th="ออมเงินเป็นกลุ่มสำหรับฟรีแลนซ์ที่รายได้ไม่แน่นอน">Group savings for freelancers with uneven income.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="000010000100010000100100010010"></span><span class="mono" data-th="6 อัปเดต">6 updates</span></p>
+            </div>
             <p class="by"><span class="av av--sand" aria-hidden="true">Ph</span><span>Phoom</span><time class="mono" data-th="เมื่อวาน">yesterday</time></p>
           </article>
           <article class="card">
-            <div class="cover cover--game" style="--c:#4a5b4a"><span class="cover__title">Moonwheel</span></div>
-            <p class="mono meta">Game · Puzzle · Prototype</p>
-            <p class="pulse-row"><span class="pulse" data-pulse="010000100001000010001000100100"></span><span class="mono" data-th="6 อัปเดต">6 updates</span></p>
+            <div class="cover cover--game" style="--c:#4a5b4a"><span class="cat mono">Game</span></div>
+            <div class="card__body">
+              <h3><a href="#">Moonwheel</a><span class="badge mono">Prototype</span></h3>
+              <p class="tags">#Puzzle #Cozy</p>
+              <p class="blurb" data-th="หมุนพระจันทร์ เรียงแสงให้ครบก่อนฟ้าสาง">Turn the moon, line up the light, finish before dawn.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="010000100001000010001000100100"></span><span class="mono" data-th="6 อัปเดต">6 updates</span></p>
+            </div>
             <p class="by"><span class="av av--plum" aria-hidden="true">F</span><span>Fahsai</span><time class="mono" data-th="2 วันที่แล้ว">2 days ago</time></p>
           </article>
           <article class="card">
-            <div class="cover cover--web" style="--c:#2f5d50"><span class="cover__title">Kernel Docs</span></div>
-            <p class="mono meta">Web · Dev tool · Live</p>
-            <p class="pulse-row"><span class="pulse" data-pulse="000001000010000001000010000100"></span><span class="mono" data-th="5 อัปเดต">5 updates</span></p>
+            <div class="cover cover--web" style="--c:#2f5d50"><span class="cat mono">Web</span></div>
+            <div class="card__body">
+              <h3><a href="#">Kernel Docs</a><span class="badge mono">Live</span></h3>
+              <p class="tags">#DevTool #API</p>
+              <p class="blurb" data-th="เขียนเอกสาร API จากโค้ดที่คุณมีอยู่แล้ว">Writes your API docs from the code you already have.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="000001000010000001000010000100"></span><span class="mono" data-th="5 อัปเดต">5 updates</span></p>
+            </div>
             <p class="by"><span class="av av--sand" aria-hidden="true">T</span><span>Tonkla</span><time class="mono" data-th="2 วันที่แล้ว">2 days ago</time></p>
           </article>
         </div>
@@ -190,12 +222,12 @@
       <aside class="feed" aria-labelledby="feed-title">
         <h2 id="feed-title"><span class="dot" aria-hidden="true"></span><span data-th="เพิ่งลงเมื่อกี้">Just posted</span></h2>
         <ol>
-          <li><time class="mono" data-th="40 นาที">40 min</time><p><strong>WheelSense</strong> <span data-th="ปล่อยเฟิร์มแวร์ 0.9 แบตอยู่ได้นานขึ้น">shipped firmware 0.9. The battery lasts longer now.</span></p></li>
-          <li><time class="mono" data-th="1 ชม.">1 hr</time><p><strong>NestBoard</strong> <span data-th="เพิ่มหน้ารายงานสำหรับนักลงทุน">added a report page for investors.</span></p></li>
-          <li><time class="mono" data-th="2 ชม.">2 hrs</time><p><strong>Burrow Knights</strong> <span data-th="มีเดโมเล่นสองคนให้ลองแล้ว">has a two-player demo you can try.</span></p></li>
-          <li><time class="mono" data-th="3 ชม.">3 hrs</time><p><strong>Pawprint</strong> <span data-th="เริ่มทดสอบระบบจ่ายเงินกับร้านกลุ่มแรก">started testing payments with its first shops.</span></p></li>
-          <li><time class="mono" data-th="5 ชม.">5 hrs</time><p><strong>Seed Dash</strong> <span data-th="ปรับด่าน 3 ถึง 5 ใหม่ หลังผู้เล่นบอกว่ายากเกินไป">rebalanced levels 3 to 5 after players said they were too hard.</span></p></li>
-          <li><time class="mono" data-th="เมื่อวาน">Yesterday</time><p><strong>AquaNode</strong> <span data-th="เอาเครื่องต้นแบบชุดแรกไปติดตั้งในบ่อจริง">put its first prototypes in a real pond.</span></p></li>
+          <li><p class="feed__meta mono"><time data-th="40 นาที">40 min</time><span class="kind">Release</span><span class="react">♥ 12 · ↩ 3</span></p><p><strong>WheelSense</strong> <span data-th="ปล่อยเฟิร์มแวร์ 0.9 แบตอยู่ได้นานขึ้น">shipped firmware 0.9. The battery lasts longer now.</span></p></li>
+          <li><p class="feed__meta mono"><time data-th="1 ชม.">1 hr</time><span class="kind">Feature</span><span class="react">♥ 7 · ↩ 2</span></p><p><strong>NestBoard</strong> <span data-th="เพิ่มหน้ารายงานสำหรับนักลงทุน">added a report page for investors.</span></p></li>
+          <li><p class="feed__meta mono"><time data-th="2 ชม.">2 hrs</time><span class="kind">Demo</span><span class="react">♥ 31 · ↩ 9</span></p><p><strong>Burrow Knights</strong> <span data-th="มีเดโมเล่นสองคนให้ลองแล้ว">has a two-player demo you can try.</span></p></li>
+          <li><p class="feed__meta mono"><time data-th="3 ชม.">3 hrs</time><span class="kind">Field test</span><span class="react">♥ 5 · ↩ 1</span></p><p><strong>Pawprint</strong> <span data-th="เริ่มทดสอบระบบจ่ายเงินกับร้านกลุ่มแรก">started testing payments with its first shops.</span></p></li>
+          <li><p class="feed__meta mono"><time data-th="5 ชม.">5 hrs</time><span class="kind">Patch</span><span class="react">♥ 9 · ↩ 4</span></p><p><strong>Seed Dash</strong> <span data-th="ปรับด่าน 3 ถึง 5 ใหม่ หลังผู้เล่นบอกว่ายากเกินไป">rebalanced levels 3 to 5 after players said they were too hard.</span></p></li>
+          <li><p class="feed__meta mono"><time data-th="เมื่อวาน">Yesterday</time><span class="kind">Field test</span><span class="react">♥ 14 · ↩ 6</span></p><p><strong>AquaNode</strong> <span data-th="เอาเครื่องต้นแบบชุดแรกไปติดตั้งในบ่อจริง">put its first prototypes in a real pond.</span></p></li>
         </ol>
         <a class="feed__all" href="#" data-th="ดูอัปเดตทั้งหมด">See every update</a>
         <p class="feed__hub"><span data-th="ทุกงานที่นี่โยงกลับมาที่ Hamster Hub ได้ เราดูทั้งงานและทีมก่อนขึ้นชั้น และเขียนไว้ชัดเจนว่าแต่ละงานหาเงินยังไง">Everything here leads back to Hamster Hub. We check the work and the team before it goes up, and we write down how each project makes money.</span> <a href="#trust" data-th="อ่านวิธีคัดงานของเรา">Read how we pick</a></p>
