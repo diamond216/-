@@ -1,0 +1,44 @@
+import { describe, expect, it } from "vitest";
+import { createNest } from "@/composition/createNest";
+import { NOW } from "@/test/fixtures";
+import { MemoryStore } from "@/services/storage/KeyValueStore";
+import { ShelfQuery } from ".";
+
+const nest = createNest({ clock: NOW, storage: new MemoryStore() });
+const names = (query: ShelfQuery) => {
+  const view = nest.shelf.browse(query);
+  return [...view.featured, ...view.rest].map((l) => l.project.name);
+};
+
+describe("Shelf with the sample data", () => {
+  it("counts come from the data", () => {
+    const counts = nest.shelf.categoryCounts().reduce((sum, c) => sum + c.count, 0);
+    expect(counts).toBe(nest.shelf.size());
+    expect(nest.shelf.size()).toBeGreaterThanOrEqual(12);
+    expect(nest.digest.stats().updates).toBeGreaterThan(50);
+  });
+
+  it("the busiest three are computed, WheelSense first", () => {
+    const view = nest.shelf.browse(ShelfQuery.EVERYTHING);
+    expect(view.featured.map((l) => l.project.name)).toEqual(["WheelSense", "NestBoard", "Burrow Knights"]);
+    expect(view.featured.length + view.rest.length).toBe(view.total);
+  });
+
+  it("filters compose with category and sort", () => {
+    const query = new ShelfQuery({ category: "iot", openToInvestment: true, sort: "followed" });
+    expect(names(query)).toEqual(["AquaNode", "Coop Watch"]);
+    expect(names(query.with({ stages: ["beta"] }))).toEqual([]);
+  });
+
+  it("searches in English and Thai, including mid-phrase Thai", () => {
+    expect(names(new ShelfQuery({ text: "soil sensor" }))).toEqual(["WheelSense"]);
+    expect(names(new ShelfQuery({ text: "co-op roguelike" }))).toEqual(["Burrow Knights"]);
+    expect(names(new ShelfQuery({ text: "กุ้ง" }))).toEqual(["AquaNode"]);
+    expect(names(new ShelfQuery({ text: "เซนเซอร์วัดดิน" }))).toContain("WheelSense");
+    expect(names(new ShelfQuery({ text: "zzzz nothing" }))).toEqual([]);
+  });
+
+  it("the spotlight is the maker of the most recent update", () => {
+    expect(nest.digest.spotlight()?.maker.name).toBe("Pim");
+  });
+});
