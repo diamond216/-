@@ -749,6 +749,12 @@
     .tried figure:nth-child(n) { grid-column: 1 / -1; }
     .tried blockquote { font-size: 23px; }
     .proj__side { grid-template-columns: minmax(0, 1fr); }
+    /* On a phone the maker card comes straight after the actions, before the long sections. */
+    .proj__grid { display: flex; flex-direction: column; }
+    .proj__main { display: contents; }
+    .proj__side { order: 1; margin: 0 0 56px; }
+    .proj__main > section { order: 2; }
+    .proj__main > section:first-of-type { margin-top: 0; }
     .me { padding-top: 40px; padding-bottom: 56px; }
     .me h1 { font-size: 88px; }
     .me__motto { font-size: 28px; }
