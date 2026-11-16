@@ -40,10 +40,16 @@ export function MakerNote({ spotlight }: { spotlight: MakerSpotlight }) {
           })}
         </span>
       </p>
-      <button className="btn" type="button" onClick={() => setWriting(true)}>
-        {localizer.t("note.cta", { name: localizer.text(maker.nickname) })}
-      </button>
-      <ContactDialog maker={maker} open={writing} onOpenChange={setWriting} />
+      <ContactDialog
+        maker={maker}
+        open={writing}
+        onOpenChange={setWriting}
+        trigger={
+          <button className="btn" type="button">
+            {localizer.t("note.cta", { name: localizer.text(maker.nickname) })}
+          </button>
+        }
+      />
     </aside>
   );
 }

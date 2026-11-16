@@ -1,8 +1,8 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useId } from "react";
-import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { type ReactElement, useId } from "react";
+import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import type { Maker } from "@/domain";
 import { useLocalizer } from "../providers/NestProvider";
 import { ContactForm } from "./ContactForm";
@@ -12,8 +12,11 @@ export function ContactDialog({
   maker,
   open,
   onOpenChange,
+  trigger,
 }: {
   maker: Maker;
+  /** The button that opens it. Focus goes back here on close. */
+  trigger: ReactElement;
   open: boolean;
   onOpenChange(open: boolean): void;
 }) {
@@ -23,12 +26,13 @@ export function ContactDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent
         showCloseButton={false}
         aria-describedby={noteId}
         className="max-h-[calc(100dvh-2rem)] gap-5 overflow-y-auto rounded-lg border border-line bg-surface p-6 text-base text-ink ring-0 sm:max-w-[520px] sm:p-7"
       >
-        <DialogTitle className="contact__title">{localizer.t("contact.title", { name })}</DialogTitle>
+        <DialogTitle className="contact__title text-[30px] leading-[1.08] font-extrabold tracking-[-0.03em]">{localizer.t("contact.title", { name })}</DialogTitle>
         <ContactForm maker={maker} noteId={noteId} onDone={() => onOpenChange(false)} />
         <DialogClose
           className="absolute top-4 right-4 grid size-9 place-items-center rounded-md text-ink-soft hover:bg-muted hover:text-ink"
