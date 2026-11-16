@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hamster Nest — work that's still moving</title>
+  <meta name="description" content="Where people at Hamster Hub keep what they're building. Every project posts updates, and you can write to the person who made it.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Design draft. Every project, person, number and quote below is placeholder content. -->
+
+<header class="top">
+  <div class="wrap top__in">
+    <a class="brand" href="#" aria-label="Hamster Nest home">
+      <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="10" cy="9" r="6" fill="#d8923a"/><circle cx="30" cy="9" r="6" fill="#d8923a"/><circle cx="10" cy="9" r="2.8" fill="#f6e3c3"/><circle cx="30" cy="9" r="2.8" fill="#f6e3c3"/><ellipse cx="20" cy="22" rx="17" ry="15.5" fill="#d8923a"/><ellipse cx="11" cy="27" rx="7" ry="6" fill="#f6e3c3"/><ellipse cx="29" cy="27" rx="7" ry="6" fill="#f6e3c3"/><circle cx="13.5" cy="19" r="2.1" fill="#25211c"/><circle cx="26.5" cy="19" r="2.1" fill="#25211c"/><ellipse cx="20" cy="24" rx="2" ry="1.4" fill="#25211c"/></svg>
+      <span class="brand__name">Hamster Nest</span>
+      <span class="brand__by" data-th="จาก Hamster Hub">from Hamster Hub</span>
+    </a>
+    <nav class="top__nav" aria-label="Main">
+      <a href="#shelf" data-th="ดูผลงาน">Browse</a>
+      <a href="#" data-th="คนทำงาน">Makers</a>
+      <a href="#" data-th="สำหรับนักลงทุน">For investors</a>
+      <a href="#trust" data-th="เราคัดงานยังไง">How we pick</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="th" aria-pressed="false">ไทย</button>
+    </div>
+    <a class="btn" href="#makers" data-th="ลงผลงานของคุณ">Post your work</a>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero__main">
+      <p class="mono hero__count"><span class="dot" aria-hidden="true"></span><span data-th="68 ผลงาน · 312 อัปเดตใน 30 วันที่ผ่านมา">68 projects · 312 updates in the last 30 days</span></p>
+      <h1 id="hero-title" data-th="งานที่ยัง<em>ไม่หยุดเดิน</em>">Work that's <em>still moving.</em></h1>
+      <p class="hero__lede" data-th="Hamster Nest คือที่ที่คนใน Hamster Hub เอาของที่กำลังทำมาวางไว้ ทั้งเกม เว็บ ฮาร์ดแวร์ และไอเดียที่ยังไม่เสร็จดี ทุกงานมีอัปเดตให้ตามดูเรื่อย ๆ เจองานที่ชอบเมื่อไหร่ ทักไปคุยกับคนทำได้เลย">Hamster Nest is where people at Hamster Hub keep what they're building: games, web apps, hardware, and ideas that aren't finished yet. Every project here posts updates as it goes. See one you like? Write to the person who made it.</p>
+
+      <form class="search" role="search" action="#shelf">
+        <label for="q" data-th="กำลังมองหาอะไรอยู่">What are you looking for?</label>
+        <div class="search__row">
+          <input id="q" name="q" type="search" placeholder="Try “co-op roguelike” or “soil sensor”" data-th-placeholder="ลองพิมพ์ “roguelike เล่นสองคน” หรือ “เซนเซอร์วัดดิน”">
+          <button class="btn btn--ink" type="submit" data-th="ไปดูกัน">Have a look</button>
+        </div>
+      </form>
+      <p class="hero__busy"><span data-th="หรือเริ่มจากแนวที่ช่วงนี้คึกคัก:">Or start with what's been busy lately:</span>
+        <a href="#">Roguelike</a><a href="#">Smart farm</a><a href="#">SaaS</a><a href="#">FinTech</a><a href="#" data-th="เปิดรับการลงทุน">Open to investment</a>
+      </p>
+    </div>
+
+    <aside class="note" aria-label="A note from a maker">
+      <p class="mono note__label" data-th="โน้ตจากคนทำงาน">A note from a maker</p>
+      <blockquote data-th="“เกมที่ดี คือเกมที่คนเล่นแล้วอยากเอาไปเล่าต่อ”">“A good game is one people can't help telling their friends about.”</blockquote>
+      <div class="who">
+        <span class="av av--clay" aria-hidden="true">P</span>
+        <p><strong>Pim</strong><span data-th="นักออกแบบเกม · อยู่ Hamster Hub มา 3 ปี · 4 ผลงาน">Game designer · 3 years at Hamster Hub · 4 projects</span></p>
+      </div>
+      <p class="note__last"><span class="dot" aria-hidden="true"></span><span data-th="เมื่อ 2 ชั่วโมงก่อน: Burrow Knights มีเดโมเล่นสองคนให้ลองแล้ว">2 hrs ago: Burrow Knights got a two-player demo.</span></p>
+      <a class="btn" href="#" data-th="ทักไปคุยกับพิม">Say hi to Pim</a>
+    </aside>
+  </section>
+
+  <section class="shelf" id="shelf" aria-label="Projects">
+    <nav class="tabs wrap" aria-label="Categories">
+      <a href="#" aria-current="true"><span data-th="ทั้งหมด">Everything</span> <small>68</small></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5.5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.3" r=".9"/><circle cx="18" cy="13.8" r=".9"/></svg><span data-th="เกม">Games</span> <small>24</small></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18"/></svg><span data-th="เว็บ">Web</span> <small>18</small></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 7V4M14 7V4M10 20v-3M14 20v-3M7 10H4M7 14H4M20 10h-3M20 14h-3"/></svg><span>IoT</span> <small>11</small></a>
+      <a href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 17h5M10.5 20h3M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2v.2h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg><span data-th="ไอเดีย">Ideas</span> <small>15</small></a>
+      <p class="tabs__sort"><span data-th="เรียงตาม">Sorted by</span> <button type="button" data-th="อัปเดตถี่สุด ▾">most active ▾</button></p>
+    </nav>
+
+    <div class="wrap shelf__grid">
+
+      <aside class="filters" aria-label="Filters">
+        <h2 class="mono" data-th="แนว">Genre</h2>
+        <ul class="filters__list">
+          <li><a href="#" aria-current="true">Roguelike <small>6</small></a></li>
+          <li><a href="#">Puzzle <small>5</small></a></li>
+          <li><a href="#">Casual <small>4</small></a></li>
+          <li><a href="#">Co-op <small>3</small></a></li>
+          <li><a href="#">SaaS <small>7</small></a></li>
+          <li><a href="#">Dev tool <small>4</small></a></li>
+          <li><a href="#">Smart farm <small>4</small></a></li>
+          <li><a href="#">FinTech <small>5</small></a></li>
+          <li><a href="#" data-th="ดูทุกแนว (23)">All 23 genres</a></li>
+        </ul>
+        <h2 class="mono" data-th="งานไปถึงไหนแล้ว">How far along</h2>
+        <label><input type="checkbox"> <span data-th="ยังเป็นไอเดีย">Concept</span></label>
+        <label><input type="checkbox"> <span data-th="ต้นแบบ">Prototype</span></label>
+        <label><input type="checkbox" checked> Beta</label>
+        <label><input type="checkbox" checked> <span data-th="ใช้งานจริงแล้ว">Live</span></label>
+        <h2 class="mono" data-th="ถ้าคุณมาหางานลงทุน">If you're investing</h2>
+        <label><input type="checkbox" checked> <span data-th="เปิดรับการลงทุน">Open to investment</span></label>
+        <label><input type="checkbox"> <span data-th="มีของให้ลองเล่น/ลองใช้">Has something to try</span></label>
+        <label><input type="checkbox"> <span data-th="อัปเดตในสัปดาห์นี้">Updated this week</span></label>
+        <p class="filters__help"><span data-th="หาไม่เจอใช่ไหม">Can't find it?</span> <a href="#" data-th="บอกเราว่ากำลังหาอะไร">Tell us what you're after</a></p>
+      </aside>
+
+      <div class="shelf__main">
+        <header class="sec-head">
+          <h2 data-th="คึกคักที่สุดสัปดาห์นี้">Busiest this week</h2>
+          <p><span data-th="เรียงจากงานที่ลงอัปเดตจริงบ่อยที่สุด ยิ่งอัปเดตสม่ำเสมอ ยิ่งขึ้นมาอยู่ข้างบน">Ranked by how often a project posts real updates. Post more, climb higher.</span> <a href="#" data-th="ดูวิธีจัดอันดับ">How ranking works</a></p>
+        </header>
+
+        <div class="top3">
+          <article class="feat feat--big">
+            <div class="cover cover--iot" style="--c:#2f5d50"><span class="rank mono">01</span></div>
+            <div class="feat__body">
+              <p class="mono meta">IoT · Smart farm · Beta</p>
+              <h3><a href="#">WheelSense</a></h3>
+              <p data-th="เซนเซอร์วัดความชื้นดินแบบไร้สาย ราคาไม่แรง สำหรับฟาร์มเล็ก ๆ ใช้ถ่านก้อนเดียวอยู่ได้หลายเดือน">A cheap wireless soil sensor for small farms. Runs for months on one battery.</p>
+              <p class="pulse-row"><span class="pulse" data-pulse="101101011011101101110111011111"></span><span class="mono" data-th="14 อัปเดตใน 30 วัน">14 updates in 30 days</span></p>
+              <p class="by"><span class="av av--moss" aria-hidden="true">M</span><span><strong>Mind</strong>, <span data-th="วิศวกรฮาร์ดแวร์">hardware engineer</span></span><time class="mono" data-th="40 นาทีที่แล้ว">40 min ago</time></p>
+            </div>
+          </article>
+          <article class="feat">
+            <div class="cover cover--web" style="--c:#c9553a"><span class="rank mono">02</span></div>
+            <div class="feat__body">
+              <p class="mono meta">Web · SaaS · Live</p>
+              <h3><a href="#">NestBoard</a></h3>
+              <p data-th="รายงานผลงานสำหรับทีมเล็กที่ไม่มีนักวิเคราะห์ข้อมูล">Reports for small teams who don't have an analyst.</p>
+              <p class="by"><span class="av av--sand" aria-hidden="true">T</span><span><strong>Tonkla</strong></span><time class="mono" data-th="1 ชม.ที่แล้ว">1 hr ago</time></p>
+            </div>
+          </article>
+          <article class="feat">
+            <div class="cover cover--game" style="--c:#d39a2f"><span class="rank mono">03</span></div>
+            <div class="feat__body">
+              <p class="mono meta">Game · Roguelike · Beta</p>
+              <h3><a href="#">Burrow Knights</a></h3>
+              <p data-th="ขุด สู้ แล้วหลงทางใต้ดินไปกับเพื่อนอีกคน">Dig, fight, and get lost underground with a friend.</p>
+              <p class="by"><span class="av av--clay" aria-hidden="true">P</span><span><strong>Pim</strong></span><time class="mono" data-th="2 ชม.ที่แล้ว">2 hrs ago</time></p>
+            </div>
+          </article>
+        </div>
+
+        <header class="sec-head">
+          <h2 data-th="อัปเดตล่าสุด">Fresh updates</h2>
+          <p data-th="ทุกหมวด เรียงจากใหม่ไปเก่า">Every category, newest first.</p>
+        </header>
+
+        <div class="cards">
+          <article class="card">
+            <div class="cover cover--web" style="--c:#b9785a"><span class="cover__title">Pawprint</span></div>
+            <p class="mono meta">Web · E-commerce · Beta</p>
+            <p class="pulse-row"><span class="pulse" data-pulse="001001010010010100100101001011"></span><span class="mono" data-th="9 อัปเดต">9 updates</span></p>
+            <p class="by"><span class="av av--plum" aria-hidden="true">F</span><span>Fahsai</span><time class="mono" data-th="3 ชม.ที่แล้ว">3 hrs ago</time></p>
+          </article>
+          <article class="card">
+            <div class="cover cover--game" style="--c:#c9553a"><span class="cover__title">Seed Dash</span></div>
+            <p class="mono meta">Game · Casual · Live</p>
+            <p class="pulse-row"><span class="pulse" data-pulse="100100100101001001001010010011"></span><span class="mono" data-th="9 อัปเดต">9 updates</span></p>
+            <p class="by"><span class="av av--clay" aria-hidden="true">P</span><span>Pim</span><time class="mono" data-th="5 ชม.ที่แล้ว">5 hrs ago</time></p>
+          </article>
+          <article class="card">
+            <div class="cover cover--iot" style="--c:#3d5a6c"><span class="cover__title">AquaNode</span><span class="tag" data-th="เปิดรับการลงทุน">Open to investment</span></div>
+            <p class="mono meta">IoT · Water · Prototype</p>
+            <p class="pulse-row"><span class="pulse" data-pulse="000100100010010010010100100110"></span><span class="mono" data-th="8 อัปเดต">8 updates</span></p>
+            <p class="by"><span class="av av--moss" aria-hidden="true">M</span><span>Mind</span><time class="mono" data-th="เมื่อวาน">yesterday</time></p>
+          </article>
+          <article class="card">
+            <div class="cover cover--idea" style="--c:#d39a2f"><span class="cover__title">Sunflower Bank</span><span class="tag" data-th="เปิดรับการลงทุน">Open to investment</span></div>
+            <p class="mono meta">Idea · FinTech · Concept</p>
+            <p class="pulse-row"><span class="pulse" data-pulse="000010000100010000100100010010"></span><span class="mono" data-th="6 อัปเดต">6 updates</span></p>
+            <p class="by"><span class="av av--sand" aria-hidden="true">Ph</span><span>Phoom</span><time class="mono" data-th="เมื่อวาน">yesterday</time></p>
+          </article>
+          <article class="card">
+            <div class="cover cover--game" style="--c:#4a5b4a"><span class="cover__title">Moonwheel</span></div>
+            <p class="mono meta">Game · Puzzle · Prototype</p>
+            <p class="pulse-row"><span class="pulse" data-pulse="010000100001000010001000100100"></span><span class="mono" data-th="6 อัปเดต">6 updates</span></p>
+            <p class="by"><span class="av av--plum" aria-hidden="true">F</span><span>Fahsai</span><time class="mono" data-th="2 วันที่แล้ว">2 days ago</time></p>
+          </article>
+          <article class="card">
+            <div class="cover cover--web" style="--c:#2f5d50"><span class="cover__title">Kernel Docs</span></div>
+            <p class="mono meta">Web · Dev tool · Live</p>
+            <p class="pulse-row"><span class="pulse" data-pulse="000001000010000001000010000100"></span><span class="mono" data-th="5 อัปเดต">5 updates</span></p>
+            <p class="by"><span class="av av--sand" aria-hidden="true">T</span><span>Tonkla</span><time class="mono" data-th="2 วันที่แล้ว">2 days ago</time></p>
+          </article>
+        </div>
+        <p class="more"><a class="btn btn--ghost" href="#" data-th="ขอดูอีก">Show me more</a></p>
+      </div>
+
+      <aside class="feed" aria-labelledby="feed-title">
+        <h2 id="feed-title"><span class="dot" aria-hidden="true"></span><span data-th="เพิ่งลงเมื่อกี้">Just posted</span></h2>
+        <ol>
+          <li><time class="mono" data-th="40 นาที">40 min</time><p><strong>WheelSense</strong> <span data-th="ปล่อยเฟิร์มแวร์ 0.9 แบตอยู่ได้นานขึ้น">shipped firmware 0.9. The battery lasts longer now.</span></p></li>
+          <li><time class="mono" data-th="1 ชม.">1 hr</time><p><strong>NestBoard</strong> <span data-th="เพิ่มหน้ารายงานสำหรับนักลงทุน">added a report page for investors.</span></p></li>
+          <li><time class="mono" data-th="2 ชม.">2 hrs</time><p><strong>Burrow Knights</strong> <span data-th="มีเดโมเล่นสองคนให้ลองแล้ว">has a two-player demo you can try.</span></p></li>
+          <li><time class="mono" data-th="3 ชม.">3 hrs</time><p><strong>Pawprint</strong> <span data-th="เริ่มทดสอบระบบจ่ายเงินกับร้านกลุ่มแรก">started testing payments with its first shops.</span></p></li>
+          <li><time class="mono" data-th="5 ชม.">5 hrs</time><p><strong>Seed Dash</strong> <span data-th="ปรับด่าน 3 ถึง 5 ใหม่ หลังผู้เล่นบอกว่ายากเกินไป">rebalanced levels 3 to 5 after players said they were too hard.</span></p></li>
+          <li><time class="mono" data-th="เมื่อวาน">Yesterday</time><p><strong>AquaNode</strong> <span data-th="เอาเครื่องต้นแบบชุดแรกไปติดตั้งในบ่อจริง">put its first prototypes in a real pond.</span></p></li>
+        </ol>
+        <a class="feed__all" href="#" data-th="ดูอัปเดตทั้งหมด">See every update</a>
+        <p class="feed__hub"><span data-th="ทุกงานที่นี่โยงกลับมาที่ Hamster Hub ได้ เราดูทั้งงานและทีมก่อนขึ้นชั้น และเขียนไว้ชัดเจนว่าแต่ละงานหาเงินยังไง">Everything here leads back to Hamster Hub. We check the work and the team before it goes up, and we write down how each project makes money.</span> <a href="#trust" data-th="อ่านวิธีคัดงานของเรา">Read how we pick</a></p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="trust" id="trust" aria-labelledby="trust-title">
+    <div class="wrap trust__grid">
+      <div class="trust__head">
+        <h2 id="trust-title" data-th="ทำไมถึงเชื่อของบนชั้นนี้ได้">Why you can trust what's on the shelf</h2>
+        <p data-th="เราอยากโชว์สิบงานที่กล้ารับรอง มากกว่าร้อยงานที่ไม่กล้า เลยมีกติกาอยู่ไม่กี่ข้อ">We'd rather show ten projects we can stand behind than a hundred we can't. So there are a few rules.</p>
+        <a class="btn btn--ghost" href="#" data-th="อ่านเช็กลิสต์ฉบับเต็ม">Read the full checklist</a>
+      </div>
+      <ol class="rules">
+        <li><span class="mono">01</span><div><h3 data-th="มีคนของเราตรวจมาแล้ว">Someone here has checked it.</h3><p data-th="ก่อนงานไหนจะขึ้นชั้น Hamster Hub ดูทั้งตัวงานและทีมที่ทำ เช็กลิสต์เปิดให้อ่านได้ คุณจะรู้เลยว่าเราดูอะไรบ้าง">Before a project goes up, Hamster Hub looks at the work and the team behind it. The checklist is public, so you can read exactly what we look for.</p></div></li>
+        <li><span class="mono">02</span><div><h3 data-th="เรื่องเงิน เขียนไว้ให้เห็น">The money part is written down.</h3><p data-th="ทุกงานบอกว่าหารายได้ยังไง ใครถือส่วนไหน และกำลังระดมทุนอยู่หรือเปล่า ไม่ต้องไปขุดหาใน pitch deck">Each project says how it earns, who owns what, and whether it's raising. No digging through a pitch deck.</p></div></li>
+        <li><span class="mono">03</span><div><h3 data-th="ดูมันเดินได้ด้วยตาตัวเอง">You can watch it move.</h3><p data-th="แต่ละงานลงอัปเดตไปเรื่อย ๆ ถ้างานไหนเงียบ เราจะติดป้ายว่าพักอยู่ ไม่ปล่อยให้ดูเหมือนยังสดใหม่">Projects post updates as they go. If one goes quiet, we mark it as paused instead of leaving it up looking fresh.</p></div></li>
+        <li><span class="mono">04</span><div><h3 data-th="ทุกงานโยงกลับมาหาเรา">It all leads back to us.</h3><p data-th="ทุกงานระบุว่า Hamster Hub ลงอะไรไปบ้าง จะเป็นคน เงิน หรือเวลา ถ้างานไปได้ดี คุณจะรู้ว่ามันมาจากไหน">Every project lists what Hamster Hub put in: people, money, or time. If it does well, you'll know where it came from.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="voices wrap" aria-labelledby="voices-title">
+    <div class="voices__head">
+      <h2 id="voices-title" data-th="คนที่เคยมาลองของที่นี่">People who've tried things here</h2>
+      <p data-th="ผู้เล่น ลูกค้า และนักลงทุนบางคน เราอ้างคำพูดเฉพาะคนที่ยินดีให้ใส่ชื่อ">Players, customers, and a few investors. We only quote people who said we could use their name.</p>
+    </div>
+    <figure class="voice voice--a">
+      <blockquote data-th="“ผมเล่นเดโม Burrow Knights วันศุกร์ แล้วเขียนไปหาพิมวันจันทร์ ปรากฏว่าบั๊กที่ผมเจอ เธอแก้ไปแล้ว”">“I played the Burrow Knights demo on a Friday and wrote to Pim on Monday. She'd already fixed the bug I found.”</blockquote>
+      <figcaption><strong data-th="ชื่อตัวอย่าง">Placeholder name</strong> <span data-th="ผู้จัดจำหน่ายเกมอินดี้">indie publisher</span></figcaption>
+    </figure>
+    <figure class="voice voice--b">
+      <blockquote data-th="“ประวัติอัปเดตบอกอะไรผมได้มากกว่าตัว pitch เสียอีก”">“The update log told me more than the pitch did.”</blockquote>
+      <figcaption><strong data-th="ชื่อตัวอย่าง">Placeholder name</strong> <span data-th="นักลงทุนอิสระ">angel investor</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="makers" id="makers" aria-labelledby="makers-title">
+    <div class="wrap makers__in">
+      <h2 id="makers-title" data-th="ทำงานที่ Hamster Hub ใช่ไหม เอางานมาวางบนชั้นสิ">Work at Hamster Hub? Put it on the shelf.</h2>
+      <div>
+        <p data-th="ลงสิ่งที่กำลังทำอยู่ แล้วก็ลงต่อไปเรื่อย ๆ อัปเดตสั้น ๆ ทุกหนึ่งหรือสองสัปดาห์ ได้ผลกว่าเปิดตัวใหญ่ปีละครั้ง แถมยังดันงานคุณขึ้นไปอยู่ข้างบนด้วย">Post what you're building, then keep posting. A short update every week or two does more than one big launch a year, and it moves you up the shelf.</p>
+        <p class="makers__cta"><a class="btn" href="#" data-th="ลงผลงานของคุณ">Post your work</a><a href="#" data-th="ดูตัวอย่างอัปเดตที่ดี">See what a good update looks like</a></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p data-th="Hamster Nest ดูแลโดย Hamster Hub">Hamster Nest is run by Hamster Hub.</p>
+    <nav aria-label="Footer"><a href="#" data-th="เราคัดงานยังไง">How we pick</a><a href="#" data-th="วิธีจัดอันดับ">How ranking works</a><a href="#" data-th="สำหรับนักลงทุน">For investors</a><a href="#" data-th="ติดต่อเรา">Get in touch</a></nav>
+    <p class="mono" data-th="ฉบับร่างดีไซน์ · ผลงาน ชื่อ และตัวเลขเป็นข้อมูลสมมติ">Design draft · projects, names and numbers are placeholders</p>
+  </div>
+</footer>
+
+<script src="landing.js"></script>
+</body>
+</html>
