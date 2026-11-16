@@ -10,7 +10,9 @@ npm run lint
 npm test
 ```
 
-All projects, people, numbers and quotes are placeholders. The approved visual draft is in `design/landing/`.
+All projects, people, numbers and quotes are placeholders. The approved visual drafts are in `design/`.
+
+**Picking this up in a new session? Start with [`docs/HANDOFF.md`](docs/HANDOFF.md).**
 
 ## Layout
 
