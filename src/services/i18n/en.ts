@@ -31,6 +31,8 @@ export const en = {
   "hero.highlights": "Highlights · picked from this week's busiest",
   "hero.reel.label": "Highlighted projects",
   "hero.look": "Take a look",
+  "hero.prev": "Previous project",
+  "hero.next": "Next project",
 
   "browse.title": "Browse",
   "browse.sub": (p: { count: number }) => `${plural(p.count, "project", "projects")}. Search, or pick a category.`,

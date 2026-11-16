@@ -28,6 +28,8 @@ export const th: Messages = {
   "hero.highlights": "ผลงานเด่น · คัดจากงานที่คึกคักที่สุดสัปดาห์นี้",
   "hero.reel.label": "ผลงานเด่น",
   "hero.look": "เข้าไปดู",
+  "hero.prev": "ผลงานก่อนหน้า",
+  "hero.next": "ผลงานถัดไป",
 
   "browse.title": "ดูผลงานทั้งหมด",
   "browse.sub": (p) => `${p.count} ผลงาน ค้นหา หรือเลือกหมวดด้านล่างได้เลย`,
