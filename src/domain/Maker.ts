@@ -1,4 +1,5 @@
 import type { LocalizedText } from "./LocalizedText";
+import type { MakerStory } from "./MakerStory";
 
 export type AvatarTone = "clay" | "moss" | "sand" | "plum";
 
@@ -9,11 +10,13 @@ export interface MakerProps {
   /** What you'd call them when writing to them. */
   nickname: LocalizedText;
   role: LocalizedText;
-  yearsAtHub: number;
+  /** The year they started at Hamster Hub. */
+  joinedYear: number;
   /** A line of their own, shown on their note. */
   motto: LocalizedText;
   initials: string;
   tone: AvatarTone;
+  story: MakerStory;
 }
 
 /** A person at Hamster Hub who makes things. */
@@ -22,20 +25,27 @@ export class Maker {
   readonly name: string;
   readonly nickname: LocalizedText;
   readonly role: LocalizedText;
-  readonly yearsAtHub: number;
+  readonly joinedYear: number;
   readonly motto: LocalizedText;
   readonly initials: string;
   readonly tone: AvatarTone;
+  readonly story: MakerStory;
 
   constructor(props: MakerProps) {
-    if (props.yearsAtHub < 0) throw new RangeError(`yearsAtHub can't be negative (${props.id})`);
+    if (!Number.isInteger(props.joinedYear)) throw new RangeError(`joinedYear has to be a year (${props.id})`);
     this.id = props.id;
     this.name = props.name;
     this.nickname = props.nickname;
     this.role = props.role;
-    this.yearsAtHub = props.yearsAtHub;
+    this.joinedYear = props.joinedYear;
     this.motto = props.motto;
     this.initials = props.initials;
     this.tone = props.tone;
+    this.story = props.story;
+  }
+
+  /** Whole calendar years since they joined. */
+  yearsAtHub(now: Date): number {
+    return Math.max(0, now.getUTCFullYear() - this.joinedYear);
   }
 }

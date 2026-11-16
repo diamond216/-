@@ -8,9 +8,11 @@ import {
   Listing,
   LocalizedText,
   Maker,
+  MakerStory,
   Project,
   type ProjectProps,
   ProjectUpdate,
+  ReplyTime,
   Stage,
   UpdateType,
 } from "@/domain";
@@ -22,10 +24,20 @@ export const maker = new Maker({
   name: "Mo",
   nickname: new LocalizedText("Mo", "โม"),
   role: new LocalizedText("Tester", "ผู้ทดสอบ"),
-  yearsAtHub: 1,
+  joinedYear: 2025,
   motto: new LocalizedText("Hi", "สวัสดี"),
   initials: "M",
   tone: "clay",
+  story: new MakerStory({
+    intro: LocalizedText.same("Hello."),
+    description: LocalizedText.same("Mo makes things."),
+    talkTopics: [],
+    replyTime: new ReplyTime(2),
+    languages: ["en"],
+    timeline: [],
+    recognitions: [],
+    earlier: [],
+  }),
 });
 
 export const genre = new Genre("puzzle", "Puzzle", "game");
@@ -38,6 +50,8 @@ export function update(projectId: string, hoursAgo: number, type: UpdateType = U
     type,
     postedAt: new Date(NOW.now().getTime() - hoursAgo * HOUR_MS),
     summary: LocalizedText.same("did a thing."),
+    title: LocalizedText.same("A thing"),
+    body: LocalizedText.same("We did a thing."),
   });
 }
 

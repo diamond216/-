@@ -24,7 +24,7 @@ export function MakerNote({ spotlight }: { spotlight: MakerSpotlight }) {
           <span>
             {localizer.t("note.who", {
               role: localizer.text(maker.role),
-              years: maker.yearsAtHub,
+              years: maker.yearsAtHub(clock.now()),
               projects: projectCount,
             })}
           </span>

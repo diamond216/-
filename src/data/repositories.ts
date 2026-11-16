@@ -28,6 +28,8 @@ export interface EndorsementRepository {
   /** Quotes we're allowed to show with a name. */
   quotable(): readonly Endorsement[];
   forProject(projectId: string): readonly Endorsement[];
+  /** Quotes about a person, from people who work with them. */
+  forMaker(makerId: string): readonly Endorsement[];
 }
 
 export interface GenreRepository {

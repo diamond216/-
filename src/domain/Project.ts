@@ -1,6 +1,10 @@
 import type { Category, CategoryId } from "./Category";
+import type { CoverArt } from "./CoverArt";
+import type { HubContribution } from "./HubCheck";
 import type { Genre } from "./Genre";
 import type { LocalizedText } from "./LocalizedText";
+import type { MoneyLedger } from "./MoneyLedger";
+import type { Platform } from "./Platform";
 import type { Stage, StageId } from "./Stage";
 
 export interface ProjectProps {
@@ -25,6 +29,15 @@ export interface ProjectProps {
   coverColor: string;
   /** The maker marked it as paused. */
   paused?: boolean;
+  /** Generated stand-ins for screenshots, shown beside the cover. */
+  screens?: readonly CoverArt[];
+  platforms?: readonly Platform[];
+  /** "Pim and one artist". */
+  team?: LocalizedText;
+  /** First of the month it started. */
+  startedOn?: Date;
+  ledger?: MoneyLedger;
+  hub?: HubContribution;
 }
 
 /** Something on the shelf. */
@@ -44,6 +57,12 @@ export class Project {
   readonly trust: number;
   readonly coverColor: string;
   readonly paused: boolean;
+  readonly screens: readonly CoverArt[];
+  readonly platforms: readonly Platform[];
+  readonly team?: LocalizedText;
+  readonly startedOn?: Date;
+  readonly ledger?: MoneyLedger;
+  readonly hub?: HubContribution;
 
   constructor(props: ProjectProps) {
     if (props.genres.length === 0) throw new Error(`${props.id} needs at least one genre`);
@@ -64,6 +83,12 @@ export class Project {
     this.trust = props.trust;
     this.coverColor = props.coverColor;
     this.paused = props.paused ?? false;
+    this.screens = props.screens ?? [];
+    this.platforms = props.platforms ?? [];
+    this.team = props.team;
+    this.startedOn = props.startedOn;
+    this.ledger = props.ledger;
+    this.hub = props.hub;
   }
 
   private static assertUnit(field: string, value: number, id: string): void {

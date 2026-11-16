@@ -16,7 +16,6 @@ export interface MakerSeed {
   name: string;
   nickname: Bilingual;
   role: Bilingual;
-  yearsAtHub: number;
   motto: Bilingual;
   initials: string;
   tone: AvatarTone;
@@ -57,6 +56,8 @@ export interface ProjectSeed {
 
 export interface EndorsementSeed {
   id: string;
+  kind: "played" | "used" | "invested" | "colleague";
+  makerId?: string;
   quote: Bilingual;
   author: Bilingual;
   authorRole: Bilingual;
@@ -73,7 +74,6 @@ export const makerSeeds: readonly MakerSeed[] = [
     name: "Pim",
     nickname: { en: "Pim", th: "พิม" },
     role: { en: "Game designer", th: "นักออกแบบเกม" },
-    yearsAtHub: 3,
     motto: {
       en: "A good game is one people can't help telling their friends about.",
       th: "เกมที่ดี คือเกมที่คนเล่นแล้วอยากเอาไปเล่าต่อ",
@@ -86,7 +86,6 @@ export const makerSeeds: readonly MakerSeed[] = [
     name: "Mind",
     nickname: { en: "Mind", th: "มายด์" },
     role: { en: "Hardware engineer", th: "วิศวกรฮาร์ดแวร์" },
-    yearsAtHub: 4,
     motto: {
       en: "If it can't get through a rainy season, it isn't finished.",
       th: "ถ้ายังไม่รอดหน้าฝน ก็ยังไม่เรียกว่าเสร็จ",
@@ -99,7 +98,6 @@ export const makerSeeds: readonly MakerSeed[] = [
     name: "Tonkla",
     nickname: { en: "Tonkla", th: "ต้นกล้า" },
     role: { en: "Web developer", th: "นักพัฒนาเว็บ" },
-    yearsAtHub: 2,
     motto: {
       en: "I'd rather ship something small on Friday than something big never.",
       th: "ส่งของเล็ก ๆ ทุกวันศุกร์ ดีกว่ารอของใหญ่ที่ไม่มีวันเสร็จ",
@@ -112,7 +110,6 @@ export const makerSeeds: readonly MakerSeed[] = [
     name: "Fahsai",
     nickname: { en: "Fahsai", th: "ฟ้าใส" },
     role: { en: "Product designer", th: "นักออกแบบผลิตภัณฑ์" },
-    yearsAtHub: 2,
     motto: {
       en: "If my mum can't use it, I'm not done.",
       th: "ถ้าแม่ยังใช้ไม่เป็น แปลว่างานยังไม่จบ",
@@ -125,7 +122,6 @@ export const makerSeeds: readonly MakerSeed[] = [
     name: "Phoom",
     nickname: { en: "Phoom", th: "ภูมิ" },
     role: { en: "Analyst", th: "นักวิเคราะห์" },
-    yearsAtHub: 1,
     motto: {
       en: "Most ideas get better when you show them early.",
       th: "ไอเดียส่วนใหญ่ดีขึ้น เมื่อเอาออกมาให้คนอื่นดูตั้งแต่เนิ่น ๆ",
@@ -139,6 +135,7 @@ export const makerSeeds: readonly MakerSeed[] = [
 export const historyTemplates: Readonly<Record<UpdateTypeId, Bilingual>> = {
   release: { en: "shipped a new version.", th: "ปล่อยเวอร์ชันใหม่" },
   feature: { en: "added something people asked for.", th: "เพิ่มของที่มีคนขอเข้ามา" },
+  milestone: { en: "reached a small milestone.", th: "ไปถึงอีกก้าวหนึ่ง" },
   demo: { en: "put up a new demo.", th: "ลงเดโมตัวใหม่" },
   "field-test": { en: "took it out for a field test.", th: "เอาออกไปทดสอบหน้างาน" },
   devlog: { en: "wrote about what changed this week.", th: "เขียนเล่าว่าสัปดาห์นี้มีอะไรเปลี่ยนไปบ้าง" },
@@ -212,15 +209,16 @@ export const projectSeeds: readonly ProjectSeed[] = [
     name: "Burrow Knights",
     category: "game",
     genres: ["roguelike", "co-op"],
-    tags: ["Roguelike", "Coop"],
+    tags: ["Roguelike", "Coop", "PixelArt"],
     stage: "beta",
     blurb: {
       en: "Dig, fight, and get lost underground with a friend.",
       th: "ขุด สู้ แล้วหลงทางใต้ดินไปกับเพื่อนอีกคน",
     },
     maker: "pim",
+    openToInvestment: true,
     demoUrl: "#",
-    followers: 412,
+    followers: 214,
     quality: 0.84,
     trust: 0.8,
     coverColor: "#d39a2f",
@@ -232,10 +230,8 @@ export const projectSeeds: readonly ProjectSeed[] = [
       hearts: 31,
       replies: 9,
     },
-    history: [
-      [2, "devlog"], [3, "media"], [5, "patch"], [8, "devlog"], [10, "feature"], [14, "devlog"], [17, "media"],
-      [20, "patch"], [24, "devlog"], [28, "devlog"],
-    ],
+    // The posts at 4, 9 and 14 days are written out in projectDetails.ts.
+    history: [[17, "demo"], [19, "devlog"], [21, "patch"], [23, "devlog"], [25, "patch"], [27, "devlog"], [29, "patch"]],
   },
   {
     id: "pawprint",
@@ -647,6 +643,7 @@ export const projectSeeds: readonly ProjectSeed[] = [
 export const endorsementSeeds: readonly EndorsementSeed[] = [
   {
     id: "voice-publisher",
+    kind: "played",
     quote: {
       en: "I played the Burrow Knights demo on a Friday and wrote to Pim on Monday. She'd already fixed the bug I found.",
       th: "ผมเล่นเดโม Burrow Knights วันศุกร์ แล้วเขียนไปหาพิมวันจันทร์ ปรากฏว่าบั๊กที่ผมเจอ เธอแก้ไปแล้ว",
@@ -658,12 +655,108 @@ export const endorsementSeeds: readonly EndorsementSeed[] = [
   },
   {
     id: "voice-angel",
+    kind: "invested",
+    projectId: "burrow-knights",
     quote: {
       en: "The update log told me more than the pitch did.",
       th: "ประวัติอัปเดตบอกอะไรผมได้มากกว่าตัว pitch เสียอีก",
     },
     author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
     authorRole: { en: "angel investor", th: "นักลงทุนอิสระ" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-farmer",
+    kind: "used",
+    projectId: "wheelsense",
+    quote: {
+      en: "I stopped walking the rows at six every morning. The phone tells me which corner is dry.",
+      th: "ผมเลิกเดินดูแปลงตอนหกโมงเช้าทุกวันแล้ว มือถือบอกเองว่ามุมไหนดินแห้ง",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "durian farmer", th: "เจ้าของสวนทุเรียน" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-team-lead",
+    kind: "used",
+    projectId: "nestboard",
+    quote: {
+      en: "Our Monday meeting got twenty minutes shorter. Nobody has to make the slides any more.",
+      th: "ประชุมวันจันทร์สั้นลงยี่สิบนาที ไม่ต้องมีใครมานั่งทำสไลด์อีกแล้ว",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "team lead at a logistics startup", th: "หัวหน้าทีมในสตาร์ทอัพขนส่ง" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-player",
+    kind: "played",
+    projectId: "seed-dash",
+    quote: {
+      en: "I play it on the bus. Level four still beats me, but less often now.",
+      th: "เล่นบนรถเมล์ประจำ ด่านสี่ยังแพ้อยู่ แต่แพ้น้อยลงแล้ว",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "player", th: "ผู้เล่น" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-shrimp",
+    kind: "invested",
+    projectId: "aquanode",
+    quote: {
+      en: "I lost a pond to bad water two years ago. I'd pay for this before it's finished.",
+      th: "เมื่อสองปีก่อนผมเสียบ่อไปหนึ่งบ่อเพราะน้ำเสีย ของแบบนี้ผมยอมจ่ายตั้งแต่ยังทำไม่เสร็จ",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "shrimp farmer and small investor", th: "คนเลี้ยงกุ้งและนักลงทุนรายย่อย" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-anon",
+    kind: "played",
+    projectId: "moonwheel",
+    quote: { en: "Lovely, but level three needs a hint.", th: "น่ารักมาก แต่ด่านสามควรมีคำใบ้" },
+    author: { en: "Unnamed tester", th: "ผู้ทดสอบไม่ประสงค์ออกนาม" },
+    authorRole: { en: "playtester", th: "ผู้ทดสอบ" },
+    // Didn't agree to be named, so this one never shows.
+    namedWithConsent: false,
+  },
+  {
+    id: "voice-producer",
+    kind: "colleague",
+    makerId: "pim",
+    quote: {
+      en: "Pim sends a build every Friday whether it's ready or not. That's why her games get good.",
+      th: "พิมส่งบิลด์ทุกวันศุกร์ ไม่ว่าจะพร้อมหรือไม่ นั่นแหละคือเหตุผลที่เกมของเธอออกมาดี",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "producer at Hamster Hub", th: "โปรดิวเซอร์ที่ Hamster Hub" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-ops",
+    kind: "colleague",
+    makerId: "mind",
+    quote: {
+      en: "Mind will drive three hours to see why one sensor went quiet. Usually it's a snail.",
+      th: "มายด์ยอมขับรถสามชั่วโมงเพื่อไปดูว่าทำไมเซนเซอร์ตัวเดียวเงียบไป ส่วนใหญ่ก็เพราะหอยทาก",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "operations at Hamster Hub", th: "ฝ่ายปฏิบัติการที่ Hamster Hub" },
+    namedWithConsent: true,
+  },
+  {
+    id: "voice-tonkla",
+    kind: "colleague",
+    makerId: "tonkla",
+    quote: {
+      en: "Ask Tonkla for a feature on Monday and you'll usually have a smaller, better one by Friday.",
+      th: "ขอฟีเจอร์กับต้นกล้าวันจันทร์ ส่วนใหญ่วันศุกร์จะได้ของที่เล็กกว่าแต่ดีกว่ากลับมา",
+    },
+    author: { en: "Placeholder name", th: "ชื่อตัวอย่าง" },
+    authorRole: { en: "finance at Hamster Hub", th: "ฝ่ายการเงินที่ Hamster Hub" },
     namedWithConsent: true,
   },
 ];

@@ -67,6 +67,10 @@ export class InMemoryEndorsementRepository
   }
 
   forProject(projectId: string): readonly Endorsement[] {
-    return this.items.filter((endorsement) => endorsement.projectId === projectId);
+    return this.quotable().filter((endorsement) => endorsement.projectId === projectId);
+  }
+
+  forMaker(makerId: string): readonly Endorsement[] {
+    return this.quotable().filter((endorsement) => endorsement.makerId === makerId);
   }
 }

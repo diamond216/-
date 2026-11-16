@@ -1,4 +1,5 @@
 import { DAY_MS } from "./Clock";
+import type { CoverArt } from "./CoverArt";
 import type { LocalizedText } from "./LocalizedText";
 import type { UpdateType } from "./UpdateType";
 
@@ -11,6 +12,12 @@ export interface ProjectUpdateProps {
   summary: LocalizedText;
   /** A tighter wording for places with less room. Falls back to the summary. */
   note?: LocalizedText;
+  /** Headline on the project page. */
+  title: LocalizedText;
+  /** A short paragraph on the project page. */
+  body: LocalizedText;
+  /** A picture that came with the post. */
+  image?: CoverArt;
   hearts?: number;
   replies?: number;
 }
@@ -23,6 +30,9 @@ export class ProjectUpdate {
   readonly postedAt: Date;
   readonly summary: LocalizedText;
   readonly note: LocalizedText;
+  readonly title: LocalizedText;
+  readonly body: LocalizedText;
+  readonly image?: CoverArt;
   readonly hearts: number;
   readonly replies: number;
 
@@ -33,6 +43,9 @@ export class ProjectUpdate {
     this.postedAt = props.postedAt;
     this.summary = props.summary;
     this.note = props.note ?? props.summary;
+    this.title = props.title;
+    this.body = props.body;
+    this.image = props.image;
     this.hearts = props.hearts ?? 0;
     this.replies = props.replies ?? 0;
   }
