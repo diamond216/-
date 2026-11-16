@@ -4,7 +4,7 @@
 > ตอนนี้หน้าแรก, หน้าผลงาน และหน้าโปรไฟล์สร้างเสร็จและผ่านการอนุมัติแล้ว (ข้อมูลยังเป็นข้อมูลสมมติ ยังไม่มี backend)
 > session ใหม่: อ่าน `docs/WORKFLOW.md` (ระบบและวิธีคิดทั้งหมด) และไฟล์นี้ให้จบก่อนเริ่มงาน
 
-Last updated: 16 Nov 2026. Branch: `claude/hamster-nest-portfolio-8gihhk`.
+Last updated: 17 Nov 2026. Branch: `claude/hamster-nest-portfolio-8gihhk`.
 
 ---
 
@@ -130,7 +130,14 @@ flow = Σ w(type) × 2^(−ageDays/14)
 - Real backend: auth, database, sending messages, uploads
 - Deployment
 
-**Likely next steps:** ask the owner which to do first. Draft it as static HTML in `design/<page>/`, render options as pictures, let the owner choose, then build.
+**On hold (16 Nov 2026):** the owner plans to restructure the whole UX/UI. Don't build anything visible until the owner gives the new direction. To prepare, 25 showcase sites were visited and captured: the list with what to borrow is in `docs/references/showcase-sites.md`, the contact sheet is `docs/references/showcase-sites.jpg`, and there's one picture per site in `docs/references/sites/`. We borrow layout patterns only, never branding, images or copy.
+
+**Open questions for the owner:**
+
+- The hero highlight shows the same three projects as "Busiest this week", because both use the same ranking. Should the highlight pick by a different rule?
+- The Thai copy added with the hero highlight and Browse header still needs a Thai speaker's proofread.
+
+**Likely next steps:** wait for the owner's new direction. Then draft it as static HTML in `design/<page>/`, render options as pictures, let the owner choose, then build.
 
 ## 8. Environment notes
 
