@@ -48,6 +48,12 @@ export class Shelf {
     return { total: matches.length, featured, rest };
   }
 
+  /** Where a project sits on the headline ranking across the whole shelf, counting from 1. */
+  positionOf(projectId: string): number | undefined {
+    const index = this.headline.rank(this.directory.all()).findIndex((listing) => listing.id === projectId);
+    return index === -1 ? undefined : index + 1;
+  }
+
   size(): number {
     return this.directory.all().length;
   }

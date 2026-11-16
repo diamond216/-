@@ -8,6 +8,11 @@ export class ActivityLog {
     this.updates = [...updates].sort((a, b) => b.postedAt.getTime() - a.postedAt.getTime());
   }
 
+  /** One log covering several projects, for example everything a maker has posted. */
+  static merge(logs: readonly ActivityLog[]): ActivityLog {
+    return new ActivityLog(logs.flatMap((log) => log.all()));
+  }
+
   all(): readonly ProjectUpdate[] {
     return this.updates;
   }
@@ -26,6 +31,11 @@ export class ActivityLog {
 
   hasUpdateWithin(days: number, now: Date): boolean {
     return this.updates.some((update) => update.isWithinDays(days, now));
+  }
+
+  /** On how many different days something was posted, within the window. */
+  activeDaysWithin(days: number, now: Date): number {
+    return this.dailyStrip(days, now).filter(Boolean).length;
   }
 
   /** One flag per day, oldest first: did anything get posted that day? */

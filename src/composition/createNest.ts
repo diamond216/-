@@ -11,6 +11,8 @@ import {
 } from "@/services/preferences/PreferenceStore";
 import { FlowRanking, MostFollowed, NewestFirst, RankingRegistry } from "@/services/ranking";
 import { MiniSearchProjectSearch } from "@/services/search";
+import { FollowStore } from "@/services/follow/FollowStore";
+import { MakerProfileService, ProjectPageService } from "@/services/pages";
 import { ActivityDigest, ListingDirectory, ListingSpecificationBuilder, Shelf } from "@/services/shelf";
 import { BrowserStore, type KeyValueStore } from "@/services/storage/KeyValueStore";
 
@@ -20,6 +22,9 @@ export interface Nest {
   shelf: Shelf;
   digest: ActivityDigest;
   endorsements: EndorsementRepository;
+  projectPages: ProjectPageService;
+  makerProfiles: MakerProfileService;
+  follows: FollowStore;
   contact: { validator: MessageValidator; sender: MessageSender };
   preferences: { locale: PreferenceStore<Locale>; theme: PreferenceStore<Theme> };
 }
@@ -43,11 +48,16 @@ export function createNest({ clock = FrozenClock.atLoad(), storage = new Browser
   const search = new MiniSearchProjectSearch(directory.all());
   const specifications = new ListingSpecificationBuilder(search, clock);
 
+  const shelf = new Shelf(directory, repositories.genres, specifications, rankings, flow);
+
   return {
     clock,
-    shelf: new Shelf(directory, repositories.genres, specifications, rankings, flow),
+    shelf,
     digest: new ActivityDigest(directory, repositories.updates, repositories.genres, flow, clock),
     endorsements: repositories.endorsements,
+    projectPages: new ProjectPageService(directory, shelf, repositories.endorsements, clock),
+    makerProfiles: new MakerProfileService(repositories.makers, directory, repositories.endorsements, flow, clock),
+    follows: new FollowStore(storage),
     contact: { validator: new MessageValidator(), sender: new LocalOutboxSender(storage, clock) },
     preferences: {
       locale: new PreferenceStore<Locale>(LOCALE_STORAGE_KEY, LOCALES, "en", storage, "lang"),
