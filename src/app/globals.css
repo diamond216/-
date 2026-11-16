@@ -446,9 +446,9 @@
   .feed h2 { font-size: 20px; font-weight: 700; display: flex; align-items: center; margin-bottom: 8px; }
   .feed li { padding: 14px 0; border-bottom: 1px solid var(--line); }
   .feed li p { font-size: 14.5px; line-height: 1.45; margin-top: 3px; }
-  .feed__meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 2px; text-transform: none; white-space: nowrap; }
+  .feed__meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; row-gap: 2px; text-transform: none; white-space: nowrap; }
   .kind { border: 1px solid var(--line); border-radius: 3px; padding: 1px 6px; color: var(--ink); }
-  .react { margin-left: auto; }
+  .react { margin-left: auto; font-size: 11px; letter-spacing: 0; }
   .feed__all { display: inline-block; margin-top: 14px; font-weight: 600; font-size: 14.5px; }
   .feed__hub { margin-top: 40px; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
   .feed__hub a { color: var(--ink); font-weight: 600; display: block; margin-top: 6px; }
