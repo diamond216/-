@@ -8,7 +8,7 @@ function isTyping(target: EventTarget | null): boolean {
   return target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
 }
 
-/** The search field in the hero. Filters the shelf as you type; "/" jumps to it from anywhere. */
+/** The search field at the top of Browse. Filters the shelf as you type; "/" jumps to it from anywhere. */
 export function SearchBox({
   value,
   onChange,

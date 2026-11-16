@@ -261,19 +261,48 @@
   .theme svg { width: 15px; height: 15px; }
   .theme[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-  /* ---------- hero: wide text column, a maker's note hanging off to the right ---------- */
-  .hero { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; padding-top: 76px; padding-bottom: 88px; }
-  .hero__main { grid-column: 1 / span 7; }
-  .hero__count { display: flex; align-items: center; margin-bottom: 22px; }
-  .hero h1 { font-size: clamp(56px, 7.4vw, 108px); font-weight: 800; letter-spacing: -0.045em; line-height: 0.94; }
-  .hero h1 .h-line { display: block; }
-  .hero h1 em { font-style: normal; color: var(--accent); }
-  :lang(th) .hero h1 { font-size: clamp(48px, 5.6vw, 82px); font-weight: 700; line-height: 1.22; }
-  .motion-ok .hero h1[data-anim="pending"] .h-line { opacity: 0; }
-  .hero__lede { max-width: 58ch; font-size: 19px; line-height: 1.6; margin-top: 30px; color: var(--ink); }
+  /* ---------- hero: a highlighted project on the left, the shelf's pulse and its maker on the right ---------- */
+  .hero { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; padding-top: 56px; padding-bottom: 72px; }
+  .hero__main { grid-column: 1 / span 7; min-width: 0; }
+  .hero__count { display: flex; align-items: center; margin-bottom: 18px; }
 
-  .search { margin-top: 40px; max-width: 620px; }
-  .search label { display: block; font-weight: 600; margin-bottom: 8px; }
+  /* The highlight card. Same frame as the panels beside it. */
+  .hl { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .hl .cover { aspect-ratio: 16 / 5.6; }
+  .hl .cover--game { background-size: 44px 44px; background-position: 0 0, 22px 22px; }
+  .hl .cover--game::after { width: 34%; }
+  .hl__tag { position: absolute; left: 18px; top: 18px; z-index: 1; background: var(--ink); color: var(--paper); font-weight: 600; padding: 6px 10px; border-radius: 4px; }
+  .hl__body { padding: 24px 28px 26px; display: grid; gap: 10px; justify-items: start; }
+  .hl h2 { font: 800 58px/0.98 var(--display); letter-spacing: -0.04em; }
+  :lang(th) .hl h2 { line-height: 1.1; }
+  .hl h2 a { text-decoration: none; }
+  .hl h2 a:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .hl__blurb { font-size: 18px; line-height: 1.5; max-width: 52ch; }
+  .hl__latest { justify-self: stretch; display: flex; align-items: center; gap: 8px; font-size: 14.5px; border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 4px; }
+  .hl__latest .dot { flex: none; }
+  .hl__cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .hl__cta .btn { text-decoration: none; }
+
+  /* The three tabs under the card. The active one fills up; when it's full, the next project comes up. */
+  .reel__tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+  .reel__tabs button {
+    position: relative; display: grid; gap: 2px; padding: 12px 0 0; border: 0; background: none; color: var(--ink-soft);
+    font: 400 14px/1.35 var(--body); text-align: left; cursor: pointer;
+  }
+  .reel__tabs b { font: 700 17px/1.2 var(--display); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .reel__tabs button:hover b { text-decoration: underline; }
+  .reel__bar { position: absolute; inset: 0 0 auto; height: 3px; border-radius: 2px; background: var(--line); overflow: hidden; }
+  .reel__bar::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+  [aria-selected="true"] > .reel__bar::after { transform: scaleX(1); }
+  .motion-ok [aria-selected="true"] > .reel__bar::after { animation: reel-fill 6.5s linear both; }
+  .motion-ok .hero:is(:hover, :focus-within) .reel__bar::after,
+  .motion-ok .reel[data-paused="true"] .reel__bar::after { animation-play-state: paused; }
+  @keyframes reel-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .motion-ok .hl, .motion-ok .hero .note { animation: hl-in 0.45s ease both; }
+  @keyframes hl-in { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+
+  .search { flex: 1; min-width: 0; }
+  .search label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .search__row { display: flex; gap: 8px; }
   .search__field { position: relative; flex: 1; min-width: 0; }
   .search kbd { position: absolute; right: 12px; top: 50%; translate: 0 -50%; border: 1px solid var(--line); border-radius: 4px; padding: 2px 8px; pointer-events: none; }
@@ -284,12 +313,11 @@
   .search input::placeholder { color: var(--ink-soft); opacity: 1; }
   .search input::-webkit-search-cancel-button { display: none; }
   .search input:focus-visible { outline-offset: 0; }
-  .hero__busy { margin-top: 16px; font-size: 14.5px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 6px 14px; }
-  .hero__busy a { color: var(--ink); }
 
-  .hero__side { grid-column: 8 / span 5; align-self: end; margin-bottom: -24px; }
-  .donut { display: flex; align-items: center; gap: 28px; margin: 0 0 28px; }
-  .donut svg { flex: none; width: 236px; height: 236px; overflow: visible; }
+  .hero__side { grid-column: 8 / span 5; display: flex; flex-direction: column; gap: 20px; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 22px 24px; }
+  .donut { display: flex; align-items: center; gap: 26px; margin: 0; }
+  .donut svg { flex: none; width: 168px; height: 168px; overflow: visible; }
   .donut__slice { fill: none; stroke-width: 34; stroke-linecap: round; }
   .donut__dot { stroke: none; }
   .donut__hole { fill: var(--surface); }
@@ -308,19 +336,25 @@
   .donut__legend i { width: 16px; height: 16px; border-radius: 50%; background: var(--slice); }
   .donut__legend b { font: 800 26px/1 var(--display); letter-spacing: -0.02em; }
   .motion-ok .donut[data-anim="pending"] .donut__slice, .motion-ok .donut[data-anim="pending"] .donut__dot { opacity: 0; }
-  .note {
-    position: relative; width: 82%; margin-left: auto; transform: rotate(1.4deg);
-    background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 26px 26px 24px;
-    box-shadow: 6px 8px 0 color-mix(in srgb, var(--ink) 10%, transparent);
-  }
-  .note blockquote { font: 700 27px/1.22 var(--display); letter-spacing: -0.02em; margin: 14px 0 22px; }
-  :lang(th) .note blockquote { line-height: 1.45; letter-spacing: 0; font-size: 24px; }
+  /* The maker of the project on show. A strip of the project's cover colour ties it to the card. */
+  .note { flex: 1; display: flex; flex-direction: column; border-top: 4px solid var(--c, var(--line)); padding: 24px 26px; }
+  .note blockquote { font: 700 25px/1.22 var(--display); letter-spacing: -0.02em; margin: 12px 0 20px; }
+  :lang(th) .note blockquote { line-height: 1.45; letter-spacing: 0; font-size: 22px; }
   .who { display: flex; gap: 12px; align-items: center; }
   .who .av { width: 44px; height: 44px; font-size: 18px; }
   .who p { font-size: 14px; color: var(--ink-soft); line-height: 1.4; }
   .who strong { display: block; font-size: 16px; color: var(--ink); }
-  .note__last { font-size: 14px; margin: 18px 0; padding-top: 16px; border-top: 1px dashed var(--line); }
-  .note .btn { display: block; width: 100%; text-align: center; }
+  .note__last { display: flex; align-items: center; gap: 8px; font-size: 14px; margin: 18px 0 20px; padding-top: 14px; border-top: 1px dashed var(--line); }
+  .note__last .dot { flex: none; }
+  .note .btn { display: block; width: 100%; text-align: center; margin-top: auto; }
+  .note .who + .btn { margin-top: 20px; }
+
+  /* ---------- browse: title and search above the tabs ---------- */
+  .browse { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px 48px; align-items: end; padding-top: 8px; padding-bottom: 16px; }
+  .browse__title h2 { font: 800 46px/1 var(--display); letter-spacing: -0.035em; }
+  .browse__title p { font-size: 16px; color: var(--ink-soft); margin-top: 8px; }
+  .browse__busy { grid-column: 2; justify-self: end; font-size: 14.5px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .browse__busy a { color: var(--ink); }
 
   /* ---------- the shelf ---------- */
   .shelf { scroll-margin-top: 16px; }
@@ -780,10 +814,9 @@
   /* ---------- smaller screens ---------- */
   @media (max-width: 1120px) {
     .hero__main, .hero__side, .trust__head, .rules, .voices__head, .voice--a, .voice--b, .makers h2, .makers__in > div { grid-column: 1 / -1; }
-    .hero__side { margin: 48px 0 0; }
-    .donut { flex-wrap: wrap; gap: 20px; }
-    .donut svg { width: 200px; height: 200px; }
-    .note { transform: none; width: auto; max-width: 460px; margin-left: 0; }
+    .hero__side { margin: 32px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: stretch; }
+    .browse { grid-template-columns: minmax(0, 1fr); }
+    .browse__busy { grid-column: 1; justify-self: start; }
     .shelf__grid { grid-template-columns: minmax(0, 1fr); }
     .feed { border-left: 0; padding-left: 0; }
     /* Filters fold away behind one button. */
@@ -814,7 +847,14 @@
     .top__prefs { flex: none; }
     .top .btn { display: none; } /* the same button sits in the makers band further down */
     .voice--a blockquote { font-size: 28px; }
-    .hero__busy a { white-space: nowrap; }
+    .browse__busy a { white-space: nowrap; }
+    .hl h2 { font-size: 42px; }
+    .hl .cover { aspect-ratio: 16 / 8; }
+    .hl__body { padding: 20px; }
+    .reel__tabs { gap: 8px; }
+    .reel__tabs b { font-size: 15px; }
+    .reel__tabs button > span:last-child { display: none; }
+    .donut { flex-wrap: wrap; }
     .foot .mono { margin-left: 0; }
   }
   @media (max-width: 520px) {

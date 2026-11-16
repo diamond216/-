@@ -23,16 +23,19 @@ export const th: Messages = {
   "lang.label": "ภาษา",
   "theme.night": "โหมดกลางคืน",
 
-  "hero.count": (p) => `${p.projects} ผลงาน · ${p.updates} อัปเดตใน ${p.days} วันที่ผ่านมา`,
   "hero.title.lead": "งานที่ยัง",
   "hero.title.accent": "ไม่หยุดเดิน",
-  "hero.lede":
-    "Hamster Nest คือที่ที่คนใน Hamster Hub เอาของที่กำลังทำมาวางไว้ ทั้งเกม เว็บ ฮาร์ดแวร์ และไอเดียที่ยังไม่เสร็จดี ทุกงานมีอัปเดตให้ตามดูเรื่อย ๆ เจองานที่ชอบเมื่อไหร่ ทักไปคุยกับคนทำได้เลย",
+  "hero.highlights": "ผลงานเด่น · คัดจากงานที่คึกคักที่สุดสัปดาห์นี้",
+  "hero.reel.label": "ผลงานเด่น",
+  "hero.look": "เข้าไปดู",
+
+  "browse.title": "ดูผลงานทั้งหมด",
+  "browse.sub": (p) => `${p.count} ผลงาน ค้นหา หรือเลือกหมวดด้านล่างได้เลย`,
+  "browse.busy": "ช่วงนี้คึกคัก:",
   "search.label": "กำลังมองหาอะไรอยู่",
   "search.placeholder": "ลองพิมพ์ “roguelike เล่นสองคน” หรือ “เซนเซอร์วัดดิน”",
   "search.submit": "ไปดูกัน",
   "search.hint": "กด / เพื่อค้นหา",
-  "hero.busy": "หรือเริ่มจากแนวที่ช่วงนี้คึกคัก:",
 
   "donut.aria": (p) =>
     `${p.updates} อัปเดตใน ${p.days} วันที่ผ่านมา มี ${p.today} ผลงานลงอัปเดตวันนี้ อีก ${p.open} ผลงานกำลังหานักลงทุน ${p.building} ผลงานกำลังก้มหน้าก้มตาทำ และ ${p.paused} ผลงานพักอยู่`,
@@ -42,10 +45,11 @@ export const th: Messages = {
   "donut.building": "ก้มหน้าก้มตาทำอยู่",
   "donut.paused": "พักอยู่",
 
-  "note.label": "โน้ตจากคนทำงาน",
   "note.who": (p) => `${p.role} · อยู่ Hamster Hub มา ${p.years} ปี · ${p.projects} ผลงาน`,
   "note.last": (p) => `${p.ago}: ${p.project} ${p.what}`,
   "note.cta": (p) => `ทักไปคุยกับ${p.name}`,
+  "note.behind": "คนที่ทำงานนี้",
+  "note.also": (p) => `กำลังทำอีก: ${p.names.join(", ")}${p.more > 0 ? ` และอีก ${p.more} งาน` : ""}`,
 
   "tabs.label": "หมวดหมู่",
   "tabs.everything": "ทั้งหมด",

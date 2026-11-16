@@ -28,6 +28,8 @@ export interface MakerSpotlight {
   projectCount: number;
   update: ProjectUpdate;
   listing: Listing;
+  /** The maker's other projects, busiest first by flow. */
+  otherProjects: Listing[];
 }
 
 export type MomentumKey = "today" | "open" | "building" | "paused";
@@ -76,13 +78,24 @@ export class ActivityDigest {
   /** The maker behind the most recent update anywhere on the shelf. */
   spotlight(): MakerSpotlight | undefined {
     const [latest] = this.feed(1);
-    if (!latest) return undefined;
-    const { maker } = latest.listing;
+    return latest && this.describe(latest.listing, latest.update);
+  }
+
+  /** The maker behind one project, with that project's latest update. */
+  spotlightFor(listing: Listing): MakerSpotlight | undefined {
+    const update = listing.latestUpdate();
+    return update && this.describe(listing, update);
+  }
+
+  private describe(listing: Listing, update: ProjectUpdate): MakerSpotlight {
+    const { maker } = listing;
+    const theirs = this.directory.all().filter((other) => other.maker.id === maker.id);
     return {
       maker,
-      projectCount: this.directory.all().filter((listing) => listing.maker.id === maker.id).length,
-      update: latest.update,
-      listing: latest.listing,
+      projectCount: theirs.length,
+      update,
+      listing,
+      otherProjects: this.flow.rank(theirs.filter((other) => other.id !== listing.id)),
     };
   }
 

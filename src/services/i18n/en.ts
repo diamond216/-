@@ -26,17 +26,19 @@ export const en = {
   "lang.label": "Language",
   "theme.night": "Night theme",
 
-  "hero.count": (p: { projects: number; updates: number; days: number }) =>
-    `${plural(p.projects, "project", "projects")} · ${plural(p.updates, "update", "updates")} in the last ${p.days} days`,
   "hero.title.lead": "Work that's",
   "hero.title.accent": "still moving.",
-  "hero.lede":
-    "Hamster Nest is where people at Hamster Hub keep what they're building: games, web apps, hardware, and ideas that aren't finished yet. Every project here posts updates as it goes. See one you like? Write to the person who made it.",
+  "hero.highlights": "Highlights · picked from this week's busiest",
+  "hero.reel.label": "Highlighted projects",
+  "hero.look": "Take a look",
+
+  "browse.title": "Browse",
+  "browse.sub": (p: { count: number }) => `${plural(p.count, "project", "projects")}. Search, or pick a category.`,
+  "browse.busy": "Busy lately:",
   "search.label": "What are you looking for?",
   "search.placeholder": "Try “co-op roguelike” or “soil sensor”",
   "search.submit": "Have a look",
   "search.hint": "Press / to search",
-  "hero.busy": "Or start with what's been busy lately:",
 
   "donut.aria": (p: { updates: number; days: number; today: number; open: number; building: number; paused: number }) =>
     `${plural(p.updates, "update", "updates")} in the last ${p.days} days. ${plural(p.today, "project", "projects")} posted something today, ${p.open} more are looking for investors, ${p.building} are heads down building, and ${p.paused} are taking a break.`,
@@ -46,11 +48,20 @@ export const en = {
   "donut.building": "heads down, building",
   "donut.paused": "taking a break",
 
-  "note.label": "A note from a maker",
   "note.who": (p: { role: string; years: number; projects: number }) =>
     `${p.role} · ${plural(p.years, "year", "years")} at Hamster Hub · ${plural(p.projects, "project", "projects")}`,
   "note.last": (p: { ago: string; project: string; what: string }) => `${p.ago}: ${p.project} ${p.what}`,
   "note.cta": (p: { name: string }) => `Say hi to ${p.name}`,
+  "note.behind": "The maker behind it",
+  "note.also": (p: { names: string[]; more: number }) => {
+    const list =
+      p.more > 0
+        ? `${p.names.join(", ")} and ${p.more} more`
+        : p.names.length > 1
+          ? `${p.names.slice(0, -1).join(", ")} and ${p.names.at(-1)}`
+          : p.names[0];
+    return `Also building: ${list}`;
+  },
 
   "tabs.label": "Categories",
   "tabs.everything": "Everything",

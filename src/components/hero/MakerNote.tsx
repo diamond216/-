@@ -8,16 +8,38 @@ import { Avatar } from "../common/Avatar";
 import { ContactDialog } from "../contact/ContactDialog";
 import { useLocalizer, useNest } from "../providers/NestProvider";
 
-/** The paper note in the hero: whoever posted most recently, in their own words, with a way to write to them. */
-export function MakerNote({ spotlight }: { spotlight: MakerSpotlight }) {
+const OTHER_PROJECTS_NAMED = 2;
+
+/**
+ * The note beside the highlight: the maker of the project on show, in their own words,
+ * what else they're building, and a way to write to them.
+ */
+export function MakerNote({
+  spotlight,
+  onWritingChange,
+}: {
+  spotlight: MakerSpotlight;
+  /** Tells the hero a message is being written, so the highlight holds still. */
+  onWritingChange?(writing: boolean): void;
+}) {
   const localizer = useLocalizer();
   const { clock } = useNest();
   const [writing, setWriting] = useState(false);
-  const { maker, update, listing, projectCount } = spotlight;
+  const { maker, listing, projectCount, otherProjects } = spotlight;
+  const named = otherProjects.slice(0, OTHER_PROJECTS_NAMED).map((other) => other.project.name);
+  const toggleWriting = (open: boolean) => {
+    setWriting(open);
+    onWritingChange?.(open);
+  };
 
   return (
-    <aside className="note" aria-label={localizer.t("note.label")}>
-      <p className="mono note__label">{localizer.t("note.label")}</p>
+    <aside
+      key={maker.id}
+      className="note panel"
+      aria-label={localizer.t("note.behind")}
+      style={{ "--c": listing.project.coverColor } as React.CSSProperties}
+    >
+      <p className="mono note__label">{localizer.t("note.behind")}</p>
       <blockquote>“{localizer.text(maker.motto)}”</blockquote>
       <div className="who">
         <Avatar maker={maker} />
@@ -36,20 +58,16 @@ export function MakerNote({ spotlight }: { spotlight: MakerSpotlight }) {
           </span>
         </p>
       </div>
-      <p className="note__last">
-        <span className="dot" aria-hidden="true" />
-        <span>
-          {localizer.t("note.last", {
-            ago: localizer.ago(update.postedAt, clock.now(), "sentence"),
-            project: listing.project.name,
-            what: localizer.text(update.note),
-          })}
-        </span>
-      </p>
+      {named.length > 0 && (
+        <p className="note__last">
+          <span className="dot" aria-hidden="true" />
+          <span>{localizer.t("note.also", { names: named, more: otherProjects.length - named.length })}</span>
+        </p>
+      )}
       <ContactDialog
         maker={maker}
         open={writing}
-        onOpenChange={setWriting}
+        onOpenChange={toggleWriting}
         trigger={
           <button className="btn" type="button">
             {localizer.t("note.cta", { name: localizer.text(maker.nickname) })}

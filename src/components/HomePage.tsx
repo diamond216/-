@@ -12,7 +12,7 @@ import { ShelfSection } from "./shelf/ShelfSection";
 export function HomePage() {
   const localizer = useLocalizer();
   const shelfQuery = useShelfQuery();
-  const browse = () => document.getElementById("shelf")?.scrollIntoView({ block: "start" });
+  const showResults = () => document.getElementById("shelf")?.scrollIntoView({ block: "start" });
 
   return (
     <SiteFrame
@@ -20,8 +20,8 @@ export function HomePage() {
       onHome
       skipTo={{ href: "#shelf", label: localizer.t("skip.shelf") }}
     >
-      <Hero shelfQuery={shelfQuery} onBrowse={browse} />
-      <ShelfSection shelfQuery={shelfQuery} />
+      <Hero />
+      <ShelfSection shelfQuery={shelfQuery} onSearch={showResults} />
       <TrustBand />
       <Voices />
       <MakersBand />

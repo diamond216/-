@@ -24,6 +24,19 @@ describe("Shelf with the sample data", () => {
     expect(view.featured.length + view.rest.length).toBe(view.total);
   });
 
+  it("the hero highlights are the shelf's top three, whatever the visitor has filtered", () => {
+    expect(nest.shelf.highlights().map((l) => l.project.name)).toEqual(["WheelSense", "NestBoard", "Burrow Knights"]);
+  });
+
+  it("a highlight's maker note lists their other projects, not the one on show", () => {
+    const burrow = nest.shelf.highlights().find((l) => l.id === "burrow-knights")!;
+    const spotlight = nest.digest.spotlightFor(burrow)!;
+    expect(spotlight.maker.id).toBe("pim");
+    expect(spotlight.update).toBe(burrow.latestUpdate());
+    expect(spotlight.otherProjects.map((l) => l.id)).not.toContain("burrow-knights");
+    expect(spotlight.otherProjects.length).toBe(spotlight.projectCount - 1);
+  });
+
   it("filters compose with category and sort", () => {
     const query = new ShelfQuery({ category: "iot", openToInvestment: true, sort: "followed" });
     expect(names(query)).toEqual(["AquaNode", "Coop Watch"]);

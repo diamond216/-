@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { ShelfQueryControls } from "@/hooks/useShelfQuery";
 import { useLocalizer, useNest } from "../providers/NestProvider";
+import { BrowseHead } from "./BrowseHead";
 import { FeaturedCard } from "./FeaturedCard";
 import { Feed } from "./Feed";
 import { FilterPanel } from "./FilterPanel";
@@ -13,8 +14,8 @@ import { ShelfTabs } from "./ShelfTabs";
 const PAGE_SIZE = 6;
 const FEED_SIZE = 6;
 
-/** Tabs, filters, the busiest three, the card grid and the feed. */
-export function ShelfSection({ shelfQuery }: { shelfQuery: ShelfQueryControls }) {
+/** Search, tabs, filters, the busiest three, the card grid and the feed. */
+export function ShelfSection({ shelfQuery, onSearch }: { shelfQuery: ShelfQueryControls; onSearch(): void }) {
   const localizer = useLocalizer();
   const { shelf, digest } = useNest();
   const { query, clear } = shelfQuery;
@@ -31,6 +32,7 @@ export function ShelfSection({ shelfQuery }: { shelfQuery: ShelfQueryControls })
 
   return (
     <section className="shelf" id="shelf" aria-label={localizer.t("shelf.label")}>
+      <BrowseHead shelfQuery={shelfQuery} onSubmit={onSearch} />
       <ShelfTabs counts={counts} total={shelf.size()} shelfQuery={shelfQuery} />
 
       <div className="wrap shelf__grid">

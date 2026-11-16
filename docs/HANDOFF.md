@@ -51,6 +51,7 @@ Other standing rules from the owner:
 | 8 | The tick wheel became a **friendly donut** (option 2), styled as **"Soft segments" (A)** | `docs/decisions/03-…`, `04-…` |
 | 9 | The positioning chart (price × player pull) from the handwritten note was **removed** at the owner's request. Don't add it back | |
 | 10 | Project page and maker profile drafts were **approved as built** | |
+| 11 | Hero left side is a **rotating highlight of 3 projects** (option 2): big card, three tabs that fill and move on every ~6.5 s, pausing on hover, focus or while writing to the maker. The maker note on the right follows the project on show. Donut and note sit in panels with the same frame as the card. The search moved to a **Browse** header above the category tabs. The big "Work that's still moving." headline is now screen-reader only | `docs/decisions/05-hero-highlight-option-2.jpg` |
 
 `docs/decisions/02-reference-sites-vs-draft.jpg` shows what was borrowed from each reference site.
 
@@ -84,7 +85,7 @@ npm test        # 38 tests
   - `ranking/`: `FlowRanking`, `NewestFirst`, `MostFollowed`, and the `RankingRegistry`.
   - `filters/`: specifications.
   - `search/`: MiniSearch with a Thai `Intl.Segmenter` tokenizer.
-  - `shelf/`: `Shelf`, plus `ActivityDigest` (stats, feed, spotlight, donut `momentum()`).
+  - `shelf/`: `Shelf` (also `highlights()` for the hero), plus `ActivityDigest` (stats, feed, `spotlight()` / `spotlightFor(listing)`, donut `momentum()`).
   - `pages/`: project and profile page services.
   - `contact/`: validator, plus a local-outbox sender.
   - `follow/`, `i18n/` (EN/TH dictionaries, kept in parity by types), `preferences/`, `storage/`.

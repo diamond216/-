@@ -48,6 +48,11 @@ export class Shelf {
     return { total: matches.length, featured, rest };
   }
 
+  /** The projects the hero takes turns showing: the top of the headline ranking across the whole shelf. */
+  highlights(): Listing[] {
+    return this.headline.rank(this.directory.all()).slice(0, this.featuredCount);
+  }
+
   /** Where a project sits on the headline ranking across the whole shelf, counting from 1. */
   positionOf(projectId: string): number | undefined {
     const index = this.headline.rank(this.directory.all()).findIndex((listing) => listing.id === projectId);
