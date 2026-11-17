@@ -190,3 +190,37 @@ html{background:#0B0B0F}
 .foot__links a{color:#A1A1AA}.foot__top,.foot__copy{border-color:rgba(255,255,255,.08)}.foot__copy{color:#71717A}
 .hero__dots i.on{background:var(--acc)}
 @media (prefers-reduced-motion:reduce){:root{transition:none}}
+/* ---------- statement between the hero and the tiers, lit (rules from game-color-light) ---------- */
+.say{position:relative;padding:150px 0 170px;overflow:hidden;isolation:isolate}
+.say__in{position:relative}
+.say__h,.say__shadow{font:800 136px/.98 "Prompt",var(--f);letter-spacing:-.035em;margin:0}
+/* rule 4: shade with brightness only, the hue stays white with a hint of the page tone */
+.say__h{position:relative;z-index:2;background:linear-gradient(180deg,#fff 0%,#fff 38%,color-mix(in oklab,var(--tone) 18%,#B9B9C2) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* rule 7 and 21: the light lands on a floor, and the words cast a shadow on it */
+.say__shadow{position:absolute;left:0;top:0;z-index:1;color:rgba(0,0,0,.55);filter:blur(10px);transform-origin:50% 100%;transform:translate(26px,58px) skewX(-18deg) scaleY(.9);pointer-events:none}
+.say::before,.say::after,.say__lamp{content:"";position:absolute;pointer-events:none}
+/* A: one soft lamp above, near-neutral warm (rules 1, 2), edges fall into shadow (rule 6) */
+.say[data-light="a"]::before{inset:0;z-index:-1;background:
+  radial-gradient(60% 75% at 34% 0%,rgba(255,240,222,.17),rgba(255,240,222,.05) 45%,transparent 72%),
+  radial-gradient(45% 22% at 36% 92%,rgba(255,240,222,.09),transparent 70%)}
+.say[data-light="a"]::after{left:0;right:0;bottom:0;height:46%;z-index:-1;background:linear-gradient(180deg,transparent,rgba(0,0,0,.35));box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.say[data-light="a"] .say__lamp{left:18%;top:-150px;width:440px;height:300px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,244,230,.22),transparent);filter:blur(20px)}
+@media (max-width:900px){.say{padding:80px 0 90px}.say__h,.say__shadow{font-size:58px}.say__shadow{transform:translate(12px,26px) skewX(-18deg)}}
+/* soften the edges of every light layer so the band has no hard top or bottom */
+.say::before,.say::after,.say__lamp{-webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000 70%,transparent);mask-image:linear-gradient(180deg,transparent,#000 22%,#000 70%,transparent)}
+.say[data-light="a"]::after{background:linear-gradient(180deg,transparent,rgba(0,0,0,.28) 60%,transparent);box-shadow:none}
+.say[data-light="a"] .say__lamp{-webkit-mask-image:none;mask-image:none;top:-60px}
+/* a cast shadow lies flat on the floor behind the words, instead of a blurred copy */
+.say__shadow{color:rgba(0,0,0,.6);filter:blur(6px);transform:translate(40px,128px) skewX(-38deg) scaleY(.32)}
+/* the flat floor copy floated away from the words; a soft drop shadow reads better */
+.say__shadow{display:none}
+.say[data-light="a"] .say__h{filter:drop-shadow(0 28px 26px rgba(0,0,0,.55))}
+/* round 5: the statement sits right under the hero, centred, so the first screen shows both */
+.hero{height:max(480px,calc(100svh - 76px - 250px))}
+.hero__text{top:56px}
+.say{padding:34px 0 64px;text-align:center}
+.say__h{font-size:clamp(46px,6.6vw,104px);line-height:1;display:inline-block}
+.say[data-light="a"]::before{background:radial-gradient(50% 90% at 50% 0%,rgba(255,240,222,.16),rgba(255,240,222,.04) 50%,transparent 75%),radial-gradient(40% 30% at 50% 96%,rgba(255,240,222,.08),transparent 70%)}
+.say[data-light="a"] .say__lamp{left:50%;top:-140px;width:620px;margin-left:-310px}
+.shelf{margin-top:40px}
+@media (max-width:900px){.say{padding:28px 0 40px}.hero{height:auto}}
