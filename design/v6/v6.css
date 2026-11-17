@@ -138,3 +138,55 @@ body{-webkit-font-smoothing:antialiased;letter-spacing:-.011em}
 .flt__btn{border-radius:980px;font-weight:500}
 .flt__tabs button{font-weight:500}
 .card--std .card__txt span{display:none}
+/* ---------- round 4: theme follows the work, then the tier; Hamster Hub top bar ---------- */
+@property --tone{syntax:"<color>";inherits:true;initial-value:#0B0B0F}
+@property --acc{syntax:"<color>";inherits:true;initial-value:#F5F5F7}
+:root{--tone:#0B0B0F;--acc:#F5F5F7;--ink:#0B0B0F;--wh:#F5F5F7;--tx:#A1A1AA;--card:#1C1C22;--deep:#0B0B0F;--bd:rgba(255,255,255,.12);
+  --hub:#111116;--hub-or:#FF6A1A;--hub-or2:#FF8A3D;transition:--tone .9s ease,--acc .9s ease}
+html{background:#0B0B0F}
+.amb{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  linear-gradient(180deg,color-mix(in oklab,var(--tone) 34%,#0B0B0F) 0%,color-mix(in oklab,var(--tone) 22%,#0B0B0F) 60%,color-mix(in oklab,var(--tone) 14%,#0B0B0F) 100%)}
+/* top bar, the same colours as the Hamster Hub site */
+.top{background:var(--hub);backdrop-filter:none;border-bottom:1px solid rgba(255,255,255,.06)}
+.top .brand{color:#fff}.top .brand em{color:var(--hub-or)}
+.top nav{color:#A1A1AA;font-size:17px}.top nav a:hover{color:#fff}
+.top .lang{color:#A1A1AA}.top .lang b{color:#fff}
+.top__in{gap:32px}.top .lang{margin-left:auto}.top nav{margin:0 auto}
+.b--ghost{background:none;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);border-radius:10px;padding:11px 18px;font-weight:600}
+.b--ghost:hover{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px #fff}
+.b--hub{background:linear-gradient(180deg,var(--hub-or2),var(--hub-or));color:#fff;border-radius:10px;padding:11px 22px;font-weight:600;box-shadow:0 6px 24px rgba(255,106,26,.45)}
+.b--hub:hover{background:linear-gradient(180deg,#FF9A55,var(--hub-or2));box-shadow:0 8px 28px rgba(255,106,26,.55)}
+.top .b{margin-left:0}
+/* accent follows the page tone */
+.b:not(.b--line):not(.b--ghost):not(.b--hub){background:var(--acc);color:var(--ink)}
+.b:not(.b--line):not(.b--ghost):not(.b--hub):hover{background:color-mix(in oklab,var(--acc) 80%,white)}
+.hero__text .tag{color:var(--acc)}
+.hero::before{background:linear-gradient(90deg,color-mix(in oklab,var(--tone) 22%,#0B0B0F) 0%,color-mix(in oklab,var(--tone) 22%,rgba(11,11,15,.6)) 34%,transparent 62%),linear-gradient(0deg,color-mix(in oklab,var(--tone) 18%,#0B0B0F) 0%,transparent 32%)}
+.hero{background:#0B0B0F}
+.hero__text h1,.hero__text p{color:#fff}
+/* tiers carry their own colour */
+.tier__head h2{color:var(--wh)}.tier__head p{color:color-mix(in oklab,var(--tc) 45%,#A1A1AA)}
+.gem{background:var(--tc)}
+.card__pic{background:var(--card);box-shadow:0 0 0 1px color-mix(in oklab,var(--tc) 25%,transparent)}
+.card__txt strong{color:var(--wh)}.card:hover .card__txt strong{color:var(--tc)}
+.card__play{background:var(--tc);color:var(--ink)}
+.card--feat .card__pic::after{background:linear-gradient(0deg,color-mix(in oklab,var(--tc) 14%,rgba(11,11,15,.92)),transparent 55%)}
+.card--feat .card__txt span{color:#D4D4D8}
+.tier__none{border-color:color-mix(in oklab,var(--tc) 40%,transparent);color:var(--tx)}.tier__none button{color:var(--tc)}
+.rail__title,.rail__item{color:var(--tx)}.rail__item[aria-current],.rail__item:hover{color:var(--wh)}
+.rail__bar{background:rgba(255,255,255,.1)}
+/* filter takes the Platinum colour */
+.flt__btn{background:rgba(11,11,15,.6);border-color:color-mix(in oklab,var(--tc) 50%,transparent);color:var(--wh)}
+.flt__btn:hover,.flt__btn[aria-expanded="true"]{background:var(--card);border-color:var(--tc)}
+.flt__btn b{background:var(--tc);color:var(--ink)}
+.flt__box{background:#141419;border-color:rgba(255,255,255,.14)}
+.flt__tabs button{border-color:rgba(255,255,255,.2);color:#D4D4D8}.flt__tabs button[aria-selected="true"]{background:var(--tc);border-color:var(--tc);color:var(--ink)}
+.flt__ck{color:var(--wh)}.flt__ck input{border-color:#D4D4D8}.flt__ck input:checked{background:var(--tc);border-color:var(--tc)}.flt__ck input:checked::after{border-color:var(--ink)}
+.flt__clear{color:var(--tc)}.flt__ck em,.flt__hint{color:var(--tx)}
+.flt__foot{border-color:rgba(255,255,255,.1)}
+.flt__show.b{background:var(--tc);color:var(--ink)}
+/* footer in the same dark as the top bar */
+.foot{background:var(--hub);color:#D4D4D8}.foot__contact small{color:var(--hub-or)}
+.foot__links a{color:#A1A1AA}.foot__top,.foot__copy{border-color:rgba(255,255,255,.08)}.foot__copy{color:#71717A}
+.hero__dots i.on{background:var(--acc)}
+@media (prefers-reduced-motion:reduce){:root{transition:none}}

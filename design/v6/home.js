@@ -151,8 +151,8 @@
 
   // ---------- hero: one work on show, its pictures slide by as cards ----------
   class HeroShowcase {
-    constructor(root, works) {
-      this.root = root; this.works = works; this.w = 0; this.f = 0; this.paused = false; this.busy = false;
+    constructor(root, works, onWork = () => {}) {
+      this.root = root; this.works = works; this.onWork = onWork; this.w = 0; this.f = 0; this.paused = false; this.busy = false;
       this.bg = $(".hero__bg", root); this.track = $(".strip__track", root); this.dots = $(".hero__dots", root);
       root.querySelectorAll(".hero__arrow").forEach((b) => b.addEventListener("click", () => this.show((this.w + +b.dataset.step + this.works.length) % this.works.length)));
       root.addEventListener("pointerenter", () => (this.paused = true));
@@ -166,6 +166,7 @@
     get work() { return this.works[this.w]; }
     show(wi, animate = true) {
       this.w = wi; this.f = 0;
+      this.onWork(this.work);
       const w = this.work, t = $(".hero__text", this.root);
       if (animate && !calm) { t.classList.remove("in"); void t.offsetWidth; t.classList.add("in"); }
       $(".tag", t).textContent = `Platinum · ${w.room}`;
@@ -208,6 +209,22 @@
     }
   }
 
+  // ---------- the page colour: the work on show in the hero, then each tier's colour ----------
+  class Ambience {
+    constructor(hero, sections, tiers) {
+      this.hero = hero; this.sections = sections; this.tiers = tiers; this.heroTone = { bg: "#0B0B0F", acc: "#F5F5F7" };
+      addEventListener("scroll", () => this.update(), { passive: true });
+    }
+    setHeroTone(c) { this.heroTone = c; this.update(); }
+    update() {
+      const line = scrollY + innerHeight * 0.45;
+      let tone = this.heroTone.bg, acc = this.heroTone.acc;
+      this.sections.forEach((s, i) => { if (line >= s.offsetTop) { tone = this.tiers[i].color; acc = tone; } });
+      const r = document.documentElement.style;
+      r.setProperty("--tone", tone); r.setProperty("--acc", acc);
+    }
+  }
+
   // ---------- wire it up ----------
   const { tiers, rooms, works, inTier, hero } = window.NEST;
   const list = $("#tiers"), filter = new WorkFilter();
@@ -215,5 +232,6 @@
   new FilterPanel($(".tier__head", sections[0]), filter, rooms, works);
   const rail = new TierRail($("#rail"), sections);
   filter.addEventListener("change", () => rail.update());
-  new HeroShowcase($("#hero"), hero());
+  const amb = new Ambience($("#hero"), sections, tiers);
+  new HeroShowcase($("#hero"), hero(), (w) => amb.setHeroTone(Art.tone(w)));
 })();

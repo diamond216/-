@@ -57,7 +57,7 @@
   class IotPainter {
     static BG = ["#0E5450", "#1F4E79", "#7A3B2E", "#33402A", "#4A2F5C", "#0F6B4A"];
     paint(seed, frame, label) {
-      const r = new Rng(seed + "#" + frame), bg = IotPainter.BG[(new Rng(seed).int(6) + frame) % 6];
+      const r = new Rng(seed + "#" + frame), bg = IotPainter.BG[new Rng(seed).int(6)];
       let g = "";
       for (let i = 1; i < 8; i++) g += `<rect x="${i * 49}" width="1" height="220" fill="#fff" opacity=".12"/>`;
       for (let j = 1; j < 5; j++) g += `<rect y="${j * 44}" width="392" height="1" fill="#fff" opacity=".12"/>`;
@@ -69,7 +69,7 @@
   class WebPainter {
     static TINT = [["#DCE3EE", "#FF6816"], ["#DDEBE4", "#1FB5A0"], ["#EEE6DA", "#E8665A"], ["#E4E0F0", "#7A5AF0"], ["#E7EDD8", "#3E8E4B"]];
     paint(seed, frame) {
-      const r = new Rng(seed + "#" + frame), [bg, acc] = WebPainter.TINT[(new Rng(seed).int(5) + frame) % 5];
+      const r = new Rng(seed + "#" + frame), [bg, acc] = WebPainter.TINT[new Rng(seed).int(5)];
       const bars = [0, 1, 2, 3, 4, 5].map((i) => { const v = 40 + r.int(100); return `<rect x="${140 + i * 34}" y="${198 - v}" width="22" height="${v}" rx="3" fill="${i === 5 ? acc : "#7C8AA0"}"/>`; }).join("");
       return svg("0 0 392 220", `<rect width="392" height="220" fill="${bg}"/><rect x="28" y="26" width="336" height="220" rx="10" fill="#fff"/><rect x="28" y="26" width="336" height="22" rx="10" fill="#E9EDF3"/><circle cx="44" cy="37" r="4" fill="#C9D0DA"/><circle cx="58" cy="37" r="4" fill="#C9D0DA"/><rect x="48" y="66" width="${40 + r.int(60)}" height="8" rx="4" fill="#1A1A20"/><rect x="48" y="84" width="60" height="5" rx="2.5" fill="#C9D0DA"/><rect x="48" y="96" width="44" height="5" rx="2.5" fill="#C9D0DA"/>${bars}`);
     }
@@ -106,7 +106,22 @@
 
   const painters = { Game: new GamePainter(), IoT: new IotPainter(), Web: new WebPainter(), Idea: new IdeaPainter() };
 
+  // One colour per work, taken from its own pictures. The page takes its theme from it.
+  const TONE = { Idea: ["#E8665A", "#159C6B", "#3A6FD8", "#E0A030"] };
+  // returns { bg, acc }: bg tints the page, acc colours buttons and labels
+  function tone(work) {
+    if (work.room === "Game") {
+      const p = GamePainter.PALETTES[GamePainter.KEEP[work.id] ?? new Rng(work.id).int(GamePainter.PALETTES.length)];
+      return { bg: p[0], acc: p[1] === "#E8E6D8" ? p[2] : p[1] };
+    }
+    if (work.room === "IoT") return { bg: IotPainter.BG[new Rng(work.id).int(6)], acc: "#FFD24A" };
+    if (work.room === "Web") { const c = WebPainter.TINT[new Rng(work.id).int(5)][1]; return { bg: c, acc: c }; }
+    const c = TONE.Idea[new Rng(work.id).int(4)];
+    return { bg: c, acc: c };
+  }
+
   window.Art = {
+    tone,
     // frame 0 is the cover; frames 1..n are the extra pictures of the same work
     draw(work, frame = 0) {
       if (frame === 0 && HAND_FOR[work.id]) return hand(HAND_FOR[work.id]);
