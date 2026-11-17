@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { paths } from "../common/links";
 import { useLocalizer } from "../providers/NestProvider";
 
 /** The invitation to people at Hamster Hub, just above the footer. */
@@ -15,9 +17,9 @@ export function PostBand() {
         </h2>
         <div>
           <p>{localizer.t("post.body")}</p>
-          <a className="b" href="#">
+          <Link className="b" href={paths.post}>
             {localizer.t("nav.post")}
-          </a>
+          </Link>
         </div>
       </div>
     </section>

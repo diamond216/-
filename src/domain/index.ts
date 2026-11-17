@@ -14,6 +14,7 @@ export * from "./Money";
 export * from "./MoneyLedger";
 export * from "./Platform";
 export * from "./Project";
+export * from "./ProjectPhoto";
 export * from "./ProjectUpdate";
 export * from "./Stage";
 export * from "./UpdateType";

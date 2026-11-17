@@ -1,0 +1,147 @@
+/* "Post your work": a new project, or an update to one. Uses the shared tokens, so a new site look carries over. */
+
+.pw-lead { padding-block: 44px 26px; }
+.pw-lead h1 { font: 900 120px/0.86 var(--display); font-stretch: 62%; letter-spacing: -0.015em; margin-left: -0.04em; }
+.pw-modes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.pw-modes button { padding: 12px 18px; border: 0; border-radius: 8px; background: none; color: inherit; box-shadow: inset 0 0 0 1.5px var(--line); font: 600 17px/1.2 var(--body); cursor: pointer; }
+.pw-modes button[aria-pressed="true"] { background: var(--ink); color: var(--paper); box-shadow: none; }
+
+.pw { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 72px; padding-bottom: 96px; align-items: start; }
+.pw__form { min-width: 0; }
+.pw__f { border: 0; margin: 0; padding: 26px 0; border-top: 1px solid var(--line); min-width: 0; }
+.pw__form > .pw__f:first-of-type { border-top: 1.5px solid var(--ink); }
+.pw__f:focus { outline: none; }
+/* A legend normally sits on the fieldset border. Floating it puts it inside, like the other field titles. */
+fieldset.pw__f > legend { float: left; width: 100%; }
+fieldset.pw__f > legend ~ * { clear: both; }
+.pw__lab + .pw__hint, legend.pw__lab ~ .pw__hint { margin-top: 4px; }
+legend.pw__lab + .pw-pills, legend.pw__lab + .pw-rooms, legend.pw__lab + .pw-ck { margin-top: 14px; }
+.pw__lab { display: block; padding: 0; font: 800 26px/1.15 var(--display); font-stretch: 75%; }
+.pw__hint { font-size: 16px; color: var(--ink-soft); margin-top: 4px; }
+.pw__lab + .pw__inp, .pw__hint + .pw__inp, .pw__lab + .pw-pills, .pw__hint + .pw-pills, .pw__lab + .pw-rooms,
+.pw__hint + .pw-drop, .pw__lab + .pw-drop, .pw__hint + .pw-two, .pw__hint + .pw-olds { margin-top: 14px; }
+.pw__inp { display: block; width: 100%; min-height: 58px; padding: 12px 18px; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--surface); color: var(--ink); font: 400 18px/1.4 var(--body); }
+.pw__inp::placeholder { color: var(--ink-soft); }
+.pw__inp--hand { font-family: var(--hand); font-size: 22px; }
+.pw__inp--tall { min-height: 120px; resize: vertical; }
+select.pw__inp { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 26px) 50%, calc(100% - 20px) 50%; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 48px; cursor: pointer; }
+.pw__inp:focus-visible { outline: 3px solid var(--hi); outline-offset: 2px; }
+.pw__inp[aria-invalid="true"] { border-color: #c4361c; }
+.pw__error { margin-top: 10px; font-size: 16px; font-weight: 600; color: #c4361c; }
+:root[data-theme="night"] .pw__error { color: #ff8a6b; }
+:root[data-theme="night"] .pw__inp[aria-invalid="true"] { border-color: #ff8a6b; }
+
+/* choices drawn as pills: the input is hidden, the label is the button */
+.pw-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pw-pill { padding: 10px 16px; border-radius: 8px; box-shadow: inset 0 0 0 1.5px var(--line); font-weight: 600; font-size: 16px; cursor: pointer; }
+.pw-pill:has(input:checked) { background: var(--ink); color: var(--paper); box-shadow: none; }
+.pw-pill:has(input:disabled) { opacity: .45; cursor: not-allowed; }
+.pw-pill:has(input:focus-visible), .pw-room:has(input:focus-visible), .pw-old:has(input:focus-visible) { outline: 3px solid var(--hi); outline-offset: 2px; }
+
+/* the four rooms, each in its own look */
+.pw-rooms { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pw-room { min-height: 84px; padding: 16px; border-radius: 10px; display: flex; align-items: end; cursor: pointer; }
+.pw-room b { font: 900 34px/0.9 var(--display); font-stretch: 62%; }
+.pw-room--game { background: #25211c; } .pw-room--game b { color: #ffe14d; text-transform: uppercase; }
+.pw-room--iot { background: #171411 radial-gradient(circle, rgba(255,178,31,.2) 2px, transparent 2.6px) 0 0 / 12px 12px; } .pw-room--iot b { color: #ffb21f; font-stretch: 125%; font-weight: 800; font-size: 26px; }
+.pw-room--web { background: #fff; box-shadow: inset 0 0 0 1.5px #25211c; } .pw-room--web b { color: #25211c; font-stretch: 100%; font-weight: 800; font-size: 28px; }
+.pw-room--idea { background: #fdfdf9; box-shadow: inset 0 0 0 1.5px #d8cebb; } .pw-room--idea b { color: #1f3fae; font-family: var(--hand); font-weight: 700; font-stretch: 100%; font-size: 30px; }
+.pw-room:has(input:checked) { outline: 4px solid var(--ink); outline-offset: 3px; }
+
+/* one photo slot */
+.pw-drop { display: flex; align-items: center; gap: 18px; padding: 14px; border: 1.5px dashed var(--ink-soft); border-radius: 12px; }
+.pw-drop[data-over] { border-color: var(--ink); background: var(--surface); }
+.pw-drop .cover { width: 150px; height: 96px; border-radius: 6px; flex: none; }
+.pw-drop__text { display: grid; gap: 2px; min-width: 0; font-size: 15px; color: var(--ink-soft); }
+.pw-drop__text b { color: var(--ink); font-size: 15px; }
+.pw-drop__name { color: var(--ink); font-size: 17px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pw-drop__acts { margin-left: auto; display: flex; gap: 14px; flex: none; }
+.pw-drop__acts label, .pw-drop__acts button { padding: 0; border: 0; background: none; color: var(--ink); font: 400 16px var(--body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.pw-drop__empty { flex: 1; display: grid; gap: 4px; justify-items: center; text-align: center; min-height: 96px; align-content: center; cursor: pointer; color: var(--ink-soft); font-size: 15px; }
+.pw-drop__empty b { color: var(--ink); }
+.pw-drop__add { color: var(--ink); font-size: 18px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.pw-drop:has(input:focus-visible) { outline: 3px solid var(--hi); outline-offset: 2px; }
+.pw-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pw-two .pw-drop { flex-direction: column; align-items: stretch; }
+.pw-two .pw-drop .cover { width: 100%; height: 130px; }
+.pw-two .pw-drop__acts { margin-left: 0; }
+
+/* an uploaded photo fills its frame the way the generated covers do */
+.cover--photo { background: var(--surface); }
+.cover--photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* "This is the after of…" */
+.pw-olds { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; }
+.pw-old { position: relative; display: block; padding: 6px 6px 10px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer; }
+.pw-old .cover { height: 104px; border-radius: 6px; }
+/* These frames set their own size; the cover ratio from the older pages would push them wider than the card. */
+.pw-old .cover, .pw-drop .cover { aspect-ratio: auto; }
+.pw-old b { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 8px 4px 0; font-size: 15px; line-height: 1.25; }
+.pw-old span { display: block; margin: 2px 4px 0; font-size: 14px; color: var(--ink-soft); }
+.pw-old:has(input:checked) { box-shadow: inset 0 0 0 3px var(--ink); background: var(--surface); }
+.pw-old:has(input:checked)::after { content: ""; position: absolute; right: -8px; top: -8px; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); }
+.pw-old:has(input:checked)::before { content: ""; position: absolute; z-index: 1; right: 3px; top: -2px; width: 6px; height: 12px; border: solid var(--paper); border-width: 0 3px 3px 0; rotate: 45deg; }
+.pw-old--none { display: flex; flex-direction: column; justify-content: center; padding: 14px; border: 1.5px dashed var(--ink-soft); box-shadow: none; min-height: 160px; }
+.pw-old--none b { margin: 0; } .pw-old--none span { margin: 4px 0 0; }
+
+/* plain checkboxes */
+.pw-ck { display: flex; align-items: flex-start; gap: 12px; margin-top: 14px; font-size: 18px; cursor: pointer; }
+.pw-ck input { appearance: none; flex: none; width: 22px; height: 22px; margin: 2px 0 0; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--ink-soft); position: relative; cursor: pointer; }
+.pw-ck input:checked { background: var(--ink); box-shadow: none; }
+.pw-ck input:checked::after { content: ""; position: absolute; left: 7.5px; top: 3px; width: 5px; height: 11px; border: solid var(--paper); border-width: 0 2.5px 2.5px 0; rotate: 45deg; }
+.pw-ck input:focus-visible { outline: 3px solid var(--hi); outline-offset: 2px; }
+.pw-ck:has(input:checked) { font-weight: 600; }
+
+.pw__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 30px; border-top: 1.5px solid var(--ink); }
+.pw__acts .b { font-size: 18px; padding: 16px 24px; white-space: nowrap; cursor: pointer; }
+.pw__acts .b:disabled { opacity: .6; cursor: progress; }
+.pw__small { font-size: 15px; color: var(--ink-soft); margin-left: 8px; max-width: 36ch; }
+.pw__preview-note { margin: 18px 0 0; max-width: none; }
+.pw-resume { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 18px; padding: 12px 16px; border-radius: 8px; background: var(--hi); color: #25211c; font-size: 16px; }
+.pw-resume button { padding: 0; border: 0; background: none; color: inherit; font: 700 16px var(--body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* the right column: a preview of the update, or the five checks */
+.pw__aside { position: sticky; top: 24px; }
+.pw-card { padding: 28px; border-radius: 20px; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.pw-card > h2 { font: 900 40px/0.95 var(--display); font-stretch: 62%; margin-bottom: 18px; }
+.pw-card .pair__two .cover { height: 230px; }
+.pw-card .pair__two--one { grid-template-columns: 1fr; }
+.pw-card .pair h3 { font-size: 30px; }
+.pw-card__soft { color: var(--ink-soft); }
+.pw-card__note { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 16px; color: var(--ink-soft); }
+.pw-todo { list-style: none; margin: 0; padding: 0; }
+.pw-todo li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; font-size: 17px; }
+.pw-todo i { position: relative; flex: none; width: 22px; height: 22px; margin-top: 2px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--ink-soft); }
+.pw-todo li[data-met] { font-weight: 600; }
+.pw-todo li[data-met] i { background: var(--ink); box-shadow: none; }
+.pw-todo li[data-met] i::after { content: ""; position: absolute; left: 7.5px; top: 3px; width: 5px; height: 11px; border: solid var(--paper); border-width: 0 2.5px 2.5px 0; rotate: 45deg; }
+.pw-done { padding-top: 30px; border-top: 1.5px solid var(--ink); }
+.pw-done h2 { font: 900 56px/0.95 var(--display); font-stretch: 62%; max-width: 18ch; }
+.pw-done > p:not(.pw__acts) { margin-top: 14px; font-size: 18px; color: var(--ink-soft); max-width: 50ch; }
+.pw-done .pw__acts { border: 0; padding-top: 24px; }
+
+:lang(th) .pw-lead h1 { font-weight: 700; line-height: 1.15; font-size: 88px; }
+:lang(th) :is(.pw__lab, .pw-card > h2, .pw-done h2) { line-height: 1.3; font-weight: 700; }
+:lang(th) .pw-card > h2 { font-size: 32px; }
+:lang(th) .pw-done h2 { font-size: 40px; }
+
+@media (max-width: 1100px) {
+  .pw { grid-template-columns: 1fr; gap: 40px; }
+  .pw__aside { position: static; }
+}
+@media (max-width: 700px) {
+  .pw-lead { padding-block: 28px 18px; }
+  .pw-lead h1, :lang(th) .pw-lead h1 { font-size: 64px; }
+  .pw-modes button { flex: 1 1 100%; text-align: left; }
+  .pw__lab { font-size: 23px; }
+  .pw-rooms { grid-template-columns: 1fr 1fr; }
+  .pw-two { grid-template-columns: 1fr; }
+  .pw-drop { flex-wrap: wrap; }
+  .pw-drop .cover { width: 100%; height: 160px; }
+  .pw-drop__acts { margin-left: 0; }
+  .pw-olds { grid-template-columns: repeat(2, 1fr); }
+  .pw-card { padding: 20px; }
+  .pw-card .pair__two .cover { height: 170px; }
+  .pw__small { margin-left: 0; }
+  .pw__acts .b { flex: 1 1 auto; text-align: center; }
+}

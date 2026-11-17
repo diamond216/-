@@ -15,6 +15,22 @@ import { FollowStore } from "@/services/follow/FollowStore";
 import { MakerProfileService, ProjectPageService } from "@/services/pages";
 import { ActivityDigest, ListingDirectory, ListingSpecificationBuilder, Shelf } from "@/services/shelf";
 import { BrowserStore, type KeyValueStore } from "@/services/storage/KeyValueStore";
+import {
+  type DraftValidator,
+  LocalSubmissionOutbox,
+  PickChecklist,
+  PostingDesk,
+  type ProjectDraft,
+  type ProjectError,
+  type ProjectField,
+  projectValidator,
+  SavedDrafts,
+  type SubmissionSender,
+  type UpdateDraft,
+  type UpdateError,
+  type UpdateField,
+  updateValidator,
+} from "@/services/submissions";
 
 /** Everything the interface needs, already wired together. */
 export interface Nest {
@@ -26,6 +42,15 @@ export interface Nest {
   makerProfiles: MakerProfileService;
   follows: FollowStore;
   contact: { validator: MessageValidator; sender: MessageSender };
+  /** "Post your work": the forms for a new project and for an update. */
+  posting: {
+    desk: PostingDesk;
+    updateValidator: DraftValidator<UpdateDraft, UpdateField, UpdateError>;
+    projectValidator: DraftValidator<ProjectDraft, ProjectField, ProjectError>;
+    checklist: PickChecklist;
+    sender: SubmissionSender;
+    drafts: SavedDrafts;
+  };
   preferences: { locale: PreferenceStore<Locale>; theme: PreferenceStore<Theme> };
 }
 
@@ -59,6 +84,14 @@ export function createNest({ clock = FrozenClock.atLoad(), storage = new Browser
     makerProfiles: new MakerProfileService(repositories.makers, directory, repositories.endorsements, flow, clock),
     follows: new FollowStore(storage),
     contact: { validator: new MessageValidator(), sender: new LocalOutboxSender(storage, clock) },
+    posting: {
+      desk: new PostingDesk(directory, repositories.genres),
+      updateValidator: updateValidator(),
+      projectValidator: projectValidator(),
+      checklist: new PickChecklist(),
+      sender: new LocalSubmissionOutbox(storage, clock),
+      drafts: new SavedDrafts(storage),
+    },
     preferences: {
       locale: new PreferenceStore<Locale>(LOCALE_STORAGE_KEY, LOCALES, "en", storage, "lang"),
       theme: new PreferenceStore<Theme>(THEME_STORAGE_KEY, THEMES, "day", storage, "theme"),

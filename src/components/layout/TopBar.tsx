@@ -62,7 +62,7 @@ export function TopBar({ room, skipTo }: { room?: CategoryId; skipTo: { href: st
             {night ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </button>
         </div>
-        <Link className="b" href="/#post">
+        <Link className="b" href={paths.post}>
           {localizer.t("nav.post")}
         </Link>
       </div>

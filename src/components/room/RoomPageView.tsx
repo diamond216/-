@@ -5,6 +5,7 @@ import { useId, useMemo } from "react";
 import { Category, type CategoryId } from "@/domain";
 import { useRoomQuery } from "@/hooks/useRoomQuery";
 import { SiteFrame } from "../layout/SiteFrame";
+import { paths } from "../common/links";
 import { useLocalizer, useNest } from "../providers/NestProvider";
 import { RoomCard } from "./RoomCard";
 import { RoomSidebar } from "./RoomSidebar";
@@ -74,7 +75,7 @@ export function RoomPageView({ roomId }: { roomId: CategoryId }) {
             <div className="rcard rcard--post">
               <h3>{localizer.t(`room.${roomId}.postTitle`)}</h3>
               <p>{localizer.t(`room.${roomId}.postBody`)}</p>
-              <Link className="b" href="/#post">
+              <Link className="b" href={paths.postTo(roomId)}>
                 {localizer.t(`room.${roomId}.postCta`)}
               </Link>
             </div>
