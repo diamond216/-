@@ -1,30 +1,25 @@
 "use client";
 
-import { useShelfQuery } from "@/hooks/useShelfQuery";
-import { Hero } from "./hero/Hero";
+import { AboutHub } from "./home/AboutHub";
+import { BeforeNow } from "./home/BeforeNow";
+import { BestOfRooms } from "./home/BestOfRooms";
+import { PostBand } from "./home/PostBand";
+import { RoomDoors } from "./home/RoomDoors";
+import { Statement } from "./home/Statement";
 import { SiteFrame } from "./layout/SiteFrame";
 import { useLocalizer } from "./providers/NestProvider";
-import { MakersBand } from "./sections/MakersBand";
-import { TrustBand } from "./sections/TrustBand";
-import { Voices } from "./sections/Voices";
-import { ShelfSection } from "./shelf/ShelfSection";
 
+/** Home, top to bottom: the statement, the best of each room, the four rooms, what changed, and Hamster Hub. */
 export function HomePage() {
   const localizer = useLocalizer();
-  const shelfQuery = useShelfQuery();
-  const showResults = () => document.getElementById("shelf")?.scrollIntoView({ block: "start" });
-
   return (
-    <SiteFrame
-      title={localizer.t("meta.title")}
-      onHome
-      skipTo={{ href: "#shelf", label: localizer.t("skip.shelf") }}
-    >
-      <Hero />
-      <ShelfSection shelfQuery={shelfQuery} onSearch={showResults} />
-      <TrustBand />
-      <Voices />
-      <MakersBand />
+    <SiteFrame title={localizer.t("meta.title")} skipTo={{ href: "#rooms", label: localizer.t("skip.rooms") }}>
+      <Statement />
+      <BestOfRooms />
+      <RoomDoors />
+      <BeforeNow />
+      <AboutHub />
+      <PostBand />
     </SiteFrame>
   );
 }

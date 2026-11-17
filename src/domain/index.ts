@@ -3,6 +3,7 @@ export * from "./Category";
 export * from "./Clock";
 export * from "./CoverArt";
 export * from "./Endorsement";
+export * from "./Freshness";
 export * from "./Genre";
 export * from "./HubCheck";
 export * from "./Listing";

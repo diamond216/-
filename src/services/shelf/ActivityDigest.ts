@@ -75,6 +75,20 @@ export class ActivityDigest {
       .filter((entry): entry is FeedEntry => entry.listing !== undefined);
   }
 
+  /** The projects that moved most recently, one entry each, with the post that moved them. Newest first. */
+  latestPerProject(limit: number): FeedEntry[] {
+    const seen = new Set<string>();
+    const entries: FeedEntry[] = [];
+    for (const update of this.updates.latest(Number.MAX_SAFE_INTEGER)) {
+      if (seen.has(update.projectId)) continue;
+      seen.add(update.projectId);
+      const listing = this.directory.forProject(update.projectId);
+      if (listing) entries.push({ update, listing });
+      if (entries.length === limit) break;
+    }
+    return entries;
+  }
+
   /** The maker behind the most recent update anywhere on the shelf. */
   spotlight(): MakerSpotlight | undefined {
     const [latest] = this.feed(1);

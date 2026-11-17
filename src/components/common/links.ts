@@ -3,7 +3,9 @@ export const paths = {
   project: (slug: string) => `/projects/${slug}/`,
   maker: (slug: string) => `/makers/${slug}/`,
   update: (projectSlug: string, updateId: string) => `/projects/${projectSlug}/#update-${updateId}`,
-  /** The home shelf with one filter applied. Plain links, so the shelf reads the address fresh. */
-  shelfCategory: (categoryId: string) => `/?cat=${categoryId}#shelf`,
-  shelfGenre: (genreId: string) => `/?genre=${genreId}#shelf`,
+  /** One of the four rooms: /game/, /iot/, /web/, /idea/. */
+  room: (categoryId: string) => `/${categoryId}/`,
+  /** A room with one genre already picked. */
+  roomGenre: (categoryId: string, genreId: string) => `/${categoryId}/?genre=${genreId}`,
+  about: "/#about",
 };

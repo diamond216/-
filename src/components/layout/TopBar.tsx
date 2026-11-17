@@ -2,15 +2,15 @@
 
 import { Moon, Sun } from "lucide-react";
 import Link from "next/link";
-import { LOCALES, type Locale } from "@/domain";
+import { Category, type CategoryId, LOCALES, type Locale } from "@/domain";
 import { BrandMark } from "../common/BrandMark";
+import { paths } from "../common/links";
 import { usePreferences } from "../providers/NestProvider";
 
 const LOCALE_NAMES: Readonly<Record<Locale, string>> = { en: "EN", th: "ไทย" };
 
-/** Same header on every page. On the home page the section links stay on the page; elsewhere they lead back to it. */
-export function TopBar({ onHome = false, skipTo }: { onHome?: boolean; skipTo: { href: string; label: string } }) {
-  const home = onHome ? "" : "/";
+/** Same header on every page: the four rooms, then Hamster Hub. */
+export function TopBar({ room, skipTo }: { room?: CategoryId; skipTo: { href: string; label: string } }) {
   const { locale, theme, localizer, setLocale, setTheme } = usePreferences();
   const night = theme === "night";
 
@@ -26,10 +26,16 @@ export function TopBar({ onHome = false, skipTo }: { onHome?: boolean; skipTo: {
           <span className="brand__by">{localizer.t("brand.by")}</span>
         </Link>
         <nav className="top__nav" aria-label={localizer.t("nav.label")}>
-          <a href={`${home}#shelf`}>{localizer.t("nav.browse")}</a>
-          <a href="#">{localizer.t("nav.makers")}</a>
-          <a href="#">{localizer.t("nav.investors")}</a>
-          <a href={`${home}#trust`}>{localizer.t("nav.howWePick")}</a>
+          {Category.rooms().map((category) => (
+            <Link
+              key={category.id}
+              href={paths.room(category.id)}
+              aria-current={category.id === room ? "page" : undefined}
+            >
+              {category.tag}
+            </Link>
+          ))}
+          <Link href={paths.about}>{localizer.t("nav.about")}</Link>
         </nav>
         <div className="top__prefs">
           <div className="lang" role="group" aria-label={localizer.t("lang.label")}>
@@ -56,9 +62,9 @@ export function TopBar({ onHome = false, skipTo }: { onHome?: boolean; skipTo: {
             {night ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </button>
         </div>
-        <a className="btn" href={`${home}#makers`}>
+        <Link className="b" href="/#post">
           {localizer.t("nav.post")}
-        </a>
+        </Link>
       </div>
     </header>
   );

@@ -1,5 +1,6 @@
 import { DAY_MS } from "./Clock";
 import type { CoverArt } from "./CoverArt";
+import { Freshness } from "./Freshness";
 import type { LocalizedText } from "./LocalizedText";
 import type { UpdateType } from "./UpdateType";
 
@@ -57,6 +58,11 @@ export class ProjectUpdate {
   /** Whole days since this was posted, counted in rolling 24-hour windows: 0 means "today". */
   daysAgo(now: Date): number {
     return Math.floor(this.ageMs(now) / DAY_MS);
+  }
+
+  /** "Today", "this week" and so on, for places that show words instead of a clock. */
+  freshness(now: Date): Freshness {
+    return Freshness.of(this.daysAgo(now));
   }
 
   isWithinDays(days: number, now: Date): boolean {

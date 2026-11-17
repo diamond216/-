@@ -30,6 +30,11 @@ export class Category {
     return Category.registry;
   }
 
+  /** The four rooms in the order the home page shows them: Game, IoT, Web, Idea. */
+  static rooms(): readonly Category[] {
+    return [Category.GAME, Category.IOT, Category.WEB, Category.IDEA];
+  }
+
   static ids(): CategoryId[] {
     return Category.registry.map((category) => category.id);
   }

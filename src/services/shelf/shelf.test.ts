@@ -24,17 +24,43 @@ describe("Shelf with the sample data", () => {
     expect(view.featured.length + view.rest.length).toBe(view.total);
   });
 
-  it("the hero highlights are the shelf's top three, whatever the visitor has filtered", () => {
-    expect(nest.shelf.highlights().map((l) => l.project.name)).toEqual(["WheelSense", "NestBoard", "Burrow Knights"]);
+  it("the home highlight is the top project of each room, in room order", () => {
+    const best = nest.shelf.bestOfEachRoom();
+    expect(best.map((l) => l.project.category.id)).toEqual(["game", "iot", "web", "idea"]);
+    expect(best.map((l) => l.project.name).slice(0, 3)).toEqual(["Burrow Knights", "WheelSense", "NestBoard"]);
   });
 
-  it("a highlight's maker note lists their other projects, not the one on show", () => {
-    const burrow = nest.shelf.highlights().find((l) => l.id === "burrow-knights")!;
-    const spotlight = nest.digest.spotlightFor(burrow)!;
-    expect(spotlight.maker.id).toBe("pim");
-    expect(spotlight.update).toBe(burrow.latestUpdate());
-    expect(spotlight.otherProjects.map((l) => l.id)).not.toContain("burrow-knights");
-    expect(spotlight.otherProjects.length).toBe(spotlight.projectCount - 1);
+  it("a room only holds its own category, newest first when asked", () => {
+    const games = nest.shelf.room("game", new ShelfQuery({ sort: "newest" }));
+    expect(games.length).toBeGreaterThan(1);
+    expect(games.every((l) => l.project.isIn("game"))).toBe(true);
+    const times = games.map((l) => l.lastUpdatedAt());
+    expect(times).toEqual([...times].sort((a, b) => b - a));
+    expect(nest.shelf.room("game", new ShelfQuery({ genres: ["puzzle"] })).map((l) => l.project.name)).toEqual(["Moonwheel"]);
+  });
+
+  it("a room's strongest three come from its matches and stay in the full list", () => {
+    const view = nest.shelf.roomView("game", new ShelfQuery({ sort: "newest" }));
+    expect(view.strongest.length).toBeLessThanOrEqual(3);
+    expect(view.strongest[0].project.name).toBe("Burrow Knights");
+    const ids = new Set(view.latest.map((l) => l.id));
+    expect(view.strongest.every((l) => ids.has(l.id))).toBe(true);
+    expect(view.latest).toHaveLength(nest.shelf.roomSize("game"));
+  });
+
+  it("a room narrows by stage and by the investor filters together", () => {
+    const all = nest.shelf.roomView("game", ShelfQuery.EVERYTHING).latest;
+    const view = nest.shelf.roomView("game", new ShelfQuery({ stages: ["beta", "live"], openToInvestment: true }));
+    const expected = all.filter((l) => (l.project.isAt("beta") || l.project.isAt("live")) && l.project.openToInvestment);
+    expect(view.latest.map((l) => l.id).sort()).toEqual(expected.map((l) => l.id).sort());
+    expect(view.strongest.every((l) => expected.includes(l))).toBe(true);
+  });
+
+  it("before-and-now shows each project once, newest first", () => {
+    const entries = nest.digest.latestPerProject(3);
+    expect(entries).toHaveLength(3);
+    expect(new Set(entries.map((e) => e.listing.id)).size).toBe(3);
+    expect(entries.every((e) => e.update === e.listing.latestUpdate())).toBe(true);
   });
 
   it("filters compose with category and sort", () => {

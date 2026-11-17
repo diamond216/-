@@ -147,3 +147,56 @@ h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
 .room--idea .rhead { background-image: linear-gradient(90deg, transparent 40px, #e2584c 40px 42px, transparent 42px), linear-gradient(#cfe0f5 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 32px; border-bottom: 1.5px solid #d8cebb; }
 .room--idea .rhead h1 { font: 700 190px/0.95 var(--hand); letter-spacing: -0.02em; }
 .room--idea .rhead p { font-family: var(--hand); font-size: 23px; color: #1f3fae; }
+
+/* ---------- a room with a left sidebar (approved 17 Nov 2026, option A: with counts and ranks) ---------- */
+.shell { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 56px; padding-top: 44px; align-items: start; }
+
+/* ---------- sidebar ---------- */
+.side { position: sticky; top: 24px; }
+.side h2 { font: 800 22px/1 var(--display); font-stretch: 75%; margin: 34px 0 12px; }
+.side h2:first-child { margin-top: 6px; }
+.side__list { list-style: none; margin: 0 -12px; padding: 0; }
+.side__list li { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 12px; border-radius: 8px; font-size: 17px; font-weight: 500; }
+.side__list li.on { background: var(--rfg); color: var(--rbg); font-weight: 700; }
+.side__n { font-size: 15px; color: var(--rsoft); font-variant-numeric: tabular-nums; }
+.side__list li.on .side__n { color: inherit; opacity: .7; }
+.ck { display: flex; align-items: center; gap: 11px; padding: 7px 0; font-size: 17px; }
+.ck i { width: 20px; height: 20px; flex: none; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--rsoft); position: relative; }
+.ck--on { font-weight: 600; }
+.ck--on i { background: var(--racc); box-shadow: none; }
+.ck--on i::after { content: ""; position: absolute; left: 6.5px; top: 2.5px; width: 5px; height: 10px; border: solid var(--ract); border-width: 0 2.5px 2.5px 0; rotate: 45deg; }
+.side__clear { display: inline-block; margin-top: 26px; font-size: 15px; color: var(--rsoft); }
+
+/* ---------- main ---------- */
+.mhead { margin-bottom: 20px; }
+.mhead h2 { font: 900 46px/0.95 var(--display); font-stretch: 62%; }
+.mhead p { color: var(--rsoft); font-size: 17px; margin-top: 6px; }
+.mhead--row { display: flex; align-items: baseline; gap: 16px; margin-top: 64px; }
+.mhead--row p { margin: 0; }
+.mhead--row .sort { margin-left: auto; color: var(--rsoft); font-size: 16px; }
+
+.flow { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); grid-template-rows: 232px 232px; gap: 12px; }
+.flow a { position: relative; display: flex; align-items: flex-end; border-radius: 14px; overflow: hidden; text-decoration: none; color: #fbf6ea; }
+.flow__big { grid-row: span 2; border-radius: 20px !important; }
+.flow .cover { position: absolute; inset: 0; }
+.flow .shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(26,22,17,.9), rgba(26,22,17,0) 72%); }
+.flow__t { position: relative; z-index: 2; padding: 20px 22px; }
+.flow__big .flow__t { padding: 34px 36px; max-width: 560px; }
+.flow h3 { margin: 0; font: 900 34px/1 var(--display); font-stretch: 62%; }
+.flow__big h3 { font-size: 76px; line-height: 0.95; margin-bottom: 10px; }
+.flow__big p { font-size: 19px; }
+.flow .hand { font-size: 17px; margin-top: 4px; }
+.flow__big .hand { font-size: 20px; margin-top: 8px; }
+.flow__m { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 15px; }
+.flow__big .flow__m { margin-top: 18px; font-size: 16px; }
+.flow .when, .flow .pace { color: #fbf6ea; opacity: .85; font-size: 15px; font-weight: 600; }
+.flow .pace::before { content: ""; display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: currentColor; margin: 0 10px 3px 0; }
+.flow__rank { display: table; line-height: 1.3; background: #fbf6ea; color: #25211c; font-size: 14px; font-weight: 700; padding: 3px 9px; border-radius: 2px; margin-bottom: 10px; }
+
+.shell__main .rgrid { gap: 32px 20px; }
+.shell__main .rcard > .cover { height: 208px; }
+.shell__main .rcard h3 { font-size: 28px; }
+.stage { margin-left: auto; padding: 2px 9px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--rline); font-size: 14px; font-weight: 600; color: var(--rfg); }
+
+/* Idea room: the side list is pencilled in the margin */
+.room--idea .side h2 { color: #1f3fae; }

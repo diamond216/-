@@ -1,0 +1,327 @@
+/* Hamster Nest v2: home and the four rooms. Ported from design/v2/v2.css; keep the two in step.
+   Loads after globals.css and reuses its tokens, top bar and .cover patterns.
+   Warm paper and charcoal stay. The one loud colour is highlighter yellow, and it only marks what is new today.
+   One family, Archivo, at different widths. Mali is the makers' handwriting, used only for words a maker wrote. */
+
+:root {
+  --display: "Archivo Variable", "Anuphan Variable", system-ui, sans-serif;
+  --body: "Archivo Variable", "Anuphan Variable", system-ui, sans-serif;
+  --hand: "Mali", "Anuphan Variable", cursive;
+  --hi: #ffe14d;
+}
+body { font: 400 17px/1.5 var(--body); }
+.cover { position: relative; overflow: hidden; }
+h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
+/* The v2 blocks give their covers a height. Older pages (project, maker) keep sizing theirs by ratio. */
+:is(.best, .door__art, .pair__two, .rcard, .flow) .cover, .best__stage { aspect-ratio: auto; }
+.hi { background: var(--hi); color: #25211c; padding: 1px 7px; border-radius: 2px; font-weight: 600; }
+.when { font-size: 15px; font-weight: 600; color: var(--ink-soft); }
+.b { display: inline-block; padding: 13px 20px; border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 16px/1 var(--body); text-decoration: none; border: 1.5px solid var(--ink); }
+.b--line { background: none; color: inherit; border-color: currentColor; }
+.small { font-size: 15px; color: var(--ink-soft); }
+.hand { font-family: var(--hand); }
+.who2 { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--ink-soft); margin-top: 12px; }
+
+.top__nav { font-size: 16px; }
+.brand__name { font: 900 26px/1 var(--display); font-stretch: 75%; letter-spacing: 0; }
+
+/* ---------- home: the statement ---------- */
+.say { padding-top: 60px; padding-bottom: 44px; }
+.say h1 { font: 900 clamp(50px, 13.2vw, 190px)/0.84 var(--display); font-stretch: 62%; letter-spacing: -0.015em; margin-left: -0.05em; }
+.say h1 span { display: block; white-space: nowrap; }
+.say h1 span:first-child { text-indent: -0.36em; padding-left: 0.36em; }
+.say p { margin-top: 30px; font-size: 22px; line-height: 1.45; max-width: 50ch; }
+
+/* ---------- home: the best one from each room ---------- */
+.best { display: grid; grid-template-columns: 1fr 360px; gap: 16px; }
+.best__stage { height: 610px; border-radius: 20px; display: flex; align-items: flex-end; }
+.best__stage::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,22,17,.86), rgba(26,22,17,0) 60%); z-index: 1; }
+.best__text { position: relative; z-index: 2; padding: 44px; color: #fbf6ea; max-width: 660px; }
+.best__text h2 { font: 900 84px/0.9 var(--display); font-stretch: 62%; margin: 16px 0 12px; }
+.best__text p { font-size: 21px; margin-bottom: 24px; }
+.best__text .b { background: #fbf6ea; color: #25211c; border-color: #fbf6ea; margin-right: 8px; }
+.best__text .b--line { background: none; color: #fbf6ea; }
+.best__list { display: grid; grid-template-rows: repeat(4, 1fr); gap: 8px; }
+.best__item { display: flex; gap: 16px; align-items: center; padding: 14px; border-radius: 12px; }
+.best__item .cover { width: 96px; height: 116px; border-radius: 6px; flex: none; }
+.best__item b { display: block; font-size: 15px; font-weight: 600; color: var(--ink-soft); }
+.best__item strong { display: block; font: 800 27px/1.05 var(--display); font-stretch: 75%; margin: 3px 0 5px; }
+.best__item--on { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+/* ---------- home: four rooms ---------- */
+.sec { padding-block: 84px 0; }
+.sec h2 { font: 900 64px/0.95 var(--display); font-stretch: 62%; }
+.sec__lede { font-size: 20px; margin: 10px 0 30px; max-width: 56ch; }
+.rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.door { display: block; text-decoration: none; height: 540px; border-radius: 20px; overflow: hidden; position: relative; padding: 40px 44px; background-color: var(--bg); color: var(--fg); }
+.door h3 { font-size: 92px; line-height: 0.9; }
+.door p { font-size: 20px; margin: 14px 0 22px; max-width: 24ch; }
+.door .b { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.door__art { position: absolute; right: -30px; bottom: -50px; display: flex; }
+.door__art .cover { width: 250px; height: 320px; border-radius: 10px; box-shadow: 0 14px 30px rgba(0,0,0,.25); margin-left: -70px; }
+.door__art .cover:nth-child(1) { rotate: -9deg; translate: 0 40px; }
+.door__art .cover:nth-child(2) { rotate: -2deg; }
+.door__art .cover:nth-child(3) { rotate: 6deg; translate: 0 26px; }
+/* Game: an arcade at night */
+.door--game { --bg: #25211c; --fg: #ffe14d; }
+.door--game h3 { font-weight: 900; font-stretch: 62%; text-transform: uppercase; font-size: 120px; }
+.door--game p { color: #f3eee4; }
+/* IoT: a panel of amber lights */
+.door--iot { --bg: #171411; --fg: #ffb21f; background-image: radial-gradient(circle, rgba(255,178,31,.2) 2px, transparent 2.6px); background-size: 12px 12px; }
+.door--iot h3 { font-weight: 800; font-stretch: 125%; text-shadow: 0 0 24px rgba(255,178,31,.65); }
+.door--iot p { color: #f3eee4; }
+/* Web: a browser window */
+.door--web { --bg: #ffffff; --fg: #25211c; padding-top: 96px; box-shadow: inset 0 0 0 1.5px #25211c; }
+.door--web::before { content: "hamsternest / web"; position: absolute; left: 0; right: 0; top: 0; height: 54px; padding: 15px 0 0 100px; font-size: 16px; color: #655c50; background: radial-gradient(circle at 28px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 51px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 74px 27px, #25211c 6.5px, transparent 7.5px), #e9e2d3; border-bottom: 1.5px solid #25211c; }
+.door--web h3 { font-weight: 800; font-stretch: 100%; }
+/* Idea: a school notebook */
+.door--idea { --bg: #fdfdf9; --fg: #1f3fae; box-shadow: inset 0 0 0 1.5px #d8cebb; background-image: linear-gradient(90deg, transparent 70px, #e2584c 70px 72px, transparent 72px), linear-gradient(#cfe0f5 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 32px; padding-left: 100px; }
+.door--idea h3 { font-family: var(--hand); font-weight: 700; }
+.door--idea p { font-family: var(--hand); font-size: 22px; }
+
+/* ---------- home: before and now ---------- */
+.pairs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.pair { text-decoration: none; display: block; }
+.pair__two { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4px; margin-bottom: 14px; }
+.pair__two figure { position: relative; }
+.pair__two .cover { height: 250px; border-radius: 6px; }
+.pair__two figure:first-child .cover { filter: grayscale(1) contrast(.8); opacity: .7; }
+.pair__two figcaption { position: absolute; left: 10px; top: 10px; z-index: 3; background: #fbf8f1; color: #25211c; font-size: 14px; font-weight: 600; padding: 2px 8px; border-radius: 2px; }
+.pair__two figcaption.hi { background: var(--hi); }
+/* The same pair at the top right of a project page, in place of the old activity graph. */
+.proj__status .pair__two { width: 100%; margin-bottom: 0; }
+.proj__status .pair__two .cover { height: clamp(150px, 12vw, 230px); }
+.proj__now { font-size: 16px; color: var(--ink-soft); }
+.proj__now .hand { font-size: 19px; color: var(--ink); }
+.pair h3 { font: 800 28px/1.1 var(--display); font-stretch: 75%; }
+.pair .hand { font-size: 19px; margin-top: 6px; }
+
+/* ---------- home: Hamster Hub ---------- */
+.about { background: #25211c; color: #f3eee4; margin-top: 96px; }
+.about__in { display: grid; grid-template-columns: 5fr 7fr; gap: 70px; padding-block: 88px 72px; }
+.about h2 { font: 900 76px/0.9 var(--display); font-stretch: 62%; margin-bottom: 20px; }
+.about__in > div > p { font-size: 20px; opacity: .85; max-width: 34ch; margin-bottom: 26px; }
+.about li { padding: 18px 0; border-bottom: 1px solid rgba(243,238,228,.18); }
+.about li:last-child { border: 0; }
+.about li strong { display: block; font: 700 23px/1.2 var(--display); margin-bottom: 4px; }
+.about li p { opacity: .8; }
+.about__quote { padding-block: 0 88px; }
+.about__quote blockquote { font: 900 60px/0.98 var(--display); font-stretch: 62%; max-width: 30ch; }
+.about__quote p { margin-top: 16px; opacity: .8; }
+.post__in { display: flex; align-items: end; justify-content: space-between; padding-block: 80px; gap: 40px; }
+.post h2 { font: 900 96px/0.88 var(--display); font-stretch: 62%; }
+.post p { max-width: 38ch; margin-bottom: 18px; font-size: 19px; }
+.hubfoot { border-top: 1.5px solid var(--ink); }
+.hubfoot__in { display: flex; justify-content: space-between; padding-block: 36px 44px; }
+.hubfoot b { font: 900 30px var(--display); font-stretch: 75%; display: block; }
+
+/* ---------- a room (browse page) ---------- */
+.room { background: var(--rbg); color: var(--rfg); --paper: var(--rbg); --ink: var(--rfg); --ink-soft: var(--rsoft); --line: var(--rline); min-height: 100vh; padding-bottom: 90px; }
+.room .top { border-color: var(--rline); }
+.room .b { background: var(--racc); color: var(--ract); border-color: var(--racc); }
+.rhead__in { padding-block: 50px 34px; display: grid; grid-template-columns: 7fr 5fr; gap: 40px; align-items: end; }
+.rhead h1 { font: 900 230px/0.8 var(--display); font-stretch: 62%; color: var(--rtitle, var(--rfg)); }
+.rhead p { font-size: 21px; margin-bottom: 18px; }
+.rsearch { height: 58px; display: flex; align-items: center; padding: 0 20px; border: 1.5px solid var(--rfg); border-radius: 8px; color: var(--rsoft); font-size: 18px; background: var(--rbg); }
+.rbar { display: flex; align-items: center; gap: 8px; padding-block: 30px 22px; flex-wrap: wrap; }
+.chip { padding: 10px 16px; border-radius: 8px; box-shadow: inset 0 0 0 1.5px var(--rline); font-weight: 600; font-size: 16px; }
+.chip--on { background: var(--rfg); color: var(--rbg); box-shadow: none; }
+.rbar .sort { margin-left: auto; color: var(--rsoft); }
+.rgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px 24px; }
+.rcard { text-decoration: none; display: block; }
+.rcard > .cover { height: 270px; border-radius: 12px; }
+.rcard h3 { font: 800 32px/1.05 var(--display); font-stretch: 75%; margin: 16px 0 4px; }
+.rcard__new { margin-top: 12px; font-size: 16px; }
+.rcard__new .hand { font-size: 18px; display: block; margin-top: 6px; }
+.rcard--post { border: 1.5px dashed var(--rsoft); border-radius: 12px; padding: 30px; display: flex; flex-direction: column; justify-content: end; align-items: start; }
+.rcard--post h3 { margin-top: 0; }
+.rcard--post p { color: var(--rsoft); margin: 6px 0 18px; }
+
+.room--game { --rbg: #25211c; --rfg: #f3eee4; --rsoft: #b3a995; --rline: #453e34; --racc: #ffe14d; --ract: #25211c; --rtitle: #ffe14d; }
+.room--game .rhead h1 { text-transform: uppercase; }
+.room--game .rhead::after { content: ""; display: block; height: 26px; background: repeating-linear-gradient(90deg, #ffe14d 0 26px, transparent 26px 52px); }
+
+.room--iot { --rbg: #171411; --rfg: #f3eee4; --rsoft: #a89f8e; --rline: #3a332a; --racc: #ffb21f; --ract: #171411; --rtitle: #ffb21f; }
+.room--iot .rhead { background-image: radial-gradient(circle, rgba(255,178,31,.2) 2px, transparent 2.6px); background-size: 12px 12px; border-bottom: 1.5px solid #3a332a; }
+.room--iot .rhead h1 { font-weight: 800; font-stretch: 125%; font-size: 190px; line-height: 0.9; text-shadow: 0 0 34px rgba(255,178,31,.6); }
+
+.room--web { --rbg: #ffffff; --rfg: #25211c; --rsoft: #655c50; --rline: #d8cebb; --racc: #25211c; --ract: #ffffff; }
+.room--web .rhead { border-bottom: 1.5px solid #25211c; }
+.room--web .rhead::before { content: "hamsternest / web"; display: block; height: 54px; padding: 15px 0 0 100px; font-size: 16px; color: #655c50; background: radial-gradient(circle at 28px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 51px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 74px 27px, #25211c 6.5px, transparent 7.5px), #e9e2d3; border-bottom: 1.5px solid #25211c; }
+.room--web .rhead h1 { font-weight: 800; font-stretch: 100%; font-size: 200px; line-height: 0.9; }
+
+.room--idea { --rbg: #fdfdf9; --rfg: #25211c; --rsoft: #655c50; --rline: #d8cebb; --racc: #1f3fae; --ract: #fdfdf9; --rtitle: #1f3fae; }
+.room--idea .rhead { background-image: linear-gradient(90deg, transparent 40px, #e2584c 40px 42px, transparent 42px), linear-gradient(#cfe0f5 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 32px; border-bottom: 1.5px solid #d8cebb; }
+.room--idea .rhead h1 { font: 700 190px/0.95 var(--hand); letter-spacing: -0.02em; }
+.room--idea .rhead p { font-family: var(--hand); font-size: 23px; color: #1f3fae; }
+
+/* ---------- a room with a left sidebar (design/v2, option A) ---------- */
+.shell { display: grid; grid-template-columns: 236px minmax(0, 1fr); gap: 56px; padding-top: 44px; align-items: start; }
+.side { position: sticky; top: 24px; }
+.side h2 { font: 800 22px/1 var(--display); font-stretch: 75%; margin: 34px 0 12px; }
+.side h2:first-child { margin-top: 6px; }
+.side__list { list-style: none; margin: 0 -12px; padding: 0; }
+.side__list button { width: 100%; display: flex; justify-content: space-between; align-items: baseline; padding: 9px 12px; border: 0; border-radius: 8px; background: none; color: inherit; font: 500 17px/1.5 var(--body); text-align: left; cursor: pointer; }
+.side__list button[aria-pressed="true"] { background: var(--rfg); color: var(--rbg); font-weight: 700; }
+.side__n { font-size: 15px; color: var(--rsoft); font-variant-numeric: tabular-nums; }
+.side__list button[aria-pressed="true"] .side__n { color: inherit; opacity: .7; }
+.ck { display: flex; align-items: center; gap: 11px; padding: 7px 0; font-size: 17px; cursor: pointer; }
+.ck input { appearance: none; margin: 0; width: 20px; height: 20px; flex: none; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--rsoft); position: relative; cursor: pointer; }
+.ck:has(input:checked) { font-weight: 600; }
+.ck input:checked { background: var(--racc); box-shadow: none; }
+.ck input:checked::after { content: ""; position: absolute; left: 6.5px; top: 2.5px; width: 5px; height: 10px; border: solid var(--ract); border-width: 0 2.5px 2.5px 0; rotate: 45deg; }
+.side__clear { display: inline-block; margin-top: 26px; padding: 0; border: 0; background: none; font: 400 15px var(--body); color: var(--rsoft); text-decoration: underline; cursor: pointer; }
+.side__toggle { display: none; }
+.side__list button:focus-visible, .ck input:focus-visible, .side__clear:focus-visible, .side__toggle:focus-visible, .flow a:focus-visible { outline: 3px solid var(--hi); outline-offset: 2px; }
+
+.mhead { margin-bottom: 20px; }
+.mhead h2 { font: 900 46px/0.95 var(--display); font-stretch: 62%; }
+.mhead p { color: var(--rsoft); font-size: 17px; margin-top: 6px; }
+.mhead--row { display: flex; align-items: baseline; gap: 16px; margin-top: 64px; flex-wrap: wrap; }
+.shell__main > .mhead--row:first-child { margin-top: 0; }
+.mhead--row p { margin: 0; }
+.mhead--row .sort { margin-left: auto; color: var(--rsoft); font-size: 16px; }
+
+.flow { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); grid-template-rows: 232px 232px; gap: 12px; }
+.flow a { position: relative; display: flex; align-items: flex-end; border-radius: 14px; overflow: hidden; text-decoration: none; color: #fbf6ea; }
+.flow a.flow__big { grid-row: span 2; border-radius: 20px; }
+/* Filters can leave fewer than three: one card takes the whole block, two share it. */
+.flow a.flow__big:only-child { grid-column: 1 / -1; }
+.flow a.flow__s:nth-child(2):last-child { grid-row: span 2; }
+.flow .cover { position: absolute; inset: 0; }
+.flow .shade { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(26,22,17,.9), rgba(26,22,17,0) 72%); }
+.flow__t { position: relative; z-index: 2; padding: 20px 22px; }
+.flow__big .flow__t { padding: 34px 36px; max-width: 560px; }
+.flow h3 { margin: 0; font: 900 34px/1 var(--display); font-stretch: 62%; }
+.flow__big h3 { font-size: 76px; line-height: 0.95; margin-bottom: 10px; }
+.flow__big p { font-size: 19px; }
+.flow .hand { font-size: 17px; margin-top: 4px; }
+.flow__big .hand { font-size: 20px; margin-top: 8px; }
+.flow__m { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 15px; flex-wrap: wrap; }
+.flow__big .flow__m { margin-top: 18px; font-size: 16px; }
+.flow .when, .flow .pace { color: #fbf6ea; opacity: .85; font-size: 15px; font-weight: 600; }
+.flow .pace::before { content: ""; display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: currentColor; margin: 0 10px 3px 0; }
+.flow__rank { display: table; line-height: 1.3; background: #fbf6ea; color: #25211c; font-size: 14px; font-weight: 700; padding: 3px 9px; border-radius: 2px; margin-bottom: 10px; }
+
+.shell__main .rgrid { gap: 32px 20px; }
+.shell__main .rcard > .cover { height: 208px; }
+.shell__main .rcard h3 { font-size: 28px; }
+.stage { margin-left: auto; padding: 2px 9px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--rline); font-size: 14px; font-weight: 600; color: var(--rfg); }
+.room--idea .side h2 { color: #1f3fae; }
+
+/* ---------- things the static draft didn't need ---------- */
+.top .b { padding: 11px 18px; }
+.top__nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.best__item { width: 100%; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.best__item:focus-visible, .door:focus-visible, .rcard:focus-visible, .pair:focus-visible, .chip:focus-visible, .b:focus-visible { outline: 3px solid var(--hi); outline-offset: 3px; }
+.best__text h2 a, .rcard h3 a, .pair h3 a { text-decoration: none; }
+.best__text .b { cursor: pointer; }
+button.chip { border: 0; background: none; color: inherit; font-family: inherit; cursor: pointer; }
+button.chip.chip--on { background: var(--rfg); color: var(--rbg); }
+.rsearch { padding: 0; }
+.rsearch input { width: 100%; height: 100%; padding: 0 20px; border: 0; background: none; color: var(--rfg); font: 400 18px var(--body); outline: none; border-radius: 8px; }
+.rsearch input::placeholder { color: var(--rsoft); }
+.rsearch:focus-within { outline: 3px solid var(--hi); outline-offset: 2px; }
+.rempty { grid-column: 1 / -1; font-size: 19px; padding-block: 30px; }
+.rempty .b { margin-top: 16px; cursor: pointer; }
+.room .hubfoot { border-color: var(--rline); }
+.room main { padding-bottom: 90px; }
+.room { padding-bottom: 0; }
+
+/* ---------- screen sizes ----------
+   Computers use the whole width of the screen, with only a gutter at the edges.
+   Tablets (1100px and under) and phones (700px and under) get their own layouts further down. */
+.wrap { max-width: none; padding-inline: clamp(20px, 3vw, 72px); }
+@media (min-width: 1101px) {
+  .shell__main .rgrid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .rgrid .rcard > .cover { height: auto; aspect-ratio: 16 / 10; }
+  .flow { grid-template-rows: repeat(2, clamp(232px, 16vw, 340px)); }
+}
+/* Past a laptop, the big headlines grow with the screen so the right side doesn't sit empty. */
+@media (min-width: 1441px) {
+  .say h1 { font-size: 13.2vw; }
+  .rhead h1 { font-size: 16vw; }
+  .room--iot .rhead h1, .room--idea .rhead h1 { font-size: 13.2vw; }
+  .room--web .rhead h1 { font-size: 13.9vw; }
+  .best__stage { height: clamp(610px, 42vw, 820px); }
+  .door { height: clamp(540px, 37vw, 720px); }
+  .pair__two .cover { height: clamp(250px, 17vw, 360px); }
+}
+
+/* Thai has no condensed cut, so headlines get smaller and breathe more. */
+:lang(th) .say h1 { font-size: clamp(40px, 9vw, 128px); line-height: 1.12; font-weight: 700; }
+:lang(th) :is(.sec h2, .about h2, .best__text h2) { line-height: 1.2; font-weight: 700; }
+:lang(th) .sec h2 { font-size: 48px; }
+:lang(th) .about h2 { font-size: 56px; }
+:lang(th) .post h2 { font-size: 64px; line-height: 1.2; font-weight: 700; }
+:lang(th) .about__quote blockquote { font-size: 40px; line-height: 1.3; font-weight: 700; }
+:lang(th) .rhead h1 { line-height: 1.1; }
+:lang(th) :is(.mhead h2, .flow h3, .side h2) { line-height: 1.25; font-weight: 700; }
+:lang(th) .mhead h2 { font-size: 36px; }
+:lang(th) .flow__big h3 { font-size: 56px; }
+:lang(th) .room--idea .rhead h1 { font-size: 120px; }
+:lang(th) .door h3 { line-height: 1.15; }
+:lang(th) .door--idea h3 { font-size: 72px; }
+
+@media (max-width: 1100px) {
+  /* Tablets and phones: the rooms move to their own row under the logo, so they're always one tap away. */
+  .top__in { flex-wrap: wrap; height: auto; padding-block: 12px; gap: 10px 16px; }
+  .top__nav { display: flex; order: 5; width: 100%; margin-left: 0; gap: 22px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; padding-block: 4px; }
+  .top__prefs { margin-left: auto; }
+  .best { grid-template-columns: 1fr; }
+  .best__list { grid-template-rows: none; grid-template-columns: 1fr 1fr; }
+  .rooms { grid-template-columns: 1fr; }
+  .pairs { grid-template-columns: 1fr; gap: 36px; }
+  .about__in { grid-template-columns: 1fr; gap: 30px; }
+  .post__in { flex-direction: column; align-items: start; }
+  .rhead__in { grid-template-columns: 1fr; gap: 20px; }
+  .rgrid { grid-template-columns: 1fr 1fr; }
+  .rhead h1 { font-size: clamp(90px, 22vw, 230px) !important; }
+}
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; gap: 28px; padding-top: 28px; }
+  .side { position: static; }
+  .side__toggle { display: block; width: 100%; padding: 13px 16px; border: 0; border-radius: 8px; box-shadow: inset 0 0 0 1.5px var(--rfg); background: none; color: inherit; font: 600 17px var(--body); text-align: left; cursor: pointer; }
+  .side__panel { display: none; padding-top: 22px; }
+  .side__panel[data-open="true"] { display: block; }
+  .flow { grid-template-columns: 1fr 1fr; grid-template-rows: 380px 210px; }
+  .flow a.flow__big { grid-row: auto; grid-column: 1 / -1; }
+}
+@media (max-width: 700px) {
+  .top .b { display: none; } /* the same button sits in the band at the bottom of the home page */
+  .brand__name { font-size: 22px; white-space: nowrap; }
+  .say { padding-top: 36px; padding-bottom: 30px; }
+  .say p { font-size: 19px; margin-top: 20px; }
+  .best__stage { height: 460px; }
+  .best__text { padding: 24px; }
+  .best__text h2 { font-size: 56px; }
+  .best__text p { font-size: 18px; }
+  .best__text .b { margin-bottom: 8px; }
+  .best__list { grid-template-columns: 1fr; }
+  .best__item .cover { width: 64px; height: 76px; }
+  .sec { padding-block: 56px 0; }
+  .sec h2 { font-size: 48px; }
+  .door { height: 460px; padding: 28px 24px; }
+  .door--web { padding-top: 84px; }
+  .door--idea { padding-left: 88px; }
+  .door h3 { font-size: 72px; }
+  .door--game h3 { font-size: 92px; }
+  .door__art .cover { width: 170px; height: 220px; margin-left: -50px; }
+  .about { margin-top: 64px; }
+  .about__in { padding-block: 56px 44px; }
+  .about h2 { font-size: 56px; }
+  .about__quote blockquote { font-size: 38px; }
+  .post__in { padding-block: 56px; }
+  .post h2 { font-size: 60px; }
+  .hubfoot__in { flex-direction: column; gap: 20px; }
+  .rgrid { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: 1fr; grid-template-rows: 380px 200px 200px; }
+  .flow__big .flow__t { padding: 24px; }
+  .flow__big h3 { font-size: 56px; }
+  .mhead h2 { font-size: 38px; }
+  .mhead--row { margin-top: 48px; }
+  .mhead--row .sort { margin-left: 0; width: 100%; }
+  .rbar .sort { margin-left: 0; width: 100%; }
+  .rcard > .cover { height: 230px; }
+  .room--idea .rhead h1 { font-size: 110px !important; }
+}

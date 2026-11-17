@@ -2,19 +2,20 @@
 
 import { useLocalizer } from "../providers/NestProvider";
 
+/** Every page ends on Hamster Hub: who runs this, and where to reach them. */
 export function Footer() {
   const localizer = useLocalizer();
   return (
-    <footer className="foot">
-      <div className="wrap foot__in">
-        <p>{localizer.t("foot.run")}</p>
-        <nav aria-label={localizer.t("foot.label")}>
-          <a href="#">{localizer.t("foot.howWePick")}</a>
-          <a href="#">{localizer.t("foot.ranking")}</a>
-          <a href="#">{localizer.t("foot.investors")}</a>
-          <a href="#">{localizer.t("foot.contact")}</a>
-        </nav>
-        <p className="mono">{localizer.t("foot.note")}</p>
+    <footer className="hubfoot">
+      <div className="wrap hubfoot__in">
+        <div>
+          <b>Hamster Hub</b>
+          <span className="small">{localizer.t("foot.hub")}</span>
+        </div>
+        <div>
+          <p>{localizer.t("foot.contacts")}</p>
+          <span className="small">{localizer.t("foot.placeholders")}</span>
+        </div>
       </div>
     </footer>
   );

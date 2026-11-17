@@ -14,6 +14,17 @@ export interface ShelfView {
   rest: Listing[];
 }
 
+/** What a room shows once the visitor has searched and filtered. */
+export interface RoomView {
+  /** The busiest few of the matches, by the headline ranking: "flowing strongest this week". */
+  strongest: Listing[];
+  /** Every match, in the order the visitor asked for. The strongest ones appear here too. */
+  latest: Listing[];
+}
+
+/** The window behind "14 updates in 30 days" on a room's strongest cards. */
+export const PACE_DAYS = 30;
+
 export interface CategoryCount {
   category: Category;
   count: number;
@@ -48,9 +59,32 @@ export class Shelf {
     return { total: matches.length, featured, rest };
   }
 
-  /** The projects the hero takes turns showing: the top of the headline ranking across the whole shelf. */
-  highlights(): Listing[] {
-    return this.headline.rank(this.directory.all()).slice(0, this.featuredCount);
+  /** The highlight on the home page: the top project of each room by the headline ranking, in room order. */
+  bestOfEachRoom(): Listing[] {
+    const ranked = this.headline.rank(this.directory.all());
+    return Category.rooms()
+      .map((room) => ranked.find((listing) => listing.project.isIn(room.id)))
+      .filter((listing): listing is Listing => listing !== undefined);
+  }
+
+  /** Everything in one room that matches the query, in the order the visitor asked for. */
+  room(categoryId: CategoryId, query: ShelfQuery): Listing[] {
+    return this.roomView(categoryId, query).latest;
+  }
+
+  /** A room's two blocks for one query: the strongest few on top, then every match. */
+  roomView(categoryId: CategoryId, query: ShelfQuery): RoomView {
+    const specification = this.specifications.build(query.with({ category: categoryId }));
+    const matches = this.directory.all().filter((listing) => specification.isSatisfiedBy(listing));
+    return {
+      strongest: this.headline.rank(matches).slice(0, this.featuredCount),
+      latest: this.rankings.get(query.sort).rank(matches),
+    };
+  }
+
+  /** How many projects live in a room, before any filter. */
+  roomSize(categoryId: CategoryId): number {
+    return this.directory.all().filter((listing) => listing.project.isIn(categoryId)).length;
   }
 
   /** Where a project sits on the headline ranking across the whole shelf, counting from 1. */

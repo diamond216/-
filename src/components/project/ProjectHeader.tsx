@@ -1,11 +1,12 @@
 "use client";
 
 import type { ProjectPage } from "@/services/pages";
-import { ACTIVITY_WINDOW_DAYS } from "@/services/shelf";
+import { BeforeNowPair } from "../common/BeforeNowPair";
+import { FreshnessLabel } from "../common/FreshnessLabel";
 import { paths } from "../common/links";
 import { useLocalizer, useNest } from "../providers/NestProvider";
-import { ActivityStrip } from "../shelf/ActivityStrip";
 
+/** The top of a project page: its name and line on the left, how it looked before and now on the right. */
 export function ProjectHeader({ page }: { page: ProjectPage }) {
   const localizer = useLocalizer();
   const { clock } = useNest();
@@ -16,9 +17,9 @@ export function ProjectHeader({ page }: { page: ProjectPage }) {
     <>
       <nav aria-label={localizer.t("crumb.label")}>
         <p className="mono crumb">
-          <a href={paths.shelfCategory(project.category.id)}>{localizer.text(project.category.label)}</a>
+          <a href={paths.room(project.category.id)}>{localizer.text(project.category.label)}</a>
           {" / "}
-          <a href={paths.shelfGenre(genre.id)}>{localizer.text(genre.label)}</a>
+          <a href={paths.roomGenre(project.category.id, genre.id)}>{localizer.text(genre.label)}</a>
           {" / "}
           <span aria-current="page">{project.name}</span>
         </p>
@@ -31,17 +32,19 @@ export function ProjectHeader({ page }: { page: ProjectPage }) {
           <p className="tags">{project.hashtags().join(" ")}</p>
         </div>
         <div className="proj__status">
-          <ActivityStrip days={page.strip} />
-          <p className="mono">
-            <span className="dot" aria-hidden="true" />
-            {page.latest
-              ? localizer.t("project.status", {
-                  count: page.updatesInWindow,
-                  days: ACTIVITY_WINDOW_DAYS,
-                  ago: localizer.ago(page.latest.postedAt, clock.now()),
-                })
-              : localizer.t("project.quiet")}
-          </p>
+          {page.latest ? (
+            <>
+              <BeforeNowPair project={project} update={page.latest} />
+              <p className="proj__now">
+                <span className="sr-only">
+                  <FreshnessLabel freshness={page.latest.freshness(clock.now())} />{" "}
+                </span>
+                <span className="hand">{localizer.text(page.latest.title)}</span>
+              </p>
+            </>
+          ) : (
+            <p className="proj__now">{localizer.t("project.quiet")}</p>
+          )}
           <p className="chips">
             <span className="chip">{localizer.text(project.stage.label)}</span>
             {project.paused && <span className="chip">{localizer.t("card.paused")}</span>}

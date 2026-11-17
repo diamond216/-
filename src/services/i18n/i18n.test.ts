@@ -20,8 +20,10 @@ describe("Localizer", () => {
   });
 
   it("keeps to the copy rules: no exclamation marks, none of the banned words", () => {
-    for (const value of Object.values(en)) {
+    for (const [key, value] of Object.entries(en)) {
       if (typeof value !== "string") continue;
+      // The home headline is the owner's own line, a visitor's surprised question, so it keeps its "!?".
+      if (key === "say.title.second") continue;
       expect(value).not.toMatch(/!/);
       expect(value).not.toMatch(banned);
     }

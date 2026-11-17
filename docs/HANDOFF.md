@@ -56,6 +56,7 @@ Other standing rules from the owner:
 | 13 | **Look v2** (made with the `frontend-design` skill, owner chose it over the first pass): paper and charcoal stay, the one loud colour is **highlighter yellow `#ffe14d`, used only to mark what is new today**. Type is **Archivo** at different widths (condensed black for headlines), and **Mali** handwriting only for words a maker wrote. No persimmon, no mono uppercase labels, no numbers or charts on the home page | same picture |
 | 14 | **Updates are shown as "Before and now"** photo pairs (option 2 of 3). No counts, graphs or donut | `docs/decisions/08-updates-options-2-chosen.jpg` |
 | 15 | **Room themes:** Game = arcade at night (charcoal + yellow), IoT = LED panel (dark + amber dots), Web = browser window (white, address bar), Idea = school notebook (ruled paper, blue pen) | `docs/decisions/07-rooms-themes-chosen.jpg`, options in `09-room-theme-options.jpg` |
+| 16 | **Rooms have a left sidebar** (option A, with numbers; 17 Nov 2026): genre list with counts (one genre at a time), stage checkboxes, investor checkboxes (open to investment, has a demo, updated in the last 7 days). On the right, "Flowing strongest this week" (one big No. 1 card, smaller No. 2 and No. 3, each with "N updates in 30 days"), then "Latest updates" with every match. This replaces the chip row. Counts and ranks are allowed in rooms; the home page still has none | `docs/decisions/10-room-sidebar-option-A-chosen.png` |
 
 `docs/decisions/02-reference-sites-vs-draft.jpg` shows what was borrowed from each reference site.
 
@@ -136,7 +137,16 @@ flow = Σ w(type) × 2^(−ageDays/14)
 
 **UX/UI restructure (17 Nov 2026):** the hold is over. The owner gave the new direction and chose every option (decisions 12 to 15). The approved drafts are `design/v2/index.html` (home) and `design/v2/game.html`, `iot.html`, `web.html`, `idea.html` (rooms), styled by `design/v2/v2.css` on top of `design/landing/styles.css`. They are the reference for the build. The 25 showcase sites in `docs/references/` were the research for this.
 
-**Next step:** build the v2 home and the four room pages in the app to match `design/v2/`, then compare with screenshots. The old home sections (donut, maker note, filter sidebar, feed) go away on the home page; project and maker pages stay as they are until the owner asks.
+**v2 build (17 Nov 2026, on the owner's PC, not committed yet):** the v2 home and the four rooms are built. Rooms follow decision 16 and were compared with `design/v2/game.html`, `iot.html`, `web.html`, `idea.html` at 1440 (EN, plus TH for Game and Idea). Build, lint and 45 tests pass.
+
+- Room code: `src/app/[room]/page.tsx`, `src/components/room/` (`RoomPageView`, `RoomSidebar`, `RoomStrongest`, `RoomCard`), `src/hooks/useRoomQuery.ts` (URL state: `q`, `genre`, `stage`, `open`, `demo`, `week`), `Shelf.roomView()` / `roomSize()`, styles in `src/app/v2.css`. Home code: `src/components/home/`.
+- Under 900px the sidebar folds behind a "Filters" button.
+- Rooms keep their own colours in night mode.
+- Screen sizes (owner's request, 17 Nov 2026): computers use the whole width of the screen (`.wrap` has no max width, only a gutter; past 1440px the big headlines and cover blocks grow with the screen, and room grids add columns). Tablets (1100px and under) and phones (700px and under) have their own layouts; there the room links sit in a second row of the top bar. All of it is in the "screen sizes" block and the media queries of `src/app/v2.css`.
+- Project page (owner's request, 17 Nov 2026): the activity graph and the "N updates in 30 days" line at the top right are gone. In their place is the same "Before and now" pair as the home page (`src/components/common/BeforeNowPair.tsx`) with the latest update's title under it. The stage, investment and rank chips stay. The big cover that had collapsed under v2 is fixed.
+- This PC has no Playwright or Python, so `tools/` doesn't run here. Screenshots were taken with headless Chrome against a static server on `out/`. Headless Chrome can't go narrower than about 500px, so 390px was only checked for overflow in the app's browser pane (none on the room page).
+
+**Next step:** compare the v2 home with `design/v2/index.html`, check phone width by eye, look over the old project and maker pages under the new top bar and footer, then commit and push once the owner says yes.
 
 **Open questions for the owner:**
 

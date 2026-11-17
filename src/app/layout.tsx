@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/anuphan";
+import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource/mali/500.css";
+import "@fontsource/mali/700.css";
 import "@fontsource-variable/bricolage-grotesque/opsz.css";
 import "@fontsource-variable/jetbrains-mono";
 import { NestProvider } from "@/components/providers/NestProvider";
 import { en } from "@/services/i18n/en";
 import "./globals.css";
+import "./v2.css";
 
 export const metadata: Metadata = {
   title: en["meta.title"],
