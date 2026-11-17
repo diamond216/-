@@ -244,3 +244,16 @@ html{background:#0B0B0F}
 /* statement font chosen by the owner: Fraunces 600 */
 .say__h{font:600 clamp(34px,4.3vw,62px)/1.1 "Fraunces",Georgia,serif;letter-spacing:-.025em}
 .hero::before{-webkit-mask-image:linear-gradient(180deg,#000 50%,transparent);mask-image:linear-gradient(180deg,#000 50%,transparent)}
+/* ---------- round 9: IBM Plex Sans Thai Looped everywhere (statement stays Fraunces) ---------- */
+:root{--f:"IBM Plex Sans Thai Looped",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+body{letter-spacing:0}
+.hero__text h1{letter-spacing:-.03em}.tier__head h2{letter-spacing:-.025em}
+/* ---------- light, colour, shadow on the tier area ---------- */
+.fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+/* every card sits on the page: top edge catches light, soft shadow below (game-color-light rules 4, 7) */
+.card__pic{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px color-mix(in oklab,var(--tc) 22%,transparent),var(--sx,0px) var(--sy,22px) 40px -14px rgba(0,0,0,.7)}
+.card:hover .card__pic{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 0 0 2px var(--tc),var(--sx,0px) calc(var(--sy,22px) + 12px) 56px -12px rgba(0,0,0,.75),0 0 40px -6px color-mix(in oklab,var(--tc) 45%,transparent)}
+.tier__head h2{text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.gem{box-shadow:0 0 0 3px color-mix(in oklab,var(--tc) 20%,transparent)}
+/* a light that follows the pointer; card shadows fall away from it (owner chose B) */
+.fx{background:radial-gradient(30vmax 30vmax at var(--lx,70%) var(--ly,25%),color-mix(in oklab,var(--acc) 38%,transparent),transparent 70%)}
