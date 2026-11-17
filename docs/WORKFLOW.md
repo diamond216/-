@@ -15,6 +15,7 @@ Read this together with `docs/HANDOFF.md` (project facts, decisions, code map, s
 | Allowed hosts | ui.shadcn.com, ui.aceternity.com, assets.aceternity.com, 21st.dev, cdn.21st.dev, assets.21st.dev, www.originkit.dev, cdn.originkit.dev, animejs.com, itch.io, static.itch.io | Already saved on the environment. If you need another host, ask the owner through the environment tools; never work around the proxy |
 | Skill | `manager-researcher-coder` (account skill). It tells you to work as Manager / Researcher / Coder and show pictures first | It is synced to the owner's account. Invoke it at the start of every task. Its rules are also copied in section 2 |
 | Related skills | `oop-design-playbook` (read before writing code). `dataviz` (read before any chart) | Invoke with the Skill tool |
+| Design skill | `frontend-design` (plugin `frontend-design@claude-plugins-official`). The owner asked for all visual work to follow it from 17 Nov 2026 | Invoke it before drafting any picture. If it isn't installed, read `~/.claude/plugins/marketplaces/claude-plugins-official/plugins/frontend-design/skills/frontend-design/SKILL.md` |
 | Browser | Pre-installed Chromium + Playwright (`require('playwright')`) | Never run `playwright install` |
 | Tools in repo | `tools/shots.cjs`, `tools/compare.py`, `tools/options-sheet.py` | See section 5 |
 | shadcn MCP (optional) | `npx shadcn@latest mcp init --client claude`. Free, needs ui.shadcn.com | Only if you want the registry as MCP tools; the CLI is enough |
@@ -122,7 +123,7 @@ The owner gave this as the standard for all copy and UI. Keep to it:
 >    - Choose expressive, readable typography (pair a distinct display font with a clean sans-serif or monospace font) rather than default Inter/Roboto everywhere.
 >    - Make micro-copy (buttons, error messages, form placeholders) feel warm and helpful (e.g., use "Send it over" instead of "Submit").
 
-The tokens that came out of it:
+The tokens that came out of it (v1; for v2 see HANDOFF decision 13 and `design/v2/v2.css`):
 
 - **Colours:** paper `#f3eee4`, surface `#fbf8f1`, ink `#25211c`, ink-soft `#655c50`, line `#d8cebb`, accent (persimmon) `#e0482a`, fresh `#2f7d55`, sand `#e2c98f`.
 - **Night theme:** same roles, warm dark palette.

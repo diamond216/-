@@ -52,6 +52,10 @@ Other standing rules from the owner:
 | 9 | The positioning chart (price × player pull) from the handwritten note was **removed** at the owner's request. Don't add it back | |
 | 10 | Project page and maker profile drafts were **approved as built** | |
 | 11 | Hero left side is a **rotating highlight of 3 projects** (option 2): big card, three tabs that fill and move on every ~6.5 s, pausing on hover, focus or while writing to the maker. The maker note on the right follows the project on show. Donut and note sit in panels with the same frame as the card. The search moved to a **Browse** header above the category tabs. The big "Work that's still moving." headline is now screen-reader only | `docs/decisions/05-hero-highlight-option-2.jpg` |
+| 12 | **Home v2 structure** (owner's direction, 17 Nov 2026): a statement headline in quote marks ("High schoolers can do all this!?"), then an Epic-style highlight with **the best project from each category**, then **four rooms** (Game, IoT, Web, Idea) as a 2x2 grid, then updates, then Hamster Hub info at the bottom. Entering a room opens that room's browse page. This replaces decisions 1, 6, 8 and 11 for the home page | `docs/decisions/06-home-v2-approved.jpg` |
+| 13 | **Look v2** (made with the `frontend-design` skill, owner chose it over the first pass): paper and charcoal stay, the one loud colour is **highlighter yellow `#ffe14d`, used only to mark what is new today**. Type is **Archivo** at different widths (condensed black for headlines), and **Mali** handwriting only for words a maker wrote. No persimmon, no mono uppercase labels, no numbers or charts on the home page | same picture |
+| 14 | **Updates are shown as "Before and now"** photo pairs (option 2 of 3). No counts, graphs or donut | `docs/decisions/08-updates-options-2-chosen.jpg` |
+| 15 | **Room themes:** Game = arcade at night (charcoal + yellow), IoT = LED panel (dark + amber dots), Web = browser window (white, address bar), Idea = school notebook (ruled paper, blue pen) | `docs/decisions/07-rooms-themes-chosen.jpg`, options in `09-room-theme-options.jpg` |
 
 `docs/decisions/02-reference-sites-vs-draft.jpg` shows what was borrowed from each reference site.
 
@@ -130,14 +134,15 @@ flow = Σ w(type) × 2^(−ageDays/14)
 - Real backend: auth, database, sending messages, uploads
 - Deployment
 
-**On hold (16 Nov 2026):** the owner plans to restructure the whole UX/UI. Don't build anything visible until the owner gives the new direction. To prepare, 25 showcase sites were visited and captured: the list with what to borrow is in `docs/references/showcase-sites.md`, the contact sheet is `docs/references/showcase-sites.jpg`, and there's one picture per site in `docs/references/sites/`. We borrow layout patterns only, never branding, images or copy.
+**UX/UI restructure (17 Nov 2026):** the hold is over. The owner gave the new direction and chose every option (decisions 12 to 15). The approved drafts are `design/v2/index.html` (home) and `design/v2/game.html`, `iot.html`, `web.html`, `idea.html` (rooms), styled by `design/v2/v2.css` on top of `design/landing/styles.css`. They are the reference for the build. The 25 showcase sites in `docs/references/` were the research for this.
+
+**Next step:** build the v2 home and the four room pages in the app to match `design/v2/`, then compare with screenshots. The old home sections (donut, maker note, filter sidebar, feed) go away on the home page; project and maker pages stay as they are until the owner asks.
 
 **Open questions for the owner:**
 
-- The hero highlight shows the same three projects as "Busiest this week", because both use the same ranking. Should the highlight pick by a different rule?
-- The Thai copy added with the hero highlight and Browse header still needs a Thai speaker's proofread.
-
-**Likely next steps:** wait for the owner's new direction. Then draft it as static HTML in `design/<page>/`, render options as pictures, let the owner choose, then build.
+- The headline is the owner's example line. It may change.
+- All Thai copy for v2 still needs writing and a Thai speaker's proofread.
+- Figma: the connector was not visible in the 17 Nov session (not connected on the account as seen from the desktop app). The owner worked from pictures instead.
 
 ## 8. Environment notes
 

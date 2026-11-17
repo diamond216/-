@@ -1,0 +1,149 @@
+/* Hamster Nest v2: home and the four rooms.
+   Loads after ../landing/styles.css and reuses its tokens, top bar and .cover patterns.
+   Warm paper and charcoal stay. The one loud colour is highlighter yellow, and it only marks what is new today.
+   One family, Archivo, at different widths. Mali is the makers' handwriting, used only for words a maker wrote. */
+
+:root {
+  --display: "Archivo", "Anuphan", sans-serif;
+  --body: "Archivo", "Anuphan", sans-serif;
+  --hand: "Mali", "Anuphan", cursive;
+  --hi: #ffe14d;
+}
+body { font: 400 17px/1.5 var(--body); }
+h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; }
+.cover { aspect-ratio: auto; }
+.hi { background: var(--hi); color: #25211c; padding: 1px 7px; border-radius: 2px; font-weight: 600; }
+.when { font-size: 15px; font-weight: 600; color: var(--ink-soft); }
+.b { display: inline-block; padding: 13px 20px; border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 16px/1 var(--body); text-decoration: none; border: 1.5px solid var(--ink); }
+.b--line { background: none; color: inherit; border-color: currentColor; }
+.small { font-size: 15px; color: var(--ink-soft); }
+.hand { font-family: var(--hand); }
+.who2 { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--ink-soft); margin-top: 12px; }
+
+.top__nav { font-size: 16px; }
+.brand__name { font: 900 26px/1 var(--display); font-stretch: 75%; letter-spacing: 0; }
+
+/* ---------- home: the statement ---------- */
+.say { padding-top: 60px; padding-bottom: 44px; }
+.say h1 { font: 900 190px/0.84 var(--display); font-stretch: 62%; letter-spacing: -0.015em; margin-left: -0.05em; }
+.say h1 span { display: block; white-space: nowrap; }
+.say h1 span:first-child { text-indent: -0.36em; padding-left: 0.36em; }
+.say p { margin-top: 30px; font-size: 22px; line-height: 1.45; max-width: 50ch; }
+
+/* ---------- home: the best one from each room ---------- */
+.hl { display: grid; grid-template-columns: 1fr 360px; gap: 16px; }
+.hl__stage { height: 610px; border-radius: 20px; display: flex; align-items: flex-end; }
+.hl__stage::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,22,17,.86), rgba(26,22,17,0) 60%); z-index: 1; }
+.hl__text { position: relative; z-index: 2; padding: 44px; color: #fbf6ea; max-width: 660px; }
+.hl__text h2 { font: 900 84px/0.9 var(--display); font-stretch: 62%; margin: 16px 0 12px; }
+.hl__text p { font-size: 21px; margin-bottom: 24px; }
+.hl__text .b { background: #fbf6ea; color: #25211c; border-color: #fbf6ea; margin-right: 8px; }
+.hl__text .b--line { background: none; color: #fbf6ea; }
+.hl__list { display: grid; grid-template-rows: repeat(4, 1fr); gap: 8px; }
+.hl__item { display: flex; gap: 16px; align-items: center; padding: 14px; border-radius: 12px; }
+.hl__item .cover { width: 96px; height: 116px; border-radius: 6px; flex: none; }
+.hl__item b { display: block; font-size: 15px; font-weight: 600; color: var(--ink-soft); }
+.hl__item strong { display: block; font: 800 27px/1.05 var(--display); font-stretch: 75%; margin: 3px 0 5px; }
+.hl__item--on { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+/* ---------- home: four rooms ---------- */
+.sec { padding-block: 84px 0; }
+.sec h2 { font: 900 64px/0.95 var(--display); font-stretch: 62%; }
+.sec__lede { font-size: 20px; margin: 10px 0 30px; max-width: 56ch; }
+.rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.door { display: block; text-decoration: none; height: 540px; border-radius: 20px; overflow: hidden; position: relative; padding: 40px 44px; background-color: var(--bg); color: var(--fg); }
+.door h3 { font-size: 92px; line-height: 0.9; }
+.door p { font-size: 20px; margin: 14px 0 22px; max-width: 24ch; }
+.door .b { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.door__art { position: absolute; right: -30px; bottom: -50px; display: flex; }
+.door__art .cover { width: 250px; height: 320px; border-radius: 10px; box-shadow: 0 14px 30px rgba(0,0,0,.25); margin-left: -70px; }
+.door__art .cover:nth-child(1) { rotate: -9deg; translate: 0 40px; }
+.door__art .cover:nth-child(2) { rotate: -2deg; }
+.door__art .cover:nth-child(3) { rotate: 6deg; translate: 0 26px; }
+/* Game: an arcade at night */
+.door--game { --bg: #25211c; --fg: #ffe14d; }
+.door--game h3 { font-weight: 900; font-stretch: 62%; text-transform: uppercase; font-size: 120px; }
+.door--game p { color: #f3eee4; }
+/* IoT: a panel of amber lights */
+.door--iot { --bg: #171411; --fg: #ffb21f; background-image: radial-gradient(circle, rgba(255,178,31,.2) 2px, transparent 2.6px); background-size: 12px 12px; }
+.door--iot h3 { font-weight: 800; font-stretch: 125%; text-shadow: 0 0 24px rgba(255,178,31,.65); }
+.door--iot p { color: #f3eee4; }
+/* Web: a browser window */
+.door--web { --bg: #ffffff; --fg: #25211c; padding-top: 96px; box-shadow: inset 0 0 0 1.5px #25211c; }
+.door--web::before { content: "hamsternest / web"; position: absolute; left: 0; right: 0; top: 0; height: 54px; padding: 15px 0 0 100px; font-size: 16px; color: #655c50; background: radial-gradient(circle at 28px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 51px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 74px 27px, #25211c 6.5px, transparent 7.5px), #e9e2d3; border-bottom: 1.5px solid #25211c; }
+.door--web h3 { font-weight: 800; font-stretch: 100%; }
+/* Idea: a school notebook */
+.door--idea { --bg: #fdfdf9; --fg: #1f3fae; box-shadow: inset 0 0 0 1.5px #d8cebb; background-image: linear-gradient(90deg, transparent 70px, #e2584c 70px 72px, transparent 72px), linear-gradient(#cfe0f5 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 32px; padding-left: 100px; }
+.door--idea h3 { font-family: var(--hand); font-weight: 700; }
+.door--idea p { font-family: var(--hand); font-size: 22px; }
+
+/* ---------- home: before and now ---------- */
+.pairs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.pair { text-decoration: none; display: block; }
+.pair__two { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4px; margin-bottom: 14px; }
+.pair__two figure { position: relative; }
+.pair__two .cover { height: 250px; border-radius: 6px; }
+.pair__two figure:first-child .cover { filter: grayscale(1) contrast(.8); opacity: .7; }
+.pair__two figcaption { position: absolute; left: 10px; top: 10px; z-index: 3; background: #fbf8f1; color: #25211c; font-size: 14px; font-weight: 600; padding: 2px 8px; border-radius: 2px; }
+.pair__two figcaption.hi { background: var(--hi); }
+.pair h3 { font: 800 28px/1.1 var(--display); font-stretch: 75%; }
+.pair .hand { font-size: 19px; margin-top: 6px; }
+
+/* ---------- home: Hamster Hub ---------- */
+.hub { background: #25211c; color: #f3eee4; margin-top: 96px; }
+.hub__in { display: grid; grid-template-columns: 5fr 7fr; gap: 70px; padding-block: 88px 72px; }
+.hub h2 { font: 900 76px/0.9 var(--display); font-stretch: 62%; margin-bottom: 20px; }
+.hub__in > div > p { font-size: 20px; opacity: .85; max-width: 34ch; margin-bottom: 26px; }
+.hub li { padding: 18px 0; border-bottom: 1px solid rgba(243,238,228,.18); }
+.hub li:last-child { border: 0; }
+.hub li strong { display: block; font: 700 23px/1.2 var(--display); margin-bottom: 4px; }
+.hub li p { opacity: .8; }
+.hub__quote { padding-block: 0 88px; }
+.hub__quote blockquote { font: 900 60px/0.98 var(--display); font-stretch: 62%; max-width: 30ch; }
+.hub__quote p { margin-top: 16px; opacity: .8; }
+.cta__in { display: flex; align-items: end; justify-content: space-between; padding-block: 80px; gap: 40px; }
+.cta h2 { font: 900 96px/0.88 var(--display); font-stretch: 62%; }
+.cta p { max-width: 38ch; margin-bottom: 18px; font-size: 19px; }
+.foot { border-top: 1.5px solid var(--ink); }
+.foot__in { display: flex; justify-content: space-between; padding-block: 36px 44px; }
+.foot b { font: 900 30px var(--display); font-stretch: 75%; display: block; }
+
+/* ---------- a room (browse page) ---------- */
+.room { background: var(--rbg); color: var(--rfg); --paper: var(--rbg); --ink: var(--rfg); --ink-soft: var(--rsoft); --line: var(--rline); min-height: 100vh; padding-bottom: 90px; }
+.room .top { border-color: var(--rline); }
+.room .b { background: var(--racc); color: var(--ract); border-color: var(--racc); }
+.rhead__in { padding-block: 50px 34px; display: grid; grid-template-columns: 7fr 5fr; gap: 40px; align-items: end; }
+.rhead h1 { font: 900 230px/0.8 var(--display); font-stretch: 62%; color: var(--rtitle, var(--rfg)); }
+.rhead p { font-size: 21px; margin-bottom: 18px; }
+.rsearch { height: 58px; display: flex; align-items: center; padding: 0 20px; border: 1.5px solid var(--rfg); border-radius: 8px; color: var(--rsoft); font-size: 18px; background: var(--rbg); }
+.rbar { display: flex; align-items: center; gap: 8px; padding-block: 30px 22px; flex-wrap: wrap; }
+.chip { padding: 10px 16px; border-radius: 8px; box-shadow: inset 0 0 0 1.5px var(--rline); font-weight: 600; font-size: 16px; }
+.chip--on { background: var(--rfg); color: var(--rbg); box-shadow: none; }
+.rbar .sort { margin-left: auto; color: var(--rsoft); }
+.rgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px 24px; }
+.rcard { text-decoration: none; display: block; }
+.rcard > .cover { height: 270px; border-radius: 12px; }
+.rcard h3 { font: 800 32px/1.05 var(--display); font-stretch: 75%; margin: 16px 0 4px; }
+.rcard__new { margin-top: 12px; font-size: 16px; }
+.rcard__new .hand { font-size: 18px; display: block; margin-top: 6px; }
+.rcard--post { border: 1.5px dashed var(--rsoft); border-radius: 12px; padding: 30px; display: flex; flex-direction: column; justify-content: end; align-items: start; }
+.rcard--post h3 { margin-top: 0; }
+.rcard--post p { color: var(--rsoft); margin: 6px 0 18px; }
+
+.room--game { --rbg: #25211c; --rfg: #f3eee4; --rsoft: #b3a995; --rline: #453e34; --racc: #ffe14d; --ract: #25211c; --rtitle: #ffe14d; }
+.room--game .rhead h1 { text-transform: uppercase; }
+.room--game .rhead::after { content: ""; display: block; height: 26px; background: repeating-linear-gradient(90deg, #ffe14d 0 26px, transparent 26px 52px); }
+
+.room--iot { --rbg: #171411; --rfg: #f3eee4; --rsoft: #a89f8e; --rline: #3a332a; --racc: #ffb21f; --ract: #171411; --rtitle: #ffb21f; }
+.room--iot .rhead { background-image: radial-gradient(circle, rgba(255,178,31,.2) 2px, transparent 2.6px); background-size: 12px 12px; border-bottom: 1.5px solid #3a332a; }
+.room--iot .rhead h1 { font-weight: 800; font-stretch: 125%; font-size: 190px; line-height: 0.9; text-shadow: 0 0 34px rgba(255,178,31,.6); }
+
+.room--web { --rbg: #ffffff; --rfg: #25211c; --rsoft: #655c50; --rline: #d8cebb; --racc: #25211c; --ract: #ffffff; }
+.room--web .rhead { border-bottom: 1.5px solid #25211c; }
+.room--web .rhead::before { content: "hamsternest / web"; display: block; height: 54px; padding: 15px 0 0 100px; font-size: 16px; color: #655c50; background: radial-gradient(circle at 28px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 51px 27px, #25211c 6.5px, transparent 7.5px), radial-gradient(circle at 74px 27px, #25211c 6.5px, transparent 7.5px), #e9e2d3; border-bottom: 1.5px solid #25211c; }
+.room--web .rhead h1 { font-weight: 800; font-stretch: 100%; font-size: 200px; line-height: 0.9; }
+
+.room--idea { --rbg: #fdfdf9; --rfg: #25211c; --rsoft: #655c50; --rline: #d8cebb; --racc: #1f3fae; --ract: #fdfdf9; --rtitle: #1f3fae; }
+.room--idea .rhead { background-image: linear-gradient(90deg, transparent 40px, #e2584c 40px 42px, transparent 42px), linear-gradient(#cfe0f5 1.5px, transparent 1.5px); background-size: 100% 100%, 100% 32px; border-bottom: 1.5px solid #d8cebb; }
+.room--idea .rhead h1 { font: 700 190px/0.95 var(--hand); letter-spacing: -0.02em; }
+.room--idea .rhead p { font-family: var(--hand); font-size: 23px; color: #1f3fae; }
