@@ -244,3 +244,9 @@ html{background:#0B0B0F}
 /* statement font chosen by the owner: Fraunces 600 */
 .say__h{font:600 clamp(34px,4.3vw,62px)/1.1 "Fraunces",Georgia,serif;letter-spacing:-.025em}
 .hero::before{-webkit-mask-image:linear-gradient(180deg,#000 50%,transparent);mask-image:linear-gradient(180deg,#000 50%,transparent)}
+/* round 8: FC Iconic Text (f0nt.com) for nav, body copy and buttons.
+   Put the font files in design/fonts/ with these names; until then the page falls back to the Apple-style stack. */
+@font-face{font-family:"FC Iconic Text";font-weight:400;font-display:swap;src:local("FC Iconic Text"),local("FCIconicText-Regular"),url("../fonts/FCIconicText-Regular.woff2") format("woff2"),url("../fonts/FCIconicText-Regular.ttf") format("truetype"),url("../fonts/FCIconicText-Regular.otf") format("opentype")}
+@font-face{font-family:"FC Iconic Text";font-weight:500 600;font-display:swap;src:local("FC Iconic Text Medium"),local("FCIconicText-Medium"),url("../fonts/FCIconicText-Medium.woff2") format("woff2"),url("../fonts/FCIconicText-Medium.ttf") format("truetype"),url("../fonts/FCIconicText-Medium.otf") format("opentype")}
+@font-face{font-family:"FC Iconic Text";font-weight:700 800;font-display:swap;src:local("FC Iconic Text Bold"),local("FCIconicText-Bold"),url("../fonts/FCIconicText-Bold.woff2") format("woff2"),url("../fonts/FCIconicText-Bold.ttf") format("truetype"),url("../fonts/FCIconicText-Bold.otf") format("opentype")}
+:root{--f:"FC Iconic Text",-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Noto Sans Thai","Helvetica Neue",Arial,sans-serif}
