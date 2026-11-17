@@ -224,3 +224,10 @@ html{background:#0B0B0F}
 .say[data-light="a"] .say__lamp{left:50%;top:-140px;width:620px;margin-left:-310px}
 .shelf{margin-top:40px}
 @media (max-width:900px){.say{padding:28px 0 40px}.hero{height:auto}}
+/* round 6: one line, Apple heading size (like "iPhone Duo"), no tier/room label in the hero */
+.hero{height:max(480px,calc(100svh - 76px - 170px))}
+.say{padding:44px 0 58px}
+.say__h{font:600 clamp(32px,4vw,60px)/1.1 var(--f);letter-spacing:-.03em;white-space:nowrap}
+.say[data-light="a"] .say__h{filter:drop-shadow(0 14px 16px rgba(0,0,0,.5))}
+.say[data-light="a"] .say__lamp{top:-170px;height:280px}
+@media (max-width:700px){.say__h{white-space:normal}}

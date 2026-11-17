@@ -169,7 +169,6 @@
       this.onWork(this.work);
       const w = this.work, t = $(".hero__text", this.root);
       if (animate && !calm) { t.classList.remove("in"); void t.offsetWidth; t.classList.add("in"); }
-      $(".tag", t).textContent = `Platinum · ${w.room}`;
       $("h1", t).textContent = w.name;
       $("p", t).textContent = w.blurb;
       $(".hero__hi", t).textContent = `Say hi to ${w.maker}`;
