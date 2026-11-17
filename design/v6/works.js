@@ -3,11 +3,11 @@
 window.NEST = (function () {
   "use strict";
   const TIERS = [
-    { id: "platinum", name: "Platinum", color: "#E6EEF0", note: "The ten pieces people keep coming back to." },
-    { id: "diamond", name: "Diamond", color: "#9EE8F0", note: "Close behind, and some of them are still climbing." },
-    { id: "gold", name: "Gold", color: "#F2C14E", note: "Solid work that ships updates every week or two." },
-    { id: "silver", name: "Silver", color: "#C8D0D4", note: "Good starts. A few more updates and they move up." },
-    { id: "bronze", name: "Bronze", color: "#D99A66", note: "New on the shelf. Be one of the first to try them." },
+    { id: "platinum", name: "Platinum", color: "#E6EEF0", note: "The 10 works with the most updates and plays this month." },
+    { id: "diamond", name: "Diamond", color: "#9EE8F0", note: "Places 11 to 20." },
+    { id: "gold", name: "Gold", color: "#F2C14E", note: "Places 21 to 30. Most post an update every week or two." },
+    { id: "silver", name: "Silver", color: "#C8D0D4", note: "Places 31 to 40." },
+    { id: "bronze", name: "Bronze", color: "#D99A66", note: "Places 41 to 50, mostly new this term." },
   ];
 
   // [name, room, maker, one line, handwriting on the picture (optional)]

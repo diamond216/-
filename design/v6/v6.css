@@ -104,3 +104,37 @@
 .tier__none button{background:none;border:0;color:var(--g300);font:500 16px var(--f);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .tier--empty{padding-bottom:56px}
 @media (max-width:900px){.flt__box{width:min(400px,calc(100vw - 48px))}}
+/* ---------- round 3: Apple-like type, flat controls, one-line cards ---------- */
+:root{--f:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Noto Sans Thai","Helvetica Neue",Arial,sans-serif}
+body{-webkit-font-smoothing:antialiased;letter-spacing:-.011em}
+.brand{font-weight:600;letter-spacing:.14em}.top nav{font-size:15px;gap:36px}
+.b{border-radius:980px;padding:12px 22px;font:500 16px/1 var(--f);background:var(--g400);box-shadow:none;letter-spacing:-.01em}
+.b:hover{background:var(--g300);transform:none;box-shadow:none}
+.b--line{background:none;box-shadow:inset 0 0 0 1px rgba(222,246,235,.7)}.b--line:hover{background:rgba(222,246,235,.08);box-shadow:inset 0 0 0 1px var(--wh)}
+/* hero */
+.hero__text .tag{background:none;padding:0;color:var(--g300);font:600 17px/1 var(--f);letter-spacing:-.01em}
+.hero__text h1{font:600 84px/1.02 var(--f);letter-spacing:-.04em;margin:12px 0 16px}
+.hero__text p{font-size:19px;line-height:1.45;letter-spacing:-.015em}
+.hero__nav{position:absolute;right:max(24px,calc((100% - 1280px) / 2));bottom:32px;z-index:2;display:flex;align-items:center;gap:12px}
+.hero__dots{display:flex;gap:8px;margin-right:8px;padding:10px 14px;border-radius:99px;background:rgba(3,21,15,.55);backdrop-filter:blur(10px)}
+.hero__dots i{width:8px;height:8px;border-radius:99px;background:rgba(222,246,235,.4);transition:width .3s,background .3s}
+.hero__dots i.on{width:24px;background:var(--wh)}
+.hero__arrow{width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;background:rgba(222,246,235,.16);backdrop-filter:blur(10px);color:var(--wh);cursor:pointer;transition:background .2s}
+.hero__arrow svg{width:20px;height:20px}.hero__arrow:hover{background:rgba(222,246,235,.3)}
+/* tiers */
+.tier__head h2{font:600 44px/1.05 var(--f);letter-spacing:-.035em}
+.tier__head p{font-size:17px;letter-spacing:-.015em}
+.gem{box-shadow:none;width:12px;height:12px;border-radius:2px}
+.rail__title{letter-spacing:.06em;font-size:12px}
+/* one line under each picture */
+.card__txt{display:flex;align-items:baseline;gap:10px;padding:12px 2px 0;min-width:0}
+.card__txt strong{font:600 15px/1.3 var(--f);letter-spacing:-.015em;text-transform:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card__txt span{margin-left:auto;flex:none;font-size:13px}
+.tier:not(.tier--big) .card__txt strong{font-size:15px}
+.card--feat .card__txt{display:flex;align-items:baseline}
+.card--feat .card__txt strong{font:600 34px/1.1 var(--f);letter-spacing:-.035em}
+.card--feat .card__txt span{color:#C4E9DA;font-size:15px}
+.card__play{border-radius:99px;font-weight:500}
+.flt__btn{border-radius:980px;font-weight:500}
+.flt__tabs button{font-weight:500}
+.card--std .card__txt span{display:none}

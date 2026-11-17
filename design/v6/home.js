@@ -37,7 +37,7 @@
       const w = this.work, a = document.createElement("a");
       a.href = "#"; a.className = `card card--${this.size}`;
       a.innerHTML = `<div class="card__pic"><div class="cv"></div><span class="card__play" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg>Preview</span></div>
-        <div class="card__txt"><strong>${w.name}</strong><p>${w.blurb}</p><span>${w.room} · ${w.genre} · by ${w.maker}</span></div>`;
+        <div class="card__txt"><strong>${w.name}</strong><span>${w.room} · ${w.genre}</span></div>`;
       Art.fill($(".cv", a), w);
       const pv = previewFor($(".card__pic", a), w);
       a.addEventListener("pointerenter", () => pv.start());
@@ -153,7 +153,8 @@
   class HeroShowcase {
     constructor(root, works) {
       this.root = root; this.works = works; this.w = 0; this.f = 0; this.paused = false; this.busy = false;
-      this.bg = $(".hero__bg", root); this.track = $(".strip__track", root); this.picker = $(".hero__pick", root);
+      this.bg = $(".hero__bg", root); this.track = $(".strip__track", root); this.dots = $(".hero__dots", root);
+      root.querySelectorAll(".hero__arrow").forEach((b) => b.addEventListener("click", () => this.show((this.w + +b.dataset.step + this.works.length) % this.works.length)));
       root.addEventListener("pointerenter", () => (this.paused = true));
       root.addEventListener("pointerleave", () => (this.paused = false));
       root.addEventListener("focusin", () => (this.paused = true));
@@ -172,17 +173,8 @@
       $("p", t).textContent = w.blurb;
       $(".hero__hi", t).textContent = `Say hi to ${w.maker}`;
       this.paintBg(animate); this.paintStrip();
-      // the three other works, ready to pick
-      this.picker.innerHTML = "";
-      this.works.forEach((o, i) => {
-        if (i === wi) return;
-        const b = document.createElement("button");
-        b.type = "button"; b.className = "pick";
-        b.innerHTML = `<span class="cv"></span><span><small>Best of ${o.room}</small>${o.name}</span>`;
-        Art.fill($(".cv", b), o);
-        b.addEventListener("click", () => this.show(i));
-        this.picker.appendChild(b);
-      });
+      this.dots.innerHTML = this.works.map((_, i) => `<i${i === wi ? ' class="on"' : ""}></i>`).join("");
+      this.root.setAttribute("aria-label", `${w.name}, work ${wi + 1} of ${this.works.length}`);
     }
     paintBg(animate) {
       const layer = document.createElement("div");
@@ -191,9 +183,6 @@
       requestAnimationFrame(() => layer.classList.add("on"));
       const old = [...this.bg.children].slice(0, -1);
       setTimeout(() => old.forEach((o) => o.remove()), animate && !calm ? 900 : 0);
-      $(".count b", this.root).textContent = pad(this.f + 1);
-      $(".count span", this.root).textContent = pad(this.work.frames);
-      $(".count i", this.root).style.setProperty("--p", (this.f + 1) / this.work.frames);
     }
     paintStrip() {
       const n = this.work.frames;
@@ -222,7 +211,7 @@
   // ---------- wire it up ----------
   const { tiers, rooms, works, inTier, hero } = window.NEST;
   const list = $("#tiers"), filter = new WorkFilter();
-  const sections = tiers.map((t, i) => { const s = new TierShelf(t, inTier(t.id), i < 2, filter).render(); list.appendChild(s); return s; });
+  const sections = tiers.map((t, i) => { const s = new TierShelf(t, inTier(t.id), true, filter).render(); list.appendChild(s); return s; });
   new FilterPanel($(".tier__head", sections[0]), filter, rooms, works);
   const rail = new TierRail($("#rail"), sections);
   filter.addEventListener("change", () => rail.update());
