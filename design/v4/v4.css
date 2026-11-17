@@ -118,3 +118,15 @@ cite{display:block;font-style:normal;color:var(--tx);font-size:15px;margin-top:1
 .foot__links h4{font-size:15px;font-weight:600;color:#fff;margin-bottom:14px}.foot__links a{display:block;color:var(--tx);font-size:15px;margin-bottom:12px}.foot__links a:hover{color:#fff}
 .foot__copy{text-align:center;font-size:13px;color:var(--tx);border-top:1px solid #26262d;padding:20px 24px}
 @media (max-width:900px){.tiles,.trust__in,.tried__in,.cta__in,.foot__links{grid-template-columns:1fr}.foot__top{flex-direction:column;align-items:flex-start}.cta h2{font-size:44px}}
+/* three lists: new releases, most viewed, most saved */
+.lists{display:grid;grid-template-columns:repeat(3,1fr);margin-top:110px;margin-bottom:110px}
+.lists__col{padding:0 28px;border-left:1px solid #26262d}.lists__col:first-child{padding-left:0;border:0}.lists__col:last-child{padding-right:0}
+.lists h2 a{display:inline-flex;align-items:center;gap:14px;font:600 24px/1.2 var(--f);letter-spacing:-.01em;margin-bottom:20px}
+.lists h2 a:hover{color:var(--or)}
+.lists ol{list-style:none}
+.lists li a{display:flex;align-items:center;gap:24px;padding:10px;border-radius:12px}
+.lists li a:hover,.lists li.on a{background:var(--card)}
+.lists .cv{width:96px;height:128px;border-radius:8px;flex:none}
+.lists strong{display:block;font-size:17px;font-weight:600;line-height:1.3}.lists span{display:block;font-size:14px;color:var(--tx);margin-top:4px}
+.say{padding-bottom:56px}
+@media (max-width:900px){.lists{grid-template-columns:1fr;gap:40px}.lists__col{padding:0;border:0}}
