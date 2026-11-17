@@ -257,3 +257,27 @@ body{letter-spacing:0}
 .gem{box-shadow:0 0 0 3px color-mix(in oklab,var(--tc) 20%,transparent)}
 /* a light that follows the pointer; card shadows fall away from it (owner chose B) */
 .fx{background:radial-gradient(30vmax 30vmax at var(--lx,70%) var(--ly,25%),color-mix(in oklab,var(--acc) 38%,transparent),transparent 70%)}
+/* ---------- round 10: tier wordmarks after Apple product names ---------- */
+.tier__head--mark{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;margin:0 0 40px;padding-top:12px}
+.mark{display:inline-flex;align-items:center;justify-content:center;gap:.22em;font:600 clamp(44px,5.4vw,76px)/1.05 var(--f);letter-spacing:-.03em;color:#F5F5F7;text-shadow:none}
+.mark__sub{margin-top:10px;font-size:clamp(19px,1.9vw,26px);line-height:1.3;color:#E4E4E7;letter-spacing:-.01em;max-width:30ch}
+/* badge (Watch Series): logo, heavy name, light word, all in one metal gradient */
+.mark--badge{gap:.16em;font-size:clamp(38px,4.6vw,64px);letter-spacing:.01em}
+.mark--badge b,.mark--badge .mark__light{background:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mark--badge b{font-weight:700}.mark--badge .mark__light{font-weight:300;margin-left:.08em}
+.mark__logo{display:inline-grid;width:.9em;height:.9em;color:#E9EDF0;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+.mark__logo svg{width:100%;height:100%}
+/* script (iPad mini): one word handwritten in a gradient */
+.mark__script{font:400 1.12em/1 "Yellowtail",cursive;letter-spacing:0;background:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent;padding:.05em .12em .12em .02em}
+/* split (MacBook Pro): the line under the title runs from one colour into another */
+.mark__sub--ink{color:#E4E4E7}
+.mark__fade{background:var(--ink);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* Apple-style pair of pills, in the tier colour */
+.mark__acts{display:flex;gap:16px;margin-top:22px}
+.mark__btn{display:inline-flex;align-items:center;padding:11px 24px;border-radius:980px;font:400 17px/1.2 var(--f);background:var(--tc);color:#0B0B0F;transition:filter .2s,background .2s}
+.mark__btn:hover{filter:brightness(1.1)}
+.mark__btn--line{background:none;color:var(--tc);box-shadow:inset 0 0 0 1px var(--tc)}.mark__btn--line:hover{background:color-mix(in oklab,var(--tc) 12%,transparent)}
+/* the Filters button stays at the right of the Platinum head */
+.tier__head--mark .flt{position:absolute;right:0;top:12px;margin:0}
+@media (max-width:900px){.tier__head--mark .flt{position:static;margin-top:16px}.mark__acts{flex-wrap:wrap;justify-content:center}}
+.tier__head .mark{text-shadow:none}.mark__sub{max-width:42ch}

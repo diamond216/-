@@ -3,11 +3,11 @@
 window.NEST = (function () {
   "use strict";
   const TIERS = [
-    { id: "platinum", name: "Platinum", color: "#E6EEF0", note: "The 10 works with the most updates and plays this month." },
-    { id: "diamond", name: "Diamond", color: "#9EE8F0", note: "Places 11 to 20." },
-    { id: "gold", name: "Gold", color: "#F2C14E", note: "Places 21 to 30. Most post an update every week or two." },
-    { id: "silver", name: "Silver", color: "#C8D0D4", note: "Places 31 to 40." },
-    { id: "bronze", name: "Bronze", color: "#D99A66", note: "Places 41 to 50, mostly new this term." },
+    { id: "platinum", name: "Platinum", color: "#E6EEF0", note: "The 10 works with the most updates and plays this month.", mark: { kind: "badge", logo: "hamster", metal: ["#FFFFFF", "#E2E8EC", "#B4C0C8"] } },
+    { id: "diamond", name: "Diamond", color: "#9EE8F0", note: "Places 11 to 20.", mark: { kind: "script", script: "tier", ink: ["#9EE8F0", "#7A8CF0", "#5EF2D0"] } },
+    { id: "gold", name: "Gold", color: "#F2C14E", note: "Places 21 to 30. Most post an update every week or two.", mark: { kind: "split", lead: "Places 21 to 30.", ink: ["#FFE07A", "#F2A93C", "#E8743C"] } },
+    { id: "silver", name: "Silver", color: "#C8D0D4", note: "Places 31 to 40.", mark: { kind: "badge", logo: "gem", metal: ["#F4F6F7", "#CBD2D6", "#9AA5AC"] } },
+    { id: "bronze", name: "Bronze", color: "#D99A66", note: "Places 41 to 50, mostly new this term.", mark: { kind: "script", script: "Bronze", ink: ["#F2B27A", "#D9804A", "#A8552E"] } },
   ];
 
   // [name, room, maker, one line, handwriting on the picture (optional)]

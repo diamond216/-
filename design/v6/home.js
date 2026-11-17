@@ -106,7 +106,8 @@
       const s = document.createElement("section");
       s.className = `tier${this.featured ? " tier--big" : ""}`; s.id = this.tier.id;
       s.style.setProperty("--tc", this.tier.color);
-      s.innerHTML = `<header class="tier__head"><h2><i class="gem" aria-hidden="true"></i>${this.tier.name} tier</h2><p>${this.tier.note}</p></header><div class="tier__grid"></div>`;
+      s.dataset.name = this.tier.name;
+      s.innerHTML = `<header class="tier__head tier__head--mark">${TierMarks.head(this.tier, this.works.length)}</header><div class="tier__grid"></div>`;
       this.el = s; this.grid = $(".tier__grid", s); this.fill();
       return s;
     }
@@ -130,7 +131,7 @@
       this.items = sections.map((s, i) => {
         const a = document.createElement("a");
         a.href = "#" + s.id; a.className = "rail__item"; a.style.setProperty("--tc", s.style.getPropertyValue("--tc"));
-        a.innerHTML = `<span class="rail__bar"><i></i></span><span class="rail__name">${$("h2", s).textContent.replace(" tier", "")}</span><span class="rail__n">${pad(i + 1)}</span>`;
+        a.innerHTML = `<span class="rail__bar"><i></i></span><span class="rail__name">${s.dataset.name}</span><span class="rail__n">${pad(i + 1)}</span>`;
         rail.appendChild(a); return a;
       });
       addEventListener("scroll", () => this.update(), { passive: true });
