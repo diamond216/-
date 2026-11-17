@@ -281,3 +281,8 @@ body{letter-spacing:0}
 .tier__head--mark .flt{position:absolute;right:0;top:12px;margin:0}
 @media (max-width:900px){.tier__head--mark .flt{position:static;margin-top:16px}.mark__acts{flex-wrap:wrap;justify-content:center}}
 .tier__head .mark{text-shadow:none}.mark__sub{max-width:42ch}
+/* round 11: no subtitle or logo; Platinum is navy; the script moves to Diamond, larger and easier to read */
+.mark__script{font:400 1.08em/1.1 "Kaushan Script",cursive;letter-spacing:.01em;padding:.06em .14em .14em .04em;filter:drop-shadow(0 1px 0 rgba(255,255,255,.12))}
+.mark__fade{padding-bottom:.06em}
+.mark__acts{margin-top:20px}
+#platinum .mark__btn{color:#fff}
