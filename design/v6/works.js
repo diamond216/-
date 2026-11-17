@@ -74,17 +74,38 @@ window.NEST = (function () {
     ],
   };
 
+  // Genres per room, the same lists as the room pages (design/v2), plus Smart home and School.
+  const ROOMS = {
+    Game: ["Roguelike", "Puzzle", "Casual", "Co-op"],
+    IoT: ["Smart farm", "Water", "Wearable", "Smart home"],
+    Web: ["SaaS", "Ecommerce", "Dev tool", "School"],
+    Idea: ["Fintech", "Logistics", "Community"],
+  };
+  const GENRE = {
+    "Burrow Knights": "Co-op", "Seed Dash": "Casual", "Moonwheel": "Puzzle", "Tunnel Tales": "Roguelike", "Cheek Pouch": "Casual",
+    "Pixel Pals": "Casual", "Lantern Run": "Roguelike", "Kite Wars": "Co-op", "Night Market": "Casual", "Frog Hop": "Casual",
+    "Star Catch": "Casual", "Block Drop": "Puzzle", "Cloud Hopper": "Casual", "Paper Planes": "Casual", "Snail Race": "Co-op",
+    "WheelSense": "Smart farm", "AquaNode": "Water", "Coop Watch": "Smart farm", "Bus Ping": "Wearable", "Fan Brain": "Smart home",
+    "Rain Jar": "Water", "Shelf Scale": "Smart farm", "Door Bell Plus": "Smart home", "Plant Talk": "Smart farm", "Lab Timer": "Smart home",
+    "Bike Lock Buzz": "Wearable", "Water Meter": "Water", "Light Switch Bot": "Smart home", "Mood Lamp": "Smart home", "Fish Feeder": "Water",
+    "NestBoard": "School", "Kernel Docs": "Dev tool", "Homework Radar": "School", "Canteen Queue": "SaaS", "Club Finder": "School",
+    "Grade Guess": "School", "Exam Map": "School", "Recipe Box": "SaaS", "Note Share": "School", "Bus Routes": "SaaS",
+    "Sunflower Bank": "Fintech", "Lunch Swap": "Community", "Book Loop": "Community", "Tutor Trade": "Community", "Uniform Swap": "Logistics",
+    "Repair Café": "Community", "Snack Fund": "Fintech", "Old Phone Library": "Logistics", "Walk Buddy": "Community", "Skill Swap Wall": "Community",
+  };
+
   const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const works = [];
   for (const t of TIERS) {
     ROWS[t.id].forEach(([name, room, maker, blurb, scribble], i) =>
-      works.push({ id: slug(name), name, room, maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: null }));
+      works.push({ id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: null }));
   }
   // The hero shows the best of each room from the top tier.
   const hero = ["burrow-knights", "wheelsense", "nestboard", "sunflower-bank"];
 
   return {
     tiers: TIERS,
+    rooms: ROOMS,
     works,
     inTier: (id) => works.filter((w) => w.tier === id),
     byId: (id) => works.find((w) => w.id === id),

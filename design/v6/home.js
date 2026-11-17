@@ -37,7 +37,7 @@
       const w = this.work, a = document.createElement("a");
       a.href = "#"; a.className = `card card--${this.size}`;
       a.innerHTML = `<div class="card__pic"><div class="cv"></div><span class="card__play" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg>Preview</span></div>
-        <div class="card__txt"><strong>${w.name}</strong><p>${w.blurb}</p><span>${w.room} · by ${w.maker}</span></div>`;
+        <div class="card__txt"><strong>${w.name}</strong><p>${w.blurb}</p><span>${w.room} · ${w.genre} · by ${w.maker}</span></div>`;
       Art.fill($(".cv", a), w);
       const pv = previewFor($(".card__pic", a), w);
       a.addEventListener("pointerenter", () => pv.start());
@@ -48,17 +48,78 @@
     }
   }
 
+  // ---------- filter: one room at a time, any of its genres ----------
+  // Owns the state; shelves and the panel listen to "change".
+  class WorkFilter extends EventTarget {
+    constructor() { super(); this.room = "All"; this.genres = new Set(); }
+    setRoom(room) { this.room = room; this.genres.clear(); this.emit(); }
+    toggle(genre) { this.genres.has(genre) ? this.genres.delete(genre) : this.genres.add(genre); this.emit(); }
+    clear() { this.room = "All"; this.genres.clear(); this.emit(); }
+    get active() { return (this.room === "All" ? 0 : 1) + this.genres.size; }
+    matches(w) { return (this.room === "All" || w.room === this.room) && (!this.genres.size || this.genres.has(w.genre)); }
+    emit() { this.dispatchEvent(new Event("change")); }
+  }
+
+  // The Filters button beside the Platinum title, and the box it opens.
+  class FilterPanel {
+    constructor(host, filter, rooms, allWorks) {
+      this.f = filter; this.rooms = rooms; this.all = allWorks;
+      host.insertAdjacentHTML("beforeend", `<div class="flt"><button type="button" class="flt__btn" aria-expanded="false" aria-controls="flt-box">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Filters<b hidden></b></button>
+        <div class="flt__box" id="flt-box" role="dialog" aria-label="Filter works" hidden><div class="flt__tabs" role="tablist"></div><div class="flt__genres"></div>
+        <div class="flt__foot"><button type="button" class="flt__clear">Clear all</button><button type="button" class="b b--sm flt__show"></button></div></div></div>`);
+      this.root = $(".flt", host); this.btn = $(".flt__btn", this.root); this.box = $(".flt__box", this.root);
+      this.btn.addEventListener("click", () => this.open(this.box.hidden));
+      $(".flt__clear", this.root).addEventListener("click", () => filter.clear());
+      $(".flt__show", this.root).addEventListener("click", () => { this.open(false); $("#tiers").scrollIntoView({ behavior: calm ? "auto" : "smooth" }); });
+      document.addEventListener("click", (e) => { if (!this.box.hidden && !e.composedPath().includes(this.root)) this.open(false); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !this.box.hidden) { this.open(false); this.btn.focus(); } });
+      filter.addEventListener("change", () => this.paint());
+      this.paint();
+    }
+    open(on) { this.box.hidden = !on; this.btn.setAttribute("aria-expanded", on); }
+    paint() {
+      const f = this.f, tabs = $(".flt__tabs", this.root), list = $(".flt__genres", this.root);
+      tabs.innerHTML = ["All", ...Object.keys(this.rooms)].map((r) => `<button type="button" role="tab" aria-selected="${r === f.room}" data-room="${r}">${r}</button>`).join("");
+      tabs.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => f.setRoom(b.dataset.room)));
+      if (f.room === "All") list.innerHTML = `<p class="flt__hint">Pick a room to see its genres.</p>`;
+      else {
+        list.innerHTML = this.rooms[f.room].map((g) => {
+          const n = this.all.filter((w) => w.room === f.room && w.genre === g).length;
+          return `<label class="flt__ck"><input type="checkbox" value="${g}"${f.genres.has(g) ? " checked" : ""}><span>${g}</span><em>${n}</em></label>`;
+        }).join("");
+        list.querySelectorAll("input").forEach((i) => i.addEventListener("change", () => f.toggle(i.value)));
+      }
+      const n = this.all.filter((w) => f.matches(w)).length, badge = $("b", this.btn);
+      badge.hidden = !f.active; badge.textContent = f.active;
+      $(".flt__show", this.root).textContent = `Show ${n} work${n === 1 ? "" : "s"}`;
+    }
+  }
+
   // ---------- a tier section ----------
   class TierShelf {
-    constructor(tier, works, featured) { this.tier = tier; this.works = works; this.featured = featured; }
+    constructor(tier, works, featured, filter) {
+      this.tier = tier; this.works = works; this.featured = featured; this.filter = filter;
+      filter.addEventListener("change", () => this.fill());
+    }
     render() {
       const s = document.createElement("section");
       s.className = `tier${this.featured ? " tier--big" : ""}`; s.id = this.tier.id;
       s.style.setProperty("--tc", this.tier.color);
       s.innerHTML = `<header class="tier__head"><h2><i class="gem" aria-hidden="true"></i>${this.tier.name} tier</h2><p>${this.tier.note}</p></header><div class="tier__grid"></div>`;
-      const grid = $(".tier__grid", s);
-      this.works.forEach((w, i) => grid.appendChild(new WorkCard(w, this.featured && i === 0 ? "feat" : "std").render()));
+      this.el = s; this.grid = $(".tier__grid", s); this.fill();
       return s;
+    }
+    fill() {
+      const shown = this.works.filter((w) => this.filter.matches(w));
+      this.grid.innerHTML = "";
+      this.el.classList.toggle("tier--empty", !shown.length);
+      if (!shown.length) {
+        this.grid.innerHTML = `<p class="tier__none">Nothing in ${this.tier.name} matches yet. <button type="button">Clear the filters</button></p>`;
+        $("button", this.grid).addEventListener("click", () => this.filter.clear());
+        return;
+      }
+      shown.forEach((w, i) => this.grid.appendChild(new WorkCard(w, this.featured && i === 0 ? "feat" : "std").render()));
     }
   }
 
@@ -159,9 +220,11 @@
   }
 
   // ---------- wire it up ----------
-  const { tiers, inTier, hero } = window.NEST;
-  const list = $("#tiers");
-  const sections = tiers.map((t, i) => { const s = new TierShelf(t, inTier(t.id), i < 2).render(); list.appendChild(s); return s; });
-  new TierRail($("#rail"), sections);
+  const { tiers, rooms, works, inTier, hero } = window.NEST;
+  const list = $("#tiers"), filter = new WorkFilter();
+  const sections = tiers.map((t, i) => { const s = new TierShelf(t, inTier(t.id), i < 2, filter).render(); list.appendChild(s); return s; });
+  new FilterPanel($(".tier__head", sections[0]), filter, rooms, works);
+  const rail = new TierRail($("#rail"), sections);
+  filter.addEventListener("change", () => rail.update());
   new HeroShowcase($("#hero"), hero());
 })();
