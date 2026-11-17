@@ -286,3 +286,10 @@ body{letter-spacing:0}
 .mark__fade{padding-bottom:.06em}
 .mark__acts{margin-top:20px}
 #platinum .mark__btn{color:#fff}
+/* round 12: tier colours fade into each other down the page; rail further left; tier names centred on the page */
+.amb{z-index:-3}.tierbg{position:absolute;left:0;right:0;z-index:-2;pointer-events:none}.fx{z-index:-1}
+.shelf{width:min(1440px,100% - 32px);grid-template-columns:140px 1fr;gap:36px}
+.rail{padding-left:8px}
+.tier__head--mark{transform:translateX(-88px)}
+.tier__head--mark .flt{right:-88px}
+@media (max-width:900px){.tier__head--mark{transform:none}.tier__head--mark .flt{right:auto}}

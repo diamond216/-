@@ -219,9 +219,35 @@
     update() {
       const line = scrollY + innerHeight * 0.45;
       let tone = this.heroTone.bg, acc = this.heroTone.acc;
-      this.sections.forEach((s, i) => { if (line >= s.offsetTop) { tone = this.tiers[i].color; acc = tone; } });
+      // in the tier area the colour is painted on the page itself (TierBackdrop), so the fixed layer goes dark
+      this.sections.forEach((s, i) => { if (line >= s.offsetTop) { tone = "#0B0B0F"; acc = this.tiers[i].color; } });
       const r = document.documentElement.style;
       r.setProperty("--tone", tone); r.setProperty("--acc", acc);
+    }
+  }
+
+  // ---------- tier colours painted down the page, each fading into the next as you scroll ----------
+  class TierBackdrop {
+    constructor(shelf, sections, tiers) {
+      this.shelf = shelf; this.sections = sections; this.tiers = tiers;
+      this.el = document.createElement("div"); this.el.className = "tierbg"; this.el.setAttribute("aria-hidden", "true");
+      document.body.appendChild(this.el);
+      const redo = () => this.paint();
+      addEventListener("resize", redo); addEventListener("load", redo);
+      new ResizeObserver(redo).observe(shelf);
+      this.paint();
+    }
+    paint() {
+      const top = this.shelf.offsetTop - 260, h = this.shelf.offsetHeight + 520;
+      const pct = (y) => (((y - top) / h) * 100).toFixed(2) + "%";
+      const col = (c) => `color-mix(in oklab, ${c} 34%, transparent)`;
+      const stops = ["transparent 0%"];
+      this.sections.forEach((s, i) => {
+        const c = col(this.tiers[i].color);
+        stops.push(`${c} ${pct(s.offsetTop + 120)}`, `${c} ${pct(s.offsetTop + s.offsetHeight * 0.55)}`);
+      });
+      stops.push("transparent 100%");
+      Object.assign(this.el.style, { top: top + "px", height: h + "px", background: `linear-gradient(180deg, ${stops.join(", ")})` });
     }
   }
 
@@ -232,6 +258,7 @@
   new FilterPanel($(".tier__head", sections[0]), filter, rooms, works);
   const rail = new TierRail($("#rail"), sections);
   filter.addEventListener("change", () => rail.update());
+  new TierBackdrop($(".shelf"), sections, tiers);
   const amb = new Ambience($("#hero"), sections, tiers);
   new HeroShowcase($("#hero"), hero(), (w) => amb.setHeroTone(Art.tone(w)));
 })();
