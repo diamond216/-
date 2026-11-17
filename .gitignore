@@ -114,3 +114,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+design/fonts/*.ttf
+design/fonts/*.otf
+design/fonts/*.woff2
