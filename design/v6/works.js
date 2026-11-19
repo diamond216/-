@@ -94,11 +94,19 @@ window.NEST = (function () {
     "Repair Café": "Community", "Snack Fund": "Fintech", "Old Phone Library": "Logistics", "Walk Buddy": "Community", "Skill Swap Wall": "Community",
   };
 
+  // Where each work runs. Picked per room so the sample looks real; a real work lists its own.
+  const PLATFORMS = {
+    Game: [["Windows", "Web"], ["Windows", "macOS"], ["Web"], ["Android", "Windows"], ["Windows"]],
+    IoT: [["ESP32"], ["Arduino"], ["Raspberry Pi"], ["ESP32", "Android"]],
+    Web: [["Web"], ["Web", "Android"], ["Web", "iOS"]],
+    Idea: [["Pitch deck"], ["Pitch deck", "Web"]],
+  };
+
   const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const works = [];
   for (const t of TIERS) {
     ROWS[t.id].forEach(([name, room, maker, blurb, scribble], i) =>
-      works.push({ id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: null }));
+      works.push({ platforms: PLATFORMS[room][(name.length + i) % PLATFORMS[room].length], id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: null }));
   }
   // The hero shows the best of each room from the top tier.
   const hero = ["burrow-knights", "wheelsense", "nestboard", "sunflower-bank"];
