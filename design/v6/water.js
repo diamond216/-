@@ -16,9 +16,15 @@
       c+=1./length(vec2(p.x/(sin(i.x+tt)/k),p.y/(cos(i.y+tt)/k)));}
     c/=4.; c=1.17-pow(c,1.4); float l=pow(abs(c),8.);
     float depth=gl_FragCoord.y/r.y;                       // 1 at the top of the screen, 0 at the bottom
-    vec3 deep=vec3(.42,.80,.80), shallow=vec3(.80,.95,.93);
-    vec3 water=mix(shallow,deep,depth*.85);
-    gl_FragColor=vec4(water+vec3(.95,1.,.98)*l*.32,1.);
+    vec2 q=gl_FragCoord.xy/r.y;
+    // slow, wide drifts of colour so the water is never one flat blue: cyan patches and a little periwinkle
+    float d1=.5+.5*sin(q.x*1.7+t*.21+sin(q.y*2.3-t*.17));
+    float d2=.5+.5*sin(q.y*1.9-t*.13+cos(q.x*1.3+t*.11));
+    vec3 deep=vec3(.36,.62,.92), cyan=vec3(.48,.84,.95), peri=vec3(.62,.66,.95), foam=vec3(.93,.97,1.);
+    vec3 water=mix(foam,deep,depth*.78);
+    water=mix(water,cyan,d1*.32*depth+.06);
+    water=mix(water,peri,d2*.18*depth);
+    gl_FragColor=vec4(water+vec3(1.,.99,.95)*l*.36,1.);
   }`;
   const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
   const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);

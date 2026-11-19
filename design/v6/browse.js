@@ -6,7 +6,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ROOM_NAMES = Object.keys(rooms);
-  const RANK_INK = { platinum: "#3D5BA8", diamond: "#1F8FA6", gold: "#B98314", silver: "#7C878F", bronze: "#A65F33" };
+  const RANK_INK = { platinum: "#3550A8", diamond: "#1E93C2", gold: "#C08A12", silver: "#7A8794", bronze: "#B0602F" };
 
   // ---------- state ----------
   class BrowseState extends EventTarget {
@@ -54,7 +54,8 @@
     open(on) { this.menu.hidden = !on; this.btn.setAttribute("aria-expanded", on); if (on) $("li[aria-selected='true']", this.menu)?.focus(); }
     paint() {
       const r = this.s.ranks, label = r.size === 0 ? "All ranks" : r.size === 1 ? tiers.find((t) => r.has(t.id)).name : `${r.size} ranks`;
-      $("span", this.btn).textContent = label;
+      // one rank: its name with its gem; two or more: just the count
+      $("span", this.btn).innerHTML = r.size === 1 ? `<i class="gem-ico" style="--ri:${RANK_INK[[...r][0]]}"></i>${label}` : label;
       this.btn.style.setProperty("--ri", r.size === 1 ? RANK_INK[[...r][0]] : "currentColor");
       const opts = [{ id: "", name: "All ranks" }, ...tiers];
       this.menu.innerHTML = opts.map((t) => `<li role="option" tabindex="-1" data-id="${t.id}" aria-selected="${t.id ? r.size === 1 && r.has(t.id) : r.size === 0}">${t.id ? `<i style="--ri:${RANK_INK[t.id]}"></i>` : ""}${t.name}</li>`).join("");
