@@ -176,6 +176,19 @@
     }
   }
 
+  // play the rank reveal only when the choice becomes exactly one rank (and it is a different one)
+  class RankWatcher {
+    constructor(state) {
+      this.last = "";
+      state.addEventListener("change", () => {
+        const one = state.ranks.size === 1 ? [...state.ranks][0] : "";
+        if (one && one !== this.last) window.RankReveal.play(one, tiers.find((t) => t.id === one).name);
+        this.last = one;
+      });
+    }
+  }
+
   const state = new BrowseState();
+  new RankWatcher(state);
   new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
 })();
