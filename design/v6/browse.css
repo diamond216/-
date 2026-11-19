@@ -138,3 +138,7 @@ html:has(.sea){background:#A9CFF2}
 @media (max-width:900px){.gbar__in{grid-template-columns:auto 1fr}.gnav{display:none}}
 .br__top{position:relative;z-index:10} /* the glass search bar makes its own layer; keep its rank menu above the results */
 .rooms{margin:12px auto 0;width:min(1292px,100% - 36px)} /* 6px wider than the page column on each side, so the ring of the chosen tab has room */
+/* the line inside the clip sits on the picture itself: no box, a dark fade behind it */
+.rc__pic::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;z-index:1;pointer-events:none;background:linear-gradient(0deg,rgba(6,20,40,.78),rgba(6,20,40,0));opacity:0;transition:opacity .3s}
+.rc--open .rc__pic::after{opacity:1}
+.rc__line{left:18px;right:18px;bottom:16px;padding:0;border-radius:0;background:none;-webkit-backdrop-filter:none;backdrop-filter:none;font-size:17px;font-weight:500;text-shadow:0 1px 10px rgba(0,0,0,.45)}

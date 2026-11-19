@@ -53,8 +53,8 @@
     }
     open(on) { this.menu.hidden = !on; this.btn.setAttribute("aria-expanded", on); if (on) $("li[aria-selected='true']", this.menu)?.focus(); }
     paint() {
-      const r = this.s.ranks, label = r.size === 0 ? "All ranks" : r.size === 1 ? tiers.find((t) => r.has(t.id)).name : `${r.size} ranks`;
-      // one rank: its name with its gem; two or more: just the count
+      const r = this.s.ranks, label = r.size === 0 ? "All ranks" : r.size === 1 ? tiers.find((t) => r.has(t.id)).name : "Rank"; // two or more: no count, no name
+      // one rank: its name with its gem; two or more: a plain "Rank"
       $("span", this.btn).innerHTML = r.size === 1 ? `<i class="gem-ico" style="--ri:${RANK_INK[[...r][0]]}"></i>${label}` : label;
       this.btn.style.setProperty("--ri", r.size === 1 ? RANK_INK[[...r][0]] : "currentColor");
       const opts = [{ id: "", name: "All ranks" }, ...tiers];
