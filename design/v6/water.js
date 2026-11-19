@@ -8,7 +8,7 @@
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
   // after the well-known "water caustic" pattern: a few rounds of wave interference, then sharpened to bright lines
-  const fs = `precision mediump float;uniform vec2 r;uniform float t;uniform float sy;
+  const fs = `precision mediump float;uniform vec2 r;uniform float t;uniform float sy;uniform vec3 cDeep;uniform vec3 cCyan;uniform vec3 cPeri;uniform vec3 cFoam;uniform float cLight;
   void main(){
     vec2 uv=gl_FragCoord.xy/r.y; uv.y-=sy*.00025;
     vec2 p=mod(uv*6.2831*1.15,6.2831)-250.; vec2 i=p; float c=1.; float k=.005;
@@ -20,11 +20,11 @@
     // slow, wide drifts of colour so the water is never one flat blue: cyan patches and a little periwinkle
     float d1=.5+.5*sin(q.x*1.7+t*.21+sin(q.y*2.3-t*.17));
     float d2=.5+.5*sin(q.y*1.9-t*.13+cos(q.x*1.3+t*.11));
-    vec3 deep=vec3(.36,.62,.92), cyan=vec3(.48,.84,.95), peri=vec3(.62,.66,.95), foam=vec3(.93,.97,1.);
+    vec3 deep=cDeep, cyan=cCyan, peri=cPeri, foam=cFoam;
     vec3 water=mix(foam,deep,depth*.78);
     water=mix(water,cyan,d1*.32*depth+.06);
     water=mix(water,peri,d2*.18*depth);
-    gl_FragColor=vec4(water+vec3(1.,.99,.95)*l*.36,1.);
+    gl_FragColor=vec4(water+vec3(1.,.99,.95)*l*cLight,1.);
   }`;
   const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
   const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
@@ -34,6 +34,16 @@
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
   const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   const uR = gl.getUniformLocation(pr, "r"), uT = gl.getUniformLocation(pr, "t"), uS = gl.getUniformLocation(pr, "sy");
+  const uC = ["cDeep", "cCyan", "cPeri", "cFoam"].map((n) => gl.getUniformLocation(pr, n)), uL = gl.getUniformLocation(pr, "cLight");
+  // water colours come from CSS custom properties on <body>, so a palette is just a block of CSS
+  const hex = (h) => { h = h.trim().replace("#", ""); return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255); };
+  function colours() {
+    const cs = getComputedStyle(document.body);
+    ["--w-deep", "--w-cyan", "--w-peri", "--w-foam"].forEach((v, i) => gl.uniform3fv(uC[i], hex(cs.getPropertyValue(v) || "#ffffff")));
+    gl.uniform1f(uL, parseFloat(cs.getPropertyValue("--w-light")) || 0.36);
+  }
+  colours();
+  new MutationObserver(colours).observe(document.body, { attributes: true, attributeFilter: ["data-tone", "class"] });
   const SCALE = 0.35;
   function size() { cv.width = Math.round(innerWidth * SCALE); cv.height = Math.round(innerHeight * SCALE); gl.viewport(0, 0, cv.width, cv.height); }
   addEventListener("resize", size); size();
