@@ -143,15 +143,86 @@
     }
   }
 
+  // ---------- card motion: staggered exit and entrance, each awaited through Animation.finished ----------
+  // Only cards on or near the screen get the stagger; the rest move at once so long lists stay quick.
+  const CardMotion = {
+    targets(grid) {
+      const vh = innerHeight, cards = [...grid.querySelectorAll(".rc:not(.rc--gap)")];
+      let k = 0;
+      return cards.map((c) => { const r = c.getBoundingClientRect(), near = r.bottom > -40 && r.top < vh + 40; return { c, i: near ? Math.min(k++, 11) : -1 }; });
+    },
+    play(grid, frames, o) {
+      const anims = this.targets(grid).map(({ c, i }) => c.animate(frames, { duration: i < 0 ? 1 : o.duration, delay: i < 0 ? 0 : i * o.step, easing: o.easing, fill: "both" }));
+      return Promise.all(anims.map((a) => a.finished.catch(() => {}))).then(() => anims);
+    },
+    exit(grid) {
+      if (calm) return this.play(grid, [{ opacity: 1 }, { opacity: 0 }], { duration: 160, step: 0, easing: "linear" });
+      // each card tips back, blurs and is wiped upward, left to right along the rows
+      return this.play(grid, [
+        { transform: "translateY(0) scale(1)", filter: "blur(0)", clipPath: "inset(0 0 0 0 round 16px)", opacity: 1 },
+        { transform: "translateY(-14px) scale(.95)", filter: "blur(2px)", clipPath: "inset(0 0 22% 0 round 16px)", opacity: 1, offset: .55 },
+        { transform: "translateY(-26px) scale(.92)", filter: "blur(8px)", clipPath: "inset(0 0 100% 0 round 16px)", opacity: 0 },
+      ], { duration: 460, step: 38, easing: "cubic-bezier(.55,0,.7,.4)" });
+    },
+    enter(grid) {
+      if (calm) return this.play(grid, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, step: 0, easing: "linear" });
+      // the new set rises from below, in the direction the old one left, unblurring as its wipe opens
+      return this.play(grid, [
+        { transform: "translateY(34px) scale(.95)", filter: "blur(8px)", clipPath: "inset(100% 0 0 0 round 16px)", opacity: 0 },
+        { transform: "translateY(6px) scale(.99)", filter: "blur(1px)", clipPath: "inset(12% 0 0 0 round 16px)", opacity: 1, offset: .6 },
+        { transform: "translateY(0) scale(1)", filter: "blur(0)", clipPath: "inset(0 0 0 0 round 16px)", opacity: 1 },
+      ], { duration: 620, step: 46, easing: "cubic-bezier(.2,.8,.2,1)" });
+    },
+  };
+
   // ---------- results in rows of four: hovering a card widens it and slides the rest of its row aside ----------
+  // A rank change never repaints at once. activeRank is what is on screen; pendingRank is the latest choice.
+  // Order: exit the old cards -> (one rank: the reveal covers the screen) -> swap to the latest state -> entrance -> idle.
+  // Choices made meanwhile only update pendingRank; the loop takes the newest one when it reaches the swap.
+  const rankKey = (s) => [...s.ranks].sort().join(",");
   class ResultGrid {
     constructor(state) {
       this.s = state; this.grid = $(".grid"); this.n = $(".results__n");
-      state.addEventListener("change", () => this.paint());
+      this.activeRank = rankKey(state); this.pendingRank = this.activeRank; this.busy = false;
+      state.addEventListener("change", () => this.onChange());
       this.paint();
     }
-    paint() {
-      const shown = works.filter((w) => this.s.matches(w));
+    onChange() {
+      this.pendingRank = rankKey(this.s);
+      if (this.busy) return;                                          // the running transition reads the newest state at its swap
+      if (this.pendingRank === this.activeRank) { this.paint(); return; } // not a rank change: show it straight away
+      this.transition();
+    }
+    async transition() {
+      this.busy = true; this.grid.classList.add("grid--busy");
+      try {
+        while (this.pendingRank !== this.activeRank) {
+          const one = this.s.ranks.size === 1 ? [...this.s.ranks][0] : "";
+          await CardMotion.exit(this.grid);                         // 1. old set leaves; it stays in the DOM until this resolves
+          let revealed = "";
+          if (one && window.RankReveal.has(one)) {                    // 2. a single rank: the reveal covers the screen
+            revealed = one; await window.RankReveal.enter(one, this.tierName(one));
+            const now = this.s.ranks.size === 1 ? [...this.s.ranks][0] : "";
+            if (now && now !== revealed) { revealed = now; await window.RankReveal.retitle(now, this.tierName(now)); }
+          }
+          this.activeRank = rankKey(this.s);                          // 3. swap to whatever is chosen now
+          this.paint(true);                                           //    (enter() starts in the same task, so its first frame is what paints: no flash)
+          const entering = CardMotion.enter(this.grid);               // 4. new set comes in as the reveal lifts away
+          await Promise.all([entering, revealed ? window.RankReveal.leave() : null]);
+          this.pendingRank = rankKey(this.s);                         // 5. another choice arrived meanwhile? go round again
+        }
+      } finally {
+        // every entrance has ended on its resting frame, which is also the card's normal style, so dropping them changes nothing
+        this.grid.querySelectorAll(".rc").forEach((c) => c.getAnimations().forEach((a) => a.cancel()));
+        this.busy = false; this.grid.classList.remove("grid--busy");
+        this.paint();                                                // settle on the current state (also any non-rank change made meanwhile)
+      }
+    }
+    tierName(id) { return tiers.find((t) => t.id === id).name; }
+    paint(force = false) {
+      const shown = works.filter((w) => this.s.matches(w)), sig = shown.map((w) => w.id).join("|");
+      if (!force && sig === this.sig && this.grid.childElementCount) return; // same set already on screen
+      this.sig = sig;
       this.n.textContent = `${shown.length} work${shown.length === 1 ? "" : "s"}`;
       this.grid.innerHTML = "";
       if (!shown.length) {
@@ -169,26 +240,12 @@
           el.addEventListener("focus", on); el.addEventListener("blur", off);
           row.appendChild(el);
         });
-        // keep the last row's cards the same width as the rest
         for (let k = row.children.length; k < 4; k++) row.insertAdjacentHTML("beforeend", '<span class="rc rc--gap" aria-hidden="true"></span>');
         this.grid.appendChild(row);
       }
     }
   }
 
-  // play the rank reveal only when the choice becomes exactly one rank (and it is a different one)
-  class RankWatcher {
-    constructor(state) {
-      this.last = "";
-      state.addEventListener("change", () => {
-        const one = state.ranks.size === 1 ? [...state.ranks][0] : "";
-        if (one && one !== this.last) window.RankReveal.play(one, tiers.find((t) => t.id === one).name);
-        this.last = one;
-      });
-    }
-  }
-
   const state = new BrowseState();
-  new RankWatcher(state);
   new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
 })();

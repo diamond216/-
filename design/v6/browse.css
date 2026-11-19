@@ -176,3 +176,6 @@ html:has(.sea){background:#A9CFF2}
   background:linear-gradient(180deg,#fff 30%,var(--rv-hi));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 14px rgba(0,0,0,.35))}
 .rv__bg{background:radial-gradient(55% 50% at 50% 46%,color-mix(in oklab,var(--rv-bg) 78%,#fff 10%),color-mix(in oklab,var(--rv-bg) 88%,#000) 70%,color-mix(in oklab,var(--rv-bg) 60%,#000))}
 .rv__name{background:linear-gradient(180deg,#fff 35%,color-mix(in oklab,var(--rv-hi) 70%,#fff));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 2px 18px rgba(0,0,0,.55))}
+/* while ranks change over, cards don't take hover */
+.grid--busy{pointer-events:none}
+.grid--busy .rc{will-change:transform,filter,clip-path}
