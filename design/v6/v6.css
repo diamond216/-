@@ -293,3 +293,44 @@ body{letter-spacing:0}
 .tier__head--mark{transform:translateX(-88px)}
 .tier__head--mark .flt{right:-88px}
 @media (max-width:900px){.tier__head--mark{transform:none}.tier__head--mark .flt{right:auto}}
+/* ---------- round 13: dynamic-island top bar, language switch, opening logo ---------- */
+.isl-bar{position:fixed;left:0;right:0;top:0;z-index:50;height:76px;transition:background .35s,box-shadow .35s,border-color .35s;border-bottom:1px solid transparent}
+.isl-bar__in{height:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
+.isl-bar .brand{color:#fff;font:600 16px/1 var(--f);letter-spacing:.2em;transition:color .35s}.isl-bar .brand em{color:#FF6A1A;font-style:normal}
+.isl-bar .brand svg{width:34px;height:34px}
+/* the island: black capsule, opens a little on hover like the phone's */
+.island{position:relative;display:flex;align-items:center;gap:2px;padding:5px;border-radius:999px;background:#0A0A0C;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 10px 30px -10px rgba(0,0,0,.6);transition:padding .45s cubic-bezier(.34,1.56,.64,1),gap .45s cubic-bezier(.34,1.56,.64,1)}
+.island:hover{padding:6px 9px;gap:6px}
+.island a{position:relative;z-index:1;padding:9px 20px;border-radius:999px;color:#E8E8ED;font:500 15px/1 var(--f);white-space:nowrap;transition:color .25s}
+.island a:hover,.island a:focus-visible{color:#fff}
+.island a[aria-current]{color:#fff}
+.island__pill{position:absolute;left:0;top:5px;bottom:5px;width:0;border-radius:999px;background:rgba(255,255,255,.16);opacity:0;
+  transition:transform .42s cubic-bezier(.34,1.4,.64,1),width .42s cubic-bezier(.34,1.4,.64,1),opacity .2s;pointer-events:none}
+.island:hover .island__pill{top:6px;bottom:6px}
+.island--calm,.island--calm .island__pill{transition:none}
+.isl-bar__end{display:flex;justify-content:flex-end;align-items:center;gap:12px}
+.lang-sw{display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.lang-sw button{border:0;background:none;padding:7px 12px;border-radius:999px;color:rgba(255,255,255,.75);font:600 13px/1 var(--f);letter-spacing:.04em;cursor:pointer;transition:background .25s,color .25s}
+.lang-sw button[aria-pressed="true"]{background:#fff;color:#0A0A0C}
+.signin{display:inline-flex;align-items:center;height:38px;padding:0 18px;border-radius:999px;background:#fff;color:#0A0A0C;font:600 14px/1 var(--f);transition:transform .2s,box-shadow .2s}
+.signin:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(0,0,0,.5)}
+/* after scrolling: a white frame */
+.isl-bar--framed{background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);border-color:rgba(10,10,12,.08);box-shadow:0 8px 30px -14px rgba(0,0,0,.35)}
+.isl-bar--framed .brand{color:#0A0A0C}
+.isl-bar--framed .lang-sw{background:rgba(10,10,12,.06);box-shadow:inset 0 0 0 1px rgba(10,10,12,.1)}
+.isl-bar--framed .lang-sw button{color:#55555C}.isl-bar--framed .lang-sw button[aria-pressed="true"]{background:#0A0A0C;color:#fff}
+.isl-bar--framed .signin{background:#0A0A0C;color:#fff}
+/* the hero now runs under the bar */
+.hero{height:max(556px,calc(100svh - 200px + 76px))}
+.hero__text{top:132px}.strip{top:122px}
+.say__h{font-family:"Fraunces","IBM Plex Sans Thai Looped",Georgia,serif}
+html:lang(th) .say__h{font-family:"IBM Plex Sans Thai Looped",sans-serif;font-weight:600}
+@media (max-width:900px){.isl-bar__in{grid-template-columns:auto 1fr}.island{display:none}.isl-bar .brand span{display:none}}
+/* opening logo */
+.li{position:fixed;inset:0;z-index:200;display:grid;place-items:center;cursor:pointer;background:linear-gradient(180deg,#F3F8FC,#E3EEF7)}
+.li svg{width:min(1180px,92vw);height:auto;overflow:visible}
+.li path{stroke:#2C5C8F;stroke-width:2.1;stroke-dasharray:1;stroke-dashoffset:1;vector-effect:non-scaling-stroke}
+.li-on body{overflow:hidden}
+.li path{stroke-dasharray:1 2;vector-effect:none;stroke-width:1.05}
+.isl-bar--framed{background:rgba(255,255,255,.94)}

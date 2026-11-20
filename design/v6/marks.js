@@ -14,7 +14,7 @@ window.TierMarks = (function () {
   return {
     head(tier, count) {
       const m = tier.mark || { kind: "ink", ink: ["#fff", "#fff"] };
-      return `${kinds[m.kind](tier, m)}<div class="mark__acts"><a class="mark__btn" href="#">See all ${count}</a><a class="mark__btn mark__btn--line" href="#">How ranking works</a></div>`;
+      return `${kinds[m.kind](tier, m)}<div class="mark__acts"><a class="mark__btn" href="#" data-i18n="tier.all" data-n="${count}">See all ${count}</a><a class="mark__btn mark__btn--line" href="#" data-i18n="tier.how">How ranking works</a></div>`;
     },
   };
 })();

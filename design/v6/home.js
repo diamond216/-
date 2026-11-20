@@ -43,7 +43,7 @@
     constructor(host, filter, rooms, allWorks) {
       this.f = filter; this.rooms = rooms; this.all = allWorks;
       host.insertAdjacentHTML("beforeend", `<div class="flt"><button type="button" class="flt__btn" aria-expanded="false" aria-controls="flt-box">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Filters<b hidden></b></button>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="filters">Filters</span><b hidden></b></button>
         <div class="flt__box" id="flt-box" role="dialog" aria-label="Filter works" hidden><div class="flt__tabs" role="tablist"></div><div class="flt__genres"></div>
         <div class="flt__foot"><button type="button" class="flt__clear">Clear all</button><button type="button" class="b b--sm flt__show"></button></div></div></div>`);
       this.root = $(".flt", host); this.btn = $(".flt__btn", this.root); this.box = $(".flt__box", this.root);
