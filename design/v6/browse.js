@@ -148,25 +148,21 @@
     }
   }
 
-  // ---------- player: a work's clip in a box, not full screen; up/down for the next work, "View full" to its page ----------
+  // ---------- player: a work's clip in a box, not full screen, with "View full" to its page ----------
   class Player {
     constructor() {
       this.el = document.createElement("div"); this.el.className = "pl"; this.el.hidden = true;
       this.el.setAttribute("role", "dialog"); this.el.setAttribute("aria-modal", "true");
       this.el.innerHTML = `<div class="pl__scrim"></div><div class="pl__box"><div class="pl__clip"><div class="cv"></div><p class="pl__line"></p><a class="pl__full" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>View full</span></a></div>
         <button type="button" class="pl__x" aria-label="Close">&times;</button>
-        <div class="pl__side"><button type="button" class="pl__nav" data-d="-1" aria-label="Previous work"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <button type="button" class="pl__nav" data-d="1" aria-label="Next work"><svg viewBox="0 0 24 24"><path d="M12 5v14M5.5 12.5L12 19l6.5-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+
         <p class="pl__title"></p></div>`;
       document.body.appendChild(this.el);
       $(".pl__scrim", this.el).addEventListener("click", () => this.close());
       $(".pl__x", this.el).addEventListener("click", () => this.close());
-      this.el.querySelectorAll(".pl__nav").forEach((b) => b.addEventListener("click", () => this.step(+b.dataset.d)));
       addEventListener("keydown", (e) => {
         if (this.el.hidden) return;
         if (e.key === "Escape") this.close();
-        if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); this.step(-1); }
-        if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); this.step(1); }
       });
     }
     open(list, w) {
@@ -189,11 +185,9 @@
       $(".pl__title", this.el).innerHTML = `<b>${w.name}</b><span>${w.maker} · ${w.room} · ${w.genre}</span>`;
       $(".pl__full", this.el).setAttribute("aria-label", `View ${w.name} in full`);
       this.preview = window.Previews.for(clip, w); clip.insertBefore(clip.lastElementChild, $(".pl__line", clip)); this.preview.start();
-      this.el.querySelectorAll(".pl__nav").forEach((b) => (b.disabled = (+b.dataset.d < 0 && this.i === 0) || (+b.dataset.d > 0 && this.i === this.list.length - 1)));
       clip.getAnimations().forEach((a) => a.cancel());
       if (dir && !calm) clip.animate([{ opacity: 0, transform: `translateY(${dir * 30}px)` }, { opacity: 1, transform: "none" }], { duration: 260, easing: "cubic-bezier(.2,.8,.2,1)" });
     }
-    step(d) { const n = this.i + d; if (n < 0 || n >= this.list.length) return; this.i = n; this.show(d); }
     async close() {
       if (this.el.hidden) return;
       if (!calm) await Promise.all([
