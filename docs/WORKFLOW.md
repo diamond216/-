@@ -1,6 +1,6 @@
 # How we work on Hamster Nest (the same setup as the first session)
 
-> **ภาษาไทยสั้น ๆ:** ไฟล์นี้คือ "ระบบและวิธีคิด" ทั้งหมดที่ใช้ใน session แรก ทุก session ใหม่ต้องทำตามนี้: คุยภาษาไทย, แบ่งบทบาท Manager / Researcher / Coder, **ทำภาพให้เจ้าของงานเลือกก่อนสร้างเสมอ**, สร้างเสร็จแล้วต้องจับภาพเทียบกับต้นแบบทีละส่วนจนเหมือน, เขียนโค้ดแบบ OOP, และเขียนข้อความแบบคนจริง ไม่ใช่แบบ AI
+> **ภาษาไทยสั้น ๆ:** ไฟล์นี้คือ "ระบบและวิธีคิด" ทั้งหมดที่ใช้ใน session แรก ทุก session ใหม่ต้องทำตามนี้: คุยภาษาไทย, แบ่งบทบาท Manager / Researcher / Designer / Coder, **ทำภาพให้เจ้าของงานเลือกก่อนสร้างเสมอ**, สร้างเสร็จแล้วต้องจับภาพเทียบกับต้นแบบทีละส่วนจนเหมือน, เขียนโค้ดแบบ OOP, และเขียนข้อความแบบคนจริง ไม่ใช่แบบ AI
 
 Read this together with `docs/HANDOFF.md` (project facts, decisions, code map, status).
 
@@ -12,7 +12,7 @@ Read this together with `docs/HANDOFF.md` (project facts, decisions, code map, s
 |---|---|---|
 | Repository | `diamond216/-`, branch `claude/hamster-nest-portfolio-8gihhk` | Start the cloud session with this repo and branch selected |
 | Cloud environment | **hamster-nest** (personal). Limited network, package managers allowed, plus the reference hosts below | Pick "hamster-nest" in the environment menu. Its setup script runs `npm ci`, so dependencies are ready (saved in session 1, not yet seen running on a fresh container; if `node_modules` is missing, run `npm ci`) |
-| Allowed hosts | ui.shadcn.com, ui.aceternity.com, assets.aceternity.com, 21st.dev, cdn.21st.dev, assets.21st.dev, www.originkit.dev, cdn.originkit.dev, animejs.com, itch.io, static.itch.io | Already saved on the environment. If you need another host, ask the owner through the environment tools; never work around the proxy |
+| Allowed hosts | ui.shadcn.com, ui.aceternity.com, assets.aceternity.com, 21st.dev, cdn.21st.dev, assets.21st.dev, www.originkit.dev, cdn.originkit.dev, animejs.com, itch.io, static.itch.io, www.awwwards.com, assets.awwwards.com (awwwards drops connections from the cloud: see HANDOFF) | Already saved on the environment. If you need another host, ask the owner through the environment tools; never work around the proxy |
 | Skill | `manager-researcher-coder` (account skill). It tells you to work as Manager / Researcher / Coder and show pictures first | It is synced to the owner's account. Invoke it at the start of every task. Its rules are also copied in section 2 |
 | Related skills | `oop-design-playbook` (read before writing code). `dataviz` (read before any chart) | Invoke with the Skill tool |
 | Design skill | `frontend-design` (plugin `frontend-design@claude-plugins-official`). The owner asked for all visual work to follow it from 17 Nov 2026 | Invoke it before drafting any picture. If it isn't installed, read `~/.claude/plugins/marketplaces/claude-plugins-official/plugins/frontend-design/skills/frontend-design/SKILL.md` |
@@ -22,19 +22,25 @@ Read this together with `docs/HANDOFF.md` (project facts, decisions, code map, s
 | 21st.dev MCP / OriginKit MCP | Need API keys (21st `21st_sk_…`, paid generation; OriginKit `cmp_live_…`, 10 a day) | Not set up. Ask the owner for a key through `request_credential` if one is ever needed. Until then, hand-write the components |
 | Owner's PC | DESKTOP-GEEKQH2, folder `D:\Hamster nest` | Cloud sessions could not attach it. If work must happen there, the owner runs a session on that PC |
 
-## 2. Roles (from the owner's instructions, word for word in spirit)
+## 2. Roles: the multi-agent system (owner's spec, 20 Nov 2026)
 
-The owner said:
+Four agents. The main session is the Manager; the others are spawned only when the job really needs them (not every task needs every agent). Pass the context forward in each brief. Every change stays inside the scope the owner approved.
 
-- **Manager:** sets the scope and gives the orders. Must not think for the owner on everything. Checks the details and keeps fixing until the result matches the reference. *Before doing anything, show a picture first; the owner decides.*
-- **Researcher:** researches the tech stack, skills, MCPs and every technique needed.
-- **Coder:** builds from the Manager's scope and the Researcher's resources.
-- Create agents only when needed.
+| Agent | Role | Does | Must not |
+|---|---|---|---|
+| **1. Manager** (main session) | Project manager and quality control | Reads the request and sets the scope; hands work to the right agent; gathers what Researcher and Designer return; holds the scope; checks the build against the reference; sends it back until it matches | Change the design for the owner; change anything visual without showing a preview and getting approval; widen the scope without asking |
+| **2. Researcher** | Technical research | Researches tech stack, skills, MCPs and tools; reads docs, APIs and techniques; checks compatibility; weighs pros, cons and limits; hands checked resources to Designer and Coder | Guess what a library can do; add a dependency without checking it is needed; state anything without a real source |
+| **3. Designer** | UI/UX and motion | Analyses the reference; sets visual direction, layout and design system; designs interaction and motion; studies component libraries and techniques; makes previews/prototypes; writes the design spec for the Coder | Change the design direction on their own; implement a new design before the owner picks a preview; add effects outside the scope |
+| **4. Coder** | Developer | Builds the approved scope with the Researcher's resources and the Designer's spec; keeps code maintainable and reusable; tests function, responsiveness and performance; hands results to the Manager | Change the design; touch files outside the scope without permission; switch approach on a technical limit without reporting it first |
+
+Global flow: Manager scopes -> Researcher researches -> Designer analyses and makes a preview -> **owner approves the preview** -> Coder builds -> Manager checks against the reference -> back for fixes if it differs -> deliver once it passes.
+
+Reference resources (pick what fits each job): https://animejs.com/, https://www.originkit.dev/, https://21st.dev/, https://ui.aceternity.com/components.
 
 In practice:
 
-- **You (the main session) are the Manager.** You write every brief: goal, reference, what's in and out of scope, and what "done" means. You never decide the look, the layout, the motion or which option to use. Those go to the owner as pictures plus an `AskUserQuestion`.
-- **Researcher and Coder** are background agents (`Agent` tool, `general-purpose`) for big jobs: research across many sources, or a page-sized build. For small fixes, do the Researcher or Coder step yourself, but still keep the steps separate and still show pictures first.
+- Spawn Researcher, Designer or Coder with the `Agent` tool (`general-purpose`, or `web-fetch` for reading one page). For small jobs the Manager does the step itself but keeps the steps separate and still shows a preview first.
+- The goal: work that matches the reference, good code, and every design decision left with the owner.
 - Talk to the owner in **Thai** (ฉัน/คุณ). Code, comments, commit messages and docs stay in English.
 
 ## 3. The loop for every task

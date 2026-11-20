@@ -149,6 +149,8 @@ flow = Σ w(type) × 2^(−ageDays/14)
 - Project page (owner's request, 17 Nov 2026): the activity graph and the "N updates in 30 days" line at the top right are gone. In their place is the same "Before and now" pair as the home page (`src/components/common/BeforeNowPair.tsx`) with the latest update's title under it. The stage, investment and rank chips stay. The big cover that had collapsed under v2 is fixed.
 - This PC has no Playwright or Python, so `tools/` doesn't run here. Screenshots were taken with headless Chrome against a static server on `out/`. Headless Chrome can't go narrower than about 500px, so 390px was only checked for overflow in the app's browser pane (none on the room page).
 
+**Awwwards research (20 Nov 2026):** the owner asked us to study https://www.awwwards.com/websites/sites_of_the_day/. The host is allowed on the environment, but awwwards drops every connection from the cloud session (connection reset / tunnel closed mid-exchange), and WebFetch cannot resolve it. Nothing from that page has been verified yet; waiting on screenshots from the owner.
+
 **Focus (20 Nov 2026):** the owner has paused the home page; work only on the Browse page (`design/v6/browse.html`) for now.
 
 **Next step:** compare the v2 home with `design/v2/index.html`, check phone width by eye, look over the old project and maker pages under the new top bar and footer, then commit and push once the owner says yes.
