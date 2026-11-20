@@ -123,31 +123,96 @@
     "Raspberry Pi": `<circle cx="9" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 3.5c1.2.2 2.2.9 3 2 .8-1.1 1.8-1.8 3-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>`,
     "Pitch deck": `<rect x="2" y="3" width="14" height="9" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 12v3M6 16h6M5 9l2.5-2.5 2 2L13 5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>`,
   };
+  // the gem used on flags and in the player
+  const GEM = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4h11l4.5 5.2L12 21 2 9.2z" fill="currentColor" opacity=".9"/><path d="M2 9.2h20M6.5 4L9.6 9.2 12 21l2.4-11.8L17.5 4M9.6 9.2L12 4l2.4 5.2" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1"/></svg>`;
+  const BELL = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 1112 0v5l1.6 2.2H4.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  const following = new Set();
   class ResultCard {
-    constructor(w) { this.w = w; }
+    constructor(w, onOpen) { this.w = w; this.onOpen = onOpen; }
     render() {
-      const w = this.w, t = tiers.find((x) => x.id === w.tier), a = document.createElement("a");
-      a.href = "#"; a.className = "rc"; a.dataset.id = w.id; a.style.setProperty("--ri", RANK_INK[w.tier]);
-      a.innerHTML = `<div class="rc__pic"><div class="cv"></div><p class="rc__line"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span>${w.blurb}</span></p></div>
-        <div class="rc__txt">
-          <div class="rc__title"><strong>${w.name}</strong><span class="rc__rank">${t.name}</span></div>
-          <p class="rc__desc">${w.blurb}</p>
-          <p class="rc__by">${w.maker}</p>
-          <p class="rc__tag">${w.room} · ${w.genre}</p>
-          <p class="rc__plat">${w.platforms.map((p) => `<svg viewBox="0 0 18 18" role="img" aria-label="${p}"><title>${p}</title><g fill="currentColor">${PLATFORM_ICON[p]}</g></svg>`).join("")}</p>
-        </div>`;
+      const w = this.w, t = tiers.find((x) => x.id === w.tier), a = document.createElement("article");
+      a.className = "rc"; a.dataset.id = w.id; a.style.setProperty("--ri", RANK_INK[w.tier]);
+      a.innerHTML = `<div class="rc__media"><button type="button" class="rc__open" aria-label="Play ${w.name}"><span class="rc__pic"><span class="cv"></span></span></button>
+        <span class="rc__flag" aria-hidden="true">${GEM}<b>${t.name}</b></span>
+        <button type="button" class="rc__bell" aria-pressed="${following.has(w.id)}">${BELL}<span>${following.has(w.id) ? "Following" : "Notify me"}</span></button></div>
+        <h3 class="rc__name" title="${w.name}">${w.name}</h3>`;
       Art.fill($(".cv", a), w);
-      this.preview = window.Previews.for($(".rc__pic", a), w);
-      a._card = this;
+      $(".rc__open", a).addEventListener("click", () => this.onOpen(w));
+      const bell = $(".rc__bell", a);
+      bell.addEventListener("click", () => {
+        const on = !following.has(w.id); on ? following.add(w.id) : following.delete(w.id);
+        bell.setAttribute("aria-pressed", on); $("span", bell).textContent = on ? "Following" : "Notify me";
+        bell.animate([{ transform: "rotate(0)" }, { transform: "rotate(14deg)" }, { transform: "rotate(-10deg)" }, { transform: "rotate(5deg)" }, { transform: "rotate(0)" }], { duration: 520, easing: "ease-out" });
+      });
       return a;
     }
   }
+
+  // ---------- player: a work's clip in a box, not full screen; up/down for the next work, "View full" to its page ----------
+  class Player {
+    constructor() {
+      this.el = document.createElement("div"); this.el.className = "pl"; this.el.hidden = true;
+      this.el.setAttribute("role", "dialog"); this.el.setAttribute("aria-modal", "true");
+      this.el.innerHTML = `<div class="pl__scrim"></div><div class="pl__box"><div class="pl__clip"><div class="cv"></div><p class="pl__line"></p><a class="pl__full" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>View full</span></a></div>
+        <button type="button" class="pl__x" aria-label="Close">&times;</button>
+        <div class="pl__side"><button type="button" class="pl__nav" data-d="-1" aria-label="Previous work"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="pl__nav" data-d="1" aria-label="Next work"><svg viewBox="0 0 24 24"><path d="M12 5v14M5.5 12.5L12 19l6.5-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        <p class="pl__title"></p></div>`;
+      document.body.appendChild(this.el);
+      $(".pl__scrim", this.el).addEventListener("click", () => this.close());
+      $(".pl__x", this.el).addEventListener("click", () => this.close());
+      this.el.querySelectorAll(".pl__nav").forEach((b) => b.addEventListener("click", () => this.step(+b.dataset.d)));
+      addEventListener("keydown", (e) => {
+        if (this.el.hidden) return;
+        if (e.key === "Escape") this.close();
+        if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); this.step(-1); }
+        if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); this.step(1); }
+      });
+    }
+    open(list, w) {
+      this.list = list; this.i = list.indexOf(w); this.back = document.activeElement;
+      this.el.hidden = false; document.documentElement.classList.add("pl-on");
+      this.show(0);
+      if (!calm) {
+        $(".pl__scrim", this.el).animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: "ease-out" });
+        $(".pl__box", this.el).animate([{ opacity: 0, transform: "translateY(18px) scale(.97)" }, { opacity: 1, transform: "none" }], { duration: 380, easing: "cubic-bezier(.2,.8,.2,1)" });
+      }
+      $(".pl__x", this.el).focus();
+    }
+    async show(dir) {
+      const w = this.list[this.i], clip = $(".pl__clip", this.el);
+      if (dir && !calm) await clip.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: `translateY(${-dir * 30}px)` }], { duration: 180, easing: "ease-in", fill: "forwards" }).finished;
+      if (this.preview) this.preview.stop();
+      clip.querySelectorAll(".pv").forEach((p) => p.remove());
+      Art.fill($(".cv", clip), w);
+      $(".pl__line", this.el).textContent = w.blurb;
+      $(".pl__title", this.el).innerHTML = `<b>${w.name}</b><span>${w.maker} · ${w.room} · ${w.genre}</span>`;
+      $(".pl__full", this.el).setAttribute("aria-label", `View ${w.name} in full`);
+      this.preview = window.Previews.for(clip, w); clip.insertBefore(clip.lastElementChild, $(".pl__line", clip)); this.preview.start();
+      this.el.querySelectorAll(".pl__nav").forEach((b) => (b.disabled = (+b.dataset.d < 0 && this.i === 0) || (+b.dataset.d > 0 && this.i === this.list.length - 1)));
+      clip.getAnimations().forEach((a) => a.cancel());
+      if (dir && !calm) clip.animate([{ opacity: 0, transform: `translateY(${dir * 30}px)` }, { opacity: 1, transform: "none" }], { duration: 260, easing: "cubic-bezier(.2,.8,.2,1)" });
+    }
+    step(d) { const n = this.i + d; if (n < 0 || n >= this.list.length) return; this.i = n; this.show(d); }
+    async close() {
+      if (this.el.hidden) return;
+      if (!calm) await Promise.all([
+        $(".pl__box", this.el).animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(12px) scale(.98)" }], { duration: 200, easing: "ease-in", fill: "forwards" }).finished,
+        $(".pl__scrim", this.el).animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: "forwards" }).finished,
+      ]);
+      if (this.preview) this.preview.stop();
+      this.el.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+      this.el.hidden = true; document.documentElement.classList.remove("pl-on");
+      if (this.back) this.back.focus();
+    }
+  }
+  const player = new Player();
 
   // ---------- card motion: staggered exit and entrance, each awaited through Animation.finished ----------
   // Only cards on or near the screen get the stagger; the rest move at once so long lists stay quick.
   const CardMotion = {
     targets(grid) {
-      const vh = innerHeight, cards = [...grid.querySelectorAll(".rc:not(.rc--gap)")];
+      const vh = innerHeight, cards = [...grid.querySelectorAll(".rc")];
       let k = 0;
       return cards.map((c) => { const r = c.getBoundingClientRect(), near = r.bottom > -40 && r.top < vh + 40; return { c, i: near ? Math.min(k++, 11) : -1 }; });
     },
@@ -175,7 +240,7 @@
     },
   };
 
-  // ---------- results in rows of four: hovering a card widens it and slides the rest of its row aside ----------
+  // ---------- results: four to a row, three when the filter panel is open ----------
   // A rank change never repaints at once. activeRank is what is on screen; pendingRank is the latest choice.
   // Order: exit the old cards -> (one rank: the reveal covers the screen) -> swap to the latest state -> entrance -> idle.
   // Choices made meanwhile only update pendingRank; the loop takes the newest one when it reaches the swap.
@@ -230,19 +295,7 @@
         $("button", this.grid).addEventListener("click", () => { $("#q").value = ""; $(".sbar__clear").hidden = true; this.s.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); });
         return;
       }
-      for (let i = 0; i < shown.length; i += 4) {
-        const row = document.createElement("div"); row.className = "row";
-        shown.slice(i, i + 4).forEach((w) => {
-          const card = new ResultCard(w), el = card.render();
-          const on = () => { row.classList.add("row--open"); el.classList.add("rc--open"); card.preview.start(); };
-          const off = () => { row.classList.remove("row--open"); el.classList.remove("rc--open"); card.preview.stop(); };
-          el.addEventListener("pointerenter", on); el.addEventListener("pointerleave", off);
-          el.addEventListener("focus", on); el.addEventListener("blur", off);
-          row.appendChild(el);
-        });
-        for (let k = row.children.length; k < 4; k++) row.insertAdjacentHTML("beforeend", '<span class="rc rc--gap" aria-hidden="true"></span>');
-        this.grid.appendChild(row);
-      }
+      shown.forEach((w) => this.grid.appendChild(new ResultCard(w, (x) => player.open(shown, x)).render()));
     }
   }
 
