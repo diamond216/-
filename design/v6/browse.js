@@ -96,8 +96,38 @@
       this.s = state; this.el = $("#fpanel"); this.btn = $(".fbtn");
       this.btn.addEventListener("click", () => this.open(this.el.hidden));
       state.addEventListener("change", () => this.paint()); this.paint();
+      this.busy = false;
     }
-    open(on) { this.el.hidden = !on; this.btn.setAttribute("aria-expanded", on); document.body.classList.toggle("has-panel", on); }
+    // Opening: the panel slides in from the left while the tiles re-flow from 4 to 3 a row (FLIP).
+    // Closing: the panel slides out first, then the tiles re-flow back to 4. Each step waits on Animation.finished.
+    async open(on) {
+      if (this.busy || on === !this.el.hidden) return;
+      this.busy = true; this.btn.setAttribute("aria-expanded", on);
+      window.Grid && window.Grid.collapse(false);
+      const grid = $(".grid");
+      if (on) {
+        const before = Flip.read(grid);
+        this.el.hidden = false; document.body.classList.add("has-panel");
+        if (!calm) {
+          await Promise.all([
+            this.el.animate([{ opacity: 0, transform: "translateX(-28px)", clipPath: "inset(0 100% 0 0 round 14px)" }, { opacity: 1, transform: "none", clipPath: "inset(0 0 0 0 round 14px)" }], { duration: 460, easing: EASE }).finished,
+            Flip.play(grid, before, 460),
+            this.stagger(),
+          ]);
+        }
+      } else {
+        if (!calm) await this.el.animate([{ opacity: 1, transform: "none", clipPath: "inset(0 0 0 0 round 14px)" }, { opacity: 0, transform: "translateX(-20px)", clipPath: "inset(0 100% 0 0 round 14px)" }], { duration: 280, easing: "cubic-bezier(.4,0,1,1)", fill: "forwards" }).finished;
+        const before = Flip.read(grid);
+        this.el.getAnimations().forEach((a) => a.cancel());
+        this.el.hidden = true; document.body.classList.remove("has-panel");
+        if (!calm) await Flip.play(grid, before, 460);
+      }
+      this.busy = false;
+    }
+    // the rows of the panel come in one after another
+    stagger(nodes = this.el.querySelectorAll(".fp__head, section > h3, section > h4, .ck, .fp__hint")) {
+      return Promise.all([...nodes].map((n, i) => n.animate([{ opacity: 0, transform: "translateX(-10px)" }, { opacity: 1, transform: "none" }], { duration: 300, delay: 60 + i * 18, easing: EASE, fill: "backwards" }).finished));
+    }
     box(set, value, label, n, extra = "") {
       return `<label class="ck"><input type="checkbox" data-set="${set}" value="${value}"${this.s[set].has(value) ? " checked" : ""}>${extra}<span>${label}</span><em>${n}</em></label>`;
     }
@@ -109,9 +139,12 @@
       const gr = s.genreRooms;
       h += `<section><h3>Genre</h3>`;
       if (!gr.length) h += `<p class="fp__hint">Pick a room above to see its genres.</p>`;
-      gr.forEach((r) => { h += `${gr.length > 1 || s.tab === "All" ? `<h4>${r}</h4>` : ""}${rooms[r].map((g) => this.box("genres", g, g, s.count((w) => w.room === r && w.genre === g, "genres"))).join("")}`; });
+      gr.forEach((r) => { h += `<div class="fp__group" data-g="${r}">${gr.length > 1 || s.tab === "All" ? `<h4>${r}</h4>` : ""}${rooms[r].map((g) => this.box("genres", g, g, s.count((w) => w.room === r && w.genre === g, "genres"))).join("")}</div>`; });
       h += `</section>`;
+      const had = new Set([...this.el.querySelectorAll(".fp__group")].map((g) => g.dataset.g)), focused = document.activeElement && this.el.contains(document.activeElement) ? document.activeElement.value : null;
       this.el.innerHTML = h;
+      if (focused) { const f = this.el.querySelector(`input[value="${focused}"]`); f && f.focus({ preventScroll: true }); }
+      if (!calm && !this.el.hidden) this.el.querySelectorAll(".fp__group").forEach((g) => { if (!had.has(g.dataset.g)) this.stagger(g.children); });
       this.el.querySelectorAll("input").forEach((i) => i.addEventListener("change", () => s.toggle(i.dataset.set, i.value)));
       $(".fp__clear", this.el).addEventListener("click", () => s.clear());
       const b = $("b", this.btn); b.hidden = !s.active; b.textContent = s.active;
@@ -135,106 +168,99 @@
   const BELL = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 1112 0v5l1.6 2.2H4.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   const following = new Set();
   class ResultCard {
-    constructor(w, onOpen) { this.w = w; this.onOpen = onOpen; }
+    constructor(w) { this.w = w; }
     render() {
       const w = this.w, t = tiers.find((x) => x.id === w.tier), a = document.createElement("article");
       a.className = "rc"; a.dataset.id = w.id; a.style.setProperty("--ri", RANK_INK[w.tier]);
-      a.innerHTML = `<div class="rc__media"><button type="button" class="rc__open" aria-label="Play ${w.name}"><span class="rc__pic"><span class="cv"></span></span></button>
+      a.innerHTML = `<div class="rc__media"><a class="rc__open" href="#" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
         <span class="rc__flag" aria-hidden="true">${GEM}<b>${t.name}</b></span>
         <button type="button" class="rc__bell" aria-pressed="${following.has(w.id)}">${BELL}<span>${following.has(w.id) ? "Following" : "Notify me"}</span></button></div>
-        <h3 class="rc__name" title="${w.name}">${w.name}</h3>`;
+        <h3 class="rc__name" title="${w.name}">${w.name}</h3>
+        <div class="rc__more" aria-hidden="true">
+          <p class="rc__by"><span class="rc__av" style="--h:${[...w.maker].reduce((n, c) => n + c.charCodeAt(0), 0) % 360}">${w.maker[0]}</span>${w.maker}<i>${w.room} · ${w.genre}</i></p>
+          <p class="rc__upd"><b>Updated ${w.update.when}</b>${w.update.what}</p>
+          <p class="rc__desc">${w.blurb}</p>
+          <span class="rc__go">Open project<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4.5 3H9v4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </div>`;
       Art.fill($(".cv", a), w);
-      $(".rc__open", a).addEventListener("click", () => this.onOpen(w, $(".rc__pic", a)));
       const bell = $(".rc__bell", a);
       bell.addEventListener("click", () => {
         const on = !following.has(w.id); on ? following.add(w.id) : following.delete(w.id);
         bell.setAttribute("aria-pressed", on); $("span", bell).textContent = on ? "Following" : "Notify me";
-        bell.animate([{ transform: "rotate(0)" }, { transform: "rotate(14deg)" }, { transform: "rotate(-10deg)" }, { transform: "rotate(5deg)" }, { transform: "rotate(0)" }], { duration: 520, easing: "ease-out" });
+        if (!calm) bell.animate([{ transform: "rotate(0)" }, { transform: "rotate(14deg)" }, { transform: "rotate(-10deg)" }, { transform: "rotate(5deg)" }, { transform: "rotate(0)" }], { duration: 520, easing: "ease-out" });
       });
       return a;
     }
   }
 
-  // ---------- player: a work's clip in a box, not full screen, with "View full" to its page ----------
-  class Player {
-    constructor() {
-      this.el = document.createElement("div"); this.el.className = "pl"; this.el.hidden = true;
-      this.el.setAttribute("role", "dialog"); this.el.setAttribute("aria-modal", "true"); this.el.setAttribute("aria-labelledby", "pl-name");
-      this.el.innerHTML = `<div class="pl__scrim"></div><div class="pl__box"><div class="pl__clip"><div class="cv"></div><p class="pl__line"></p><a class="pl__full" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>View full</span></a></div>
-        <button type="button" class="pl__x" aria-label="Close">&times;</button>
-        <p class="pl__title" id="pl-name"></p></div>`;
-      document.body.appendChild(this.el);
-      $(".pl__scrim", this.el).addEventListener("click", () => this.close());
-      $(".pl__x", this.el).addEventListener("click", () => this.close());
-      addEventListener("keydown", (e) => {
-        if (this.el.hidden) return;
-        if (e.key === "Escape") { e.preventDefault(); this.close(); }
-        if (e.key === "Tab") {                                   // keep focus inside the player
-          const f = [$(".pl__x", this.el), $(".pl__full", this.el)], i = f.indexOf(document.activeElement);
-          e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
-        }
+  // ---------- FLIP helper: remember where tiles were, then slide them from there to where they are now ----------
+  const EASE = "cubic-bezier(.2,.8,.2,1)";
+  const Flip = {
+    read(grid) { return new Map([...grid.querySelectorAll(".rc")].map((c) => [c, c.getBoundingClientRect()])); },
+    play(grid, before, duration = 420, except = null) {
+      const anims = [];
+      grid.querySelectorAll(".rc").forEach((c) => {
+        const a = before.get(c); if (!a || c === except) return;
+        const b = c.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top, sx = a.width / b.width, sy = a.height / b.height;
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(sx - 1) < .01) return;
+        anims.push(c.animate([{ transformOrigin: "0 0", transform: `translate(${dx}px,${dy}px) scale(${sx},${sy})` }, { transformOrigin: "0 0", transform: "none" }], { duration, easing: EASE }));
       });
-      this.busy = false;
+      return Promise.all(anims.map((x) => x.finished.catch(() => {})));
+    },
+  };
+
+  // ---------- hover to expand: rest on a tile for 0.75 s and it takes two columns and two rows; the rest move aside ----------
+  const HOLD = 750;
+  class Expander {
+    constructor(grid) {
+      this.grid = grid; this.open = null; this.timer = 0;
+      grid.addEventListener("pointerover", (e) => {
+        const c = e.target.closest(".rc"); if (!c || c === this.open || this.busy()) return;
+        clearTimeout(this.timer);
+        c.classList.add("rc--arming");
+        this.timer = setTimeout(() => { c.classList.remove("rc--arming"); if (c.matches(":hover")) this.expand(c); }, HOLD);
+      });
+      grid.addEventListener("pointerout", (e) => {
+        const c = e.target.closest(".rc"); if (!c || c.contains(e.relatedTarget)) return;
+        c.classList.remove("rc--arming"); clearTimeout(this.timer);
+        if (c === this.open) this.collapse();
+      });
+      // keyboard: focusing a tile opens it straight away
+      grid.addEventListener("focusin", (e) => { const c = e.target.closest(".rc"); if (c && c !== this.open && !this.busy()) this.expand(c); });
+      grid.addEventListener("focusout", (e) => { if (this.open && !this.open.contains(e.relatedTarget)) this.collapse(); });
+      addEventListener("resize", () => this.collapse(false));
     }
-    // the clip grows out of the tile's picture (FLIP), then its words and buttons come in
-    async open(w, src) {
-      if (this.busy || !this.el.hidden) return; this.busy = true;
-      this.back = document.activeElement; this.src = src;
-      const clip = $(".pl__clip", this.el), parts = [".pl__line", ".pl__full", ".pl__x", ".pl__title"].map((s) => $(s, this.el));
-      if (this.preview) this.preview.stop();
-      clip.querySelectorAll(".pv").forEach((p) => p.remove());
-      const bare = { ...w, scribble: "" };                    // the clip carries its own line, so no label drawn in the picture
-      Art.fill($(".cv", clip), bare);
-      $(".pl__line", this.el).textContent = w.blurb;
-      $(".pl__title", this.el).innerHTML = `<b>${w.name}</b><span>${w.maker} · ${w.room} · ${w.genre}</span>`;
-      $(".pl__full", this.el).setAttribute("aria-label", `View ${w.name} in full`);
-      this.el.hidden = false; document.documentElement.classList.add("pl-on");
-      const from = src.getBoundingClientRect(), to = clip.getBoundingClientRect();
-      if (!calm) {
-        src.style.visibility = "hidden";
-        parts.forEach((p) => (p.style.opacity = "0")); clip.style.setProperty("--fade", 0);
-        const sx = from.width / to.width, sy = from.height / to.height;
-        $(".pl__scrim", this.el).animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: "ease-out" });
-        $(".br").animate([{ transform: "none" }, { transform: "scale(.985)" }], { duration: 600, easing: E2, fill: "forwards" });
-        await clip.animate([
-          { transformOrigin: "0 0", transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${sx},${sy})`, borderRadius: `${12 / sx}px / ${12 / sy}px` },
-          { transformOrigin: "0 0", transform: "none", borderRadius: "16px" },
-        ], { duration: 600, easing: E2 }).finished;
-        clip.style.setProperty("--fade", 1);
-        parts.forEach((p, i) => { p.style.opacity = ""; p.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], { duration: 340, delay: i * 50, easing: E2, fill: "backwards" }); });
-      }
-      this.preview = window.Previews.for(clip, bare); clip.insertBefore(clip.lastElementChild, $(".pl__line", clip)); this.preview.start();
-      $(".pl__x", this.el).focus({ preventScroll: true });
-      this.busy = false;
+    busy() { return this.grid.classList.contains("grid--busy"); }
+    cols() { return getComputedStyle(this.grid).gridTemplateColumns.split(" ").length; }
+    place(c) {
+      const g = this.grid.getBoundingClientRect(), r = c.getBoundingClientRect(), cs = getComputedStyle(this.grid), n = this.cols();
+      const colW = (g.width + parseFloat(cs.columnGap)) / n, rowH = r.height + parseFloat(cs.rowGap);
+      const col = Math.min(Math.round((r.left - g.left) / colW) + 1, n - 1), row = Math.round((r.top - g.top) / rowH) + 1;
+      return `${row} / ${col} / span 2 / span 2`;
     }
-    async close() {
-      if (this.el.hidden || this.busy) return; this.busy = true;
-      const clip = $(".pl__clip", this.el), src = this.src;
-      if (this.preview) this.preview.stop();
-      const back = src && src.isConnected ? src.getBoundingClientRect() : null;
-      const onScreen = back && back.bottom > 0 && back.top < innerHeight;
-      if (!calm) {
-        const to = clip.getBoundingClientRect(), quiet = [".pl__line", ".pl__full", ".pl__x", ".pl__title"].map((s) => $(s, this.el));
-        clip.style.setProperty("--fade", 0);
-        quiet.forEach((p) => p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: "forwards" }));
-        $(".pl__scrim", this.el).animate([{ opacity: 1 }, { opacity: 0 }], { duration: 460, fill: "forwards" });
-        $(".br").animate([{ transform: "scale(.985)" }, { transform: "none" }], { duration: 520, easing: E2, fill: "forwards" });
-        // back into its tile if the tile is on screen; otherwise it sinks away
-        const frames = onScreen
-          ? [{ transformOrigin: "0 0", transform: "none", borderRadius: "16px" }, { transformOrigin: "0 0", transform: `translate(${back.left - to.left}px,${back.top - to.top}px) scale(${back.width / to.width},${back.height / to.height})`, borderRadius: `${12 / (back.width / to.width)}px / ${12 / (back.height / to.height)}px` }]
-          : [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(24px) scale(.96)" }];
-        await clip.animate(frames, { duration: onScreen ? 520 : 300, easing: E2, fill: "forwards" }).finished;
-      }
-      this.el.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-      $(".br").getAnimations().forEach((a) => a.cancel());
-      if (src) src.style.visibility = "";
-      this.el.hidden = true; document.documentElement.classList.remove("pl-on");
-      if (this.back && this.back.isConnected) this.back.focus({ preventScroll: true });
-      this.busy = false;
+    expand(c) {
+      if (this.cols() < 2) return;
+      const before = Flip.read(this.grid);
+      if (this.open) this.unset(this.open);
+      c.style.gridArea = this.place(c); c.classList.add("rc--big"); c.querySelector(".rc__more").removeAttribute("aria-hidden");
+      this.open = c;
+      if (calm) return;
+      Flip.play(this.grid, before, 520, c);
+      const a = before.get(c), b = c.getBoundingClientRect();
+      // the tile grows from its own corner; the picture keeps its place while the details rise in underneath
+      c.animate([{ transformOrigin: "0 0", transform: `translate(${a.left - b.left}px,${a.top - b.top}px) scale(${a.width / b.width},${a.height / b.height})` }, { transformOrigin: "0 0", transform: "none" }], { duration: 520, easing: EASE });
+      [...c.querySelectorAll(".rc__more > *")].forEach((n, i) => n.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 360, delay: 220 + i * 60, easing: EASE, fill: "backwards" }));
+    }
+    unset(c) { c.style.gridArea = ""; c.classList.remove("rc--big"); c.querySelector(".rc__more").setAttribute("aria-hidden", "true"); }
+    collapse(animate = true) {
+      clearTimeout(this.timer);
+      const c = this.open; if (!c) return;
+      const before = Flip.read(this.grid);
+      this.unset(c); this.open = null;
+      if (animate && !calm) Flip.play(this.grid, before, 460);
     }
   }
-  const E2 = "cubic-bezier(.2,.8,.2,1)";
-  const player = new Player();
+
 
   // ---------- card motion: staggered exit and entrance, each awaited through Animation.finished ----------
   // Only cards on or near the screen get the stagger; the rest move at once so long lists stay quick.
@@ -280,6 +306,7 @@
     constructor(state) {
       this.s = state; this.grid = $(".grid"); this.n = $(".count"); this.t = $(".rhead__t");
       this.activeRank = rankKey(state); this.pendingRank = this.activeRank; this.busy = false;
+      this.ex = new Expander(this.grid); window.Grid = this.ex;
       state.addEventListener("change", () => this.onChange());
       this.paint();
     }
@@ -319,6 +346,7 @@
     }
     tierName(id) { return tiers.find((t) => t.id === id).name; }
     paint(force = false) {
+      if (this.ex) this.ex.collapse(false);
       const shown = sortWorks(works.filter((w) => this.s.matches(w)), this.s.sort), sig = shown.map((w) => w.id).join("|");
       if (!force && sig === this.sig && this.grid.childElementCount) return false; // same set already on screen
       this.sig = sig;
@@ -330,7 +358,7 @@
         $("button", this.grid).addEventListener("click", () => { $("#q").value = ""; $(".sbar__clear").hidden = true; this.s.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); });
         return true;
       }
-      shown.forEach((w) => this.grid.appendChild(new ResultCard(w, (x, src) => player.open(x, src)).render()));
+      shown.forEach((w) => this.grid.appendChild(new ResultCard(w).render()));
       return true;
     }
   }
