@@ -155,6 +155,8 @@ flow = Σ w(type) × 2^(−ageDays/14)
 
 **Browse round 6 (21 Nov 2026, owner):** no more player. Rest the pointer on a tile for **0.75 s** (a thin line in the rank colour fills along the picture's bottom edge meanwhile) and it opens to **two columns by two rows**, pushing the other tiles aside (FLIP, `grid-auto-flow: dense`; a tile in the last column opens to the left). Opened, it shows the maker (initial avatar), room and genre, **the last update** ("Updated 2 days ago" + what changed; sample data in `works.js`), the one-line description and "Open project". Clicking a tile goes to its project page. Leaving the tile closes it; passing over tiles quickly opens nothing; keyboard focus opens a tile at once. **Filter transition:** opening slides the panel in from the left (clip-path wipe) while the tiles re-flow from 4 to 3 a row and the panel's rows stagger in; closing slides it out first, then the tiles re-flow back to 4; newly shown genre groups slide in.
 
+**Browse spacing (22 Nov 2026, owner chose C of three):** five tiles a row (four with the filter open), 44px row gap, a smaller title band and room tabs, tile names 14px medium. Opened tiles still take two by two.
+
 **Focus (20 Nov 2026):** the owner has paused the home page; work only on the Browse page (`design/v6/browse.html`) for now.
 
 **Next step:** compare the v2 home with `design/v2/index.html`, check phone width by eye, look over the old project and maker pages under the new top bar and footer, then commit and push once the owner says yes.

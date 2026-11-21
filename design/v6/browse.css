@@ -313,3 +313,14 @@ html:has(.sea--c){background:#F4F8F8}
 .fp__group{display:block}
 @media (prefers-reduced-motion:reduce){.rc--arming .rc__media::before{transition:none}}
 .rc--big .rc__pic::after{background:linear-gradient(180deg,rgba(6,22,40,.32),rgba(6,22,40,0) 22%)}
+/* ---- roomier layout (owner chose C, 22 Nov 2026): five to a row (four with the panel), quieter header ---- */
+.grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:44px 30px}
+.has-panel .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.band{padding:30px 0 18px}.band h1{font-size:32px}.band p{font-size:15px}
+.sea--c .room,.room{width:132px;height:40px;font-size:14px}
+.rc__name{font-size:14px;font-weight:500;margin-top:10px}
+.rc__media{border-radius:10px}
+.sea--c .br__body,.br__body{margin-top:40px}
+.rc--big .rc__name{font-size:20px;font-weight:600}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.has-panel .grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.grid,.has-panel .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}}
