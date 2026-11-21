@@ -151,6 +151,8 @@ flow = Σ w(type) × 2^(−ageDays/14)
 
 **Awwwards research (20 Nov 2026):** the owner asked us to study https://www.awwwards.com/websites/sites_of_the_day/. The host is allowed on the environment, but awwwards drops every connection from the cloud session (connection reset / tunnel closed mid-exchange), and WebFetch cannot resolve it. Nothing from that page has been verified yet; waiting on screenshots from the owner.
 
+**Browse layout C (21 Nov 2026, owner chose C of three mockups in `design/browse-mock/`, plus the tile-to-player transition):** water band at the top with the page title ("Browse what students are building", live count) and the search row; a pale paper page below. The search row sticks under the top bar on scroll and both turn white. Results header: room name + count badge, "Sorted by" (most updates, name A to Z, maker A to Z). Every active filter shows as a removable chip, with Clear all. "/" jumps to search, Esc clears it. Search, room, genre and sort changes rise in with a short stagger. The player now grows out of the clicked tile and shrinks back into it on close (or sinks away if the tile scrolled off), keeps focus inside, and returns focus to the tile.
+
 **Focus (20 Nov 2026):** the owner has paused the home page; work only on the Browse page (`design/v6/browse.html`) for now.
 
 **Next step:** compare the v2 home with `design/v2/index.html`, check phone width by eye, look over the old project and maker pages under the new top bar and footer, then commit and push once the owner says yes.

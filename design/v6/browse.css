@@ -242,3 +242,67 @@ html:has(.sea){background:#A9CFF2}
 .rc__pic{box-shadow:none}
 .rc__media{box-shadow:0 18px 34px -20px rgba(var(--sea-shadow),.75)}
 .pl__full{z-index:3}
+
+/* ===================== option C (chosen 21 Nov 2026): water band on top, paper page below ===================== */
+.sea--c{--paper:#F4F8F8;--ink:#0D2B33;--mute:#5C7279;--line:#DCE7E8}
+html:has(.sea--c){background:#F4F8F8}
+.sea--c{color:var(--ink)}
+.sea--c .water{position:absolute;height:460px;-webkit-mask-image:linear-gradient(180deg,#000 68%,transparent);mask-image:linear-gradient(180deg,#000 68%,transparent)}
+/* bar: clear over the water, white once the toolbar sticks under it */
+.sea--c .gbar{transition:background .3s}
+.sea--c .gbar::before{transition:opacity .3s,background .3s}
+.sea--c .gbar--framed::before{background:rgba(255,255,255,.94);border-color:rgba(13,43,51,.08)}
+/* band */
+.band{padding:40px 0 26px}
+.band h1{font:600 clamp(30px,3.2vw,42px)/1.1 var(--f);letter-spacing:-.02em;color:#06303A;text-wrap:balance}
+.band p{margin-top:8px;font-size:17px;color:#1F5561}
+.band__n{font-variant-numeric:tabular-nums;font-weight:600}
+/* toolbar: solid white controls with a soft shadow; sticks under the bar */
+.sea--c .br{padding-top:0}
+.br__sentinel{height:1px}
+.sea--c .br__top{position:sticky;z-index:15;padding:10px 0;transition:background .25s,box-shadow .25s}
+.sea--c .br__top.is-stuck{background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45);
+  }
+.sea--c .fbtn.glass,.sea--c .sbar.glass{background:#fff;border:1px solid #fff;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 10px 24px -14px rgba(5,60,80,.45);border-radius:12px}
+.sea--c .br__top.is-stuck .fbtn.glass,.sea--c .br__top.is-stuck .sbar.glass{border-color:var(--line);box-shadow:none}
+.sea--c .fbtn.glass[aria-expanded="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sea--c .sbar.glass:focus-within{border-color:var(--acc,#0B7F86);box-shadow:0 0 0 4px rgba(11,127,134,.16)}
+.sea--c .sbar input::placeholder{color:#7C9196}
+.sea--c .rank__btn{background:#EEF4F5;box-shadow:none}
+.sea--c .rooms{margin-top:14px}
+.sea--c .room[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--ink)}
+/* results header: title + count badge, sort on the right (Awwwards) */
+.sea--c .br__body{margin-top:34px}
+.rhead{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:14px}
+.rhead h2{display:flex;align-items:center;gap:10px;font:600 21px/1 var(--f)}
+.rhead .count{font:600 12px/1 var(--f);padding:4px 7px;border-radius:5px;border:1px solid currentColor;color:var(--mute);font-variant-numeric:tabular-nums}
+.sort{position:relative;display:flex;align-items:center;gap:6px;color:var(--mute);font-size:14px}
+.sort select{appearance:none;border:0;background:none;font:600 14px var(--f);color:var(--ink);padding-right:16px;cursor:pointer}
+.sort svg{position:absolute;right:0;width:11px;height:11px;pointer-events:none;color:var(--ink)}
+.sort select:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+/* active filter chips */
+.active{display:flex;flex-wrap:wrap;gap:8px;margin:-2px 0 18px}
+.active[hidden]{display:none}
+.chipx{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 10px 0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font:500 14px/1 var(--f);cursor:pointer;transition:border-color .2s,background .2s}
+.chipx i{width:8px;height:8px;border-radius:2px;transform:rotate(45deg);background:var(--ri)}
+.chipx svg{width:11px;height:11px;color:var(--mute)}
+.chipx:hover{border-color:var(--ink)}.chipx:hover svg{color:var(--ink)}
+.chipx--all{border:0;background:none;color:var(--acc,#0B7F86);text-decoration:underline;text-underline-offset:3px;padding:0 6px}
+.chipx:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* filter panel: a plain column on the paper */
+.sea--c .fpanel{background:#fff;border:1px solid var(--line);box-shadow:none;border-radius:14px;top:150px}
+.sea--c .rc__name{color:var(--ink)}
+.sea--c .rc:hover .rc__name{color:#0B5F66}
+.sea--c .rc__media{box-shadow:0 1px 2px rgba(13,43,51,.06),0 16px 30px -22px rgba(13,43,51,.5)}
+.sea--c .none{background:#fff}
+/* player opens from its tile */
+.pl__clip::after{opacity:var(--fade,1);transition:opacity .3s}
+.pl__box{will-change:transform}
+.br{transform-origin:50% 20%}
+.rhead .count{position:static;display:inline-block;transform:none;margin:0}
+.sbar__key{font:600 12px/1 var(--f);color:var(--mute);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:3px 7px;margin-right:4px}
+.sbar__key[hidden]{display:none}
+.sbar:focus-within .sbar__key{display:none}
+/* stuck toolbar: full-width white strip, controls stay where they were */
+.sea--c .br__top.is-stuck{padding-left:0;padding-right:0;box-shadow:none;background:none}
+.sea--c .br__top.is-stuck::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45)}

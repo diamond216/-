@@ -10,7 +10,7 @@
 
   // ---------- state ----------
   class BrowseState extends EventTarget {
-    constructor() { super(); this.q = ""; this.tab = "All"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); }
+    constructor() { super(); this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); }
     set(fn) { fn(this); this.dispatchEvent(new Event("change")); }
     setTab(tab) { this.set((s) => { s.tab = tab; s.rooms.clear(); s.genres.clear(); }); }
     toggle(setName, v) { this.set((s) => { const set = s[setName]; set.has(v) ? set.delete(v) : set.add(v); if (setName === "rooms") s.dropOrphanGenres(); }); }
@@ -36,8 +36,15 @@
   class SearchBar {
     constructor(state) {
       const input = $("#q"), clear = $(".sbar__clear");
-      input.addEventListener("input", () => { state.set((s) => (s.q = input.value)); clear.hidden = !input.value; });
+      input.addEventListener("input", () => { state.set((s) => (s.q = input.value)); clear.hidden = !input.value; $(".sbar__key").hidden = !!input.value; });
       clear.addEventListener("click", () => { input.value = ""; clear.hidden = true; state.set((s) => (s.q = "")); input.focus(); });
+      // "/" jumps to the search from anywhere; Esc in the box clears it
+      addEventListener("keydown", (e) => {
+        const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName);
+        if (e.key === "/" && !typing && !document.documentElement.classList.contains("pl-on")) { e.preventDefault(); input.focus(); input.select(); }
+      });
+      input.addEventListener("keydown", (e) => { if (e.key === "Escape" && input.value) { e.stopPropagation(); clear.click(); } });
+      state.addEventListener("change", () => { if (input.value !== state.q) { input.value = state.q; clear.hidden = !state.q; } });
     }
   }
 
@@ -137,7 +144,7 @@
         <button type="button" class="rc__bell" aria-pressed="${following.has(w.id)}">${BELL}<span>${following.has(w.id) ? "Following" : "Notify me"}</span></button></div>
         <h3 class="rc__name" title="${w.name}">${w.name}</h3>`;
       Art.fill($(".cv", a), w);
-      $(".rc__open", a).addEventListener("click", () => this.onOpen(w));
+      $(".rc__open", a).addEventListener("click", () => this.onOpen(w, $(".rc__pic", a)));
       const bell = $(".rc__bell", a);
       bell.addEventListener("click", () => {
         const on = !following.has(w.id); on ? following.add(w.id) : following.delete(w.id);
@@ -152,54 +159,81 @@
   class Player {
     constructor() {
       this.el = document.createElement("div"); this.el.className = "pl"; this.el.hidden = true;
-      this.el.setAttribute("role", "dialog"); this.el.setAttribute("aria-modal", "true");
+      this.el.setAttribute("role", "dialog"); this.el.setAttribute("aria-modal", "true"); this.el.setAttribute("aria-labelledby", "pl-name");
       this.el.innerHTML = `<div class="pl__scrim"></div><div class="pl__box"><div class="pl__clip"><div class="cv"></div><p class="pl__line"></p><a class="pl__full" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8.5 8.5M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>View full</span></a></div>
         <button type="button" class="pl__x" aria-label="Close">&times;</button>
-
-        <p class="pl__title"></p></div>`;
+        <p class="pl__title" id="pl-name"></p></div>`;
       document.body.appendChild(this.el);
       $(".pl__scrim", this.el).addEventListener("click", () => this.close());
       $(".pl__x", this.el).addEventListener("click", () => this.close());
       addEventListener("keydown", (e) => {
         if (this.el.hidden) return;
-        if (e.key === "Escape") this.close();
+        if (e.key === "Escape") { e.preventDefault(); this.close(); }
+        if (e.key === "Tab") {                                   // keep focus inside the player
+          const f = [$(".pl__x", this.el), $(".pl__full", this.el)], i = f.indexOf(document.activeElement);
+          e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus();
+        }
       });
+      this.busy = false;
     }
-    open(list, w) {
-      this.list = list; this.i = list.indexOf(w); this.back = document.activeElement;
-      this.el.hidden = false; document.documentElement.classList.add("pl-on");
-      this.show(0);
-      if (!calm) {
-        $(".pl__scrim", this.el).animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: "ease-out" });
-        $(".pl__box", this.el).animate([{ opacity: 0, transform: "translateY(18px) scale(.97)" }, { opacity: 1, transform: "none" }], { duration: 380, easing: "cubic-bezier(.2,.8,.2,1)" });
-      }
-      $(".pl__x", this.el).focus();
-    }
-    async show(dir) {
-      const w = this.list[this.i], clip = $(".pl__clip", this.el);
-      if (dir && !calm) await clip.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: `translateY(${-dir * 30}px)` }], { duration: 180, easing: "ease-in", fill: "forwards" }).finished;
+    // the clip grows out of the tile's picture (FLIP), then its words and buttons come in
+    async open(w, src) {
+      if (this.busy || !this.el.hidden) return; this.busy = true;
+      this.back = document.activeElement; this.src = src;
+      const clip = $(".pl__clip", this.el), parts = [".pl__line", ".pl__full", ".pl__x", ".pl__title"].map((s) => $(s, this.el));
       if (this.preview) this.preview.stop();
       clip.querySelectorAll(".pv").forEach((p) => p.remove());
-      Art.fill($(".cv", clip), w);
+      const bare = { ...w, scribble: "" };                    // the clip carries its own line, so no label drawn in the picture
+      Art.fill($(".cv", clip), bare);
       $(".pl__line", this.el).textContent = w.blurb;
       $(".pl__title", this.el).innerHTML = `<b>${w.name}</b><span>${w.maker} · ${w.room} · ${w.genre}</span>`;
       $(".pl__full", this.el).setAttribute("aria-label", `View ${w.name} in full`);
-      this.preview = window.Previews.for(clip, w); clip.insertBefore(clip.lastElementChild, $(".pl__line", clip)); this.preview.start();
-      clip.getAnimations().forEach((a) => a.cancel());
-      if (dir && !calm) clip.animate([{ opacity: 0, transform: `translateY(${dir * 30}px)` }, { opacity: 1, transform: "none" }], { duration: 260, easing: "cubic-bezier(.2,.8,.2,1)" });
+      this.el.hidden = false; document.documentElement.classList.add("pl-on");
+      const from = src.getBoundingClientRect(), to = clip.getBoundingClientRect();
+      if (!calm) {
+        src.style.visibility = "hidden";
+        parts.forEach((p) => (p.style.opacity = "0")); clip.style.setProperty("--fade", 0);
+        const sx = from.width / to.width, sy = from.height / to.height;
+        $(".pl__scrim", this.el).animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: "ease-out" });
+        $(".br").animate([{ transform: "none" }, { transform: "scale(.985)" }], { duration: 600, easing: E2, fill: "forwards" });
+        await clip.animate([
+          { transformOrigin: "0 0", transform: `translate(${from.left - to.left}px,${from.top - to.top}px) scale(${sx},${sy})`, borderRadius: `${12 / sx}px / ${12 / sy}px` },
+          { transformOrigin: "0 0", transform: "none", borderRadius: "16px" },
+        ], { duration: 600, easing: E2 }).finished;
+        clip.style.setProperty("--fade", 1);
+        parts.forEach((p, i) => { p.style.opacity = ""; p.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "none" }], { duration: 340, delay: i * 50, easing: E2, fill: "backwards" }); });
+      }
+      this.preview = window.Previews.for(clip, bare); clip.insertBefore(clip.lastElementChild, $(".pl__line", clip)); this.preview.start();
+      $(".pl__x", this.el).focus({ preventScroll: true });
+      this.busy = false;
     }
     async close() {
-      if (this.el.hidden) return;
-      if (!calm) await Promise.all([
-        $(".pl__box", this.el).animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(12px) scale(.98)" }], { duration: 200, easing: "ease-in", fill: "forwards" }).finished,
-        $(".pl__scrim", this.el).animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: "forwards" }).finished,
-      ]);
+      if (this.el.hidden || this.busy) return; this.busy = true;
+      const clip = $(".pl__clip", this.el), src = this.src;
       if (this.preview) this.preview.stop();
+      const back = src && src.isConnected ? src.getBoundingClientRect() : null;
+      const onScreen = back && back.bottom > 0 && back.top < innerHeight;
+      if (!calm) {
+        const to = clip.getBoundingClientRect(), quiet = [".pl__line", ".pl__full", ".pl__x", ".pl__title"].map((s) => $(s, this.el));
+        clip.style.setProperty("--fade", 0);
+        quiet.forEach((p) => p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: "forwards" }));
+        $(".pl__scrim", this.el).animate([{ opacity: 1 }, { opacity: 0 }], { duration: 460, fill: "forwards" });
+        $(".br").animate([{ transform: "scale(.985)" }, { transform: "none" }], { duration: 520, easing: E2, fill: "forwards" });
+        // back into its tile if the tile is on screen; otherwise it sinks away
+        const frames = onScreen
+          ? [{ transformOrigin: "0 0", transform: "none", borderRadius: "16px" }, { transformOrigin: "0 0", transform: `translate(${back.left - to.left}px,${back.top - to.top}px) scale(${back.width / to.width},${back.height / to.height})`, borderRadius: `${12 / (back.width / to.width)}px / ${12 / (back.height / to.height)}px` }]
+          : [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(24px) scale(.96)" }];
+        await clip.animate(frames, { duration: onScreen ? 520 : 300, easing: E2, fill: "forwards" }).finished;
+      }
       this.el.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+      $(".br").getAnimations().forEach((a) => a.cancel());
+      if (src) src.style.visibility = "";
       this.el.hidden = true; document.documentElement.classList.remove("pl-on");
-      if (this.back) this.back.focus();
+      if (this.back && this.back.isConnected) this.back.focus({ preventScroll: true });
+      this.busy = false;
     }
   }
+  const E2 = "cubic-bezier(.2,.8,.2,1)";
   const player = new Player();
 
   // ---------- card motion: staggered exit and entrance, each awaited through Animation.finished ----------
@@ -223,7 +257,10 @@
         { transform: "translateY(-26px) scale(.92)", filter: "blur(8px)", clipPath: "inset(0 0 100% 0 round 16px)", opacity: 0 },
       ], { duration: 460, step: 38, easing: "cubic-bezier(.55,0,.7,.4)" });
     },
-    enter(grid) {
+    enter(grid, quick = false) {
+      if (quick) return this.play(grid, [
+        { transform: "translateY(14px)", filter: "blur(4px)", opacity: 0 }, { transform: "none", filter: "blur(0)", opacity: 1 },
+      ], { duration: 360, step: 22, easing: "cubic-bezier(.2,.8,.2,1)" });
       if (calm) return this.play(grid, [{ opacity: 0 }, { opacity: 1 }], { duration: 200, step: 0, easing: "linear" });
       // the new set rises from below, in the direction the old one left, unblurring as its wipe opens
       return this.play(grid, [
@@ -241,7 +278,7 @@
   const rankKey = (s) => [...s.ranks].sort().join(",");
   class ResultGrid {
     constructor(state) {
-      this.s = state; this.grid = $(".grid"); this.n = $(".results__n");
+      this.s = state; this.grid = $(".grid"); this.n = $(".count"); this.t = $(".rhead__t");
       this.activeRank = rankKey(state); this.pendingRank = this.activeRank; this.busy = false;
       state.addEventListener("change", () => this.onChange());
       this.paint();
@@ -249,7 +286,10 @@
     onChange() {
       this.pendingRank = rankKey(this.s);
       if (this.busy) return;                                          // the running transition reads the newest state at its swap
-      if (this.pendingRank === this.activeRank) { this.paint(); return; } // not a rank change: show it straight away
+      if (this.pendingRank === this.activeRank) {                       // not a rank change: show it straight away, with a short rise-in
+        if (this.paint() && !calm) CardMotion.enter(this.grid, true);
+        return;
+      }
       this.transition();
     }
     async transition() {
@@ -279,20 +319,62 @@
     }
     tierName(id) { return tiers.find((t) => t.id === id).name; }
     paint(force = false) {
-      const shown = works.filter((w) => this.s.matches(w)), sig = shown.map((w) => w.id).join("|");
-      if (!force && sig === this.sig && this.grid.childElementCount) return; // same set already on screen
+      const shown = sortWorks(works.filter((w) => this.s.matches(w)), this.s.sort), sig = shown.map((w) => w.id).join("|");
+      if (!force && sig === this.sig && this.grid.childElementCount) return false; // same set already on screen
       this.sig = sig;
-      this.n.textContent = `${shown.length} work${shown.length === 1 ? "" : "s"}`;
+      this.n.textContent = shown.length;
+      this.t.textContent = this.s.tab === "All" ? "All work" : this.s.tab;
       this.grid.innerHTML = "";
       if (!shown.length) {
         this.grid.innerHTML = `<p class="none">Nothing matches that yet. <button type="button">Clear the filters</button></p>`;
         $("button", this.grid).addEventListener("click", () => { $("#q").value = ""; $(".sbar__clear").hidden = true; this.s.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); });
-        return;
+        return true;
       }
-      shown.forEach((w) => this.grid.appendChild(new ResultCard(w, (x) => player.open(shown, x)).render()));
+      shown.forEach((w) => this.grid.appendChild(new ResultCard(w, (x, src) => player.open(x, src)).render()));
+      return true;
+    }
+  }
+
+  // ---------- sort ----------
+  const sortWorks = (list, by) => by === "az" ? [...list].sort((a, b) => a.name.localeCompare(b.name))
+    : by === "maker" ? [...list].sort((a, b) => a.maker.localeCompare(b.maker) || a.name.localeCompare(b.name)) : list;
+
+  // ---------- chips for every active filter, each removable, plus clear all ----------
+  class ActiveChips {
+    constructor(state) {
+      this.s = state; this.el = $(".active");
+      state.addEventListener("change", () => this.paint()); this.paint();
+    }
+    paint() {
+      const s = this.s, chips = [];
+      if (s.q.trim()) chips.push(["q", "", `“${s.q.trim()}”`]);
+      tiers.filter((t) => s.ranks.has(t.id)).forEach((t) => chips.push(["ranks", t.id, t.name, RANK_INK[t.id]]));
+      [...s.rooms].forEach((r) => chips.push(["rooms", r, r]));
+      [...s.genres].forEach((g) => chips.push(["genres", g, g]));
+      this.el.hidden = !chips.length;
+      this.el.innerHTML = chips.map(([k, v, l, ink]) => `<button type="button" class="chipx" data-k="${k}" data-v="${v}" aria-label="Remove ${l.replace(/[“”]/g, "")}">${ink ? `<i style="--ri:${ink}"></i>` : ""}${l}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`).join("")
+        + (chips.length > 1 ? `<button type="button" class="chipx chipx--all">Clear all</button>` : "");
+      this.el.querySelectorAll(".chipx").forEach((b) => b.addEventListener("click", () => {
+        if (b.classList.contains("chipx--all")) return s.set((x) => { x.q = ""; x.ranks.clear(); x.rooms.clear(); x.genres.clear(); });
+        if (b.dataset.k === "q") return s.set((x) => (x.q = ""));
+        s.toggle(b.dataset.k, b.dataset.v);
+      }));
+    }
+  }
+
+  // ---------- page chrome: count in the heading, sort box, white frame on the bar and toolbar once they stick ----------
+  class Chrome {
+    constructor(state) {
+      $(".band__n").textContent = works.length;
+      const sort = $("#sort"); sort.addEventListener("change", () => state.set((s) => (s.sort = sort.value)));
+      const bar = $(".gbar"), top = $(".br__top");
+      new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); bar.classList.toggle("gbar--framed", !e.isIntersecting); },
+        { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
+      top.style.top = bar.offsetHeight + "px";
     }
   }
 
   const state = new BrowseState();
+  new Chrome(state); new ActiveChips(state);
   new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
 })();
