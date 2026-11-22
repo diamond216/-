@@ -32,7 +32,6 @@
         ["email", "Email", `${h}.${this.w.id.split("-")[0]}@student.example.ac.th`, `mailto:${h}.${this.w.id.split("-")[0]}@student.example.ac.th`],
         ["phone", "Phone", `08${seed(this.w.name, 10)}-${String(100 + seed(h, 900))}-${n}`, null],
         ["line", "LINE", `@${h}_${this.w.id.split("-")[0]}`, null],
-        ["ig", "Instagram", `@${this.w.id.replace(/-/g, ".")}`, null],
       ];
     }
     team() {
@@ -87,8 +86,9 @@
             <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
               <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${value}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
               <p class="contact__note" role="status" aria-live="polite"></p></section>
-            <section class="box"><h3>Latest update</h3><p class="when">${updates[0][0]}</p><p class="what">${updates[0][1]}</p></section>
+
             <section class="box"><h3>Awards</h3><ul class="aw">${d.awards().map(([a, s, rank]) => `<li><span class="medal${rank ? " medal--rank" : ""}" aria-hidden="true">${rank ? "◆" : "★"}</span><span><b>${a}</b><i>${s}</i></span></li>`).join("")}</ul></section>
+            <section class="box"><h3>Latest update</h3><p class="when">${updates[0][0]}</p><p class="what">${updates[0][1]}</p></section>
           </aside>
         </div>
         ${this.more(w)}`;
@@ -112,7 +112,7 @@
         .sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).slice(0, 10).map(([x]) => x);
     }
     more(w) {
-      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">MORE LIKE THIS</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
+      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">EXPLORE MORE</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
     }
     fillMore(w) {
       const g = $(".like__g", this.root), { ResultCard, Expander } = window.Tiles;

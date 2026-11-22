@@ -1,5 +1,5 @@
 /* Project page (layout A, chosen 22 Nov 2026): title on the water band, clip + updates on the left, sticky cards on the right,
-   "More like this" (Browse tiles, same room/genre/platforms) at the foot. Uses the tokens of browse.css (.sea--c). */
+   "Explore more" (Browse tiles, same room/genre/platforms) at the foot. Uses the tokens of browse.css (.sea--c). */
 .pj{padding-bottom:90px}
 .pj__head{padding:30px 0 28px}
 .back{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:#0B5F66;border-radius:6px}
