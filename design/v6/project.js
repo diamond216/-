@@ -25,6 +25,16 @@
     };
     static AWARDS = [["Best of the school fair", "Science fair, Aug 2026"], ["People's pick", "Open house, Sep 2026"], ["Best newcomer", "Hamster Hub demo day, Oct 2026"]];
     constructor(w) { this.w = w; }
+    // how to reach the lead maker; sample values on reserved domains and a made-up number
+    contact() {
+      const h = this.w.maker.toLowerCase(), n = String(1000 + seed(this.w.id, 9000)).padStart(4, "0");
+      return [
+        ["email", "Email", `${h}.${this.w.id.split("-")[0]}@student.example.ac.th`, `mailto:${h}.${this.w.id.split("-")[0]}@student.example.ac.th`],
+        ["phone", "Phone", `08${seed(this.w.name, 10)}-${String(100 + seed(h, 900))}-${n}`, null],
+        ["line", "LINE", `@${h}_${this.w.id.split("-")[0]}`, null],
+        ["ig", "Instagram", `@${this.w.id.replace(/-/g, ".")}`, null],
+      ];
+    }
     team() {
       const others = [...new Set(works.filter((x) => x.room === this.w.room && x.maker !== this.w.maker).map((x) => x.maker))];
       const size = 2 + seed(this.w.id, 3), start = seed(this.w.name, others.length);
@@ -41,6 +51,16 @@
       return [[`${t.name} rank`, `Hamster Nest, place ${tiers.indexOf(t) * 10 + this.w.place} of 50`, true], ...extra.map(([a, b]) => [a, b, false])];
     }
   }
+
+  const ICON = {
+    email: '<path d="M3 6.5h18v11H3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 7l8.5 6.5L20.5 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    phone: '<path d="M7 3.5h3l1.5 4-2 1.3a10 10 0 005.7 5.7l1.3-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 015 5.7 2 2 0 017 3.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    line: '<path d="M12 4C7 4 3 7.2 3 11.1c0 3.5 3.1 6.4 7.4 7l-.5 2.4 3.4-2.3c4.3-.5 7.7-3.5 7.7-7.1C21 7.2 17 4 12 4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+    ig: '<rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16.8" cy="7.2" r="1" fill="currentColor"/>',
+    copy: '<rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3" fill="none" stroke="currentColor" stroke-width="1.7"/>',
+    ok: '<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  };
+  const svg = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg>`;
 
   // ---------- page ----------
   class ProjectPage {
@@ -64,13 +84,17 @@
           </div>
           <aside class="pj__side">
             <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><b>${n}</b><i>${r}</i></span></li>`).join("")}</ul><a class="say" href="#">Say hi to the team</a></section>
+            <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
+              <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${value}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
+              <p class="contact__note" role="status" aria-live="polite"></p></section>
             <section class="box"><h3>Latest update</h3><p class="when">${updates[0][0]}</p><p class="what">${updates[0][1]}</p></section>
             <section class="box"><h3>Awards</h3><ul class="aw">${d.awards().map(([a, s, rank]) => `<li><span class="medal${rank ? " medal--rank" : ""}" aria-hidden="true">${rank ? "◆" : "★"}</span><span><b>${a}</b><i>${s}</i></span></li>`).join("")}</ul></section>
           </aside>
         </div>
         ${this.more(w)}`;
       Art.fill($(".media .cv", this.root), w, 1);
-      this.root.querySelectorAll(".cl__pic").forEach((el) => Art.fill(el, works.find((x) => x.id === el.dataset.id)));
+      this.fillMore(w);
+      this.root.querySelectorAll(".cp").forEach((b) => b.addEventListener("click", () => this.copy(b)));
       const play = $(".play", this.root), media = $(".media", this.root);
       this.preview = window.Previews.for(media, { ...w, scribble: "" });
       media.insertBefore(media.lastElementChild, play);
@@ -81,15 +105,29 @@
       });
       if (!calm) this.enter();
     }
-    // the rest of the class: same room first, then the others, numbered like a hall of fame
+    // works that share this one's room, genre or platforms, most alike first
+    similar(w) {
+      const score = (x) => (x.room === w.room ? 4 : 0) + (x.genre === w.genre ? 3 : 0) + x.platforms.filter((p) => w.platforms.includes(p)).length;
+      return works.filter((x) => x.id !== w.id).map((x) => [x, score(x)]).filter(([, s]) => s > 0)
+        .sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).slice(0, 10).map(([x]) => x);
+    }
     more(w) {
-      const list = [...works.filter((x) => x.room === w.room && x.id !== w.id), ...works.filter((x) => x.room !== w.room)].slice(0, 10);
-      return `<section class="class" aria-labelledby="class-h"><div class="class__h"><h2 id="class-h">MORE FROM THE CLASS</h2><span>HALL OF FAME · 2026</span></div>
-        <div class="class__g">${list.map((x, i) => `<a class="cl" href="project.html#${x.id}" style="--ri:${INK[x.tier]}"><span class="cl__pic cv" data-id="${x.id}"></span><b>${x.name}</b><span class="cl__n">${String(i + 1).padStart(2, "0")}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4.5 3H9v4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></a>`).join("")}</div></section>`;
+      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">MORE LIKE THIS</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
+    }
+    fillMore(w) {
+      const g = $(".like__g", this.root), { ResultCard, Expander } = window.Tiles;
+      this.similar(w).forEach((x) => g.appendChild(new ResultCard(x).render()));
+      if (this.ex) this.ex.collapse(false);
+      this.ex = new Expander(g);
+    }
+    copy(btn) {
+      const note = $(".contact__note", this.root), done = (msg) => { note.textContent = msg; btn.innerHTML = svg("ok"); btn.classList.add("is-done");
+        btn.animate([{ transform: "scale(.8)" }, { transform: "scale(1)" }], { duration: 220, easing: "cubic-bezier(.34,1.5,.64,1)" }).finished.then(() => btn.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 1600 }).finished).then(() => { btn.innerHTML = svg("copy"); btn.classList.remove("is-done"); }); };
+      navigator.clipboard.writeText(btn.dataset.v).then(() => done(`Copied ${btn.dataset.v}`), () => done(`Select and copy: ${btn.dataset.v}`));
     }
     enter() {
       const E = "cubic-bezier(.2,.8,.2,1)";
-      const seq = [".back", ".tags", ".title", ".blurb", ".media", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".log"];
+      const seq = [".back", ".tags", ".title", ".blurb", ".media", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".pj__side .box:nth-child(4)", ".log"];
       seq.forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(14px)", filter: "blur(4px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { duration: 520, delay: i * 55, easing: E, fill: "backwards" }); });
     }
     stop() { if (this.preview) this.preview.stop(); }
