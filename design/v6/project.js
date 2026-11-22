@@ -25,6 +25,16 @@
     };
     static AWARDS = [["Best of the school fair", "Science fair, Aug 2026"], ["People's pick", "Open house, Sep 2026"], ["Best newcomer", "Hamster Hub demo day, Oct 2026"]];
     constructor(w) { this.w = w; }
+    // a few paragraphs about the work, written the way a student would put it
+    description() {
+      const W = this.w, D = {
+        Game: [`We started ${W.name} in a two-week game jam and kept going because people kept asking for the next level.`, "It runs on a school laptop without a graphics card, and two people can play on one keyboard.", "Next we want to add a level editor so the class can make their own maps."],
+        IoT: [`${W.name} began as a science project and is now running every day.`, "The board is an ESP32 in a 3D-printed case. It sends a reading every ten minutes and a message when something is off.", "We are looking for a second place to test it before we make ten more."],
+        Web: [`${W.name} is a small site we built because we needed it ourselves.`, "It works on old phones and slow school Wi-Fi, and it needs no sign-up to read.", "Teachers asked for a version for their own classes, so that is what we are building next."],
+        Idea: [`${W.name} is still an idea, but a tested one.`, "We ran a one-week trial with friends and wrote down what worked and what didn't.", "We need one teacher or adult to back it before we try it with a whole class."],
+      }[W.room];
+      return D;                                               // the one-line blurb is already under the title
+    }
     // how to reach the lead maker; sample values on reserved domains and a made-up number
     contact() {
       const h = this.w.maker.toLowerCase(), n = String(1000 + seed(this.w.id, 9000)).padStart(4, "0");
@@ -42,7 +52,9 @@
     }
     updates() {
       const ago = ["5 days ago", "2 weeks ago"];
-      return [[this.w.update.when, this.w.update.what, this.w.blurb], ...SampleDetails.MORE[this.w.room].map(([a, b], i) => [ago[i], a, b])];
+      const NOTE = { Game: "New caves, a new boss, and a checkpoint just before it.", IoT: "Lighter, sealed against rain, and the antenna now sits outside the box.",
+        Web: "Every page got lighter: the home page went from 2 MB to 300 KB.", Idea: "We counted who came back in week two: eight out of ten." };
+      return [[this.w.update.when, this.w.update.what, NOTE[this.w.room]], ...SampleDetails.MORE[this.w.room].map(([a, b], i) => [ago[i], a, b])];
     }
     awards() {
       const t = tiers.find((x) => x.id === this.w.tier);
@@ -79,6 +91,7 @@
         <div class="pj__grid">
           <div class="pj__main">
             <div class="media"><div class="cv"></div><button type="button" class="play" aria-label="Play the clip of ${w.name}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z" fill="currentColor"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button></div>
+            <section class="about" aria-labelledby="about-h"><h2 id="about-h">About this project</h2>${d.description().map((p, i) => `<p${i ? "" : ' class="about__lead"'}>${p}</p>`).join("")}</section>
             <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates</h2><ol>${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><time>${when}</time><div><b>${what}</b><p>${more}</p></div></li>`).join("")}</ol></section>
           </div>
           <aside class="pj__side">
@@ -88,7 +101,6 @@
               <p class="contact__note" role="status" aria-live="polite"></p></section>
 
             <section class="box"><h3>Awards</h3><ul class="aw">${d.awards().map(([a, s, rank]) => `<li><span class="medal${rank ? " medal--rank" : ""}" aria-hidden="true">${rank ? "◆" : "★"}</span><span><b>${a}</b><i>${s}</i></span></li>`).join("")}</ul></section>
-            <section class="box"><h3>Latest update</h3><p class="when">${updates[0][0]}</p><p class="what">${updates[0][1]}</p></section>
           </aside>
         </div>
         ${this.more(w)}`;
@@ -127,7 +139,7 @@
     }
     enter() {
       const E = "cubic-bezier(.2,.8,.2,1)";
-      const seq = [".back", ".tags", ".title", ".blurb", ".media", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".pj__side .box:nth-child(4)", ".log"];
+      const seq = [".back", ".tags", ".title", ".blurb", ".media", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".about", ".log"];
       seq.forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(14px)", filter: "blur(4px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { duration: 520, delay: i * 55, easing: E, fill: "backwards" }); });
     }
     stop() { if (this.preview) this.preview.stop(); }
