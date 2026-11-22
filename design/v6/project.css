@@ -92,4 +92,17 @@ a.tag--room:hover{background:#0B5F66}
 .pj__side,.pj__side .box{min-width:0}
 .contact ul,.team,.aw{grid-template-columns:minmax(0,1fr)}
 .contact li{min-width:0}
-.cv2 a,.cv2 b{white-space:normal;overflow-wrap:anywhere;text-overflow:clip;line-height:1.35}
+.cv2 a,.cv2 b{white-space:normal;overflow-wrap:break-word;text-overflow:clip;line-height:1.35}
+/* a little larger, more air (owner, 22 Nov 2026) */
+.pj.wrap{width:min(1160px,100% - 64px)}
+.pj__head{padding:30px 0 28px}
+.title{font-size:44px;margin:14px 0 10px}.blurb{font-size:17.5px}
+.tags{margin-top:16px}
+.pj__grid{grid-template-columns:minmax(0,1fr) 320px;gap:36px;padding-top:32px}
+.pj__side{gap:18px}
+.box{padding:18px 20px}.box h3{margin-bottom:12px}
+.team li,.aw li,.contact li{padding:12px 0}
+.say{margin-top:16px}
+.log{margin-top:44px}.log h2{margin-bottom:14px}.log li{padding:18px 0}
+.like{margin-top:84px;padding-top:34px}.like__h{margin-bottom:30px}.like__h h2{font-size:64px}
+.like .grid{gap:40px 26px}
