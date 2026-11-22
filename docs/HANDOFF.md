@@ -157,6 +157,8 @@ flow = Σ w(type) × 2^(−ageDays/14)
 
 **Browse spacing (22 Nov 2026, owner chose C of three):** five tiles a row (four with the filter open), 44px row gap, a smaller title band and room tabs, tile names 14px medium. Opened tiles still take two by two.
 
+**Project page (22 Nov 2026, owner chose layout A of three in `design/project-mock/`):** `design/v6/project.html#<work-id>`, opened from every Browse tile. Same glass top bar and Lagoon water band as Browse. On the band: "Back to Browse", room/genre/platform tags and a rank chip, the title and one line. Left: the clip (play button starts the preview and moves to the corner as pause) and an Updates list, newest first. Right, sticky: Team (avatar, name, role, "Say hi to the team"), Latest update, Awards (the rank first). Foot: "MORE FROM THE CLASS" in Anton with a "HALL OF FAME · 2026" label, ten numbered works (same room first) that link to their own pages through the hash. Team, roles, awards and older updates are sample data in `SampleDetails` (`project.js`), the one place to swap for real data.
+
 **Focus (20 Nov 2026):** the owner has paused the home page; work only on the Browse page (`design/v6/browse.html`) for now.
 
 **Next step:** compare the v2 home with `design/v2/index.html`, check phone width by eye, look over the old project and maker pages under the new top bar and footer, then commit and push once the owner says yes.

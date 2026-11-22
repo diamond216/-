@@ -172,7 +172,7 @@
     render() {
       const w = this.w, t = tiers.find((x) => x.id === w.tier), a = document.createElement("article");
       a.className = "rc"; a.dataset.id = w.id; a.style.setProperty("--ri", RANK_INK[w.tier]);
-      a.innerHTML = `<div class="rc__media"><a class="rc__open" href="#" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
+      a.innerHTML = `<div class="rc__media"><a class="rc__open" href="project.html#${w.id}" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
         <span class="rc__flag" aria-hidden="true">${GEM}<b>${t.name}</b></span>
         <button type="button" class="rc__bell" aria-pressed="${following.has(w.id)}">${BELL}<span>${following.has(w.id) ? "Following" : "Notify me"}</span></button></div>
         <h3 class="rc__name" title="${w.name}">${w.name}</h3>
