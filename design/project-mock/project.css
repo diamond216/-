@@ -1,0 +1,55 @@
+/* project page mockups; sits on ../browse-mock/mock.css (bar, water, tokens) */
+.pj{width:min(1312px,100% - 48px);margin:0 auto;padding-bottom:80px}
+.L{display:none}.pa .L--a,.pb .L--b,.pc .L--c{display:block}
+.opt-c .water{height:420px}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;color:#0B5F66}.back svg{width:15px;height:15px}
+.back:hover{text-decoration:underline;text-underline-offset:3px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.tag{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid rgba(13,43,51,.12);font-size:13px;font-weight:500}
+.tag--room{background:#0D2B33;color:#fff;border-color:#0D2B33}
+.rk{padding:4px 10px;border-radius:999px;background:var(--ri);color:#fff;font-size:13px;font-weight:600}
+.title{font:600 clamp(38px,4.4vw,58px)/1.05 var(--f);letter-spacing:-.025em;margin:14px 0 8px;color:#06303A}
+.blurb{font-size:18px;color:#1F5561;max-width:52ch}
+.media{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#123;box-shadow:0 24px 50px -28px rgba(10,50,70,.6)}
+.media .cv,.media svg{position:absolute;inset:0;width:100%;height:100%}
+.play{position:absolute;left:50%;top:50%;width:68px;height:68px;margin:-34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.9);color:#0D2B33;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.play svg{position:static;width:28px;height:28px;margin-left:3px}
+.box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.box h3{font:600 12px/1 var(--f);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
+.team{list-style:none;display:grid;gap:10px}.team li{display:flex;gap:12px;align-items:center}
+.team b,.aw b{display:block;font-weight:600;font-size:15px;line-height:1.3}.team i,.aw i{display:block;font-style:normal;font-size:13px;color:var(--mute)}
+.av{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:hsl(var(--h) 55% 88%);color:hsl(var(--h) 45% 28%);font-weight:700}
+.say{display:block;margin-top:14px;text-align:center;padding:10px;border-radius:10px;background:#0D2B33;color:#fff;font-weight:600;font-size:14px}
+.when{font-size:13px;color:#0B5F66;font-weight:600}.what{font-weight:600;font-size:16px;margin-top:2px}.more-u{font-size:14px;color:var(--mute);margin-top:4px}
+.aw{list-style:none;display:grid;gap:10px}.aw li{display:flex;gap:12px;align-items:center}
+.medal{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#FFF3D6;color:#B07B10;font-size:15px}
+.medal--rank{background:var(--ri);color:#fff}
+.log{margin-top:40px}.log h2{font:600 22px/1 var(--f);margin-bottom:10px}
+.log ol{list-style:none}.log li{display:grid;grid-template-columns:110px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.log time{font-size:13px;color:var(--mute);padding-top:2px}.log b{font-weight:600}.log p{color:var(--mute);font-size:14px;margin-top:2px}
+/* A: water band head, media + timeline left, sticky side cards right */
+.band2{padding:30px 0 26px}
+.grid2{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start}
+.grid2 aside{display:grid;gap:14px;position:sticky;top:80px}
+/* B: media left, everything about it on the right, above the fold */
+.split{display:grid;grid-template-columns:1.55fr 1fr;gap:30px;padding-top:28px;align-items:start}
+.split .side{display:grid;gap:14px}.split .title{font-size:40px;margin-top:10px}.split .blurb{font-size:16px}
+.split .tags{margin-top:12px}
+/* C: full-width poster with the title on it, three cards under */
+.poster{position:relative;margin-top:26px}
+.poster .media{aspect-ratio:21/9}
+.poster .media::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,18,26,.85),rgba(4,18,26,0) 60%)}
+.poster .play{left:auto;right:40px;top:auto;bottom:40px;margin:0;z-index:2}
+.poster__t{position:absolute;left:36px;bottom:30px;z-index:2;color:#fff}
+.poster__t .title{color:#fff}.poster__t .blurb{color:#D6EEF2}.poster__t .back{color:#fff}
+.poster__t .tag{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.3)}.poster__t .tag--room{background:#fff;color:#0D2B33}
+.cols{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:16px;margin-top:18px}
+/* More from the class (after the reference) */
+.class{margin-top:70px;padding-top:28px;border-top:1px solid #CFDCDD}
+.class__h{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:22px}
+.class__h h2{font:400 clamp(48px,6vw,92px)/.9 "Anton",sans-serif;letter-spacing:.005em;color:#0D2B33}
+.class__h span{font:600 12px/1 var(--f);letter-spacing:.18em;color:#0B7F86;padding-bottom:8px}
+.class__g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:34px 18px}
+.cl{display:block}.cl__pic{position:relative;aspect-ratio:1.6;border-radius:10px;overflow:hidden}.cl__pic svg{width:100%;height:100%}
+.cl b{display:block;margin-top:10px;font-weight:600;font-size:15px}
+.cl span{display:block;margin-top:14px;font:600 12px/1 var(--f);letter-spacing:.1em;color:#0B7F86}
