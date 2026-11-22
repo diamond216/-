@@ -69,3 +69,27 @@ a.tag--room:hover{background:#0B5F66}
 /* optical centring (see browse.css): fixed-height pills, labels trimmed to cap height */
 .tag,.rk{display:inline-flex;align-items:center;height:28px;padding:0 12px;line-height:1;text-box:trim-both cap alphabetic}
 .say{display:flex;align-items:center;justify-content:center;height:42px;padding:0;line-height:1;text-box:trim-both cap alphabetic}
+/* ---- compact page (owner chose C, 22 Nov 2026, with larger text and dividers) ---- */
+.pj.wrap{width:min(1080px,100% - 64px)}
+.pj__head{padding:22px 0 20px}
+.title{font-size:40px;margin-top:10px}.blurb{font-size:17px}
+.tags{margin-top:12px}
+.pj__grid{grid-template-columns:minmax(0,1fr) 300px;gap:24px;padding-top:22px;border-top:1px solid rgba(13,43,51,.12)}
+.box{padding:14px 16px;border-radius:12px}.box h3{margin-bottom:8px}
+.pj__side{gap:12px}
+.team,.aw{gap:0}.contact ul{gap:0}
+/* dividers between the rows of each card */
+.team li,.aw li{padding:9px 0;border-top:1px solid var(--line)}.team li:first-child,.aw li:first-child{border-top:0;padding-top:2px}
+.contact li{margin:0;padding:9px 0;border-top:1px solid var(--line);border-radius:0}.contact li:first-child{border-top:0;padding-top:2px}
+.contact li:hover{background:none}
+.av,.medal{width:32px;height:32px;font-size:14px}.ci{width:32px;height:32px}
+.team b,.aw b{font-size:15px}.team i,.aw i,.cv2 i{font-size:13px}.cv2 b,.cv2 a{font-size:14.5px}
+.what{font-size:15.5px}.say{height:40px;font-size:15px}
+.log{margin-top:28px}.log h2{font-size:20px}.log li{padding:13px 0}.log b{font-size:15.5px}.log p{font-size:14.5px}
+.like{margin-top:56px}.like__h h2{font-size:60px}
+.like .grid{gap:34px 22px}
+/* the side column never grows past 300px: long values (email) cut with an ellipsis instead */
+.pj__side,.pj__side .box{min-width:0}
+.contact ul,.team,.aw{grid-template-columns:minmax(0,1fr)}
+.contact li{min-width:0}
+.cv2 a,.cv2 b{white-space:normal;overflow-wrap:anywhere;text-overflow:clip;line-height:1.35}
