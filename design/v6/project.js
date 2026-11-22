@@ -18,13 +18,17 @@
       Idea: ["Lead, the plan", "Money and numbers", "Talking to people", "Poster and pitch"],
     };
     static MORE = {
-      Game: [["Fixed the jump that felt floaty", "Lowered gravity at the top of the jump and added coyote time."], ["Posted the two-player demo", "Both players on one keyboard, WASD and arrows."]],
-      IoT: [["Swapped to a cheaper sensor", "Same readings within 2 percent, half the price."], ["First prototype on the bench", "Breadboard, a power bank and a lot of tape."]],
-      Web: [["Moved to a new host", "Pages load in under a second from school Wi-Fi."], ["First version online", "Twelve classmates tried it on day one."]],
-      Idea: [["Wrote the one-page plan", "Who it's for, what it costs, and what we need first."], ["Asked thirty classmates", "Twenty-one said they would join."]],
+      Game: [["Fixed the jump that felt floaty", "Lowered gravity at the top of the jump and added coyote time."], ["Posted the two-player demo", "Both players on one keyboard, WASD and arrows."], ["New tileset for the caves", "Kaew redrew every rock so the two worlds look different."], ["Playtest at lunch", "Fourteen people played; most got stuck on the same ladder, so we moved it."], ["Music for the first level", "A short loop that speeds up when the lava rises."], ["First build that runs", "One room, one enemy, and a jump that felt wrong."]],
+      IoT: [["Swapped to a cheaper sensor", "Same readings within 2 percent, half the price."], ["First prototype on the bench", "Breadboard, a power bank and a lot of tape."], ["Messages in Thai", "Alerts now come in Thai or English."], ["Survived a week of rain", "No water inside the case after seven days outdoors."], ["Battery test", "Two AA cells lasted 16 days with a reading every ten minutes."], ["Parts list posted", "Everything costs under 600 baht."]],
+      Web: [["Moved to a new host", "Pages load in under a second from school Wi-Fi."], ["First version online", "Twelve classmates tried it on day one."], ["Search that understands Thai", "Typing part of a word now finds it."], ["Bigger buttons on phones", "Tested with the oldest phone in the class."], ["Teachers can post too", "A teacher account with its own page."], ["Wrote the help page", "Five questions people asked most."]],
+      Idea: [["Wrote the one-page plan", "Who it's for, what it costs, and what we need first."], ["Asked thirty classmates", "Twenty-one said they would join."], ["Talked to the school office", "They said yes to a trial if a teacher signs."], ["Made the poster", "Put up in the canteen and on the class chat."], ["Ran the numbers again", "It still works if only eight people join."], ["The idea, on a napkin", "Where it all started, at lunch."]],
     };
     static AWARDS = [["Best of the school fair", "Science fair, Aug 2026"], ["People's pick", "Open house, Sep 2026"], ["Best newcomer", "Hamster Hub demo day, Oct 2026"]];
     constructor(w) { this.w = w; }
+    // what you can take home: label, detail, button word
+    download() {
+      return { Game: ["Free download", `${this.w.platforms.join(", ")} · 84 MB`], IoT: ["Code and case files", "ZIP · 2.1 MB"], Web: ["Source code", "ZIP · 640 KB"], Idea: ["The plan, as a PDF", "PDF · 1.2 MB"] }[this.w.room];
+    }
     // a few paragraphs about the work, written the way a student would put it
     description() {
       const W = this.w, D = {
@@ -51,7 +55,7 @@
       return names.map((n, i) => [n, SampleDetails.ROLES[this.w.room][i]]);
     }
     updates() {
-      const ago = ["5 days ago", "2 weeks ago"];
+      const ago = ["5 days ago", "1 week ago", "2 weeks ago", "3 weeks ago", "last month", "2 months ago"];
       const NOTE = { Game: "New caves, a new boss, and a checkpoint just before it.", IoT: "Lighter, sealed against rain, and the antenna now sits outside the box.",
         Web: "Every page got lighter: the home page went from 2 MB to 300 KB.", Idea: "We counted who came back in week two: eight out of ten." };
       return [[this.w.update.when, this.w.update.what, NOTE[this.w.room]], ...SampleDetails.MORE[this.w.room].map(([a, b], i) => [ago[i], a, b])];
@@ -87,12 +91,19 @@
           <p class="tags"><a class="tag tag--room" href="browse.html">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
           <h1 class="title">${w.name}</h1>
           <p class="blurb">${w.blurb}</p>
+          <div class="dl"><span><b>${d.download()[0]}</b><i>${d.download()[1]}</i></span><a class="dl__btn" href="#" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</a></div>
         </div>
         <div class="pj__grid">
           <div class="pj__main">
-            <div class="media"><div class="cv"></div><button type="button" class="play" aria-label="Play the clip of ${w.name}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z" fill="currentColor"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button></div>
+            <div class="gal" role="region" aria-roledescription="carousel" aria-label="Clip and pictures of ${w.name}">
+              <div class="gal__track" tabindex="0">${this.slides(w).map((s, i) => `<figure class="gal__slide${s.clip ? " media" : ""}" data-i="${i}" aria-label="${s.label}"><div class="cv"></div>${s.clip ? `<button type="button" class="play" aria-label="Play the clip of ${w.name}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z" fill="currentColor"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button><span class="gal__kind">Clip</span>` : ""}</figure>`).join("")}</div>
+              <button type="button" class="gal__nav gal__nav--prev" aria-label="Previous"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button type="button" class="gal__nav gal__nav--next" aria-label="Next"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span class="gal__count" aria-live="polite"></span>
+            </div>
+            <div class="thumbs">${this.slides(w).map((s, i) => `<button type="button" class="thumb" data-i="${i}" aria-label="Show ${s.label}"><span class="cv"></span>${s.clip ? '<i aria-hidden="true">▶</i>' : ""}</button>`).join("")}</div>
             <section class="about" aria-labelledby="about-h"><h2 id="about-h">About this project</h2>${d.description().map((p, i) => `<p${i ? "" : ' class="about__lead"'}>${p}</p>`).join("")}</section>
-            <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates</h2><ol>${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><time>${when}</time><div><b>${what}</b><p>${more}</p></div></li>`).join("")}</ol></section>
+            <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><time>${when}</time><div><b>${what}</b><p>${more}</p></div></li>`).join("")}</ol></section>
           </div>
           <aside class="pj__side">
             <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><b>${n}</b><i>${r}</i></span></li>`).join("")}</ul><a class="say" href="#">Say hi to the team</a></section>
@@ -104,18 +115,50 @@
           </aside>
         </div>
         ${this.more(w)}`;
-      Art.fill($(".media .cv", this.root), w, 1);
+      this.gallery(w);
+      this.scroller($(".log__list", this.root));
       this.fillMore(w);
       this.root.querySelectorAll(".cp").forEach((b) => b.addEventListener("click", () => this.copy(b)));
-      const play = $(".play", this.root), media = $(".media", this.root);
-      this.preview = window.Previews.for(media, { ...w, scribble: "" });
-      media.insertBefore(media.lastElementChild, play);
-      play.addEventListener("click", () => {
-        const on = play.getAttribute("aria-pressed") !== "true";
-        play.setAttribute("aria-pressed", on); play.setAttribute("aria-label", `${on ? "Pause" : "Play"} the clip of ${w.name}`);
-        media.classList.toggle("is-playing", on); on ? this.preview.start() : this.preview.stop();
-      });
       if (!calm) this.enter();
+    }
+    // the clip first, then pictures (frames of the work's art stand in for screenshots)
+    slides(w) { return [{ clip: true, label: "Clip", frame: 1 }, ...[2, 3, 4, 5].map((f, i) => ({ clip: false, label: `Picture ${i + 1}`, frame: f }))]; }
+    gallery(w) {
+      const root = $(".gal", this.root), track = $(".gal__track", root), slides = [...track.children], thumbs = [...this.root.querySelectorAll(".thumb")];
+      const list = this.slides(w), bare = { ...w, scribble: "" };
+      slides.forEach((s, i) => Art.fill($(".cv", s), bare, list[i].frame));
+      thumbs.forEach((t, i) => Art.fill($(".cv", t), bare, list[i].frame));
+      // the clip
+      const clip = slides[0], play = $(".play", clip);
+      this.preview = window.Previews.for(clip, bare); clip.insertBefore(clip.lastElementChild, play);
+      const setPlay = (on) => { play.setAttribute("aria-pressed", on); play.setAttribute("aria-label", `${on ? "Pause" : "Play"} the clip of ${w.name}`); clip.classList.toggle("is-playing", on); on ? this.preview.start() : this.preview.stop(); };
+      play.addEventListener("click", () => setPlay(play.getAttribute("aria-pressed") !== "true"));
+      // moving between slides: scroll-snap does the swipe; buttons, thumbnails and arrow keys scroll to a slide
+      let at = 0;
+      const go = (i) => { i = Math.max(0, Math.min(slides.length - 1, i)); track.scrollTo({ left: slides[i].offsetLeft, behavior: calm ? "auto" : "smooth" }); };
+      const mark = () => {
+        const i = Math.round(track.scrollLeft / track.clientWidth); if (i === at && root.dataset.ready) return;
+        at = i; root.dataset.ready = 1;
+        thumbs.forEach((t, k) => t.setAttribute("aria-current", k === i));
+        $(".gal__count", root).textContent = `${i + 1} / ${slides.length}`;
+        $(".gal__nav--prev", root).disabled = i === 0; $(".gal__nav--next", root).disabled = i === slides.length - 1;
+        if (i !== 0 && play.getAttribute("aria-pressed") === "true") setPlay(false);   // leaving the clip pauses it
+        thumbs[i].scrollIntoView({ block: "nearest", inline: "nearest", behavior: calm ? "auto" : "smooth" });
+      };
+      track.addEventListener("scroll", () => requestAnimationFrame(mark), { passive: true });
+      $(".gal__nav--prev", root).addEventListener("click", () => go(at - 1));
+      $(".gal__nav--next", root).addEventListener("click", () => go(at + 1));
+      thumbs.forEach((t, i) => t.addEventListener("click", () => go(i)));
+      track.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); go(at + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(at - 1); } });
+      mark();
+    }
+    // a scrolling list shows a fade at whichever end still has more
+    scroller(el) {
+      const set = () => {
+        el.classList.toggle("has-more-below", el.scrollTop + el.clientHeight < el.scrollHeight - 2);
+        el.classList.toggle("has-more-above", el.scrollTop > 2);
+      };
+      el.addEventListener("scroll", set, { passive: true }); addEventListener("resize", set); set();
     }
     // works that share this one's room, genre or platforms, most alike first
     similar(w) {
@@ -139,7 +182,7 @@
     }
     enter() {
       const E = "cubic-bezier(.2,.8,.2,1)";
-      const seq = [".back", ".tags", ".title", ".blurb", ".media", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".about", ".log"];
+      const seq = [".back", ".tags", ".title", ".blurb", ".gal", ".thumbs", ".dl", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".about", ".log"];
       seq.forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(14px)", filter: "blur(4px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { duration: 520, delay: i * 55, easing: E, fill: "backwards" }); });
     }
     stop() { if (this.preview) this.preview.stop(); }

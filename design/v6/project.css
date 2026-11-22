@@ -112,3 +112,48 @@ a.tag--room:hover{background:#0B5F66}
 .about p{font-size:16px;line-height:1.7;color:#2E4E55;margin-top:10px}
 .about .about__lead{font-size:18px;color:var(--ink);margin-top:0}
 .log{margin-top:40px;padding-top:28px;border-top:1px solid var(--line)}
+/* ---- head: download pill on the right, after Apple's price-and-buy pill ---- */
+.pj__head{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:32px;align-items:end}
+.pj__head>*{grid-column:1}
+.pj__head .dl{grid-column:2;grid-row:1 / span 4;align-self:end;margin-bottom:4px}
+.dl{display:flex;align-items:center;gap:18px;padding:8px 8px 8px 22px;border-radius:999px;background:rgba(255,255,255,.72);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.8);box-shadow:0 10px 28px -16px rgba(5,60,80,.5)}
+.dl b{display:block;font-weight:600;font-size:15px;line-height:1.2}.dl i{display:block;font-style:normal;font-size:13px;color:var(--mute);line-height:1.3}
+.dl__btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border-radius:999px;background:linear-gradient(180deg,#3B8CF0,#2368D8);color:#fff;font-weight:600;font-size:15px;
+  line-height:1;text-box:trim-both cap alphabetic;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 18px -8px rgba(35,104,216,.8);transition:filter .2s,transform .2s}
+.dl__btn svg{width:18px;height:18px}
+.dl__btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.dl__btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+/* ---- gallery: clip first, then pictures; swipe, arrows, thumbnails, arrow keys ---- */
+.gal{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0d1e24;box-shadow:0 24px 50px -28px rgba(10,50,70,.6)}
+.gal__track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;outline:none}
+.gal__track::-webkit-scrollbar{display:none}
+.gal__track:focus-visible{box-shadow:inset 0 0 0 3px #fff}
+.gal__slide{position:relative;flex:0 0 100%;height:100%;margin:0;scroll-snap-align:start;overflow:hidden}
+.gal__slide.media{aspect-ratio:auto;border-radius:0;box-shadow:none}
+.gal__slide .cv,.gal__slide .pv{position:absolute;inset:0}.gal__slide svg{width:100%;height:100%;display:block}
+.gal__kind{position:absolute;left:14px;top:14px;z-index:2;padding:0 10px;height:24px;display:inline-flex;align-items:center;border-radius:999px;background:rgba(10,20,26,.6);color:#fff;font-size:12px;font-weight:600;line-height:1;text-box:trim-both cap alphabetic}
+.gal__nav{position:absolute;top:50%;z-index:3;width:42px;height:42px;margin-top:-21px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;
+  background:rgba(255,255,255,.88);color:var(--ink);box-shadow:0 6px 18px rgba(0,0,0,.25);opacity:0;transition:opacity .25s,transform .2s}
+.gal__nav svg{width:18px;height:18px}
+.gal__nav--prev{left:14px}.gal__nav--next{right:14px}
+.gal:hover .gal__nav,.gal__nav:focus-visible{opacity:1}
+.gal__nav:hover{transform:scale(1.06)}.gal__nav:disabled{opacity:0 !important;pointer-events:none}
+.gal__nav:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.gal__count{position:absolute;right:14px;top:14px;z-index:2;padding:0 10px;height:24px;display:inline-flex;align-items:center;border-radius:999px;background:rgba(10,20,26,.6);color:#fff;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1;text-box:trim-both cap alphabetic}
+.thumbs{display:flex;gap:10px;margin-top:12px;overflow-x:auto;scrollbar-width:none;padding:3px}
+.thumb{position:relative;flex:0 0 112px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;border:0;padding:0;cursor:pointer;background:#0d1e24;opacity:.6;transition:opacity .2s,box-shadow .2s}
+.thumb .cv,.thumb svg{position:absolute;inset:0;width:100%;height:100%}
+.thumb i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.9);color:var(--ink);font-size:10px;font-style:normal}
+.thumb:hover{opacity:.9}
+.thumb[aria-current="true"]{opacity:1;box-shadow:0 0 0 2px var(--paper,#F4F8F8),0 0 0 4px var(--ink)}
+.thumb:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+/* ---- updates: a list that scrolls in its own box; the end that has more fades out ---- */
+.log h2{display:flex;align-items:center;gap:10px}
+.log__n{display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:5px;border:1px solid currentColor;color:var(--mute);font-size:12px;font-weight:600;line-height:1;text-box:trim-both cap alphabetic}
+.log__list{max-height:300px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;outline:none;padding-right:6px;
+  --top:0px;--bot:0px;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 var(--top),#000 calc(100% - var(--bot)),transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0,#000 var(--top),#000 calc(100% - var(--bot)),transparent 100%)}
+.log__list.has-more-below{--bot:90px}.log__list.has-more-above{--top:40px}
+.log__list:focus-visible{box-shadow:0 0 0 2px var(--ink);border-radius:6px}
+@media (max-width:900px){.pj__head{grid-template-columns:1fr}.pj__head .dl{grid-column:1;grid-row:auto;justify-self:start;margin-top:18px}}
+@media (prefers-reduced-motion:reduce){.gal__nav,.thumb,.dl__btn{transition:none}}
