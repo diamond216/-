@@ -338,3 +338,5 @@ html:has(.sea--c){background:#F4F8F8}
 .gbtn{line-height:1}
 .room__name{line-height:1}
 .fbtn b{display:inline-grid;place-items:center;height:20px;line-height:1;text-box:trim-both cap alphabetic}
+/* phones: the glass bar keeps the hamster, language and account on one row (the name comes back above 480px) */
+@media (max-width:480px){.gbar .brand span{display:none}.gbar__in{gap:10px}.gbar__end{gap:6px}.glang button{padding:0 9px;font-size:13px}.gbtn{height:36px;padding:0 13px;font-size:13.5px;white-space:nowrap}}

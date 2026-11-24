@@ -304,7 +304,7 @@
       const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top");
       new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); if (gbar) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
         { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
-      top.style.top = bar.offsetHeight + "px";
+      const pin = () => (top.style.top = bar.offsetHeight + "px"); pin(); addEventListener("resize", pin); // the hero header is taller on phones
     }
   }
 

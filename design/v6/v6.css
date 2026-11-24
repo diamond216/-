@@ -334,3 +334,6 @@ html:lang(th) .say__h{font-family:"IBM Plex Sans Thai Looped",sans-serif;font-we
 .li-on body{overflow:hidden}
 .li path{stroke-dasharray:1 2;vector-effect:none;stroke-width:1.05}
 .isl-bar--framed{background:rgba(255,255,255,.94)}
+/* v5's "footer .wrap{display:flex}" beats .foot__links; keep the link columns a grid, two a row on phones */
+footer .wrap.foot__links{display:grid}
+@media (max-width:900px){footer .wrap.foot__links{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;justify-content:start}}
