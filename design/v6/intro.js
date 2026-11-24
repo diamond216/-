@@ -40,6 +40,8 @@
     // hold for a beat (an animation that changes nothing), then lift away and let the page through
     return el.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 450 }).finished;
   }).then(() => {
+    // the page underneath starts its own entrance while the line lifts away
+    document.documentElement.classList.remove("li-on");
     out = el.animate([{ opacity: 1, filter: "blur(0)", transform: "scale(1)" }, { opacity: 0, filter: "blur(6px)", transform: "scale(1.04)" }],
       { duration: 700, easing: "cubic-bezier(.4,0,.2,1)", fill: "forwards" });
     return out.finished;
