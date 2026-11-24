@@ -157,3 +157,9 @@ a.tag--room:hover{background:#0B5F66}
 .log__list:focus-visible{box-shadow:0 0 0 2px var(--ink);border-radius:6px}
 @media (max-width:900px){.pj__head{grid-template-columns:1fr}.pj__head .dl{grid-column:1;grid-row:auto;justify-self:start;margin-top:18px}}
 @media (prefers-reduced-motion:reduce){.gal__nav,.thumb,.dl__btn{transition:none}}
+/* heart in the download pill; team names link to profiles */
+.fav{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid rgba(13,43,51,.14);background:#fff;color:#C0396B;cursor:pointer;transition:background .2s}
+.fav svg{width:20px;height:20px}.fav:hover{background:#FFF1F5}.fav[aria-pressed="true"]{--fill:#E0457B;color:#E0457B;background:#FFF1F5;border-color:#F6C2D4}
+.fav:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.dl{gap:10px}.dl>span{margin-right:8px}
+.team__n:hover b{color:#0B5F66;text-decoration:underline;text-underline-offset:3px}.team__n:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}

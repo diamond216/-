@@ -9,63 +9,7 @@
   const hue = (s) => [...s].reduce((n, c) => n + c.charCodeAt(0), 0) % 360;
   const seed = (s, n) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % n;
 
-  // ---------- sample details, one place to swap for real data later ----------
-  class SampleDetails {
-    static ROLES = {
-      Game: ["Lead, game design", "Programming", "Pixel art, animation", "Sound and music"],
-      IoT: ["Lead, hardware", "Firmware", "Case design, 3D print", "Field testing"],
-      Web: ["Lead, product", "Front end", "Back end, database", "Design"],
-      Idea: ["Lead, the plan", "Money and numbers", "Talking to people", "Poster and pitch"],
-    };
-    static MORE = {
-      Game: [["Fixed the jump that felt floaty", "Lowered gravity at the top of the jump and added coyote time."], ["Posted the two-player demo", "Both players on one keyboard, WASD and arrows."], ["New tileset for the caves", "Kaew redrew every rock so the two worlds look different."], ["Playtest at lunch", "Fourteen people played; most got stuck on the same ladder, so we moved it."], ["Music for the first level", "A short loop that speeds up when the lava rises."], ["First build that runs", "One room, one enemy, and a jump that felt wrong."]],
-      IoT: [["Swapped to a cheaper sensor", "Same readings within 2 percent, half the price."], ["First prototype on the bench", "Breadboard, a power bank and a lot of tape."], ["Messages in Thai", "Alerts now come in Thai or English."], ["Survived a week of rain", "No water inside the case after seven days outdoors."], ["Battery test", "Two AA cells lasted 16 days with a reading every ten minutes."], ["Parts list posted", "Everything costs under 600 baht."]],
-      Web: [["Moved to a new host", "Pages load in under a second from school Wi-Fi."], ["First version online", "Twelve classmates tried it on day one."], ["Search that understands Thai", "Typing part of a word now finds it."], ["Bigger buttons on phones", "Tested with the oldest phone in the class."], ["Teachers can post too", "A teacher account with its own page."], ["Wrote the help page", "Five questions people asked most."]],
-      Idea: [["Wrote the one-page plan", "Who it's for, what it costs, and what we need first."], ["Asked thirty classmates", "Twenty-one said they would join."], ["Talked to the school office", "They said yes to a trial if a teacher signs."], ["Made the poster", "Put up in the canteen and on the class chat."], ["Ran the numbers again", "It still works if only eight people join."], ["The idea, on a napkin", "Where it all started, at lunch."]],
-    };
-    static AWARDS = [["Best of the school fair", "Science fair, Aug 2026"], ["People's pick", "Open house, Sep 2026"], ["Best newcomer", "Hamster Hub demo day, Oct 2026"]];
-    constructor(w) { this.w = w; }
-    // what you can take home: label, detail, button word
-    download() {
-      return { Game: ["Free download", `${this.w.platforms.join(", ")} · 84 MB`], IoT: ["Code and case files", "ZIP · 2.1 MB"], Web: ["Source code", "ZIP · 640 KB"], Idea: ["The plan, as a PDF", "PDF · 1.2 MB"] }[this.w.room];
-    }
-    // a few paragraphs about the work, written the way a student would put it
-    description() {
-      const W = this.w, D = {
-        Game: [`We started ${W.name} in a two-week game jam and kept going because people kept asking for the next level.`, "It runs on a school laptop without a graphics card, and two people can play on one keyboard.", "Next we want to add a level editor so the class can make their own maps."],
-        IoT: [`${W.name} began as a science project and is now running every day.`, "The board is an ESP32 in a 3D-printed case. It sends a reading every ten minutes and a message when something is off.", "We are looking for a second place to test it before we make ten more."],
-        Web: [`${W.name} is a small site we built because we needed it ourselves.`, "It works on old phones and slow school Wi-Fi, and it needs no sign-up to read.", "Teachers asked for a version for their own classes, so that is what we are building next."],
-        Idea: [`${W.name} is still an idea, but a tested one.`, "We ran a one-week trial with friends and wrote down what worked and what didn't.", "We need one teacher or adult to back it before we try it with a whole class."],
-      }[W.room];
-      return D;                                               // the one-line blurb is already under the title
-    }
-    // how to reach the lead maker; sample values on reserved domains and a made-up number
-    contact() {
-      const h = this.w.maker.toLowerCase(), n = String(1000 + seed(this.w.id, 9000)).padStart(4, "0");
-      return [
-        ["email", "Email", `${h}.${this.w.id.split("-")[0]}@student.example.ac.th`, `mailto:${h}.${this.w.id.split("-")[0]}@student.example.ac.th`],
-        ["phone", "Phone", `08${seed(this.w.name, 10)}-${String(100 + seed(h, 900))}-${n}`, null],
-        ["line", "LINE", `@${h}_${this.w.id.split("-")[0]}`, null],
-      ];
-    }
-    team() {
-      const others = [...new Set(works.filter((x) => x.room === this.w.room && x.maker !== this.w.maker).map((x) => x.maker))];
-      const size = 2 + seed(this.w.id, 3), start = seed(this.w.name, others.length);
-      const names = [this.w.maker, ...Array.from({ length: size - 1 }, (_, i) => others[(start + i * 3) % others.length])];
-      return names.map((n, i) => [n, SampleDetails.ROLES[this.w.room][i]]);
-    }
-    updates() {
-      const ago = ["5 days ago", "1 week ago", "2 weeks ago", "3 weeks ago", "last month", "2 months ago"];
-      const NOTE = { Game: "New caves, a new boss, and a checkpoint just before it.", IoT: "Lighter, sealed against rain, and the antenna now sits outside the box.",
-        Web: "Every page got lighter: the home page went from 2 MB to 300 KB.", Idea: "We counted who came back in week two: eight out of ten." };
-      return [[this.w.update.when, this.w.update.what, NOTE[this.w.room]], ...SampleDetails.MORE[this.w.room].map(([a, b], i) => [ago[i], a, b])];
-    }
-    awards() {
-      const t = tiers.find((x) => x.id === this.w.tier);
-      const extra = SampleDetails.AWARDS.filter((_, i) => (seed(this.w.id, 5) >> i) & 1).slice(0, 2);
-      return [[`${t.name} rank`, `Hamster Nest, place ${tiers.indexOf(t) * 10 + this.w.place} of 50`, true], ...extra.map(([a, b]) => [a, b, false])];
-    }
-  }
+  const { SampleDetails } = window.Details;
 
   const ICON = {
     email: '<path d="M3 6.5h18v11H3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 7l8.5 6.5L20.5 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
@@ -91,7 +35,7 @@
           <p class="tags"><a class="tag tag--room" href="browse.html">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
           <h1 class="title">${w.name}</h1>
           <p class="blurb">${w.blurb}</p>
-          <div class="dl"><span><b>${d.download()[0]}</b><i>${d.download()[1]}</i></span><a class="dl__btn" href="#" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</a></div>
+          <div class="dl"><span><b>${d.download()[0]}</b><i>${d.download()[1]}</i></span><button type="button" class="fav" aria-pressed="false" aria-label="Save ${w.name} to your favourites"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button><a class="dl__btn" href="#" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</a></div>
         </div>
         <div class="pj__grid">
           <div class="pj__main">
@@ -106,7 +50,7 @@
             <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><time>${when}</time><div><b>${what}</b><p>${more}</p></div></li>`).join("")}</ol></section>
           </div>
           <aside class="pj__side">
-            <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><b>${n}</b><i>${r}</i></span></li>`).join("")}</ul><a class="say" href="#">Say hi to the team</a></section>
+            <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><a class="team__n" href="profile.html#${n.toLowerCase()}"><b>${n}</b></a><i>${r}</i></span></li>`).join("")}</ul><a class="say" href="#">Say hi to the team</a></section>
             <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
               <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${value.replace("@", "@<wbr>")}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
               <p class="contact__note" role="status" aria-live="polite"></p></section>
@@ -115,11 +59,25 @@
           </aside>
         </div>
         ${this.more(w)}`;
+      this.favButton(w);
       this.gallery(w);
       this.scroller($(".log__list", this.root));
       this.fillMore(w);
       this.root.querySelectorAll(".cp").forEach((b) => b.addEventListener("click", () => this.copy(b)));
       if (!calm) this.enter();
+    }
+    // heart: saves the work to your favourites (the same list the profile page reads)
+    favButton(w) {
+      const b = $(".fav", this.root), key = "nest-favs";
+      const read = () => { try { return JSON.parse(localStorage.getItem(key)) || null; } catch (e) { return null; } };
+      const seedList = () => [["wheelsense", "2026-11-23"], ["nestboard", "2026-11-23"], ["moonwheel", "2026-11-20"], ["rain-jar", "2026-11-20"], ["sunflower-bank", "2026-11-16"], ["book-loop", "2026-11-16"], ["lantern-run", "2026-11-10"]].map(([id, saved]) => ({ id, saved }));
+      const paint = (on) => { b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", `${on ? "Remove" : "Save"} ${w.name} ${on ? "from" : "to"} your favourites`); b.title = on ? "In your favourites" : "Save to favourites"; };
+      paint((read() || seedList()).some((f) => f.id === w.id));
+      b.addEventListener("click", () => {
+        const l = read() || seedList(), on = !l.some((f) => f.id === w.id);
+        try { localStorage.setItem(key, JSON.stringify(on ? [{ id: w.id, saved: new Date().toISOString().slice(0, 10) }, ...l] : l.filter((f) => f.id !== w.id))); } catch (e) {}
+        paint(on); if (!calm) b.animate([{ transform: "scale(1)" }, { transform: "scale(1.25)" }, { transform: "scale(1)" }], { duration: 320, easing: "cubic-bezier(.34,1.5,.64,1)" });
+      });
     }
     // the clip first, then pictures (frames of the work's art stand in for screenshots)
     slides(w) { return [{ clip: true, label: "Clip", frame: 1 }, ...[2, 3, 4, 5].map((f, i) => ({ clip: false, label: `Picture ${i + 1}`, frame: f }))]; }
