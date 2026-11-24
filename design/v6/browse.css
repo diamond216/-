@@ -88,7 +88,7 @@ html:has(.sea){background:#9FE0DC}
 .top nav a[aria-current]{color:#fff}
 .sea .foot{margin-top:0}
 
-@media (max-width:700px){.br__top{flex-wrap:wrap}.sbar{order:-1;flex-basis:100%}.has-panel .br__body{grid-template-columns:1fr}.fpanel{position:static;max-height:none}.row{flex-wrap:wrap;height:auto}.rc{flex:1 1 40%;height:320px}.room{width:132px}}
+@media (max-width:700px){.br__top{flex-wrap:wrap}.sbar{order:-1;flex-basis:100%;min-width:0}.sbar__key{display:none}.has-panel .br__body{grid-template-columns:1fr}.fpanel{position:static;max-height:none}.row{flex-wrap:wrap;height:auto}.rc{flex:1 1 40%;height:320px}.room{width:132px}}
 @media (prefers-reduced-motion:reduce){.rc,.rc__line,.room__art{transition:none}}
 .fbtn b[hidden]{display:none}
 /* ---------- round 2: blue water, liquid glass on top, more colour ---------- */

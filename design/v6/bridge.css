@@ -1,0 +1,30 @@
+/* Bridge: the hero page (hero/index.html) with the Browse page straight under it.
+   hero/styles.css owns the header and hero; browse.css owns Browse; this file joins them.
+   The Browse water band starts right under the hero, so the page reads as one sea. */
+.nest-browse{position:relative;--f:"IBM Plex Sans Thai Looped",system-ui,-apple-system,sans-serif;font-family:var(--f);color:var(--sea-ink,#0D2B33);scroll-margin-top:0}
+.nest-browse .wrap{width:min(1312px,100% - 48px);margin:0 auto}
+.nest-browse h1,.nest-browse h2,.nest-browse h3{font-family:var(--f)}
+.nest-browse .br{position:relative;padding-bottom:90px}
+.nest-browse .water{position:absolute;inset:0 0 auto 0;width:100%;height:460px;z-index:0}
+.nest-browse .br>*{position:relative;z-index:1}
+.nest-browse .br>.br__top{position:sticky;z-index:15} /* the rule above would make it relative; the toolbar must stay sticky under the header */
+body.sea{background:radial-gradient(130% 70svh at 50% 0,rgba(168,212,240,.26),rgba(168,212,240,0) 72%),#F4F8F8;background-repeat:no-repeat}
+
+/* the header turns solid once the hero has gone by, so its white type stays readable */
+.site-header::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .3s var(--e-out);
+  background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(16px) saturate(1.5);backdrop-filter:blur(16px) saturate(1.5);border-bottom:1px solid rgba(13,43,51,.08)}
+.site-header.is-solid{--hd-fg:#0f1f2e;--hd-nest:#e8641c;--hd-fill:#0f1f2e;--hd-onfill:#fff;--hd-edge:#0f1f2e}
+.site-header.is-solid::before{opacity:1}
+
+/* "Scroll down" in the strip under the hero panel */
+.scroll-cue{position:absolute;left:50%;bottom:10px;z-index:2;display:grid;justify-items:center;gap:2px;transform:translateX(-50%);
+  font:600 11px/1 'IBM Plex Sans Thai Looped',sans-serif;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:#4a5b69;padding:6px 10px;border-radius:10px}
+.scroll-cue svg{width:16px;height:16px}
+.scroll-cue:hover{color:#0f1f2e}
+@media (prefers-reduced-motion:no-preference){.scroll-cue svg{animation:cue 1.8s var(--e-inout) infinite}}
+@keyframes cue{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+/* the lagoon water band picks up where the hero ends (owner chose this join over a plain paper or a sheet over the hero) */
+.nest-browse .band{padding-top:52px}
+/* the water rises out of the paper strip under the hero instead of starting on a hard line */
+.nest-browse .water{-webkit-mask-image:linear-gradient(180deg,transparent,#000 90px,#000 68%,transparent);mask-image:linear-gradient(180deg,transparent,#000 90px,#000 68%,transparent)}

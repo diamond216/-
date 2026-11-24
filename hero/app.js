@@ -40,6 +40,7 @@
       soundToastOff: 'Ocean ambience · Off',
       soundHint: 'Tap to hear',
       explore: 'Explore projects',
+      scrollDown: 'Scroll down',
       viewThisProject: 'View this project',
     },
     th: {
@@ -72,6 +73,7 @@
       soundToastOff: 'เสียงบรรยากาศทะเล · ปิด',
       soundHint: 'แตะเพื่อฟังเสียง',
       explore: 'สำรวจโปรเจกต์',
+      scrollDown: 'เลื่อนลง',
       viewThisProject: 'ดูโปรเจกต์นี้',
     },
   };

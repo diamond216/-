@@ -300,8 +300,9 @@
     constructor(state) {
       $(".band__n").textContent = works.length;
       const sort = $("#sort"); sort.addEventListener("change", () => state.set((s) => (s.sort = sort.value)));
-      const bar = $(".gbar"), top = $(".br__top");
-      new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); bar.classList.toggle("gbar--framed", !e.isIntersecting); },
+      // the page's own glass bar, or the hero page's header when Browse sits under the hero (bridge.js owns that header's look)
+      const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top");
+      new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); if (gbar) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
         { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
       top.style.top = bar.offsetHeight + "px";
     }
