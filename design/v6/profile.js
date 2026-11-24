@@ -229,7 +229,7 @@
       $(".me__av").outerHTML = avatar(ME, "me__av");
       const me = new Person(ME), pr = me.profile();
       this.menu.innerHTML = `<div class="me__head">${avatar(ME, "me__big")}<b>${esc(pr.full)}</b><i>@${me.handle}</i><p><span><b>12</b> following</span><span><b>${pr.followers}</b> followers</span></p></div>
-        <a role="menuitem" href="profile.html#${me.handle}" data-go="works">Your profile</a><a role="menuitem" href="profile.html#${me.handle}" data-go="works">Your works</a>
+        <a role="menuitem" href="profile.html#${me.handle}" data-go="works">Your profile</a><a role="menuitem" href="profile.html#${me.handle}" data-go="works">Your works</a><a role="menuitem" href="post.html">Post your work</a>
         <a role="menuitem" href="profile.html#${me.handle}" data-go="favs">Favourites</a><hr>
         <button type="button" role="menuitem" data-go="settings">Settings</button><a role="menuitem" href="#">Send feedback</a><hr><a role="menuitem" href="#">Log out</a>`;
       this.btn.addEventListener("click", () => this.open(this.menu.hidden));
