@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- PLACEHOLDER hamster mark drawn for this layout. Replace with the real Hamster Nest logo. -->
+  <circle cx="15" cy="15" r="9" fill="#F2994A"/><circle cx="15" cy="15" r="5" fill="#FFC6A8"/>
+  <circle cx="49" cy="15" r="9" fill="#F2994A"/><circle cx="49" cy="15" r="5" fill="#FFC6A8"/>
+  <ellipse cx="32" cy="36" rx="26" ry="23" fill="#F5A64F"/>
+  <path d="M32 14c-5 0-8 4-8 9 0 3 4 5 8 5s8-2 8-5c0-5-3-9-8-9z" fill="#FFE8CC" opacity=".9"/>
+  <ellipse cx="32" cy="43" rx="17" ry="13" fill="#FFE8CC"/>
+  <circle cx="13" cy="41" r="6" fill="#FF9E7A" opacity=".6"/><circle cx="51" cy="41" r="6" fill="#FF9E7A" opacity=".6"/>
+  <circle cx="23" cy="33" r="3.2" fill="#3B2A20"/><circle cx="41" cy="33" r="3.2" fill="#3B2A20"/>
+  <circle cx="24" cy="32" r="1" fill="#fff"/><circle cx="42" cy="32" r="1" fill="#fff"/>
+  <ellipse cx="32" cy="40" rx="3" ry="2.2" fill="#E56F6F"/>
+  <path d="M28 44.5q4 4 8 0" fill="none" stroke="#3B2A20" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

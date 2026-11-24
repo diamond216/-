@@ -1,0 +1,3 @@
+/* Styling the polyfill needs (it cannot define :popover-open, so it adds the class `.\:popover-open`). */
+[popover]:not(.\:popover-open):not(dialog[open]) { display: none; }
+[popover]:is(.\:popover-open) { display: block; }
