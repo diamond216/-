@@ -134,7 +134,8 @@
       this.root.innerHTML = `
         <div class="po__head"><div><a class="back" href="profile.html#pim"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Your profile</a>
           <h1>Post your work</h1><p>Takes about five minutes. Everything saves as you go, so you can leave and come back.</p></div>
-          <div class="mode" role="radiogroup" aria-label="What are you posting?"><button type="button" role="radio" data-mode="new" aria-checked="${d.mode === "new"}">New project</button><button type="button" role="radio" data-mode="update" aria-checked="${d.mode === "update"}">Update a project</button></div></div>
+          <div class="po__headr"><button type="button" class="ghost3 sm guide-btn" data-act="guide"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3 2.5h6.5l3.5 3.5v7.5H3z M9.5 2.5V6H13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M5.5 9h5M5.5 11.5h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Posting guide and rules</button>
+          <div class="mode" role="radiogroup" aria-label="What are you posting?"><button type="button" role="radio" data-mode="new" aria-checked="${d.mode === "new"}">New project</button><button type="button" role="radio" data-mode="update" aria-checked="${d.mode === "update"}">Update a project</button></div></div></div>
         <div class="po__grid">
           <form class="po__form" novalidate>
             <div class="m-new">
@@ -173,7 +174,7 @@
           </form>
           <aside class="po__side">
             <section class="box pv2" aria-label="Preview"><h3>How it will look</h3><div class="pv2__body"></div></section>
-            <section class="box chk"><h3>Before it goes up</h3><ul></ul><p>Only the ones marked required stop you posting. Hamster Hub reads every new work within two days.</p></section>
+            <section class="box chk"><h3>Before it goes up</h3><ul></ul><p>Only the ones marked required stop you posting. Hamster Hub reads every new work within two days against <a href="#rules" class="rules-link">the rules</a>.</p></section>
           </aside>
         </div>`;
       this.media = new MediaField($("#media", this.root), () => this.update());
@@ -206,7 +207,9 @@
     flash(el, msg) { const h = el.previousElementSibling; const old = h.innerHTML; h.innerHTML = `${old.split("<em")[0]}<em class="warn">${msg}</em>`; setTimeout(() => (h.innerHTML = old), 1800); }
     wire() {
       const f = $("form", this.root), d = this.d;
-      this.root.querySelectorAll(".mode [data-mode]").forEach((b) => b.addEventListener("click", () => { d.mode = b.dataset.mode; this.root.querySelectorAll(".mode [data-mode]").forEach((x) => x.setAttribute("aria-checked", x === b)); this.update(); }));
+      $('[data-act="guide"]', this.root).addEventListener("click", () => window.NestGuide.open());
+      $(".rules-link", this.root).addEventListener("click", (e) => { e.preventDefault(); window.NestGuide.open("rules"); });
+      this.root.querySelectorAll(".mode [data-mode]").forEach((b) => b.addEventListener("click", () => { if (b.dataset.mode === "new" && d.mode !== "new") window.NestGuide.auto(); d.mode = b.dataset.mode; this.root.querySelectorAll(".mode [data-mode]").forEach((x) => x.setAttribute("aria-checked", x === b)); this.update(); }));
       this.wireChoices($("#s-basics", this.root));
       f.addEventListener("input", (e) => {
         const n = e.target.name; if (!n) return;
@@ -311,6 +314,8 @@
 
   accountMenu();
   const page = new PostPage($("#main"));
+  // starting a new project opens the guide (unless they asked us not to, or a link points at the rules)
+  if (page.d.mode === "new" && !/^#rules?/.test(location.hash)) window.NestGuide.auto();
   setInterval(() => page.stamp(), 15000);
   const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 160);
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
