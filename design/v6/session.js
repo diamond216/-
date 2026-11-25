@@ -24,16 +24,29 @@ window.NestSession = (function () {
     admin: { name: "Arm", full: "Arm", handle: "arm", line: "Admin · Hamster Hub" },
   };
 
+  // where the prototype keeps things: localStorage, or, where a sandboxed frame blocks it, window.name
+  // (which survives moving between pages in the same tab)
+  const Store = {
+    get(k) {
+      try { const v = localStorage.getItem(k); if (v !== null) return v; } catch (e) {}
+      try { return JSON.parse(window.name || "{}")[k] ?? null; } catch (e) { return null; }
+    },
+    set(k, v) {
+      try { localStorage.setItem(k, v); } catch (e) {}
+      try { const o = JSON.parse(window.name || "{}"); if (v === null) delete o[k]; else o[k] = v; window.name = JSON.stringify(o); } catch (e) { window.name = JSON.stringify(v === null ? {} : { [k]: v }); }
+    },
+    drop(k) { try { localStorage.removeItem(k); } catch (e) {} this.set(k, null); try { localStorage.removeItem(k); } catch (e) {} },
+  };
   const KEY = "nest-session";
   const Session = {
-    read() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } },
+    read() { try { return JSON.parse(Store.get(KEY)) || {}; } catch (e) { return {}; } },
     get signedIn() { return !!this.read().in; },
     get role() { return this.read().role === "admin" ? "admin" : "maker"; },
     get user() { return PEOPLE[this.role]; },
     is(role) { return this.signedIn && this.role === role; },
     signIn(role = "maker") { this.write({ in: true, role }); },
     signOut() { this.write({}); },
-    write(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} dispatchEvent(new CustomEvent("nest:session")); },
+    write(s) { Store.set(KEY, JSON.stringify(s)); dispatchEvent(new CustomEvent("nest:session")); },
   };
   addEventListener("storage", (e) => { if (e.key === KEY) dispatchEvent(new CustomEvent("nest:session")); });
 
@@ -133,9 +146,9 @@ window.NestSession = (function () {
   // ---------- works sent from the post page, read by the admin review queue (this computer only) ----------
   const SENT = "nest-sent";
   const Submissions = {
-    list() { try { return JSON.parse(localStorage.getItem(SENT)) || []; } catch (e) { return []; } },
-    add(it) { const a = [it, ...this.list()].slice(0, 20); try { localStorage.setItem(SENT, JSON.stringify(a)); } catch (e) {} },
-    clear() { try { localStorage.removeItem(SENT); } catch (e) {} },
+    list() { try { return JSON.parse(Store.get(SENT)) || []; } catch (e) { return []; } },
+    add(it) { Store.set(SENT, JSON.stringify([it, ...this.list()].slice(0, 20))); },
+    clear() { Store.drop(SENT); },
   };
   // "2 min ago" for a time stamp
   const ago = (t) => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`; };
@@ -168,7 +181,7 @@ window.NestSession = (function () {
 
   // every page: fill the footer and the account area once the page's own scripts have run
   // (a page that needs its own menu items sets NestSession.menuOptions before then)
-  const api = { Session, Paths, AccountMenu, Footer, Submissions, ago, gate, toast, hue, menuOptions: {} };
+  const api = { Session, Store, Paths, AccountMenu, Footer, Submissions, ago, gate, toast, hue, menuOptions: {} };
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("footer.nest-foot").forEach((f) => new Footer(f));
     const slot = document.querySelector(".acct");
