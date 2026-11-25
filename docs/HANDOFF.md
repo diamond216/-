@@ -167,7 +167,8 @@ flow = Σ w(type) × 2^(−ageDays/14)
 
 **Phone check on a real-phone setup (25 Nov 2026, iPhone 13 size with touch):**
 - `hero/index.html` had `<meta name="viewport" content="width=1440">` (from `main`), so every phone showed the home page shrunk from desktop, and none of the phone CSS applied. It is now `width=device-width, initial-scale=1`.
-- Tapping a Browse tile on a touch screen used to expand it (focus counted as keyboard) instead of opening the project. Now touch opens the project; mouse hover still expands after 0.75 s (`tiles.js`).
+- Touch screens (owner, 25 Nov): the **first tap opens a tile** (2 x 2, with maker, last update and Open project, then the page scrolls it into view below the sticky bars), **a second tap on it goes to the project**, and a tap outside closes it. Mouse hover still opens after 0.75 s and a click goes straight to the project (`tiles.js`). The opened tile keeps its picture on phones (it had collapsed to 0px).
+- 320px phones: project header and download pill, profile rank lines, the review queue (one shrinkable column, tier picker 3 a row) and Browse's "All work / Sorted by" line now fit.
 - On phones, approving or rejecting in the review queue scrolls back up to the queue rather than leaving you at the footer.
 
 **Whole-site pass (25 Nov 2026):** every page checked at 1440 and 390 px with no console errors or 404s. Fixed on the way:

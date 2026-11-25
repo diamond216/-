@@ -58,10 +58,25 @@ window.Tiles = (function () {
   class Expander {
     constructor(grid) {
       this.grid = grid; this.open = null; this.timer = 0;
-      // touch: a tap goes straight to the project page, so nothing expands (no hover on a phone)
+      // touch (no hover on a phone): the first tap opens the card, a second tap on it goes to the project page;
+      // tapping anywhere outside the open card closes it
       let touched = 0;
       grid.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") touched = performance.now(); }, true);
       const byTouch = () => performance.now() - touched < 800;
+      grid.addEventListener("click", (e) => {
+        if (!byTouch() || e.target.closest("button")) return;
+        const c = e.target.closest(".rc"); if (!c || c === this.open || this.cols() < 2) return;
+        e.preventDefault();
+        // wait for a closing card to finish, open this one, then bring all of it into view below the sticky bars
+        const show = () => {
+          const bars = Math.max(0, ...[...document.querySelectorAll(".gbar, .br__top")].map((b) => b.getBoundingClientRect().bottom));
+          const r = c.getBoundingClientRect();
+          if (r.top < bars + 8 || r.bottom > innerHeight) scrollBy({ top: r.top - bars - 12, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        };
+        const settle = () => Promise.all(this.grid.getAnimations({ subtree: true }).map((a) => a.finished.catch(() => {}))).then(show);
+        const go = () => (this.busy() ? requestAnimationFrame(go) : (this.expand(c), requestAnimationFrame(settle))); go();
+      }, true);
+      document.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse" && this.open && !this.open.contains(e.target)) this.collapse(); }, true);
       grid.addEventListener("pointerover", (e) => {
         if (e.pointerType && e.pointerType !== "mouse") return;
         const c = e.target.closest(".rc"); if (!c || c === this.open || this.busy()) return;
@@ -70,13 +85,14 @@ window.Tiles = (function () {
         this.timer = setTimeout(() => { c.classList.remove("rc--arming"); if (c.matches(":hover")) this.expand(c); }, HOLD);
       });
       grid.addEventListener("pointerout", (e) => {
+        if (e.pointerType && e.pointerType !== "mouse") return;   // a finger lifting off is not "leaving" the card
         const c = e.target.closest(".rc"); if (!c || c.contains(e.relatedTarget)) return;
         c.classList.remove("rc--arming"); clearTimeout(this.timer);
         if (c === this.open) this.collapse();
       });
       // keyboard: focusing a tile opens it straight away
       grid.addEventListener("focusin", (e) => { const c = e.target.closest(".rc"); if (c && c !== this.open && !this.busy() && !byTouch()) this.expand(c); });
-      grid.addEventListener("focusout", (e) => { if (this.open && !this.open.contains(e.relatedTarget)) this.collapse(); });
+      grid.addEventListener("focusout", (e) => { if (this.open && !this.open.contains(e.relatedTarget) && !byTouch()) this.collapse(); });
       addEventListener("resize", () => this.collapse(false));
     }
     busy() { return this.grid.classList.contains("grid--busy"); }

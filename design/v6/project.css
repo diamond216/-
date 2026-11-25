@@ -167,3 +167,6 @@ a.tag--room:hover{background:#0B5F66}
 @media (max-width:560px){.like__h{flex-direction:column;align-items:flex-start;gap:8px}.like__h h2{font-size:48px}.like__h span{white-space:normal;padding-bottom:0}}
 /* tablets and phones: one column (the size rounds above re-set two columns after the first media query) */
 @media (max-width:1000px){.pj__grid{grid-template-columns:minmax(0,1fr);gap:28px}.pj__side{position:static}}
+/* very small phones (320px): the header column may shrink and the download pill wraps instead of pushing the page wider */
+@media (max-width:900px){.pj__head{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.dl{flex-wrap:wrap;max-width:100%;padding:10px 10px 10px 18px;border-radius:22px}.dl>span{flex:1 1 100%}}

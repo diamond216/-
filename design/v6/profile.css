@@ -111,3 +111,5 @@
 .pf__side .say{width:100%;border:0;cursor:pointer}
 /* phones: the four tabs scroll sideways instead of pushing the page wider; stats wrap */
 @media (max-width:560px){.pf__tabs{overflow-x:auto;scrollbar-width:none}.pf__tabs::-webkit-scrollbar{display:none}.pf__tabs [role=tab]{flex:none;padding:0 12px}.pf__stats{flex-wrap:wrap;gap:12px 24px}}
+/* very small phones: the rank and role under each work wrap */
+.pf__rk{flex-wrap:wrap;min-width:0}

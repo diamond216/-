@@ -340,3 +340,7 @@ html:has(.sea--c){background:#F4F8F8}
 .fbtn b{display:inline-grid;place-items:center;height:20px;line-height:1;text-box:trim-both cap alphabetic}
 /* phones: the glass bar keeps the hamster, language and account on one row (the name comes back above 480px) */
 @media (max-width:480px){.gbar .brand span{display:none}.gbar__in{gap:10px}.gbar__end{gap:6px}.glang button{padding:0 9px;font-size:13px}.gbtn{height:36px;padding:0 13px;font-size:13.5px;white-space:nowrap}}
+/* very small phones: "All work 50" and "Sorted by ..." each stay on one line; the sort drops under the title if needed */
+@media (max-width:400px){.rhead{flex-wrap:wrap;row-gap:6px}.rhead h2,.rhead .sort,.rhead label{white-space:nowrap}}
+/* phones: grid rows size to content there, so the opened card's picture keeps the tile shape instead of collapsing to 0 */
+@media (max-width:700px){.rc--big .rc__media{flex:none}.rc--big .rc__pic{aspect-ratio:1.28;height:auto}.rc--big .rc__open{height:auto}.rc--big .rc__name{font-size:18px}.rc--big .rc__more{grid-template-columns:1fr;row-gap:6px}}

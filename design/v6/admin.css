@@ -87,3 +87,7 @@
 @media (max-width:560px){.adt__head{flex-direction:column;align-items:flex-start;gap:12px}}
 /* scrolled to after a decision on phones: stop below the top bar */
 .atabs{scroll-margin-top:96px}
+/* one column may shrink below its content (320px phones) */
+@media (max-width:1000px){.ad__split{grid-template-columns:minmax(0,1fr)}.aq{min-width:0}}
+@media (max-width:1000px){.adt__cols{grid-template-columns:minmax(0,1fr)}.tp{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:400px){.tp{grid-template-columns:repeat(3,minmax(0,1fr))}}
