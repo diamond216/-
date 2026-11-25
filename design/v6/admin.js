@@ -35,7 +35,13 @@
     "snack-fund-plus": { status: "rejected", rules: [7], note: "Betting on snacks with real money counts as a money game. Keep the saving part and drop the bet, then send it again.", by: "Arm", when: "yesterday" } };
 
   class Queue {
-    constructor() { this.items = SAMPLE.map(([id, name, base, maker, team, sent, line, about, link]) => ({ id, name, base: works.find((w) => w.id === base), maker, team, sent, line, about, link })); }
+    constructor() {
+      // works sent from the post page come first (newest on top); their pictures stay on the maker's computer,
+      // so the queue shows a work from the same room and genre in their place
+      const sent = NestSession.Submissions.list().map((s) => ({ ...s, sent: NestSession.ago(s.at), mine: true,
+        base: works.find((w) => w.room === s.room && w.genre === s.genre) || works.find((w) => w.room === s.room) || works[0] }));
+      this.items = [...sent, ...SAMPLE.map(([id, name, base, maker, team, sent, line, about, link]) => ({ id, name, base: works.find((w) => w.id === base), maker, team, sent, line, about, link }))];
+    }
     status(it) { return (Decisions.all()[it.id] || SEEDED[it.id] || { status: "waiting" }); }
     by(st) { return this.items.filter((it) => this.status(it).status === st); }
   }
@@ -52,7 +58,7 @@
           <button type="button" class="pf__link ad__reset">Reset the sample queue</button></nav>
         <div class="ad__split"><ol class="aql" aria-label="Works"></ol><div class="adt" aria-live="polite"></div></div>`;
       this.root.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => { this.tab = b.dataset.tab; this.sel = null; this.render(); }));
-      $(".ad__reset", this.root).addEventListener("click", () => { Decisions.clear(); this.tab = "waiting"; this.sel = null; this.render(); toast("The sample queue is back to how it started."); });
+      $(".ad__reset", this.root).addEventListener("click", () => { Decisions.clear(); NestSession.Submissions.clear(); this.tab = "waiting"; this.sel = null; this.render(); toast("The sample queue is back to how it started."); });
       this.list();
     }
     list() {
@@ -73,7 +79,7 @@
       if (!it) { box.innerHTML = `<p class="adt__empty">Pick a work on the left.</p>`; return; }
       const s = this.q.status(it), w = it.base;
       box.innerHTML = `
-        <div class="adt__head"><div><p class="adt__meta">${w.room} · ${w.genre} · sent ${esc(it.sent)} by <a href="profile.html#${it.maker.toLowerCase()}">${esc(it.maker)}</a></p><h2>${esc(it.name)}</h2><p class="adt__line">${esc(it.line)}</p></div>
+        <div class="adt__head"><div><p class="adt__meta">${it.room || w.room} · ${it.genre || w.genre} · sent ${esc(it.sent)} by <a href="profile.html#${it.maker.toLowerCase()}">${esc(it.maker)}</a></p><h2>${esc(it.name)}</h2><p class="adt__line">${esc(it.line)}</p></div>
           ${it.link ? `<a class="ghost3 sm" href="${esc(it.link)}" target="_blank" rel="noopener">Open their link ↗</a>` : `<span class="adt__nolink">No link to try</span>`}</div>
         <div class="adt__gal"><span class="cv" data-k="1"></span><span class="cv" data-k="2"></span><span class="cv" data-k="3"></span></div>
         <div class="adt__info"><section><h3>About, as they wrote it</h3><p>${esc(it.about)}</p></section>

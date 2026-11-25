@@ -145,6 +145,16 @@ window.NestSession = (function () {
     }
   }
 
+  // ---------- works sent from the post page, read by the admin review queue (this computer only) ----------
+  const SENT = "nest-sent";
+  const Submissions = {
+    list() { try { return JSON.parse(localStorage.getItem(SENT)) || []; } catch (e) { return []; } },
+    add(it) { const a = [it, ...this.list()].slice(0, 20); try { localStorage.setItem(SENT, JSON.stringify(a)); } catch (e) {} },
+    clear() { try { localStorage.removeItem(SENT); } catch (e) {} },
+  };
+  // "2 min ago" for a time stamp
+  const ago = (t) => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`; };
+
   // ---------- small note at the bottom of the screen ----------
   function toast(msg) {
     const t = document.createElement("p"); t.className = "nest-toast"; t.setAttribute("role", "status"); t.textContent = msg; document.body.appendChild(t);
@@ -173,7 +183,7 @@ window.NestSession = (function () {
 
   // every page: fill the footer and the account area once the page's own scripts have run
   // (a page that needs its own menu items sets NestSession.menuOptions before then)
-  const api = { Session, Paths, AccountMenu, Footer, gate, toast, hue, menuOptions: {} };
+  const api = { Session, Paths, AccountMenu, Footer, Submissions, ago, gate, toast, hue, menuOptions: {} };
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("footer.nest-foot").forEach((f) => new Footer(f));
     const slot = document.querySelector(".acct");

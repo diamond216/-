@@ -287,11 +287,13 @@
       }
       err.textContent = "";
       const w = works.find((x) => x.id === d.update.work);
+      // a new project goes into the admin's review queue (session.js keeps it on this computer)
+      if (d.mode === "new") NestSession.Submissions.add({ id: `sent-${Date.now()}`, name: d.name.trim(), line: d.line.trim(), about: d.about.trim(), room: d.room, genre: d.genres[0] || "", maker: ME.name, team: d.team.map((m) => m.name), link: d.dl.link || "", at: Date.now() });
       const box = $(".po__grid", this.root);
       box.innerHTML = `<section class="done" role="status"><span class="hi__tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <h2>${d.mode === "update" ? `Update posted to ${esc(w.name)}` : `${esc(d.name)} is in the queue`}</h2>
         <p>${d.mode === "update" ? "It shows at the top of the project's Updates, and the project moves up in its rank for posting something new." : "Hamster Hub reads every new work within two days. Once it's up, it starts in Bronze and climbs as you post updates."}</p>
-        <p class="done__note">This is a prototype, so nothing was sent.</p>
+        <p class="done__note">${d.mode === "update" ? "This is a prototype, so nothing was sent." : "This is a prototype: it shows up in the admin\'s review queue on this computer."}</p>
         <div class="dlg__acts"><a class="ghost3" href="profile.html#pim">Go to your profile</a><button type="button" class="post" data-act="again">Post something else</button></div></section>`;
       if (!calm) box.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 400, easing: E });
       Draft.clear();
