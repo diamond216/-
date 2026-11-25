@@ -14,7 +14,15 @@ body.sea{background:radial-gradient(130% 70svh at 50% 0,rgba(168,212,240,.26),rg
    Over the dark hero the glass gets a light wash so its dark type stays readable. */
 .gbar--hero{position:fixed;inset:0 0 auto 0;z-index:60;font-family:var(--f,"IBM Plex Sans Thai Looped",system-ui,sans-serif);color:var(--sea-ink,#0D2B33)}
 .gbar--hero .wrap{width:min(1312px,100% - 48px);margin-left:auto;margin-right:auto}
-.gbar--hero::before{background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(255,255,255,.74));transition:background .3s}
+/* over the hero (owner, 25 Nov): no band behind the bar, but each button keeps a solid light background; the name goes white */
+.gbar--hero::before{transition:opacity .3s,background .3s}
+.gbar--hero:not(.gbar--framed)::before{opacity:0}
+.gbar--hero:not(.gbar--framed) .brand span{color:#fff;text-shadow:0 1px 12px rgba(5,32,64,.35)}
+.gbar--hero:not(.gbar--framed) .brand em{color:#FFC690}
+.gbar--hero:not(.gbar--framed) :is(.gnav.glass,.glang.glass,.gbtn.glass){background:rgba(255,255,255,.94);border-color:rgba(255,255,255,.95);box-shadow:0 10px 28px -14px rgba(3,20,40,.55)}
+.gbar--hero:not(.gbar--framed) .me__av{box-shadow:0 0 0 2px #fff,0 8px 20px -10px rgba(3,20,40,.6)}
+.gbar--hero:not(.gbar--framed) .me__btn{color:#fff}
+.gbar--hero .brand span,.gbar--hero .brand em{transition:color .3s}
 .gbar--hero.gbar--framed::before{background:rgba(255,255,255,.94);border-color:rgba(13,43,51,.08)}
 .gbar--hero .brand{display:flex;align-items:center;gap:10px;text-decoration:none}.gbar--hero .brand svg{width:40px;height:40px}
 .gbar--hero a{text-decoration:none}
