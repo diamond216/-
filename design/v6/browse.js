@@ -36,7 +36,7 @@
   class SearchBar {
     constructor(state) {
       const input = $("#q"), clear = $(".sbar__clear");
-      input.addEventListener("input", () => { state.set((s) => (s.q = input.value)); clear.hidden = !input.value; $(".sbar__key").hidden = !!input.value; });
+      input.addEventListener("input", () => { state.set((s) => (s.q = input.value)); clear.hidden = !input.value; });
       clear.addEventListener("click", () => { input.value = ""; clear.hidden = true; state.set((s) => (s.q = "")); input.focus(); });
       // "/" jumps to the search from anywhere; Esc in the box clears it
       addEventListener("keydown", (e) => {

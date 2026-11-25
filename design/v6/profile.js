@@ -61,8 +61,8 @@
             <p class="pf__motto">“${esc(pr.motto)}”</p></div></div>
           <div class="pf__right">
             <ul class="pf__stats">
-              <li><b>${mine.length}</b><span>works</span></li>
               <li><b style="color:${RANK_INK[best.id]}">${best.name}</b><span>best rank</span></li>
+              <li><b>${mine.length}</b><span>works</span></li>
               <li><b class="pf__fn">${this.followers}</b><span>followers</span></li>
               <li><b>${person.awards().length + mine.filter((x) => x.lead).length}</b><span>awards</span></li></ul>
             <div class="pf__acts">${own
