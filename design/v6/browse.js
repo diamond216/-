@@ -97,11 +97,28 @@
       this.btn.addEventListener("click", () => this.open(this.el.hidden));
       state.addEventListener("change", () => this.paint()); this.paint();
       this.busy = false;
+      // computers (owner, 25 Nov 2026, option B): the panel is always open, in a rail on the screen's left edge
+      // that runs the height of Browse; the works go three a row. Smaller screens keep the Filter button.
+      this.home = this.el.parentElement;
+      this.rail = document.createElement("div"); this.rail.className = "frail";
+      const desk = matchMedia("(min-width: 1101px)"), place = () => this.place(desk.matches);
+      desk.addEventListener("change", place); place();
+    }
+    place(rail) {
+      window.Grid && window.Grid.collapse(false);
+      if (rail) {
+        this.el.closest(".br").prepend(this.rail); this.rail.append(this.el);
+        this.el.hidden = false; document.body.classList.remove("has-panel"); document.body.classList.add("has-rail");
+      } else {
+        this.home.prepend(this.el); this.rail.remove();
+        this.el.hidden = true; document.body.classList.remove("has-rail", "has-panel");
+      }
+      this.btn.setAttribute("aria-expanded", rail);
     }
     // Opening: the panel slides in from the left while the tiles re-flow from 4 to 3 a row (FLIP).
     // Closing: the panel slides out first, then the tiles re-flow back to 4. Each step waits on Animation.finished.
     async open(on) {
-      if (this.busy || on === !this.el.hidden) return;
+      if (this.busy || on === !this.el.hidden || document.body.classList.contains("has-rail")) return;
       this.busy = true; this.btn.setAttribute("aria-expanded", on);
       window.Grid && window.Grid.collapse(false);
       const grid = $(".grid");
@@ -304,7 +321,7 @@
       const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top");
       new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); if (gbar && !gbar.classList.contains("gbar--hero")) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
         { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
-      const pin = () => (top.style.top = bar.offsetHeight + "px"); pin(); addEventListener("resize", pin); // the hero header is taller on phones
+      const pin = () => { top.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin); // the hero header is taller on phones
     }
   }
 

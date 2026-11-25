@@ -344,3 +344,16 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 @media (max-width:400px){.rhead{flex-wrap:wrap;row-gap:6px}.rhead h2,.rhead .sort,.rhead label{white-space:nowrap}}
 /* phones: grid rows size to content there, so the opened card's picture keeps the tile shape instead of collapsing to 0 */
 @media (max-width:700px){.rc--big .rc__media{flex:none}.rc--big .rc__pic{aspect-ratio:1.28;height:auto}.rc--big .rc__open{height:auto}.rc--big .rc__name{font-size:18px}.rc--big .rc__more{grid-template-columns:1fr;row-gap:6px}}
+
+/* computers (owner, 25 Nov 2026, option B): the filter is always open in a white rail on the screen's left edge,
+   running the height of Browse (the panel sticks under the top bar); the works go three a row */
+@media (min-width:1101px){
+  .has-rail .br{display:grid;grid-template-columns:280px minmax(0,1fr);align-items:start}
+  .has-rail .br>*{grid-column:2}
+  .has-rail .br>.frail{grid-column:1;grid-row:1 / span 30;align-self:stretch;position:relative;z-index:5;background:#fff;border-right:1px solid var(--line,#DCE7E8)}
+  .has-rail .frail .fpanel{position:sticky;top:var(--bar-h,78px);max-height:calc(100vh - var(--bar-h,78px));overflow:auto;margin:0;padding:28px 24px 24px;border:0;border-radius:0;box-shadow:none;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .has-rail .fbtn{display:none}
+  .has-rail .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  /* the stuck search row's white band starts at the rail, not under it */
+  .has-rail .br__top.is-stuck::before{left:calc(50% - (100vw - 280px) / 2);right:calc(50% - (100vw - 280px) / 2)}
+}
