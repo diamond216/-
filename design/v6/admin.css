@@ -85,3 +85,5 @@
 .ad__head .ad__kicker{color:#fff}
 /* phones: the link button goes under the title instead of squeezing it */
 @media (max-width:560px){.adt__head{flex-direction:column;align-items:flex-start;gap:12px}}
+/* scrolled to after a decision on phones: stop below the top bar */
+.atabs{scroll-margin-top:96px}

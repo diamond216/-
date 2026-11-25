@@ -58,7 +58,12 @@ window.Tiles = (function () {
   class Expander {
     constructor(grid) {
       this.grid = grid; this.open = null; this.timer = 0;
+      // touch: a tap goes straight to the project page, so nothing expands (no hover on a phone)
+      let touched = 0;
+      grid.addEventListener("pointerdown", (e) => { if (e.pointerType !== "mouse") touched = performance.now(); }, true);
+      const byTouch = () => performance.now() - touched < 800;
       grid.addEventListener("pointerover", (e) => {
+        if (e.pointerType && e.pointerType !== "mouse") return;
         const c = e.target.closest(".rc"); if (!c || c === this.open || this.busy()) return;
         clearTimeout(this.timer);
         c.classList.add("rc--arming");
@@ -70,7 +75,7 @@ window.Tiles = (function () {
         if (c === this.open) this.collapse();
       });
       // keyboard: focusing a tile opens it straight away
-      grid.addEventListener("focusin", (e) => { const c = e.target.closest(".rc"); if (c && c !== this.open && !this.busy()) this.expand(c); });
+      grid.addEventListener("focusin", (e) => { const c = e.target.closest(".rc"); if (c && c !== this.open && !this.busy() && !byTouch()) this.expand(c); });
       grid.addEventListener("focusout", (e) => { if (this.open && !this.open.contains(e.relatedTarget)) this.collapse(); });
       addEventListener("resize", () => this.collapse(false));
     }

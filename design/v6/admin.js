@@ -149,6 +149,8 @@
       Decisions.set(it.id, d);
       const next = this.q.by("waiting")[0];
       this.sel = next ? next.id : null; this.render();
+      // one column (phones): the next work's panel is shorter, so go back up to the queue instead of landing on the footer
+      if (matchMedia("(max-width: 900px)").matches) $(".atabs", this.root)?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
       toast(d.status === "approved" ? `${it.name} approved as ${tiers.find((t) => t.id === d.tier).name}.` : `${it.name} turned down. ${it.maker} gets your comment.`, () => { Decisions.drop(it.id); this.sel = it.id; this.render(); });
     }
   }
