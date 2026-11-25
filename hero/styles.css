@@ -35,8 +35,8 @@
     --e-pop: linear(0, .25 5%, .65 11%, .93 17%, 1.05 24%, 1.07 29%, 1.04 38%, .995 50%, 1.005 62%, 1);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  :root {
+html.calm {
+  & {
     --sq-press: 1 1; --sq-lift: 1 1; --sq-land: 1 1; --arc-s: 0px; --arc-m: 0px; --arc-l: 0px;
     --d-fast: .01s; --d-base: .01s; --d-slow: .01s; --d-enter: .01s;
     --e-pop: linear; --e-spring: linear;
@@ -67,11 +67,11 @@ button { font: inherit; color: inherit; }
 
 .header-actions { display: flex; align-items: center; justify-self: end; gap: 1.25rem; }
 
-@media (prefers-reduced-motion: no-preference) {
+html:not(.calm) {
   .site-header .brand { --hx: -12px; }
   .site-header .header-actions { --hx: 12px; }
   .site-header .brand-logo { animation: hd-logo .9s var(--e-out) .15s backwards; }
-  .site-header .brand, .site-header .site-nav, .site-header .header-actions { animation: hd-in var(--d-enter) var(--e-out) both; animation-delay: calc(.15s + var(--k) * .14s); }
+  .site-header .brand,.site-header .site-nav,.site-header .header-actions { animation: hd-in var(--d-enter) var(--e-out) both; animation-delay: calc(.15s + var(--k) * .14s); }
 }
 @keyframes hd-in { 0% { opacity: 0; transform: translate(var(--hx, 0px), calc(var(--arc-m) * -1)); } 60% { opacity: 1; transform: translate(calc(var(--hx, 0px) * .2), 3px); } 100% { transform: none; } }
 @keyframes hd-logo { 0% { translate: -14px calc(var(--arc-l) * -1); scale: .94 1.06; } 55% { translate: 0 4px; scale: var(--sq-land); } 80% { translate: 0 -3px; scale: .99 1.02; } 100% { translate: 0 0; scale: 1 1; } }
@@ -108,7 +108,7 @@ button { font: inherit; color: inherit; }
 .btn-rainbow:is(:hover, :focus-visible) { --hd-fill: var(--hv); --hd-onfill: var(--hv-on); }
 .btn-rainbow:active { --hd-fill: var(--hv-press); }
 @keyframes rainbow { to { background-position: 200% center; } }
-@media (prefers-reduced-motion: no-preference) { .btn-rainbow, .btn-rainbow::before { animation: rainbow 2s linear infinite; } }
+html:not(.calm) { .btn-rainbow,.btn-rainbow::before { animation: rainbow 2s linear infinite; } }
 
 .site-nav { position: relative; width: 352px; height: 48px; justify-self: center; }
 .island {
@@ -145,14 +145,14 @@ button { font: inherit; color: inherit; }
 .sound-hint { position: absolute; z-index: 3; left: 50%; top: calc(100% + 14px); padding: 4px 12px; border-radius: 999px; background: #000; color: #fff; font-size: .75rem; font-weight: 500; white-space: nowrap; pointer-events: none; opacity: 0; translate: -50% 8px; transition: opacity var(--d-base) var(--e-out), translate var(--d-base) var(--e-out); }
 .sound-hint::before { content: ""; position: absolute; left: 50%; top: -4px; width: 8px; height: 8px; translate: -50% 0; rotate: 45deg; background: #000; }
 html[data-sound-wait] .sound-hint { opacity: 1; translate: -50% 0; }
-@media (prefers-reduced-motion: no-preference) {
+html:not(.calm) {
   .island { transition: height .55s var(--e-spring), border-radius .55s var(--e-spring), padding .45s var(--e-spring), gap .45s var(--e-spring); }
-  html:not([data-sound-wait]) .sound-btn[aria-checked="true"] .eq i { animation: eq 1s var(--e-inout) infinite alternate; }
-  html:not([data-sound-wait]) .sound-btn[aria-checked="true"] .eq i:nth-child(2) { animation-duration: .74s; animation-delay: -.3s; }
-  html:not([data-sound-wait]) .sound-btn[aria-checked="true"] .eq i:nth-child(3) { animation-duration: .88s; animation-delay: -.55s; }
+  &:not([data-sound-wait]) .sound-btn[aria-checked="true"] .eq i { animation: eq 1s var(--e-inout) infinite alternate; }
+  &:not([data-sound-wait]) .sound-btn[aria-checked="true"] .eq i:nth-child(2) { animation-duration: .74s; animation-delay: -.3s; }
+  &:not([data-sound-wait]) .sound-btn[aria-checked="true"] .eq i:nth-child(3) { animation-duration: .88s; animation-delay: -.55s; }
 }
 @keyframes eq { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
-@media (prefers-reduced-motion: reduce) { .island, .sound-label, .sound-label > span, .site-menu a, .sound-hint { transition: none; } }
+html.calm { .island,.sound-label,.sound-label > span,.site-menu a,.sound-hint { transition: none; } }
 
 html { scroll-padding-top: 0; }
 html[data-auth="in"] [data-auth="out"], html[data-auth="out"] [data-auth="in"] { display: none; }
@@ -171,10 +171,10 @@ html[data-auth="in"] [data-auth="out"], html[data-auth="out"] [data-auth="in"] {
 .hero-art img { object-fit: cover; object-position: 50% 50%; }
 .hero-art { opacity: 0; transition: opacity .9s var(--e-out); }
 .hero-frame[data-slide="0"] .hero-art.is-ready { opacity: 1; }
-@media (prefers-reduced-motion: reduce) { .hero-art { transition: none; } }
+html.calm { .hero-art { transition: none; } }
 .hero-poster { opacity: 0; }
 .hero-poster.is-ready { opacity: 1; transition: opacity 1.8s var(--e-out); }
-@media (prefers-reduced-motion: reduce) { .hero-poster, .hero-poster.is-ready { opacity: 1; transition: none; } }
+html.calm { .hero-poster,.hero-poster.is-ready { opacity: 1; transition: none; } }
 
 .hero { position: relative; height: 100svh; }
 .hero-ui { position: absolute; inset: 0; z-index: 2; color: #fff; pointer-events: none; --focus: #fff; }
@@ -183,7 +183,7 @@ html[data-auth="in"] [data-auth="out"], html[data-auth="out"] [data-auth="in"] {
 .hero-track::-webkit-scrollbar { display: none; }
 .hero-track:focus-visible { outline-offset: -6px; }
 .hero-track.is-jumping { opacity: 0; transition-duration: .16s; }
-@media (prefers-reduced-motion: no-preference) { .hero-track { scroll-behavior: smooth; } }
+html:not(.calm) { .hero-track { scroll-behavior: smooth; } }
 .slide { position: relative; flex: 0 0 100%; height: 100%; scroll-snap-align: center; scroll-snap-stop: always; }
 .slide-copy { --copy-x: 120px; position: absolute; inset-inline-start: var(--copy-x); bottom: 108px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; max-inline-size: min(780px, calc(100% - 2 * var(--copy-x))); }
 .slide-copy h2 { font-size: clamp(2.4rem, 4.8vw, 4.6rem); font-weight: 700; line-height: 1.02; letter-spacing: -.03em; text-wrap: balance; text-shadow: 0 2px 28px rgba(5, 32, 64, .35); }
@@ -191,7 +191,7 @@ html[data-auth="in"] [data-auth="out"], html[data-auth="out"] [data-auth="in"] {
 :lang(th) .slide-copy .slide-kicker { letter-spacing: 0; text-transform: none; }
 .slide-copy .slide-credit { font-size: 1rem; color: rgba(255, 255, 255, .82); }
 .slide-copy p { max-inline-size: 38ch; font-size: 1.3rem; line-height: 1.5; color: rgba(255, 255, 255, .94); text-shadow: 0 1px 14px rgba(5, 32, 64, .5); text-wrap: pretty; }
-@media (prefers-reduced-motion: no-preference) {
+html:not(.calm) {
   .slide-copy h2 { animation: hero-in 1.3s var(--e-out) .5s both; }
   .slide-copy :is(p) { animation: hero-in 1.3s var(--e-out) .65s both; }
   .slide-copy .slide-actions { animation: hero-in 1.3s var(--e-out) .8s both; }
@@ -222,8 +222,8 @@ html[data-auth="in"] [data-auth="out"], html[data-auth="out"] [data-auth="in"] {
 .btn-light:active, .btn-ghost:active { scale: var(--sq-press); transition-duration: .2s, .2s, .2s, .2s, .15s, .15s; transition-timing-function: var(--e-out); }
 .hero-arrow:active, .hero-pause:active { scale: var(--sq-press); transition-duration: .2s, .2s, .2s, .15s; transition-timing-function: var(--e-out); }
 .hero-pause svg { transform-origin: 50% 50%; }
-@media (prefers-reduced-motion: no-preference) {
-  .hero-pause[data-state="playing"] .i-pause, .hero-pause[data-state="paused"] .i-play { animation: icon-pop .3s var(--e-pop); }
+html:not(.calm) {
+  .hero-pause[data-state="playing"] .i-pause,.hero-pause[data-state="paused"] .i-play { animation: icon-pop .3s var(--e-pop); }
   .menu:popover-open { transform-origin: 100% 0; animation: menu-pop .35s var(--e-pop); }
   .menu:popover-open .menu-item { animation: menu-rise var(--d-base) var(--e-out) backwards; }
   .menu:popover-open .menu-item:nth-child(2) { animation-delay: .03s; }
@@ -248,9 +248,9 @@ html[data-auth="in"] [data-auth="out"], html[data-auth="out"] [data-auth="in"] {
 :dir(rtl) .hero-dots button > i::after { transform-origin: right; }
 .hero-ui :is(a, button, .hero-track) { pointer-events: auto; }
 
-@media (prefers-reduced-motion: reduce) {
+html.calm {
   .hero-video { transform: none; }
-  .hero-track, .hero-video, .hero-dots button > i { transition: none; }
-  :is(.btn-rainbow, .icon-btn, .menu-item, .site-menu a, .sound-btn, .btn-ghost, .btn-light, .hero-arrow, .hero-pause):is(*, :hover, :active) { transition: none; }
-  :is(.btn-rainbow, .btn-ghost, .btn-light, .hero-arrow, .hero-pause, .brand-logo, .flag, .sound-ico, .hero-dots button > i):is(*, :hover, :active) { transition-duration: .01s !important; animation: none !important; }
+  .hero-track,.hero-video,.hero-dots button > i { transition: none; }
+  :is(.btn-rainbow,.icon-btn,.menu-item,.site-menu a,.sound-btn,.btn-ghost,.btn-light,.hero-arrow,.hero-pause):is(*,:hover,:active) { transition: none; }
+  :is(.btn-rainbow,.btn-ghost,.btn-light,.hero-arrow,.hero-pause,.brand-logo,.flag,.sound-ico,.hero-dots button > i):is(*,:hover,:active) { transition-duration: .01s !important; animation: none !important; }
 }

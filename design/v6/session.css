@@ -43,3 +43,13 @@ footer.nest-foot .wrap.foot__links{display:grid;grid-template-columns:repeat(4,m
 .gate h1{font:600 26px/1.25 var(--f);margin-top:16px;color:var(--ink,#0D2B33)}
 .gate p{margin-top:10px;font-size:15.5px;line-height:1.6;color:var(--mute,#5C7279)}
 .gate__acts{display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}.gate__acts .post{margin-left:0}
+
+/* footer switch: animations on / off (motion.js) */
+.nest-foot .foot__motion{display:flex;align-items:center;gap:10px;margin:0 auto 22px;padding:8px 14px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.04);color:#D4D4D8;font:500 14px/1 inherit;font-family:inherit;cursor:pointer}
+.nest-foot .foot__motion:hover{background:rgba(255,255,255,.08)}
+.nest-foot .foot__motion:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.nest-foot .foot__motion i{position:relative;width:34px;height:20px;border-radius:999px;background:#3F3F46;transition:background .2s}
+.nest-foot .foot__motion i::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
+.nest-foot .foot__motion[aria-checked="true"] i{background:#FF6A1A}
+.nest-foot .foot__motion[aria-checked="true"] i::after{transform:translateX(14px)}
+.nest-foot .foot__motion b{font-weight:600;color:#fff;min-width:24px;text-align:left}

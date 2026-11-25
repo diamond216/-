@@ -65,7 +65,7 @@ a.tag--room:hover{background:#0B5F66}
 .like__h span{font:600 12px/1 var(--f);letter-spacing:.18em;color:#0B7F86;padding-bottom:8px;white-space:nowrap}
 @media (max-width:1000px){.pj__grid{grid-template-columns:1fr}.pj__side{position:static;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}}
 @media (max-width:640px){.log li{grid-template-columns:1fr;gap:4px}}
-@media (prefers-reduced-motion:reduce){.play,.back svg{transition:none}}
+html.calm {.play,.back svg {transition:none}}
 /* optical centring (see browse.css): fixed-height pills, labels trimmed to cap height */
 .tag,.rk{display:inline-flex;align-items:center;height:28px;padding:0 12px;line-height:1;text-box:trim-both cap alphabetic}
 .say{display:flex;align-items:center;justify-content:center;height:42px;padding:0;line-height:1;text-box:trim-both cap alphabetic}
@@ -156,7 +156,7 @@ a.tag--room:hover{background:#0B5F66}
 .log__list.has-more-below{--bot:90px}.log__list.has-more-above{--top:40px}
 .log__list:focus-visible{box-shadow:0 0 0 2px var(--ink);border-radius:6px}
 @media (max-width:900px){.pj__head{grid-template-columns:1fr}.pj__head .dl{grid-column:1;grid-row:auto;justify-self:start;margin-top:18px}}
-@media (prefers-reduced-motion:reduce){.gal__nav,.thumb,.dl__btn{transition:none}}
+html.calm {.gal__nav,.thumb,.dl__btn {transition:none}}
 /* heart in the download pill; team names link to profiles */
 .fav{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid rgba(13,43,51,.14);background:#fff;color:#C0396B;cursor:pointer;transition:background .2s}
 .fav svg{width:20px;height:20px}.fav:hover{background:#FFF1F5}.fav[aria-pressed="true"]{--fill:#E0457B;color:#E0457B;background:#FFF1F5;border-color:#F6C2D4}

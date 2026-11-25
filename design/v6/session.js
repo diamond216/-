@@ -140,6 +140,14 @@ window.NestSession = (function () {
           ${col("Help", [["Get in touch", "#contact-page"], ["Privacy", "#"], ["Cookies", "#"]])}
         </div>
         <p class="foot__copy">© 2026 Hamster Hub. All rights reserved. Projects, names and quotes on this draft are placeholders.</p>`;
+      // Animations on / off (motion.js); switching reloads the page
+      if (window.NestMotion) {
+        const on = NestMotion.on, b = document.createElement("button");
+        b.type = "button"; b.className = "foot__motion"; b.setAttribute("role", "switch"); b.setAttribute("aria-checked", on);
+        b.innerHTML = `<span>Animations</span><i aria-hidden="true"></i><b>${on ? "On" : "Off"}</b>`;
+        b.addEventListener("click", () => NestMotion.set(!on));
+        el.querySelector(".foot__copy").before(b);
+      }
     }
   }
 

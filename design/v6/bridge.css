@@ -33,7 +33,7 @@ body.sea{background:radial-gradient(130% 70svh at 50% 0,rgba(168,212,240,.26),rg
   font:600 11px/1 'IBM Plex Sans Thai Looped',sans-serif;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:#4a5b69;padding:6px 10px;border-radius:10px}
 .scroll-cue svg{width:16px;height:16px}
 .scroll-cue:hover{color:#0f1f2e}
-@media (prefers-reduced-motion:no-preference){.scroll-cue svg{animation:cue 1.8s var(--e-inout) infinite}}
+html:not(.calm) {.scroll-cue svg {animation:cue 1.8s var(--e-inout) infinite}}
 @keyframes cue{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
 /* the lagoon water band picks up where the hero ends (owner chose this join over a plain paper or a sheet over the hero) */

@@ -49,4 +49,4 @@
 .gd__foot .post{margin-left:auto}
 .guide-btn{display:inline-flex;align-items:center;gap:6px}
 @media (max-width:720px){.gd__ex{grid-template-columns:1fr}.gd__card{position:static}.gd__foot{flex-wrap:wrap}}
-@media (prefers-reduced-motion:reduce){.gd__rules summary::after,.gd__rules details{transition:none}}
+html.calm {.gd__rules summary::after,.gd__rules details {transition:none}}

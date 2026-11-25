@@ -159,4 +159,4 @@ html{background:var(--g900)}body{background:transparent}
 .tile:hover .fan .cv:nth-child(4),.tile:hover .fan .cv:nth-child(5){transform:rotateY(-32deg) translateX(22px)}
 .lists li a{transition:background .2s}.lists .cv{transition:transform .25s}.lists li a:hover .cv{transform:translateY(-3px) rotate(-2deg)}
 .lists li a:hover strong{color:var(--g300)}
-@media (prefers-reduced-motion:reduce){.glowball{animation:none}.tile,.tile__art,.hl__stage .cv,.b,.fan .cv{transition:none}.tile{transform:none}}
+html.calm {.glowball {animation:none}.tile,.tile__art,.hl__stage .cv,.b,.fan .cv {transition:none}.tile {transform:none}}

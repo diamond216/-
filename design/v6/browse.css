@@ -89,7 +89,7 @@ html:has(.sea){background:#9FE0DC}
 .sea .foot{margin-top:0}
 
 @media (max-width:700px){.br__top{flex-wrap:wrap}.sbar{order:-1;flex-basis:100%;min-width:0}.sbar__key{display:none}.has-panel .br__body{grid-template-columns:1fr}.fpanel{position:static;max-height:none}.row{flex-wrap:wrap;height:auto}.rc{flex:1 1 40%;height:320px}.room{width:132px}}
-@media (prefers-reduced-motion:reduce){.rc,.rc__line,.room__art{transition:none}}
+html.calm {.rc,.rc__line,.room__art {transition:none}}
 .fbtn b[hidden]{display:none}
 /* ---------- round 2: blue water, liquid glass on top, more colour ---------- */
 .sea{--sea-ink:#0E2A47;--sea-mute:#4F6A86;--sea-line:#D6E4F3;--sea-acc:#2F78E0;--sea-soft:#EAF2FD;--sea-shadow:22,62,120}
@@ -216,7 +216,7 @@ html:has(.sea){background:#A9CFF2}
 .rc__bell[aria-pressed="true"] svg path:first-child{fill:currentColor}
 @media (max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.has-panel .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){.grid,.has-panel .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 14px}}
-@media (prefers-reduced-motion:reduce){.rc__flag,.rc__bell,.rc__pic .cv{transition:none}}
+html.calm {.rc__flag,.rc__bell,.rc__pic .cv {transition:none}}
 .rc__media{position:relative;border-radius:12px;overflow:hidden;isolation:isolate}
 .rc__pic{box-shadow:none}
 .rc__media{box-shadow:0 18px 34px -20px rgba(var(--sea-shadow),.75)}
@@ -311,7 +311,7 @@ html:has(.sea--c){background:#F4F8F8}
 .rc--big .rc__open:focus-visible{outline-offset:-3px}
 /* the filter panel's groups */
 .fp__group{display:block}
-@media (prefers-reduced-motion:reduce){.rc--arming .rc__media::before{transition:none}}
+html.calm {.rc--arming .rc__media::before {transition:none}}
 .rc--big .rc__pic::after{background:linear-gradient(180deg,rgba(6,22,40,.32),rgba(6,22,40,0) 22%)}
 /* ---- roomier layout (owner chose C, 22 Nov 2026): five to a row (four with the panel), quieter header ---- */
 .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:44px 30px}
