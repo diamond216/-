@@ -41,8 +41,7 @@ window.NestSession = (function () {
   const sameDoc = (href) => { const a = new URL(href, location.href), b = new URL(location.href); return a.pathname === b.pathname && a.hash === b.hash; };
 
   // ---------- account menu ----------
-  // gbar pages: new AccountMenu(slot) draws Log in / Sign up, or the avatar button and its menu, into slot.
-  // hero page:  new AccountMenu(null, { hero: { button, signIn } }) uses the hero's own Sign in and round profile button.
+  // new AccountMenu(slot) draws Log in / Sign up, or the avatar button and its menu, into slot (every page's .acct).
   // opts.extra = [[label, go]] adds page-only items; opts.onPick(go, event) handles them (and may handle works/favs);
   // opts.requires = true sends you home when you log out (pages that need you signed in).
   class AccountMenu {
@@ -65,7 +64,6 @@ window.NestSession = (function () {
         ["Switch to admin view", null, "admin"], "hr", ["Log out", null, "out"]];
     }
     render() {
-      if (this.o.hero) return this.renderHero();
       this.menu = null;
       if (!Session.signedIn) {
         this.slot.innerHTML = `<a class="gbtn glass" href="#" data-in>Log in</a><a class="gbtn gbtn--solid" href="#" data-in>Sign up</a>`;
@@ -76,19 +74,6 @@ window.NestSession = (function () {
       this.wrap = this.slot.firstElementChild; this.btn = this.wrap.firstElementChild; this.menu = this.wrap.lastElementChild;
       this.btn.addEventListener("click", () => this.open(this.menu.hidden));
       this.fill();
-    }
-    renderHero() {
-      const h = this.o.hero;
-      document.documentElement.dataset.auth = Session.signedIn ? "in" : "out";
-      if (!this.wrap) {
-        this.btn = h.button; this.wrap = document.createElement("div"); this.wrap.className = "me me--hero";
-        this.btn.before(this.wrap); this.wrap.append(this.btn);
-        this.menu = document.createElement("div"); this.menu.className = "me__menu"; this.menu.setAttribute("role", "menu"); this.menu.hidden = true; this.wrap.append(this.menu);
-        this.btn.setAttribute("aria-haspopup", "menu"); this.btn.setAttribute("aria-expanded", "false");
-        this.btn.addEventListener("click", (e) => { e.preventDefault(); this.open(this.menu.hidden); });
-        h.signIn.addEventListener("click", (e) => { e.preventDefault(); Session.signIn(); toast(`Signed in as ${Session.user.name}`); });
-      }
-      this.open(false); this.fill();
     }
     fill() {
       const u = Session.user;

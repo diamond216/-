@@ -300,9 +300,9 @@
     constructor(state) {
       $(".band__n").textContent = works.length;
       const sort = $("#sort"); sort.addEventListener("change", () => state.set((s) => (s.sort = sort.value)));
-      // the page's own glass bar, or the hero page's header when Browse sits under the hero (bridge.js owns that header's look)
+      // the page's glass bar (on the home page bridge.js decides when it turns white)
       const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top");
-      new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); if (gbar) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
+      new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); if (gbar && !gbar.classList.contains("gbar--hero")) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
         { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
       const pin = () => (top.style.top = bar.offsetHeight + "px"); pin(); addEventListener("resize", pin); // the hero header is taller on phones
     }

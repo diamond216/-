@@ -1,13 +1,14 @@
-// Bridge between the hero and Browse on hero/index.html: the header turns solid once you scroll,
+// Bridge between the hero and Browse on hero/index.html: the glass top bar turns white once you scroll,
 // in-page links glide (Scroll down, Explore projects, Browse, a room from the footer, About and Contact),
-// and the hero's Sign in / profile button use the shared account menu (session.js).
+// and EN / ไทย switch the hero's language (app.js does the work through the hidden first header).
+// The account area in the bar is the shared one (session.js fills .acct).
 (function () {
   "use strict";
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const header = document.querySelector(".site-header"), hero = document.getElementById("hero"), browse = document.getElementById("browse-page");
+  const header = document.querySelector(".gbar--hero"), hero = document.getElementById("hero"), browse = document.getElementById("browse-page");
   if (!header || !hero || !browse) return;
-  // clear over the hero at rest; solid as soon as the page moves, so the hero's text never runs under clear menu type
-  const frame = () => header.classList.toggle("is-solid", scrollY > 24);
+  // glass over the hero at rest; white as soon as the page moves, so the hero's text never runs under the menu
+  const frame = () => header.classList.toggle("gbar--framed", scrollY > 24);
   addEventListener("scroll", frame, { passive: true }); frame();
 
   // where a hash on this page lands: Browse (#browse-page, #browse-game ...) or the footer (#about-page, #contact-page)
@@ -29,6 +30,9 @@
   // arriving from another page with a hash (e.g. a room link in the project page's footer)
   addEventListener("load", () => { if (target(location.hash)) glide(location.hash, false); });
 
-  // Sign in signs you in as Pim (prototype); the round profile button opens the account menu
-  if (window.NestSession) new NestSession.AccountMenu(null, { hero: { button: header.querySelector(".profile-btn"), signIn: header.querySelector('a[data-auth="out"]') } });
+  // EN / ไทย: press the matching item of the hero's own language menu, so app.js translates the page
+  const langs = [...header.querySelectorAll("[data-set-lang]")];
+  const showLang = () => langs.forEach((b) => b.setAttribute("aria-pressed", b.dataset.setLang === (document.documentElement.lang === "th" ? "th" : "en")));
+  langs.forEach((b) => b.addEventListener("click", () => { document.querySelector(`#lang-menu [data-lang="${b.dataset.setLang}"]`)?.click(); showLang(); }));
+  addEventListener("load", showLang); showLang();
 })();
