@@ -311,4 +311,11 @@
   const state = new BrowseState();
   new Chrome(state); new ActiveChips(state);
   new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
+
+  // #browse-game, #browse-iot ... (footer "Rooms" links, the project page's room tag) open Browse on that room
+  const fromHash = () => {
+    const m = location.hash.match(/^#browse-(\w+)$/), room = m && ROOM_NAMES.find((r) => r.toLowerCase() === m[1]);
+    if (room && room !== state.tab) state.setTab(room);
+  };
+  fromHash(); addEventListener("hashchange", fromHash);
 })();

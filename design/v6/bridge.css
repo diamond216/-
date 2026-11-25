@@ -61,3 +61,7 @@ body.sea{background:radial-gradient(130% 70svh at 50% 0,rgba(168,212,240,.26),rg
 .li-on body{overflow:hidden}
 /* the hero's own entrance (menu drops in, title and text rise) waits until the opening lifts */
 .li-on .site-header *,.li-on .site-header,.li-on .slide-copy *{animation-play-state:paused!important}
+
+/* signed in: the hero's round profile button (its icon had no size, so it took the SVG default of 150px) */
+.site-header .profile-btn svg{width:20px;height:20px}
+.site-header .me--hero{display:flex}

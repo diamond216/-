@@ -157,19 +157,9 @@
     a.finished.then(() => t.animate([{ opacity: 1 }, { opacity: 1 }], { duration: undo ? 5000 : 2600 }).finished).then(() => t.isConnected && t.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: "forwards" }).finished).then(() => t.remove()).catch(() => {});
   }
 
-  // account menu: signed in as an admin
-  (function accountMenu() {
-    const btn = $(".me__btn"), menu = $(".me__menu");
-    $(".me__av").outerHTML = `<span class="me__av" style="--h:${new Person(ADMIN).hue}" aria-hidden="true">${ADMIN[0]}</span>`;
-    menu.innerHTML = `<div class="me__head"><span class="me__big" style="--h:${new Person(ADMIN).hue}">${ADMIN[0]}</span><b>${ADMIN}</b><i>Admin · Hamster Hub</i></div>
-      <a role="menuitem" href="admin.html" aria-current="page">Review queue</a><a role="menuitem" href="post.html">Posting guide and rules</a><a role="menuitem" href="browse.html">Browse</a><hr><a role="menuitem" href="#">Log out</a>`;
-    const open = (on) => { menu.hidden = !on; btn.setAttribute("aria-expanded", on); if (on) menu.querySelector("[role=menuitem]").focus(); };
-    btn.addEventListener("click", () => open(menu.hidden));
-    document.addEventListener("click", (e) => { if (!menu.hidden && !e.composedPath().includes($(".me"))) open(false); });
-    addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { open(false); btn.focus(); } });
-  })();
-
-  new AdminPage($("#main"));
+  // the review queue needs the admin view; logging out from here takes you home (session.js)
+  NestSession.menuOptions = { requires: true };
+  if (NestSession.gate($("#main"), "admin")) new AdminPage($("#main"));
   const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 160);
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 })();

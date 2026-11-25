@@ -31,8 +31,8 @@
       this.root.style.setProperty("--ri", ink);
       this.root.innerHTML = `
         <div class="pj__head">
-          <a class="back" href="browse.html"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Browse</a>
-          <p class="tags"><a class="tag tag--room" href="browse.html">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
+          <a class="back" href="${NestSession.Paths.home("#browse-page")}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Browse</a>
+          <p class="tags"><a class="tag tag--room" href="${NestSession.Paths.browse(w.room)}">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
           <h1 class="title">${w.name}</h1>
           <p class="blurb">${w.blurb}</p>
           <div class="dl"><span><b>${d.download()[0]}</b><i>${d.download()[1]}</i></span><button type="button" class="fav" aria-pressed="false" aria-label="Save ${w.name} to your favourites"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button><a class="dl__btn" href="#" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</a></div>
@@ -95,7 +95,9 @@
       let at = 0;
       const go = (i) => { i = Math.max(0, Math.min(slides.length - 1, i)); track.scrollTo({ left: slides[i].offsetLeft, behavior: calm ? "auto" : "smooth" }); };
       const mark = () => {
-        const i = Math.round(track.scrollLeft / track.clientWidth); if (i === at && root.dataset.ready) return;
+        // the slide whose left edge is nearest (a phone's track is not exactly one slide wide)
+        const i = slides.reduce((best, s, k) => (Math.abs(s.offsetLeft - track.scrollLeft) < Math.abs(slides[best].offsetLeft - track.scrollLeft) ? k : best), 0);
+        if (i === at && root.dataset.ready) return;
         at = i; root.dataset.ready = 1;
         thumbs.forEach((t, k) => t.setAttribute("aria-current", k === i));
         $(".gal__count", root).textContent = `${i + 1} / ${slides.length}`;

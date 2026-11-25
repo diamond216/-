@@ -75,7 +75,8 @@ window.NestGuide = (function () {
   // called when someone starts a new project
   function auto() { if (!hidden()) open("good"); }
   // post.html#rules or #rule-3 opens straight to the rules
-  const fromHash = () => { const m = location.hash.match(/^#rules?(?:-(\d+))?$/); if (m) open("rules", m[1]); };
+  // post.html#after opens "After you post" (the footer's "How ranking works")
+  const fromHash = () => { const m = location.hash.match(/^#rules?(?:-(\d+))?$/); if (m) open("rules", m[1]); else if (location.hash === "#after") open("after"); };
   addEventListener("load", fromHash); addEventListener("hashchange", fromHash);
   return { open, auto, close };
 })();

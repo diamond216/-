@@ -47,7 +47,7 @@
   class ProfilePage {
     constructor(root) { this.root = root; this.tab = "works"; }
     render(person) {
-      this.p = person; const pr = person.profile(), mine = person.works(), ups = person.updates(), own = person.name === ME;
+      this.p = person; const pr = person.profile(), mine = person.works(), ups = person.updates(), own = person.name === ME && NestSession.Session.is("maker");
       this.own = own; this.followers = pr.followers;
       const best = tiers.find((t) => t.id === mine[0].w.tier), set = own ? Settings.get() : { contact: true, phone: true };
       const showFavs = own || favsPublic(person.name), favs = own ? Favs.list() : othersFavs(person.name);
@@ -222,31 +222,6 @@
     close() { this.el.hidden = true; if (this.back && this.back.isConnected) this.back.focus(); }
   }
 
-  // ---------- account menu in the top bar ----------
-  class AccountMenu {
-    constructor() {
-      this.btn = $(".me__btn"); this.menu = $(".me__menu");
-      $(".me__av").outerHTML = avatar(ME, "me__av");
-      const me = new Person(ME), pr = me.profile();
-      this.menu.innerHTML = `<div class="me__head">${avatar(ME, "me__big")}<b>${esc(pr.full)}</b><i>@${me.handle}</i><p><span><b>12</b> following</span><span><b>${pr.followers}</b> followers</span></p></div>
-        <a role="menuitem" href="profile.html#${me.handle}" data-go="works">Your profile</a><a role="menuitem" href="profile.html#${me.handle}" data-go="works">Your works</a><a role="menuitem" href="post.html">Post your work</a>
-        <a role="menuitem" href="profile.html#${me.handle}" data-go="favs">Favourites</a><hr>
-        <button type="button" role="menuitem" data-go="settings">Settings</button><a role="menuitem" href="#">Send feedback</a><hr><a role="menuitem" href="#">Log out</a>`;
-      this.btn.addEventListener("click", () => this.open(this.menu.hidden));
-      document.addEventListener("click", (e) => { if (!this.menu.hidden && !e.composedPath().includes($(".me"))) this.open(false); });
-      addEventListener("keydown", (e) => { if (e.key === "Escape" && !this.menu.hidden) { this.open(false); this.btn.focus(); } });
-      this.menu.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", (e) => {
-        const go = a.dataset.go; this.open(false);
-        if (go === "settings") { e.preventDefault(); if (page.own) settings.open(this.btn); else { page.tab = "works"; location.hash = me.handle; queueMicrotask(() => settings.open(this.btn)); } return; }
-        page.tab = go; if (location.hash.slice(1) === me.handle) { e.preventDefault(); page.show(go); $(".pf__tabs").scrollIntoView({ behavior: calm ? "auto" : "smooth" }); }
-      }));
-    }
-    open(on) {
-      this.menu.hidden = !on; this.btn.setAttribute("aria-expanded", on);
-      if (on) { if (!calm) this.menu.animate([{ opacity: 0, transform: "translateY(-6px)" }, { opacity: 1, transform: "none" }], { duration: 200, easing: E }); this.menu.querySelector("[role=menuitem]").focus(); }
-    }
-  }
-
   const toast = (msg) => {
     const t = document.createElement("p"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg; document.body.appendChild(t);
     t.animate([{ opacity: 0, transform: "translate(-50%,10px)" }, { opacity: 1, transform: "translate(-50%,0)" }], { duration: 250, easing: E, fill: "forwards" }).finished
@@ -254,7 +229,16 @@
   };
 
   const page = new ProfilePage($("#main")), hello = new Hello(), settings = new SettingsDialog();
-  new AccountMenu();
+  // the shared account menu (session.js), plus Settings; Your profile / Favourites open the right tab here
+  NestSession.menuOptions = {
+    extra: [["Settings", "settings"]],
+    onPick(go, e) {
+      const me = new Person(ME);
+      if (go === "settings") { e.preventDefault(); if (page.own) settings.open($(".me__btn")); else { page.tab = "works"; location.hash = me.handle; queueMicrotask(() => settings.open($(".me__btn"))); } return; }
+      page.tab = go; if (location.hash.slice(1) === me.handle) { e.preventDefault(); page.show(go); $(".pf__tabs").scrollIntoView({ behavior: calm ? "auto" : "smooth" }); }
+    },
+  };
+  addEventListener("nest:session", () => show());
   const show = () => {
     const name = Person.find(decodeURIComponent(location.hash.slice(1))) || ME;
     page.render(new Person(name)); scrollTo({ top: 0, behavior: "auto" });

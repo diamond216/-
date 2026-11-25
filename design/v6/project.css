@@ -163,3 +163,7 @@ a.tag--room:hover{background:#0B5F66}
 .fav:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .dl{gap:10px}.dl>span{margin-right:8px}
 .team__n:hover b{color:#0B5F66;text-decoration:underline;text-underline-offset:3px}.team__n:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+/* phones: the room/genre label goes under EXPLORE MORE instead of pushing past the screen */
+@media (max-width:560px){.like__h{flex-direction:column;align-items:flex-start;gap:8px}.like__h h2{font-size:48px}.like__h span{white-space:normal;padding-bottom:0}}
+/* tablets and phones: one column (the size rounds above re-set two columns after the first media query) */
+@media (max-width:1000px){.pj__grid{grid-template-columns:minmax(0,1fr);gap:28px}.pj__side{position:static}}

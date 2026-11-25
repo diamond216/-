@@ -2,6 +2,8 @@
 // a FLIP helper, and the hover-to-expand grid behaviour. Used by browse.html and project.html.
 window.Tiles = (function () {
   "use strict";
+  // works from any folder (the home page lives in hero/), via session.js when it is loaded
+  const projectHref = (id) => (window.NestSession ? NestSession.Paths.page(`project.html#${id}`) : `project.html#${id}`);
   const { tiers } = window.NEST;
   const $ = (s, r = document) => r.querySelector(s);
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -14,7 +16,7 @@ window.Tiles = (function () {
     render() {
       const w = this.w, t = tiers.find((x) => x.id === w.tier), a = document.createElement("article");
       a.className = "rc"; a.dataset.id = w.id; a.style.setProperty("--ri", RANK_INK[w.tier]);
-      a.innerHTML = `<div class="rc__media"><a class="rc__open" href="project.html#${w.id}" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
+      a.innerHTML = `<div class="rc__media"><a class="rc__open" href="${projectHref(w.id)}" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
         <span class="rc__flag" aria-hidden="true">${GEM}<b>${t.name}</b></span>
         <button type="button" class="rc__bell" aria-pressed="${following.has(w.id)}">${BELL}<span>${following.has(w.id) ? "Following" : "Notify me"}</span></button></div>
         <h3 class="rc__name" title="${w.name}">${w.name}</h3>

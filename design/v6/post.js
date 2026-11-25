@@ -300,23 +300,14 @@
     }
   }
 
-  // ---------- account menu (a smaller copy of the profile page's) ----------
-  function accountMenu() {
-    const btn = $(".me__btn"), menu = $(".me__menu"), pr = ME.profile();
-    $(".me__av").outerHTML = `<span class="me__av" style="--h:${ME.hue}" aria-hidden="true">${ME.name[0]}</span>`;
-    menu.innerHTML = `<div class="me__head"><span class="me__big" style="--h:${ME.hue}">${ME.name[0]}</span><b>${esc(pr.full)}</b><i>@${ME.handle}</i></div>
-      <a role="menuitem" href="profile.html#${ME.handle}">Your profile</a><a role="menuitem" href="post.html" aria-current="page">Post your work</a><a role="menuitem" href="profile.html#${ME.handle}">Favourites</a><hr><a role="menuitem" href="#">Log out</a>`;
-    const open = (on) => { menu.hidden = !on; btn.setAttribute("aria-expanded", on); if (on) menu.querySelector("[role=menuitem]").focus(); };
-    btn.addEventListener("click", () => open(menu.hidden));
-    document.addEventListener("click", (e) => { if (!menu.hidden && !e.composedPath().includes($(".me"))) open(false); });
-    addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { open(false); btn.focus(); } });
+  // posting needs you signed in; logging out from here takes you home (session.js)
+  NestSession.menuOptions = { requires: true };
+  if (NestSession.gate($("#main"), "in")) {
+    const page = new PostPage($("#main"));
+    // starting a new project opens the guide (unless they asked us not to, or a link points at the guide)
+    if (page.d.mode === "new" && !/^#(rules?|after)/.test(location.hash)) window.NestGuide.auto();
+    setInterval(() => page.stamp(), 15000);
   }
-
-  accountMenu();
-  const page = new PostPage($("#main"));
-  // starting a new project opens the guide (unless they asked us not to, or a link points at the rules)
-  if (page.d.mode === "new" && !/^#rules?/.test(location.hash)) window.NestGuide.auto();
-  setInterval(() => page.stamp(), 15000);
   const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 160);
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 })();
