@@ -30,7 +30,7 @@
       "pj.clip": "คลิป", "pj.pic": "รูปที่ {n}", "pj.play": "เล่นคลิปของ {name}", "pj.pause": "หยุดคลิปของ {name}",
       "pj.prev": "ก่อนหน้า", "pj.next": "ถัดไป", "pj.show": "ดู{label}", "pj.about": "เกี่ยวกับผลงานนี้",
       "pj.updates": "อัปเดต", "pj.updatesAria": "อัปเดต เรียงจากใหม่สุด", "pj.new": "ใหม่", "pj.links": "ลิงก์", "pj.team": "ทีม", "pj.contact": "ติดต่อ",
-      "pj.reach": "ติดต่อ {name} หัวหน้าทีมได้ที่นี่", "pj.copy": "คัดลอก{label}", "pj.awards": "รางวัล", "pj.more": "ดูผลงานอื่นเพิ่ม",
+      "pj.reach": "ติดต่อ {name} หัวหน้าทีมได้ที่นี่", "pj.copy": "คัดลอก {label}", "pj.awards": "รางวัล", "pj.more": "ดูผลงานอื่นเพิ่ม",
       "pj.copied": "คัดลอก {v} แล้ว", "pj.select": "คัดลอกเองได้เลย: {v}",
     },
   });

@@ -332,7 +332,7 @@
       const ch = this.checks(), done = ch.filter((c) => c[1]).length;
       $(".chk ul", this.root).innerHTML = ch.map(([t, ok, req]) => `<li class="${ok ? "ok" : ""}"><i aria-hidden="true">${ok ? "✓" : ""}</i><span>${tx(t)}${req ? ` <em>${tx("po.req")}</em>` : ""}</span><span class="sr">${tx(ok ? "po.done" : "po.notYet")}</span></li>`).join("");
       // the "still needed" line goes away as soon as nothing required is missing
-      if (!ch.some((c) => c[2] && !c[1])) $(".po__err", this.root).textContent = "";
+      if (!ch.some((c) => c[2] && !c[1])) { $(".po__err", this.root).textContent = ""; this.err = false; }
       $(".chk h3", this.root).innerHTML = `${tx("po.before")} <span class="chk__n">${done} / ${ch.length}</span>`;
       this.preview();
       if (save) { Draft.save(d); this.stamp(true); }
@@ -358,7 +358,7 @@
       const ch = this.checks(), miss = ch.filter((c) => c[2] && !c[1]), err = $(".po__err", this.root), d = this.d;
       this.root.querySelectorAll(".is-bad").forEach((x) => x.classList.remove("is-bad"));
       if (miss.length) {
-        err.textContent = tx("po.almost", { list: miss.map((m) => tx(m[0]).toLowerCase()).join(L.th ? " · " : ", ") });
+        this.err = true; err.textContent = this.missingText(miss);
         const map = d.mode === "update" ? { "ck.pick": ".pick", "ck.utitle": '[name="utitle"]' } : { "ck.name": d.name.trim() ? '[name="line"]' : '[name="name"]', "ck.room": '[data-name="room"]', "ck.cover": "#media .drop" };
         const first = $(map[miss[0][0]], this.root);
         if (first) { first.closest(".fld, .sec2")?.classList.add("is-bad"); first.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" }); (first.matches("input,[tabindex]") ? first : first.querySelector("button,input"))?.focus({ preventScroll: true }); }
@@ -372,6 +372,7 @@
       $('[data-act="again"]', box).addEventListener("click", () => { this.d = Draft.blank(); this.render(); scrollTo({ top: 0 }); });
       scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
     }
+    missingText(miss) { return tx("po.almost", { list: miss.map((m) => tx(m[0]).toLowerCase()).join(L.th ? " · " : ", ") }); }
     // the "it's in" screen, drawn from what was posted, so a language switch can draw it again
     paintDone() {
       const f = this.finished, w = works.find((x) => x.id === f.work);
@@ -388,6 +389,8 @@
       const y = scrollY, keep = { media: this.media, umedia: this.umedia };
       if (this.finished) { const box = this.paintDone(); $('[data-act="again"]', box).addEventListener("click", () => { this.d = Draft.blank(); this.render(); scrollTo({ top: 0 }); }); return; }
       this.render(keep); scrollTo({ top: y, behavior: "auto" });
+      const miss = this.checks().filter((c) => c[2] && !c[1]);
+      if (this.err && miss.length) $(".po__err", this.root).textContent = this.missingText(miss);
     }
   }
 
