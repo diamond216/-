@@ -156,9 +156,10 @@
 
   const page = new ProjectPage($("#main"));
   const show = () => {
-    const id = decodeURIComponent(location.hash.slice(1)), w = works.find((x) => x.id === id) || works[0];
+    const [id, part] = decodeURIComponent(location.hash.slice(1)).split("&"), w = works.find((x) => x.id === id) || works[0];
     page.stop(); page.render(w);
-    scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+    const log = part === "updates" && $(".log", page.root);
+    scrollTo({ top: log ? log.getBoundingClientRect().top + scrollY - $(".gbar").offsetHeight - 16 : 0, behavior: calm || log ? "auto" : "smooth" });
   };
   addEventListener("hashchange", show); show();
 

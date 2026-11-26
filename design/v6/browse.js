@@ -10,7 +10,9 @@
 
   // ---------- state ----------
   class BrowseState extends EventTarget {
-    constructor() { super(); this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.reveal = false; }
+    constructor(o = {}) {
+      super(); this.items = o.items || works; this.of = o.of || ((w) => w); this.text = o.text || ((w) => `${w.name} ${w.blurb} ${w.maker} ${w.genre} ${w.room}`);
+      this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.reveal = false; }
     set(fn) { fn(this); this.dispatchEvent(new Event("change")); }
     setTab(tab) { this.set((s) => { s.tab = tab; s.rooms.clear(); s.genres.clear(); }); }
     toggle(setName, v) { this.set((s) => { s.reveal = false; const set = s[setName]; set.has(v) ? set.delete(v) : set.add(v); if (setName === "rooms") s.dropOrphanGenres(); }); }
@@ -22,16 +24,16 @@
     get genreRooms() { return this.tab === "All" ? ROOM_NAMES.filter((r) => this.rooms.has(r)) : [this.tab]; }
     dropOrphanGenres() { const ok = new Set(this.genreRooms.flatMap((r) => rooms[r])); [...this.genres].forEach((g) => !ok.has(g) && this.genres.delete(g)); }
     get active() { return this.ranks.size + this.rooms.size + this.genres.size; }
-    matches(w, ignore = "") {
-      const q = this.q.trim().toLowerCase();
-      if (q && !`${w.name} ${w.blurb} ${w.maker} ${w.genre} ${w.room}`.toLowerCase().includes(q)) return false;
+    matches(x, ignore = "") {
+      const q = this.q.trim().toLowerCase(), w = this.of(x);
+      if (q && !this.text(x).toLowerCase().includes(q)) return false;
       if (this.tab !== "All" && w.room !== this.tab) return false;
       if (ignore !== "ranks" && this.ranks.size && !this.ranks.has(w.tier)) return false;
       if (ignore !== "rooms" && this.tab === "All" && this.rooms.size && !this.rooms.has(w.room)) return false;
       if (ignore !== "genres" && this.genres.size && !this.genres.has(w.genre)) return false;
       return true;
     }
-    count(test, ignore) { return works.filter((w) => this.matches(w, ignore) && test(w)).length; }
+    count(test, ignore) { return this.items.filter((x) => this.matches(x, ignore) && test(this.of(x))).length; }
   }
 
   // ---------- search bar ----------
@@ -94,7 +96,7 @@
 
   // ---------- filter panel: rank, then room (only under All), then genres of the chosen rooms ----------
   class FilterPanel {
-    constructor(state) {
+    constructor(state, o = {}) {
       this.s = state; this.el = $("#fpanel"); this.btn = $(".fbtn");
       this.btn.addEventListener("click", () => this.open(this.el.hidden));
       state.addEventListener("change", () => this.paint()); this.paint();
@@ -103,6 +105,7 @@
       // that runs the height of Browse; the works go three a row. Smaller screens keep the Filter button.
       this.home = this.el.parentElement;
       this.rail = document.createElement("div"); this.rail.className = "frail";
+      if (o.rail === false) { this.btn.setAttribute("aria-expanded", false); return; }
       const desk = matchMedia("(min-width: 1101px)"), place = () => this.place(desk.matches);
       desk.addEventListener("change", place); place();
     }
@@ -125,21 +128,21 @@
       window.Grid && window.Grid.collapse(false);
       const grid = $(".grid");
       if (on) {
-        const before = Flip.read(grid);
+        const before = grid && Flip.read(grid);
         this.el.hidden = false; document.body.classList.add("has-panel");
         if (!calm) {
           await Promise.all([
             this.el.animate([{ opacity: 0, transform: "translateX(-28px)", clipPath: "inset(0 100% 0 0 round 14px)" }, { opacity: 1, transform: "none", clipPath: "inset(0 0 0 0 round 14px)" }], { duration: 460, easing: EASE }).finished,
-            Flip.play(grid, before, 460),
+            grid && Flip.play(grid, before, 460),
             this.stagger(),
           ]);
         }
       } else {
         if (!calm) await this.el.animate([{ opacity: 1, transform: "none", clipPath: "inset(0 0 0 0 round 14px)" }, { opacity: 0, transform: "translateX(-20px)", clipPath: "inset(0 100% 0 0 round 14px)" }], { duration: 280, easing: "cubic-bezier(.4,0,1,1)", fill: "forwards" }).finished;
-        const before = Flip.read(grid);
+        const before = grid && Flip.read(grid);
         this.el.getAnimations().forEach((a) => a.cancel());
         this.el.hidden = true; document.body.classList.remove("has-panel");
-        if (!calm) await Flip.play(grid, before, 460);
+        if (!calm && grid) await Flip.play(grid, before, 460);
       }
       this.busy = false;
     }
@@ -319,13 +322,18 @@
     constructor(state) {
       $(".band__n").textContent = works.length;
       const sort = $("#sort"); sort.addEventListener("change", () => state.set((s) => (s.sort = sort.value)));
-      // the page's glass bar (on the home page bridge.js decides when it turns white)
-      const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top"), stick = $(".br__stick") || top;
-      new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); stick.classList.toggle("is-stuck", !e.isIntersecting); if (gbar && !gbar.classList.contains("gbar--hero")) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
-        { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
-      const pin = () => { stick.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin); // the hero header is taller on phones
+      stickTop();
     }
   }
+  function stickTop() {
+    const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top"), stick = $(".br__stick") || top;
+    new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); stick.classList.toggle("is-stuck", !e.isIntersecting); if (gbar && !gbar.classList.contains("gbar--hero")) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
+      { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
+    const pin = () => { stick.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin); // the hero header is taller on phones
+  }
+
+  window.BrowseKit = { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, ActiveChips, stickTop };
+  if (!$(".grid")) return;
 
   const state = new BrowseState();
   new Chrome(state); new ActiveChips(state);
