@@ -398,3 +398,6 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 .rc__name{display:flex;align-items:center;gap:8px}
 .rc__name a{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rc__tag{flex:none;padding:3px 8px;border-radius:999px;background:var(--sea-soft);color:var(--sea-acc);font:600 11.5px/1.2 var(--f)}
+.sea--c .br__stick{display:flow-root;padding-bottom:6px}
+.sea--c .br__stick>.br__top{padding:12px 0 0}
+.sea--c .br__stick>.rooms{margin-top:6px}
