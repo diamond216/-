@@ -121,3 +121,7 @@
 html.calm {.drop,.mi__acts,.seg2 button,.chips2 button,.pick__i,.chk li i {transition:none}}
 .po__headr{display:grid;justify-items:end;gap:12px}.ghost3.sm{height:36px;padding:0 14px;font-size:13px;gap:6px}
 .chk p a{color:#0B5F66;font-weight:600}
+
+/* team inputs: white like every other field (they had no background, so dark mode painted them grey) */
+.tm input,.tm__add input{background:#fff;color:var(--ink)}
+.tm input::placeholder,.tm__add input::placeholder{color:#8AA0A5}
