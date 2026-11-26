@@ -53,3 +53,18 @@ footer.nest-foot .wrap.foot__links{display:grid;grid-template-columns:repeat(4,m
 .nest-foot .foot__motion[aria-checked="true"] i{background:#FF6A1A}
 .nest-foot .foot__motion[aria-checked="true"] i::after{transform:translateX(14px)}
 .nest-foot .foot__motion b{font-weight:600;color:#fff;min-width:24px;text-align:left}
+
+/* Browse · About: one highlight that slides to the chosen link (NavPill in session.js) */
+.gnav.has-pill{position:relative}
+.gnav.has-pill a{position:relative;z-index:1}
+.gnav.has-pill a[aria-current]{background:none;box-shadow:none}
+.gnav__pill{position:absolute;left:0;top:5px;height:38px;border-radius:999px;pointer-events:none;z-index:0;
+  background:linear-gradient(180deg,#FFFFFF,#DCEAFF);box-shadow:inset 0 1px 0 #fff,0 4px 14px -4px rgba(47,120,224,.45);
+  transition:transform .5s cubic-bezier(.3,1.25,.5,1),width .5s cubic-bezier(.3,1.25,.5,1),opacity .2s}
+.gnav.has-pill a{transition:color .3s,font-weight .3s}
+html.calm .gnav__pill{transition:none}
+
+/* the footer is Hamster Hub and its contacts only; the Animations switch sits under them */
+.nest-foot{padding-bottom:28px}
+.nest-foot .foot__top{border-bottom:0}
+.nest-foot .foot__motion{margin:0 auto}

@@ -4,6 +4,7 @@
 //   Paths        absolute links to pages, worked out from where this file lives, so they hold from any folder
 //   AccountMenu  the avatar menu (or Log in / Sign up), one per page; pages add items with opts.extra / opts.onPick
 //   Footer       the dark Hamster Hub footer, filled into <footer class="foot nest-foot">
+//   NavPill      the sliding highlight in the Browse · About pill
 //   gate()       swaps a page's content for a short note when it needs you signed in
 window.NestSession = (function () {
   "use strict";
@@ -107,7 +108,7 @@ window.NestSession = (function () {
     }
   }
 
-  // ---------- footer ----------
+  // ---------- footer: Hamster Hub and its contacts only (owner, 26 Nov 2026), plus the Animations switch ----------
   const ICON = {
     fb: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-1.6 19.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 12 2z"/></svg>',
     line: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="4" fill="currentColor"/><path d="M7 9v4M7 13h2.5M11.5 9v4M14 13V9l3 4V9" stroke="#111116" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>',
@@ -116,28 +117,48 @@ window.NestSession = (function () {
   };
   class Footer {
     constructor(el) {
-      const col = (h, links) => `<div><h4>${h}</h4>${links.map(([t, href]) => `<a href="${href}">${t}</a>`).join("")}</div>`;
       el.id = el.id || "contact-page";
       el.innerHTML = `<div class="wrap foot__top" id="about-page">
         <div class="foot__brand"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#FFD24A"/><circle cx="11" cy="12" r="5" fill="#F2A65A"/><circle cx="29" cy="12" r="5" fill="#F2A65A"/><ellipse cx="20" cy="23" rx="13" ry="11" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="9" ry="7" fill="#FBEBDD"/><circle cx="15" cy="21" r="1.8" fill="#1A1A20"/><circle cx="25" cy="21" r="1.8" fill="#1A1A20"/></svg>
           <div><strong>Hamster Hub</strong><span>a technology community</span></div></div>
         <div class="foot__contact"><small>Get in touch</small><h3>Contacts</h3><ul>
-          <li>${ICON.fb}Hamster Hub</li><li>${ICON.line}@smart-school</li><li>${ICON.tel}090-060-2555</li><li>${ICON.ig}hamsterhub_ig</li></ul></div></div>
-        <div class="wrap foot__links">
-          ${col("Hamster Nest", [["How we pick", Paths.page("post.html#rules")], ["How ranking works", Paths.page("post.html#after")], ["For investors", "#"], ["Post your project", Paths.page("post.html")]])}
-          ${col("Rooms", ["Game", "IoT", "Web", "Idea"].map((r) => [r, Paths.browse(r)]))}
-          ${col("Hamster Hub", [["Home", Paths.home()], ["Course", "#"], ["Activity", "#"], ["About", "#"]])}
-          ${col("Help", [["Get in touch", "#contact-page"], ["Privacy", "#"], ["Cookies", "#"]])}
-        </div>
-        <p class="foot__copy">© 2026 Hamster Hub. All rights reserved. Projects, names and quotes on this draft are placeholders.</p>`;
+          <li>${ICON.fb}Hamster Hub</li><li>${ICON.line}@smart-school</li><li>${ICON.tel}090-060-2555</li><li>${ICON.ig}hamsterhub_ig</li></ul></div></div>`;
       // Animations on / off (motion.js); switching reloads the page
       if (window.NestMotion) {
         const on = NestMotion.on, b = document.createElement("button");
         b.type = "button"; b.className = "foot__motion"; b.setAttribute("role", "switch"); b.setAttribute("aria-checked", on);
         b.innerHTML = `<span>Animations</span><i aria-hidden="true"></i><b>${on ? "On" : "Off"}</b>`;
         b.addEventListener("click", () => NestMotion.set(!on));
-        el.querySelector(".foot__copy").before(b);
+        el.appendChild(b);
       }
+    }
+  }
+
+  // ---------- the Browse · About pill: the highlight slides to the link you choose (owner, 26 Nov 2026) ----------
+  // select(a) moves it; pages can call it too (the home page does, as you scroll to About and back)
+  class NavPill {
+    constructor(nav) {
+      this.nav = nav; this.links = [...nav.querySelectorAll("a")]; this.lock = 0;
+      this.pill = document.createElement("span"); this.pill.className = "gnav__pill"; this.pill.setAttribute("aria-hidden", "true");
+      nav.prepend(this.pill); nav.classList.add("has-pill");
+      this.links.forEach((a) => a.addEventListener("click", () => this.select(a, true)));
+      addEventListener("resize", () => this.place(false));
+      this.place(false);
+    }
+    get current() { return this.links.find((a) => a.hasAttribute("aria-current")); }
+    select(a, byClick = false) {
+      if (!byClick && performance.now() < this.lock) return;          // a click wins over scrolling for a moment
+      if (byClick) this.lock = performance.now() + 1100;
+      if (a === this.current) return;
+      this.links.forEach((x) => (x === a ? x.setAttribute("aria-current", "page") : x.removeAttribute("aria-current")));
+      this.place(true);
+    }
+    place(animate) {
+      const a = this.current;
+      this.pill.style.opacity = a ? 1 : 0; if (!a) return;
+      if (!animate) this.pill.style.transition = "none";
+      this.pill.style.width = a.offsetWidth + "px"; this.pill.style.transform = `translateX(${a.offsetLeft}px)`;
+      if (!animate) { this.pill.offsetWidth; this.pill.style.transition = ""; }
     }
   }
 
@@ -171,6 +192,7 @@ window.NestSession = (function () {
   const api = { Session, Store, Paths, AccountMenu, Footer, gate, toast, hue, menuOptions: {} };
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("footer.nest-foot").forEach((f) => new Footer(f));
+    const nav = document.querySelector(".gnav"); if (nav) api.nav = new NavPill(nav);
     const slot = document.querySelector(".acct");
     if (slot) api.menu = new AccountMenu(slot, api.menuOptions);
   });

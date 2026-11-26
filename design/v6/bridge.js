@@ -10,6 +10,14 @@
   // clear over the hero (each button keeps its own background); white once Browse reaches the bar (owner, 26 Nov 2026)
   const frame = () => header.classList.toggle("gbar--framed", browse.getBoundingClientRect().top <= header.offsetHeight + 1);
   addEventListener("scroll", frame, { passive: true }); frame();
+  // the Browse · About highlight follows the page: About once the footer (Hamster Hub and contacts) is in view
+  const navLink = (h) => header.querySelector(`.gnav a[href="${h}"]`);
+  const spy = () => {
+    const pill = window.NestSession && NestSession.nav, foot = document.querySelector(".nest-foot"); if (!pill || !foot) return;
+    const atAbout = foot.getBoundingClientRect().top < innerHeight * 0.6 || innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+    pill.select(navLink(atAbout ? "#about-page" : "#browse-page"));
+  };
+  addEventListener("scroll", spy, { passive: true });
 
   // where a hash on this page lands: Browse (#browse-page, #browse-game ...) or the footer (#about-page, #contact-page)
   const target = (hash) => (/^#browse(-\w+)?$/.test(hash) ? browse : /^#(about|contact)-page$/.test(hash) ? document.querySelector(".nest-foot") : null);
