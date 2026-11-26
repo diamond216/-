@@ -68,8 +68,12 @@ html.calm .gnav__pill{transition:none}
 .nest-foot{padding-bottom:28px}
 .nest-foot .foot__top{border-bottom:0}
 .nest-foot .foot__motion{margin:0 auto}
-/* contacts are links: Facebook, LINE and Instagram open in a new tab, the number opens the phone app */
-.nest-foot .foot__contact a{display:flex;gap:12px;align-items:center;color:inherit;text-decoration:none;border-radius:8px;padding:2px 4px;margin:-2px -4px;transition:color .2s}
-.nest-foot .foot__contact a:hover{color:#FF8A3D;text-decoration:underline;text-underline-offset:4px}
-.nest-foot .foot__contact a:hover svg{color:#FF8A3D}
+/* contacts are links (Facebook, LINE and Instagram open in a new tab, the number opens the phone app).
+   Hover as on hamsterhub.co: slightly dim at rest, then bright white, a touch bolder, and the item slides right a little */
+.nest-foot .foot__contact a{display:flex;gap:12px;align-items:center;color:rgba(245,245,247,.82);text-decoration:none;border-radius:8px;padding:2px 4px;margin:-2px -4px;
+  transition:color .25s cubic-bezier(.22,.8,.24,1),transform .3s cubic-bezier(.22,.8,.24,1),text-shadow .25s}
+.nest-foot .foot__contact a svg{transition:color .25s}
+.nest-foot .foot__contact a:hover,.nest-foot .foot__contact a:focus-visible{color:#fff;transform:translateX(4px);text-shadow:0 0 .01px #fff,.35px 0 0 #fff}
+.nest-foot .foot__contact a:hover svg{color:#fff}
 .nest-foot .foot__contact a:focus-visible{outline:2px solid #fff;outline-offset:2px}
+html.calm .nest-foot .foot__contact a{transition:none}
