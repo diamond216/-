@@ -88,6 +88,7 @@
   };
   const svg = (k, vb = "0 0 16 16") => `<svg viewBox="${vb}" aria-hidden="true">${ICON[k]}</svg>`;
   const avatar = (name, cls = "pf__av") => `<span class="${cls}" style="--h:${new Person(name).hue}" aria-hidden="true">${esc(name[0])}</span>`;
+  const monthLabel = (s) => L.th ? new Date(`1 ${s} 12:00`).toLocaleDateString("th-TH", { month: "short", year: "numeric" }) : s;   // "Nov 2025" (the joined month)
   const dateLabel = (d) => new Date(d + "T00:00:00").toLocaleDateString(L.th ? "th-TH" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
 
   // ---------- the page ----------
@@ -140,7 +141,7 @@
             <section class="pf__panel" id="tab-about" role="tabpanel" aria-labelledby="t-about" hidden>
               <div class="pf__lh"><h2>${esc(tx("pf.aboutH", { name: person.name }))}</h2></div>
               <p class="pf__aboutL">${esc(pr.about)}</p>
-              <dl class="pf__facts"><div><dt>${tx("pf.into")}</dt><dd>${esc(pr.into)}</dd></div><div><dt>${tx("pf.tools")}</dt><dd>${esc(pr.tools)}</dd></div><div><dt>${tx("pf.openTo")}</dt><dd>${esc(pr.open)}</dd></div><div><dt>${tx("pf.since")}</dt><dd>${esc(pr.joined)}</dd></div></dl>
+              <dl class="pf__facts"><div><dt>${tx("pf.into")}</dt><dd>${esc(pr.into)}</dd></div><div><dt>${tx("pf.tools")}</dt><dd>${esc(pr.tools)}</dd></div><div><dt>${tx("pf.openTo")}</dt><dd>${esc(pr.open)}</dd></div><div><dt>${tx("pf.since")}</dt><dd>${esc(monthLabel(pr.joined))}</dd></div></dl>
               ${person.awards().length ? `<h3 class="pf__sub">${tx("pf.awards")}</h3><ul class="pf__aw">${person.awards().map(([a, s, , w]) => `<li><span class="medal" aria-hidden="true">★</span><span><b>${esc(a)}</b><i>${esc(s)} · <a href="project.html#${w.id}">${esc(w.name)}</a></i></span></li>`).join("")}</ul>` : ""}
             </section>
           </div>
