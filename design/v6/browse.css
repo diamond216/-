@@ -183,8 +183,6 @@ html:has(.sea){background:#A9CFF2}
   box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 18px 34px -20px rgba(var(--sea-shadow),.75)}
 .rc__pic .cv{position:absolute;inset:0;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .rc__pic .cv svg{width:100%;height:100%;display:block}
-.rc__pic::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,22,40,.42),rgba(6,22,40,0) 38%,rgba(6,22,40,0) 70%,rgba(6,22,40,.25));opacity:0;transition:opacity .3s}
-.rc:hover .rc__pic::after,.rc:focus-within .rc__pic::after{opacity:1}
 .rc:hover .rc__pic .cv{transform:scale(1.035)}
 .rc__name{margin:10px 2px 0;font:600 16px/1.3 var(--f);color:var(--sea-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rc:hover .rc__name{color:#06404A}
@@ -285,7 +283,6 @@ html:has(.sea--c){background:#F4F8F8}
 /* the filter panel's groups */
 .fp__group{display:block}
 html.calm {.rc--arming .rc__media::before {transition:none}}
-.rc--big .rc__pic::after{background:linear-gradient(180deg,rgba(6,22,40,.32),rgba(6,22,40,0) 22%)}
 /* ---- roomier layout (owner chose C, 22 Nov 2026): five to a row (four with the panel), quieter header ---- */
 .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:44px 30px}
 .has-panel .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
