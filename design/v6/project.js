@@ -23,6 +23,11 @@
   // ---------- page ----------
   class ProjectPage {
     constructor(root) { this.root = root; this.preview = null; }
+    updateFig(w, i, title, alt = "") {
+      if (![0, 2, 3, 6].includes(i)) return "";
+      const src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(Art.draw({ ...w, scribble: "" }, i % 7));
+      return `<figure class="up-fig"><img class="up-img" src="${src}" alt="${alt || title}" width="240" height="135"${i ? ' loading="lazy"' : ""} decoding="async"></figure>`;
+    }
     render(w) {
       const t = tiers.find((x) => x.id === w.tier), d = new SampleDetails(w), ink = INK[w.tier];
       const updates = d.updates();
@@ -46,7 +51,7 @@
             </div>
             <div class="thumbs">${this.slides(w).map((s, i) => `<button type="button" class="thumb" data-i="${i}" aria-label="Show ${s.label}"><span class="cv"></span>${s.clip ? '<i aria-hidden="true">▶</i>' : ""}</button>`).join("")}</div>
             <section class="about" aria-labelledby="about-h"><h2 id="about-h">About this project</h2>${d.description().map((p, i) => `<p${i ? "" : ' class="about__lead"'}>${p}</p>`).join("")}</section>
-            <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><time>${when}</time><div><b>${what}</b><p>${more}</p></div></li>`).join("")}</ol></section>
+            <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><span class="log__when">${i ? "" : '<span class="log__new">New</span>'}<time>${when}</time></span><div><b>${what}</b><p>${more}</p>${this.updateFig(w, i, what)}</div></li>`).join("")}</ol></section>
           </div>
           <aside class="pj__side">
             <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
