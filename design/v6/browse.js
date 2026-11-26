@@ -184,7 +184,7 @@
   };
   // the gem used on flags and in the player
   // tile, FLIP and hover-to-expand live in tiles.js (shared with the project page)
-  const { ResultCard, Flip, Expander, EASE } = window.Tiles;
+  const { ResultCard, Flip, Preview, EASE } = window.Tiles;
 
   // ---------- card motion: staggered exit and entrance, each awaited through Animation.finished ----------
   // Only cards on or near the screen get the stagger; the rest move at once so long lists stay quick.
@@ -230,7 +230,7 @@
     constructor(state) {
       this.s = state; this.grid = $(".grid"); this.n = $(".count"); this.t = $(".rhead__t");
       this.activeRank = rankKey(state); this.pendingRank = this.activeRank; this.busy = false;
-      this.ex = new Expander(this.grid); window.Grid = this.ex;
+      this.ex = new Preview(this.grid); window.Grid = this.ex;
       state.addEventListener("change", () => this.onChange());
       this.paint();
     }

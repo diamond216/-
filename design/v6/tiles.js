@@ -4,7 +4,7 @@ window.Tiles = (function () {
   "use strict";
   // works from any folder (the home page lives in hero/), via session.js when it is loaded
   const projectHref = (id) => (window.NestSession ? NestSession.Paths.page(`project.html#${id}`) : `project.html#${id}`);
-  const { tiers } = window.NEST;
+  const { tiers, works } = window.NEST;
   const $ = (s, r = document) => r.querySelector(s);
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const RANK_INK = { platinum: "#3550A8", diamond: "#1E93C2", gold: "#C08A12", silver: "#7A8794", bronze: "#B0602F" };
@@ -127,6 +127,52 @@ window.Tiles = (function () {
     }
   }
 
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  class Preview {
+    constructor(grid) {
+      this.grid = grid; this.card = null; this.timer = 0; this.el = Preview.panel();
+      const fine = matchMedia("(hover: hover)");
+      grid.addEventListener("click", (e) => {
+        if (e.defaultPrevented || e.target.closest("a, button")) return;
+        const c = e.target.closest(".rc"); if (c) location.href = $(".rc__open", c).href;
+      });
+      grid.addEventListener("pointerover", (e) => {
+        if (e.pointerType !== "mouse" || !fine.matches) return;
+        const c = e.target.closest(".rc"); if (c && c !== this.card) this.arm(c, 250);
+      });
+      grid.addEventListener("pointerout", (e) => {
+        if (e.pointerType !== "mouse") return;
+        const c = e.target.closest(".rc"); if (c && !c.contains(e.relatedTarget)) this.collapse();
+      });
+      grid.addEventListener("focusin", (e) => { const c = e.target.closest(".rc"); if (c && fine.matches && e.target.matches(":focus-visible")) this.arm(c, 0); });
+      grid.addEventListener("focusout", (e) => { if (this.card && !this.card.contains(e.relatedTarget)) this.collapse(); });
+      addEventListener("scroll", () => this.collapse(), { passive: true, capture: true });
+      addEventListener("keydown", (e) => { if (e.key === "Escape") this.collapse(); });
+      addEventListener("resize", () => this.collapse());
+    }
+    static panel() {
+      if (!Preview.el) {
+        const p = document.createElement("div"); p.className = "rcp"; p.setAttribute("aria-hidden", "true"); p.hidden = true;
+        document.body.append(p); Preview.el = p;
+      }
+      return Preview.el;
+    }
+    arm(c, delay) { clearTimeout(this.timer); this.card = c; this.timer = setTimeout(() => this.show(c), delay); }
+    show(c) {
+      const w = works.find((x) => x.id === c.dataset.id); if (!w || this.card !== c) return;
+      const p = this.el;
+      p.innerHTML = `<b class="rcp__name">${esc(w.name)}</b><span class="rcp__upd">Updated ${esc(w.update.when)}</span><p class="rcp__desc">${esc(w.blurb)}</p><span class="rcp__by">${esc(w.maker)}</span><span class="rcp__tags"><i>${esc(w.room)}</i><i>${esc(w.genre)}</i></span>`;
+      p.hidden = false;
+      const r = c.getBoundingClientRect(), pw = p.offsetWidth, ph = p.offsetHeight, gap = 14, edge = 8;
+      const right = r.right + gap + pw <= innerWidth - edge;
+      const bars = Math.max(0, ...[...document.querySelectorAll(".gbar, .br__stick.is-stuck")].map((b) => b.getBoundingClientRect().bottom));
+      const top = Math.max(bars + edge, Math.min(r.top, innerHeight - ph - edge));
+      p.style.left = `${right ? r.right + gap : Math.max(edge, r.left - gap - pw)}px`; p.style.top = `${top}px`;
+      p.dataset.side = right ? "right" : "left";
+      if (!calm) p.animate([{ opacity: 0, transform: `translateX(${right ? -8 : 8}px)` }, { opacity: 1, transform: "none" }], { duration: 180, easing: EASE });
+    }
+    collapse() { clearTimeout(this.timer); this.card = null; this.el.hidden = true; }
+  }
 
-  return { ResultCard, Flip, Expander, EASE, RANK_INK };
+  return { ResultCard, Flip, Expander, Preview, EASE, RANK_INK };
 })();
