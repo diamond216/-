@@ -1,4 +1,4 @@
-// Bridge between the hero and Browse on hero/index.html: the glass top bar turns white once you scroll,
+// Bridge between the hero and Browse on hero/index.html: the glass top bar turns white once Browse reaches it,
 // in-page links glide (Scroll down, Explore projects, Browse, a room from the footer, About and Contact),
 // and EN / ไทย switch the hero's language (app.js does the work through the hidden first header).
 // The account area in the bar is the shared one (session.js fills .acct).
@@ -7,8 +7,8 @@
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const header = document.querySelector(".gbar--hero"), hero = document.getElementById("hero"), browse = document.getElementById("browse-page");
   if (!header || !hero || !browse) return;
-  // glass over the hero at rest; white as soon as the page moves, so the hero's text never runs under the menu
-  const frame = () => header.classList.toggle("gbar--framed", scrollY > 24);
+  // clear over the hero (each button keeps its own background); white once Browse reaches the bar (owner, 26 Nov 2026)
+  const frame = () => header.classList.toggle("gbar--framed", browse.getBoundingClientRect().top <= header.offsetHeight + 1);
   addEventListener("scroll", frame, { passive: true }); frame();
 
   // where a hash on this page lands: Browse (#browse-page, #browse-game ...) or the footer (#about-page, #contact-page)
