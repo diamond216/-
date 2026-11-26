@@ -38,17 +38,14 @@
 
   // ---------- search bar ----------
   class SearchBar {
-    constructor(state) {
-      const input = $("#q"), clear = $(".sbar__clear");
-      input.addEventListener("input", () => { state.set((s) => (s.q = input.value)); clear.hidden = !input.value; });
-      clear.addEventListener("click", () => { input.value = ""; clear.hidden = true; state.set((s) => (s.q = "")); input.focus(); });
-      // "/" jumps to the search from anywhere; Esc in the box clears it
-      addEventListener("keydown", (e) => {
-        const typing = /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName);
-        if (e.key === "/" && !typing && !document.documentElement.classList.contains("pl-on")) { e.preventDefault(); input.focus(); input.select(); }
-      });
-      input.addEventListener("keydown", (e) => { if (e.key === "Escape" && input.value) { e.stopPropagation(); clear.click(); } });
-      state.addEventListener("change", () => { if (input.value !== state.q) { input.value = state.q; clear.hidden = !state.q; } });
+    constructor(state, onEnter = null) {
+      const hs = window.NestSession && NestSession.search; if (!hs) return;
+      const input = hs.input;
+      input.addEventListener("input", () => state.set((s) => (s.q = input.value)));
+      state.addEventListener("change", () => { if (input.value !== state.q) { input.value = state.q; hs.paint(); } });
+      hs.onSubmit = (q) => { if (onEnter) onEnter(q); };
+      const q0 = new URLSearchParams(location.search).get("q");
+      if (q0) { input.value = q0; hs.paint(); state.set((s) => (s.q = q0)); }
     }
   }
 
@@ -282,7 +279,7 @@
       this.grid.innerHTML = "";
       if (!shown.length) {
         this.grid.innerHTML = `<p class="none">Nothing matches that yet. <button type="button">Clear the filters</button></p>`;
-        $("button", this.grid).addEventListener("click", () => { $("#q").value = ""; $(".sbar__clear").hidden = true; this.s.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); });
+        $("button", this.grid).addEventListener("click", () => { this.s.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); });
         return true;
       }
       shown.forEach((w) => this.grid.appendChild(new ResultCard(w).render()));
@@ -329,7 +326,7 @@
     const gbar = $(".gbar"), bar = gbar || $(".site-header"), top = $(".br__top"), stick = $(".br__stick") || top;
     new IntersectionObserver(([e]) => { top.classList.toggle("is-stuck", !e.isIntersecting); stick.classList.toggle("is-stuck", !e.isIntersecting); if (gbar && !gbar.classList.contains("gbar--hero")) gbar.classList.toggle("gbar--framed", !e.isIntersecting); },
       { rootMargin: `-${bar.offsetHeight + 1}px 0px 0px 0px` }).observe($(".br__sentinel"));
-    const pin = () => { stick.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin); // the hero header is taller on phones
+    const pin = () => { stick.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin);
   }
 
   window.BrowseKit = { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, ActiveChips, stickTop };
@@ -337,7 +334,8 @@
 
   const state = new BrowseState();
   new Chrome(state); new ActiveChips(state);
-  new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
+  const hero = $(".gbar--hero"), page = $("#browse-page");
+  new SearchBar(state, hero && page ? () => scrollTo({ top: page.getBoundingClientRect().top + scrollY - hero.offsetHeight, behavior: calm ? "auto" : "smooth" }) : null); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
 
   // #browse-game, #browse-iot ... (footer "Rooms" links, the project page's room tag) open Browse on that room
   const fromHash = () => {

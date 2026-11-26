@@ -7,6 +7,7 @@
 .ml-head{display:flex;align-items:baseline;gap:10px;margin:14px 0 14px}
 .ml-head h2{margin:0;font:600 22px/1 var(--f);color:var(--sea-ink)}
 .ml-n{font:500 14px/1 var(--f);color:var(--sea-mute)}
+.ml-head .rhead__tools{margin-left:auto;align-self:center}
 .ml{position:relative}
 .ml>.lc{position:absolute}
 .lc{display:block;border-radius:14px;background:#fff;border:1px solid var(--sea-line);overflow:hidden;color:inherit;text-decoration:none;box-shadow:0 8px 20px -16px rgba(var(--sea-shadow),.7);transition:border-color .2s,translate .2s,box-shadow .2s}

@@ -9,8 +9,8 @@
   const DAYS = { "today": 0, "yesterday": 1, "2 days ago": 2, "3 days ago": 3, "5 days ago": 5, "last week": 7, "1 week ago": 8, "2 weeks ago": 14, "3 weeks ago": 21, "last month": 30, "2 months ago": 60 };
   const RATIOS = [[4, 5], [16, 9], null, [1, 1], [2, 3], [3, 2], [9, 16], [4, 3], null, [3, 4], [21, 9], [1, 1]];
   const TEXT = {
-    en: { title: "Dev logs", lead: "What students changed in their projects lately, newest first. Sample content.", latest: "Latest logs", more: "Show more", search: "Search logs, projects and makers", searchLabel: "Search dev logs", none: (q) => q ? `No logs match “${q}”.` : "No logs match these filters.", clear: "Clear", open: "Open the project's updates", image: "image" },
-    th: { title: "บันทึกการพัฒนา", lead: "สิ่งที่นักเรียนเปลี่ยนในโปรเจกต์ช่วงนี้ ใหม่สุดก่อน (ข้อมูลตัวอย่าง)", latest: "บันทึกล่าสุด", more: "ดูเพิ่ม", search: "ค้นหาบันทึก โปรเจกต์ และผู้สร้าง", searchLabel: "ค้นหาบันทึกการพัฒนา", none: (q) => q ? `ไม่พบบันทึกที่ตรงกับ “${q}”` : "ไม่พบบันทึกที่ตรงกับตัวกรองนี้", clear: "ล้าง", open: "เปิดอัปเดตของโปรเจกต์", image: "รูปภาพ" },
+    en: { title: "Dev logs", lead: "What students changed in their projects lately, newest first. Sample content.", latest: "Latest logs", more: "Show more", none: (q) => q ? `No logs match “${q}”.` : "No logs match these filters.", clear: "Clear", open: "Open the project's updates", image: "image" },
+    th: { title: "บันทึกการพัฒนา", lead: "สิ่งที่นักเรียนเปลี่ยนในโปรเจกต์ช่วงนี้ ใหม่สุดก่อน (ข้อมูลตัวอย่าง)", latest: "บันทึกล่าสุด", more: "ดูเพิ่ม", none: (q) => q ? `ไม่พบบันทึกที่ตรงกับ “${q}”` : "ไม่พบบันทึกที่ตรงกับตัวกรองนี้", clear: "ล้าง", open: "เปิดอัปเดตของโปรเจกต์", image: "รูปภาพ" },
   };
   const updatesHref = (id) => NestSession.Paths.page(`project.html#${id}&updates`);
 
@@ -31,7 +31,7 @@
       const items = [...this.el.querySelectorAll(":scope > .lc")], W = this.el.clientWidth;
       this.w = W;
       if (!items.length) { this.el.style.height = ""; return; }
-      const n = W >= 1120 ? 4 : W >= 700 ? 3 : 2, g = innerWidth < 600 ? 10 : innerWidth < 900 ? 16 : 20, cw = (W - g * (n - 1)) / n, h = new Array(n).fill(0);
+      const n = W >= 1000 ? 4 : W >= 700 ? 3 : 2, g = innerWidth < 600 ? 10 : innerWidth < 900 ? 16 : 20, cw = (W - g * (n - 1)) / n, h = new Array(n).fill(0);
       items.forEach((it) => { it.style.width = `${cw}px`; });
       items.forEach((it) => {
         const k = h.indexOf(Math.min(...h));
@@ -81,7 +81,7 @@
   }
 
   stickTop();
-  new ActiveChips(state); new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state, { rail: false });
+  new ActiveChips(state); new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state);
   const feed = new LogFeed();
 
   function applyLang(next) {
@@ -90,7 +90,6 @@
     document.documentElement.lang = lang;
     document.title = `${t.title} · Hamster Nest`;
     document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t[el.dataset.t]; });
-    const q = $("#q"); q.placeholder = t.search; q.setAttribute("aria-label", t.searchLabel);
     document.querySelectorAll(".glang button").forEach((b) => b.setAttribute("aria-pressed", String((b.textContent.trim() === "ไทย") === (lang === "th"))));
     try { localStorage.setItem("nest-lang", lang); } catch (e) {}
     feed.paint();

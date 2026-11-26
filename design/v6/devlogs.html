@@ -14,9 +14,9 @@
 </head>
 <body class="sea sea--c" data-tone="lagoon">
 <canvas class="water" aria-hidden="true"></canvas>
-<header class="gbar"><div class="wrap gbar__in">
-<a class="brand" href="../../hero/index.html" aria-label="Hamster Nest home"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg><span>HAMSTER <em>NEST</em></span></a>
-<nav class="gnav glass" aria-label="Main"><a href="../../hero/index.html#browse-page">Browse</a><a href="devlogs.html" aria-current="page">Dev logs</a><a href="../../hero/index.html#about-page">About</a></nav>
+<header class="gbar"><div class="gbar__in">
+<div class="gleft"><a class="brand" href="../../hero/index.html" aria-label="Hamster Nest home"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg></a><nav class="gnav glass" aria-label="Main"><a href="../../hero/index.html#browse-page">Browse</a><a href="devlogs.html" aria-current="page">Dev logs</a><a href="../../hero/index.html#about-page">About</a></nav></div>
+<form class="gsearch glass" role="search" action="browse.html"><svg class="gsearch__ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" name="q" placeholder="Search projects, dev logs and makers" aria-label="Search Hamster Nest" autocomplete="off" enterkeyhint="search"><button type="button" class="gclear" aria-label="Clear the search" hidden>&times;</button><kbd aria-hidden="true">/</kbd></form>
 <div class="gbar__end">
   <div class="glang glass" role="group" aria-label="Language"><button type="button" aria-pressed="true">EN</button><button type="button" aria-pressed="false" lang="th">ไทย</button></div>
   <div class="acct"></div>
@@ -32,22 +32,13 @@
 <div class="br__stick">
 <div class="br__top wrap">
   <button type="button" class="fbtn glass" aria-expanded="false" aria-controls="fpanel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Filter<b hidden></b></button>
-  <div class="sbar glass">
-    <svg class="sbar__icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    <input id="q" type="search" placeholder="Search logs, projects and makers" aria-label="Search dev logs" data-t-ph="search" autocomplete="off">
-    <button type="button" class="sbar__clear" aria-label="Clear the search" hidden>&times;</button>
-    <div class="rank">
-      <button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span>All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <ul class="rank__menu" role="listbox" aria-label="Rank" hidden></ul>
-    </div>
-  </div>
 </div>
 <nav class="rooms wrap" aria-label="Rooms"></nav>
 </div>
 <div class="br__body wrap">
   <aside class="fpanel" id="fpanel" aria-label="Filters" hidden></aside>
   <section class="dl-feed" aria-labelledby="ml-h">
-    <div class="ml-head"><h2 id="ml-h" data-t="latest">Latest logs</h2><span class="ml-n" aria-live="polite"></span></div>
+    <div class="ml-head"><h2 id="ml-h" data-t="latest">Latest logs</h2><span class="ml-n" aria-live="polite"></span><div class="rhead__tools"><div class="rank"><button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span>All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="rank__menu" role="listbox" aria-label="Rank" hidden></ul></div></div></div>
     <div class="active" aria-label="Active filters"></div>
     <div class="ml"></div>
     <button type="button" class="dl-more" data-t="more" hidden>Show more</button>

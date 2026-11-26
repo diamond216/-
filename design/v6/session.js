@@ -72,7 +72,11 @@ window.NestSession = (function () {
     render() {
       this.menu = null;
       if (!Session.signedIn) {
-        this.slot.innerHTML = `<a class="gbtn glass" href="#" data-in>Log in</a><a class="gbtn gbtn--solid" href="#" data-in>Sign up</a>`;
+        this.slot.innerHTML = `<a class="gbtn glass acct__wide" href="#" data-in>Log in</a><a class="gbtn gbtn--solid acct__wide" href="#" data-in>Sign up</a>`
+          + `<div class="me acct__mini"><button type="button" class="gbtn glass acct__ico" aria-haspopup="menu" aria-expanded="false" aria-label="Log in or sign up"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 17c1-3.3 3.5-5 6.5-5s5.5 1.7 6.5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>`
+          + `<div class="me__menu" role="menu" hidden><button type="button" role="menuitem" data-in>Log in</button><button type="button" role="menuitem" data-in>Sign up</button></div></div>`;
+        this.wrap = this.slot.querySelector(".acct__mini"); this.btn = this.wrap.firstElementChild; this.menu = this.wrap.lastElementChild;
+        this.btn.addEventListener("click", () => this.open(this.menu.hidden));
         this.slot.querySelectorAll("[data-in]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); Session.signIn(); toast(`Signed in as ${Session.user.name}`); }));
         return;
       }
@@ -194,9 +198,49 @@ window.NestSession = (function () {
     return false;
   }
 
+  class HeaderSearch {
+    constructor(form) {
+      this.form = form; this.input = form.querySelector("input"); this.clear = form.querySelector(".gclear"); this.bar = form.closest(".gbar__in"); this.onSubmit = null;
+      this.phone = matchMedia("(max-width: 599px)");
+      this.input.addEventListener("input", () => this.paint());
+      this.clear.addEventListener("click", () => { this.set(""); this.input.focus(); });
+      this.input.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        e.stopPropagation();
+        if (this.input.value) this.set(""); else this.input.blur();
+      });
+      addEventListener("keydown", (e) => {
+        const a = document.activeElement, typing = a && (a.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName));
+        if (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey && !e.altKey && !document.documentElement.classList.contains("pl-on")) { e.preventDefault(); this.input.focus(); this.input.select(); }
+      });
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const q = this.input.value.trim();
+        if (this.onSubmit) return this.onSubmit(q);
+        if (q) location.href = Paths.page(`browse.html?q=${encodeURIComponent(q)}`);
+      });
+      this.phone.addEventListener("change", () => this.label());
+      new MutationObserver(() => { this.label(); this.measure(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+      const ro = new ResizeObserver(() => this.measure());
+      this.bar.querySelectorAll(".gleft, .gbar__end").forEach((el) => ro.observe(el));
+      this.label(); this.paint(); this.measure();
+    }
+    set(v) { this.input.value = v; this.paint(); this.input.dispatchEvent(new Event("input", { bubbles: true })); }
+    paint() { const has = !!this.input.value; this.form.classList.toggle("has-q", has); this.clear.hidden = !has; }
+    label() {
+      const th = document.documentElement.lang === "th";
+      this.input.placeholder = this.phone.matches ? (th ? "ค้นหา" : "Search") : (th ? "ค้นหาโปรเจกต์ บันทึก และผู้สร้าง" : "Search projects, dev logs and makers");
+    }
+    measure() {
+      const l = this.bar.querySelector(".gleft"), e = this.bar.querySelector(".gbar__end");
+      this.bar.style.setProperty("--side", `${Math.max(l ? l.offsetWidth : 0, e ? e.offsetWidth : 0)}px`);
+    }
+  }
+  const searchForm = document.querySelector(".gbar .gsearch");
+
   // every page: fill the footer and the account area once the page's own scripts have run
   // (a page that needs its own menu items sets NestSession.menuOptions before then)
-  const api = { Session, Store, Paths, AccountMenu, Footer, gate, toast, hue, menuOptions: {} };
+  const api = { Session, Store, Paths, AccountMenu, Footer, gate, toast, hue, menuOptions: {}, search: searchForm ? new HeaderSearch(searchForm) : null };
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("footer.nest-foot").forEach((f) => new Footer(f));
     const nav = document.querySelector(".gnav"); if (nav) api.nav = new NavPill(nav);

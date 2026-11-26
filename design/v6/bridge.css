@@ -65,3 +65,6 @@ html:not(.calm) {.scroll-cue svg {animation:cue 1.8s var(--e-inout) infinite}}
 .li-on body{overflow:hidden}
 /* the hero's own entrance (menu drops in, title and text rise) waits until the opening lifts */
 .li-on .slide-copy *{animation-play-state:paused!important}
+.gbar--hero .gsearch{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.95);box-shadow:0 6px 18px -10px rgba(10,20,60,.5)}
+.gbar--hero .gsearch input,.gbar--hero .gsearch input::placeholder,.gbar--hero .gsearch__ico{color:#3D4B66}
+.gbar--hero .gsearch kbd{background:#EEF2F8}
