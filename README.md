@@ -24,3 +24,13 @@ All projects, people, numbers and quotes are placeholders. The approved visual d
 
 To add a sort: write a `RankingStrategy`, register it in `createNest.ts`, add its label to `src/services/i18n/en.ts` and `th.ts`.
 To add a filter: write a `Specification<Listing>` and add it in `ListingSpecificationBuilder`.
+
+## Reading order when a session starts
+
+1. `AGENTS.md` (rules for AI agents) and `CLAUDE.md`
+2. This file
+3. `Context/departments/<your department>.md`, then that folder's `INBOX.md`
+4. Active Quests, then queued Quests, in `Context/quests/<dept>/`
+5. `docs/WORKFLOW.md` and `docs/HANDOFF.md` when the Quest touches design or past decisions
+
+`Context/Status.md` is the snapshot of where the project stands. `Context/Edit-Log.md` is the log of recent edits.
