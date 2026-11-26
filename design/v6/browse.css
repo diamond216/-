@@ -357,3 +357,7 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
   /* the stuck search row's white band starts at the rail, not under it */
   .has-rail .br__top.is-stuck::before{left:calc(50% - (100vw - 280px) / 2);right:calc(50% - (100vw - 280px) / 2)}
 }
+.sea--c .br__stick{position:sticky;z-index:15}
+.sea--c .br__stick>.br__top{position:relative}
+.sea--c .br__stick>.br__top.is-stuck::before{content:none}
+.sea--c .br__stick.is-stuck::before{content:"";position:absolute;z-index:-1;inset:0;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45)}

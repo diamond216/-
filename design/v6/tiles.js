@@ -69,7 +69,7 @@ window.Tiles = (function () {
         e.preventDefault();
         // wait for a closing card to finish, open this one, then bring all of it into view below the sticky bars
         const show = () => {
-          const bars = Math.max(0, ...[...document.querySelectorAll(".gbar, .br__top")].map((b) => b.getBoundingClientRect().bottom));
+          const bars = Math.max(0, ...[...document.querySelectorAll(".gbar, .br__stick, .br__top")].map((b) => b.getBoundingClientRect().bottom));
           const r = c.getBoundingClientRect();
           if (r.top < bars + 8 || r.bottom > innerHeight) scrollBy({ top: r.top - bars - 12, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
         };

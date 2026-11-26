@@ -7,7 +7,7 @@
 .nest-browse .br{position:relative;padding-bottom:90px}
 .nest-browse .water{position:absolute;inset:0 0 auto 0;width:100%;height:460px;z-index:0}
 .nest-browse .br>*{position:relative;z-index:1}
-.nest-browse .br>.br__top{position:sticky;z-index:15} /* the rule above would make it relative; the toolbar must stay sticky under the header */
+.nest-browse .br>.br__stick{position:sticky;z-index:15} /* the rule above would make it relative; the toolbar must stay sticky under the header */
 body.sea{background:radial-gradient(130% 70svh at 50% 0,rgba(168,212,240,.26),rgba(168,212,240,0) 72%),#F4F8F8;background-repeat:no-repeat}
 
 /* the glass top bar (same as every other page), fixed over the hero; clear glass at rest, white once you scroll.
