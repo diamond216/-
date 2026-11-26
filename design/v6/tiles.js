@@ -19,10 +19,10 @@ window.Tiles = (function () {
       a.innerHTML = `<div class="rc__media"><a class="rc__open" href="${projectHref(w.id)}" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
         <span class="rc__flag" aria-hidden="true">${GEM}<b>${t.name}</b></span>
         <button type="button" class="rc__follow" aria-pressed="${following.has(w.id)}">${FOLLOW}<span>${following.has(w.id) ? "Following" : "Follow"}</span></button></div>
-        <h3 class="rc__name" title="${w.name}"><a href="${projectHref(w.id)}" tabindex="-1">${w.name}</a></h3>
+        <h3 class="rc__name" title="${w.name}"><a href="${projectHref(w.id)}" tabindex="-1">${w.name}</a><span class="rc__tag">${w.room}</span></h3>
         <p class="rc__maker" title="${w.maker}">${w.maker}</p>
         <div class="rc__more" aria-hidden="true">
-          <p class="rc__by"><i>${w.room} · ${w.genre}</i></p>
+          <p class="rc__by"><i>${w.genre}</i></p>
           <p class="rc__upd"><b>Updated ${w.update.when}</b>${w.update.what}</p>
           <p class="rc__desc">${w.blurb}</p>
           <a class="rc__go" href="${projectHref(w.id)}">Open project<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4.5 3H9v4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>

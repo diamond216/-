@@ -395,3 +395,6 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
   .acct__wide{display:none}
   .acct__mini{display:block}
 }
+.rc__name{display:flex;align-items:center;gap:8px}
+.rc__name a{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rc__tag{flex:none;padding:3px 8px;border-radius:999px;background:var(--sea-soft);color:var(--sea-acc);font:600 11.5px/1.2 var(--f)}
