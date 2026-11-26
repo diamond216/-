@@ -115,6 +115,13 @@ window.NestSession = (function () {
     tel: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>',
     ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>',
   };
+  // Hamster Hub's real channels (owner, 26 Nov 2026); the phone number opens the device's phone app (tel:)
+  const CONTACTS = [
+    ["fb", "Hamster Hub", "https://www.facebook.com/HamsterHubThailand", true],
+    ["line", "@smart-school", "https://page.line.me/jkm4247u?openQrModal=true", true],
+    ["tel", "090-060-2555", "tel:+66900602555", false],
+    ["ig", "hamsterhub.official", "https://www.instagram.com/hamsterhub.official/", true],
+  ];
   class Footer {
     constructor(el) {
       el.id = el.id || "contact-page";
@@ -122,7 +129,7 @@ window.NestSession = (function () {
         <div class="foot__brand"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#FFD24A"/><circle cx="11" cy="12" r="5" fill="#F2A65A"/><circle cx="29" cy="12" r="5" fill="#F2A65A"/><ellipse cx="20" cy="23" rx="13" ry="11" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="9" ry="7" fill="#FBEBDD"/><circle cx="15" cy="21" r="1.8" fill="#1A1A20"/><circle cx="25" cy="21" r="1.8" fill="#1A1A20"/></svg>
           <div><strong>Hamster Hub</strong><span>a technology community</span></div></div>
         <div class="foot__contact"><small>Get in touch</small><h3>Contacts</h3><ul>
-          <li>${ICON.fb}Hamster Hub</li><li>${ICON.line}@smart-school</li><li>${ICON.tel}090-060-2555</li><li>${ICON.ig}hamsterhub_ig</li></ul></div></div>`;
+          ${CONTACTS.map(([ic, label, href, ext]) => `<li><a href="${href}"${ext ? ' target="_blank" rel="noopener noreferrer"' : ""}>${ICON[ic]}${label}</a></li>`).join("")}</ul></div></div>`;
       // Animations on / off (motion.js); switching reloads the page
       if (window.NestMotion) {
         const on = NestMotion.on, b = document.createElement("button");

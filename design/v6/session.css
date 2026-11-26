@@ -68,3 +68,8 @@ html.calm .gnav__pill{transition:none}
 .nest-foot{padding-bottom:28px}
 .nest-foot .foot__top{border-bottom:0}
 .nest-foot .foot__motion{margin:0 auto}
+/* contacts are links: Facebook, LINE and Instagram open in a new tab, the number opens the phone app */
+.nest-foot .foot__contact a{display:flex;gap:12px;align-items:center;color:inherit;text-decoration:none;border-radius:8px;padding:2px 4px;margin:-2px -4px;transition:color .2s}
+.nest-foot .foot__contact a:hover{color:#FF8A3D;text-decoration:underline;text-underline-offset:4px}
+.nest-foot .foot__contact a:hover svg{color:#FF8A3D}
+.nest-foot .foot__contact a:focus-visible{outline:2px solid #fff;outline-offset:2px}
