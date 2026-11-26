@@ -47,7 +47,7 @@
   class ProfilePage {
     constructor(root) { this.root = root; this.tab = "works"; }
     render(person) {
-      this.p = person; const pr = person.profile(), mine = person.works(), ups = person.updates(), own = person.name === ME && NestSession.Session.is("maker");
+      this.p = person; const pr = person.profile(), mine = person.works(), ups = person.updates(), own = person.name === ME && NestSession.Session.signedIn;
       this.own = own; this.followers = pr.followers;
       const best = tiers.find((t) => t.id === mine[0].w.tier), set = own ? Settings.get() : { contact: true, phone: true };
       const showFavs = own || favsPublic(person.name), favs = own ? Favs.list() : othersFavs(person.name);

@@ -4,7 +4,7 @@
 //   Paths        absolute links to pages, worked out from where this file lives, so they hold from any folder
 //   AccountMenu  the avatar menu (or Log in / Sign up), one per page; pages add items with opts.extra / opts.onPick
 //   Footer       the dark Hamster Hub footer, filled into <footer class="foot nest-foot">
-//   gate()       swaps a page's content for a short note when it needs sign-in or the admin view
+//   gate()       swaps a page's content for a short note when it needs you signed in
 window.NestSession = (function () {
   "use strict";
   const BASE = new URL(".", document.currentScript.src);          // .../design/v6/
@@ -18,11 +18,8 @@ window.NestSession = (function () {
     browse: (room) => Paths.home(room ? `#browse-${room.toLowerCase()}` : "#browse-page"),
   };
 
-  // the two people you can be in the prototype
-  const PEOPLE = {
-    maker: { name: "Pim", full: "Pim Srisuk", handle: "pim", line: "@pim" },
-    admin: { name: "Arm", full: "Arm", handle: "arm", line: "Admin · Hamster Hub" },
-  };
+  // who you are once signed in, in this prototype
+  const ME = { name: "Pim", full: "Pim Srisuk", handle: "pim", line: "@pim" };
 
   // where the prototype keeps things: localStorage, or, where a sandboxed frame blocks it, window.name
   // (which survives moving between pages in the same tab)
@@ -41,10 +38,8 @@ window.NestSession = (function () {
   const Session = {
     read() { try { return JSON.parse(Store.get(KEY)) || {}; } catch (e) { return {}; } },
     get signedIn() { return !!this.read().in; },
-    get role() { return this.read().role === "admin" ? "admin" : "maker"; },
-    get user() { return PEOPLE[this.role]; },
-    is(role) { return this.signedIn && this.role === role; },
-    signIn(role = "maker") { this.write({ in: true, role }); },
+    get user() { return ME; },
+    signIn() { this.write({ in: true }); },
     signOut() { this.write({}); },
     write(s) { Store.set(KEY, JSON.stringify(s)); dispatchEvent(new CustomEvent("nest:session")); },
   };
@@ -67,14 +62,11 @@ window.NestSession = (function () {
     }
     items() {
       const u = Session.user;
-      if (Session.role === "admin") return [
-        ["Review queue", Paths.page("admin.html")], ["Posting guide and rules", Paths.page("post.html#rules")], ["Browse", Paths.home("#browse-page")], "hr",
-        ["Back to Pim's account", null, "maker"], "hr", ["Log out", null, "out"]];
       return [
         ["Your profile", Paths.page(`profile.html#${u.handle}`), "works"], ["Post your work", Paths.page("post.html")],
         ["Favourites", Paths.page(`profile.html#${u.handle}`), "favs"], "hr",
         ...(this.o.extra || []).map(([label, go]) => [label, null, go]),
-        ["Switch to admin view", null, "admin"], "hr", ["Log out", null, "out"]];
+        ...(this.o.extra && this.o.extra.length ? ["hr"] : []), ["Log out", null, "out"]];
     }
     render() {
       this.menu = null;
@@ -103,8 +95,6 @@ window.NestSession = (function () {
     pick(go, e) {
       this.open(false);
       if (go === "out") { Session.signOut(); toast("Logged out"); if (this.o.requires) location.href = Paths.home(); return; }
-      if (go === "admin") { Session.signIn("admin"); location.href = Paths.page("admin.html"); return; }
-      if (go === "maker") { Session.signIn("maker"); location.href = Paths.page("profile.html#pim"); return; }
       if (this.o.onPick) this.o.onPick(go, e);
     }
     open(on) {
@@ -151,16 +141,6 @@ window.NestSession = (function () {
     }
   }
 
-  // ---------- works sent from the post page, read by the admin review queue (this computer only) ----------
-  const SENT = "nest-sent";
-  const Submissions = {
-    list() { try { return JSON.parse(Store.get(SENT)) || []; } catch (e) { return []; } },
-    add(it) { Store.set(SENT, JSON.stringify([it, ...this.list()].slice(0, 20))); },
-    clear() { Store.drop(SENT); },
-  };
-  // "2 min ago" for a time stamp
-  const ago = (t) => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`; };
-
   // ---------- small note at the bottom of the screen ----------
   function toast(msg) {
     const t = document.createElement("p"); t.className = "nest-toast"; t.setAttribute("role", "status"); t.textContent = msg; document.body.appendChild(t);
@@ -175,21 +155,20 @@ window.NestSession = (function () {
     if (a && !a.hasAttribute("data-in")) { e.preventDefault(); toast(`"${a.textContent.trim()}" isn't built yet`); }
   });
 
-  // ---------- pages that need you signed in, or in the admin view ----------
-  function gate(main, need) {
-    if (need === "admin" ? Session.is("admin") : Session.signedIn) return true;
-    const admin = need === "admin";
-    main.innerHTML = `<section class="gate"><span class="gate__ic" aria-hidden="true">${admin ? "★" : "✎"}</span>
-      <h1>${admin ? "The review queue is for Hamster Hub admins" : "Sign in to post your work"}</h1>
-      <p>${admin ? "Admins read every new work, give it a tier or send it back with a note. In this prototype you can switch to the admin view from your account menu, or here." : "Posting is free for every Hamster Hub student. Sign in and your draft is saved as you go."}</p>
-      <div class="gate__acts"><button type="button" class="post">${admin ? "Switch to admin view" : "Sign in"}</button><a class="ghost3" href="${Paths.home("#browse-page")}">Back to Browse</a></div></section>`;
-    main.querySelector(".gate .post").addEventListener("click", () => { Session.signIn(admin ? "admin" : "maker"); location.reload(); });
+  // ---------- pages that need you signed in (posting) ----------
+  function gate(main) {
+    if (Session.signedIn) return true;
+    main.innerHTML = `<section class="gate"><span class="gate__ic" aria-hidden="true">✎</span>
+      <h1>Sign in to post your work</h1>
+      <p>Posting is free for every Hamster Hub student. Sign in and your draft is saved as you go.</p>
+      <div class="gate__acts"><button type="button" class="post">Sign in</button><a class="ghost3" href="${Paths.home("#browse-page")}">Back to Browse</a></div></section>`;
+    main.querySelector(".gate .post").addEventListener("click", () => { Session.signIn(); location.reload(); });
     return false;
   }
 
   // every page: fill the footer and the account area once the page's own scripts have run
   // (a page that needs its own menu items sets NestSession.menuOptions before then)
-  const api = { Session, Store, Paths, AccountMenu, Footer, Submissions, ago, gate, toast, hue, menuOptions: {} };
+  const api = { Session, Store, Paths, AccountMenu, Footer, gate, toast, hue, menuOptions: {} };
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("footer.nest-foot").forEach((f) => new Footer(f));
     const slot = document.querySelector(".acct");

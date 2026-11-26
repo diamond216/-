@@ -1,6 +1,6 @@
-// Posting rules for Hamster Nest. Shared by the admin review page (reasons to turn a work down)
-// and the posting guide makers see on post.html. Modelled on the kinds of rules big stores such as Steam use,
-// rewritten in our own words for a school community. Edit here and both pages change.
+// Posting rules for Hamster Nest, shown to makers in the posting guide on post.html (and named in "How we pick").
+// Modelled on the kinds of rules big stores such as Steam use,
+// rewritten in our own words for a school community.
 window.NestRules = [
   { id: 1, title: "It's yours to share", short: "Your team made it, or has the right to use every part of it.",
     detail: "Art, music, sound, fonts and code you didn't make need a licence that lets you use them, and a credit in About. No re-uploads of someone else's game, app or idea.",
