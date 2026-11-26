@@ -7,7 +7,7 @@
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ROOM_NAMES = Object.keys(rooms);
   // words on Browse, also used by the Dev logs page and the home page's Browse (lang.js).
-  // Room, genre and tier names, and every work's own text, are printed as written.
+  // Room and genre labels come from L.room / L.genre; tier names and every work's own text are printed as written.
   const L = window.NestLang, tx = (k, v) => L.t(k, v);
   L.add({
     en: {
@@ -100,7 +100,7 @@
       ["All", "Game", "Web", "IoT", "Idea"].forEach((r) => {
         const b = document.createElement("button");
         b.type = "button"; b.className = "room"; b.dataset.room = r;
-        b.innerHTML = `<span class="room__art" aria-hidden="true">${Art.draw(works.find((w) => w.id === cover[r]))}</span><span class="room__name">${r === "All" ? tx("br.all") : r}</span>`;
+        b.innerHTML = `<span class="room__art" aria-hidden="true">${Art.draw(works.find((w) => w.id === cover[r]))}</span><span class="room__name">${r === "All" ? tx("br.all") : L.room(r)}</span>`;
         b.addEventListener("click", () => state.setTab(r));
         this.el.appendChild(b);
       });
@@ -108,7 +108,7 @@
     }
     paint() {
       this.el.querySelectorAll(".room").forEach((b) => b.setAttribute("aria-pressed", b.dataset.room === this.s.tab));
-      $(".room[data-room='All'] .room__name", this.el).textContent = tx("br.all");
+      this.el.querySelectorAll(".room").forEach((b) => { $(".room__name", b).textContent = b.dataset.room === "All" ? tx("br.all") : L.room(b.dataset.room); });
     }
   }
 
@@ -175,11 +175,11 @@
       const s = this.s;
       let h = `<div class="fp__head"><h2>${tx("br.filters")}</h2><button type="button" class="fp__clear"${s.active ? "" : " disabled"}>${tx("br.clearAll")}</button></div>`;
       h += `<section><h3>${tx("br.rank")}</h3>${tiers.map((t) => this.box("ranks", t.id, t.name, s.count((w) => w.tier === t.id, "ranks"), `<i class="dot" style="--ri:${RANK_INK[t.id]}"></i>`)).join("")}</section>`;
-      if (s.tab === "All") h += `<section><h3>${tx("br.room")}</h3>${ROOM_NAMES.map((r) => this.box("rooms", r, r, s.count((w) => w.room === r, "rooms"))).join("")}</section>`;
+      if (s.tab === "All") h += `<section><h3>${tx("br.room")}</h3>${ROOM_NAMES.map((r) => this.box("rooms", r, L.room(r), s.count((w) => w.room === r, "rooms"))).join("")}</section>`;
       const gr = s.genreRooms;
       h += `<section><h3>${tx("br.genre")}</h3>`;
       if (!gr.length) h += `<p class="fp__hint">${tx("br.hint")}</p>`;
-      gr.forEach((r) => { h += `<div class="fp__group" data-g="${r}">${gr.length > 1 || s.tab === "All" ? `<h4>${r}</h4>` : ""}${rooms[r].map((g) => this.box("genres", g, g, s.count((w) => w.room === r && w.genre === g, "genres"))).join("")}</div>`; });
+      gr.forEach((r) => { h += `<div class="fp__group" data-g="${r}">${gr.length > 1 || s.tab === "All" ? `<h4>${L.room(r)}</h4>` : ""}${rooms[r].map((g) => this.box("genres", g, L.genre(g), s.count((w) => w.room === r && w.genre === g, "genres"))).join("")}</div>`; });
       h += `</section>`;
       const had = new Set([...this.el.querySelectorAll(".fp__group")].map((g) => g.dataset.g)), focused = document.activeElement && this.el.contains(document.activeElement) ? document.activeElement.value : null;
       this.el.innerHTML = h;
@@ -297,7 +297,7 @@
       if (!force && sig === this.sig && this.grid.childElementCount) return false; // same set already on screen
       this.sig = sig;
       this.n.textContent = shown.length;
-      this.t.textContent = this.s.tab === "All" ? tx("br.all") : this.s.tab;
+      this.t.textContent = this.s.tab === "All" ? tx("br.all") : L.room(this.s.tab);
       this.grid.innerHTML = "";
       if (!shown.length) {
         this.grid.innerHTML = `<p class="none">${tx("br.none")} <button type="button">${tx("br.clearF")}</button></p>`;

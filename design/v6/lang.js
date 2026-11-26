@@ -6,8 +6,10 @@
 //   NestLang.addEventListener("change", fn)   parts that draw their own text in JS redraw here
 // In HTML:  data-i18n="key" sets the text, data-i18n-attr="aria-label:key,placeholder:key" sets attributes,
 //           data-n="3" fills {n}; a button with data-set-lang="th" switches (its aria-pressed follows the language).
-// Never translated (the works and their names): project names and texts, makers, teams, mottos, awards, comments,
-// room names (Game, Web, IoT, Idea), genre names and tier names. They are not put through t(); they are printed as written.
+//   NestLang.room("IoT") / NestLang.genre("Smart farm")   the label for a room or genre name (the one table below);
+//                                                         the name itself stays the key for filters, URLs and lookups
+// Never translated (the works and their names): project names and texts, makers, teams, mottos, awards, comments
+// and tier names (Platinum ... Bronze). They are not put through t(); they are printed as written.
 // The choice lives in localStorage "nest-lang" (the old hero key "hamster-nest-lang" is read once as a fallback).
 // Load this first in <head>: it sets <html lang> before the page paints.
 window.NestLang = (function () {
@@ -46,6 +48,10 @@ window.NestLang = (function () {
       const s = this.words[this.code][key] ?? this.words.en[key] ?? key;
       return s.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
     }
+    // the label for a room or genre name; a name with no entry is printed as it came
+    room(name) { return this.name("room", name); }
+    genre(name) { return this.name("genre", name); }
+    name(kind, name) { return this.words[this.code][`${kind}.${name}`] ?? name; }
     // "5 days ago", "last week", "yesterday" ...; anything it does not know is printed as it came
     ago(when) {
       if (!this.th) return when;
@@ -72,6 +78,19 @@ window.NestLang = (function () {
   }
 
   const lang = new Lang();
+
+  // ---------- room and genre names: the one table every page reads (English names are the keys used by filters and data) ----------
+  lang.add({
+    th: {
+      "room.Game": "เกม", "room.Web": "เว็บ", "room.IoT": "ไอโอที", "room.Idea": "ไอเดีย",
+      "genre.Roguelike": "Roguelike", "genre.Puzzle": "ปริศนา", "genre.Casual": "เล่นสบาย ๆ", "genre.Co-op": "เล่นเป็นทีม",
+      "genre.Smart farm": "ฟาร์มอัจฉริยะ", "genre.Water": "น้ำ", "genre.Wearable": "อุปกรณ์สวมใส่", "genre.Smart home": "บ้านอัจฉริยะ",
+      "genre.SaaS": "SaaS", "genre.Ecommerce": "ร้านค้าออนไลน์", "genre.Dev tool": "เครื่องมือนักพัฒนา", "genre.School": "โรงเรียน",
+      "genre.Fintech": "ฟินเทค", "genre.Logistics": "โลจิสติกส์", "genre.Community": "ชุมชน",
+    },
+  });
+  // English prints the name as it is (so data-i18n="room.Game" works too)
+  lang.add({ en: Object.fromEntries(Object.keys(lang.words.th).filter((k) => /^(room|genre)\./.test(k)).map((k) => [k, k.replace(/^\w+\./, "")])) });
 
   // ---------- words every page shares: the bar, the account menu, the footer, "not built yet" notes ----------
   lang.add({
