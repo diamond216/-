@@ -6,6 +6,23 @@
   const $ = (s, r = document) => r.querySelector(s);
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ROOM_NAMES = Object.keys(rooms);
+  // words on Browse, also used by the Dev logs page and the home page's Browse (lang.js).
+  // Room, genre and tier names, and every work's own text, are printed as written.
+  const L = window.NestLang, tx = (k, v) => L.t(k, v);
+  L.add({
+    en: {
+      "br.title": "Browse Hamster projects", "br.filter": "Filter", "br.filters": "Filters", "br.rooms": "Rooms", "br.rank": "Rank", "br.allRanks": "All ranks",
+      "br.all": "All projects", "br.sorted": "Sorted by", "br.sort": "Sort projects", "br.s.rank": "most updates", "br.s.az": "name, A to Z", "br.s.maker": "maker, A to Z",
+      "br.clearAll": "Clear all", "br.room": "Room", "br.genre": "Genre", "br.hint": "Pick a room above to see its genres.",
+      "br.none": "Nothing matches that yet.", "br.clearF": "Clear the filters",
+    },
+    th: {
+      "br.title": "สำรวจผลงานของ Hamster", "br.filter": "ตัวกรอง", "br.filters": "ตัวกรอง", "br.rooms": "ห้อง", "br.rank": "อันดับ", "br.allRanks": "ทุกอันดับ",
+      "br.all": "ผลงานทั้งหมด", "br.sorted": "เรียงตาม", "br.sort": "เรียงผลงาน", "br.s.rank": "อัปเดตบ่อยสุด", "br.s.az": "ชื่อ A ถึง Z", "br.s.maker": "ผู้สร้าง A ถึง Z",
+      "br.clearAll": "ล้างทั้งหมด", "br.room": "ห้อง", "br.genre": "แนว", "br.hint": "เลือกห้องด้านบนเพื่อดูแนวของห้องนั้น",
+      "br.none": "ยังไม่มีผลงานที่ตรงกับที่เลือก", "br.clearF": "ล้างตัวกรอง",
+    },
+  });
   const RANK_INK = { platinum: "#3550A8", diamond: "#1E93C2", gold: "#C08A12", silver: "#7A8794", bronze: "#B0602F" };
 
   // ---------- state ----------
@@ -57,15 +74,16 @@
       document.addEventListener("click", (e) => { if (!this.menu.hidden && !e.composedPath().includes($(".rank"))) this.open(false); });
       document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !this.menu.hidden) { this.open(false); this.btn.focus(); } });
       state.addEventListener("change", () => this.paint());
+      L.addEventListener("change", () => this.paint());
       this.paint();
     }
     open(on) { this.menu.hidden = !on; this.btn.setAttribute("aria-expanded", on); if (on) $("li[aria-selected='true']", this.menu)?.focus(); }
     paint() {
-      const r = this.s.ranks, label = r.size === 0 ? "All ranks" : r.size === 1 ? tiers.find((t) => r.has(t.id)).name : "Rank"; // two or more: no count, no name
+      const r = this.s.ranks, label = r.size === 0 ? tx("br.allRanks") : r.size === 1 ? tiers.find((t) => r.has(t.id)).name : tx("br.rank"); // two or more: no count, no name
       // one rank: its name with its gem; two or more: a plain "Rank"
       $("span", this.btn).innerHTML = r.size === 1 ? `<i class="gem-ico" style="--ri:${RANK_INK[[...r][0]]}"></i>${label}` : label;
       this.btn.style.setProperty("--ri", r.size === 1 ? RANK_INK[[...r][0]] : "currentColor");
-      const opts = [{ id: "", name: "All ranks" }, ...tiers];
+      const opts = [{ id: "", name: tx("br.allRanks") }, ...tiers];
       this.menu.innerHTML = opts.map((t) => `<li role="option" tabindex="-1" data-id="${t.id}" aria-selected="${t.id ? r.size === 1 && r.has(t.id) : r.size === 0}">${t.id ? `<i style="--ri:${RANK_INK[t.id]}"></i>` : ""}${t.name}</li>`).join("");
       this.menu.querySelectorAll("li").forEach((li) => {
         const pick = () => { this.s.onlyRank(li.dataset.id, true); this.open(false); this.btn.focus(); };
@@ -82,13 +100,16 @@
       ["All", "Game", "Web", "IoT", "Idea"].forEach((r) => {
         const b = document.createElement("button");
         b.type = "button"; b.className = "room"; b.dataset.room = r;
-        b.innerHTML = `<span class="room__art" aria-hidden="true">${Art.draw(works.find((w) => w.id === cover[r]))}</span><span class="room__name">${r === "All" ? "All projects" : r}</span>`;
+        b.innerHTML = `<span class="room__art" aria-hidden="true">${Art.draw(works.find((w) => w.id === cover[r]))}</span><span class="room__name">${r === "All" ? tx("br.all") : r}</span>`;
         b.addEventListener("click", () => state.setTab(r));
         this.el.appendChild(b);
       });
-      state.addEventListener("change", () => this.paint()); this.paint();
+      state.addEventListener("change", () => this.paint()); L.addEventListener("change", () => this.paint()); this.paint();
     }
-    paint() { this.el.querySelectorAll(".room").forEach((b) => b.setAttribute("aria-pressed", b.dataset.room === this.s.tab)); }
+    paint() {
+      this.el.querySelectorAll(".room").forEach((b) => b.setAttribute("aria-pressed", b.dataset.room === this.s.tab));
+      $(".room[data-room='All'] .room__name", this.el).textContent = tx("br.all");
+    }
   }
 
   // ---------- filter panel: rank, then room (only under All), then genres of the chosen rooms ----------
@@ -96,7 +117,7 @@
     constructor(state, o = {}) {
       this.s = state; this.el = $("#fpanel"); this.btn = $(".fbtn");
       this.btn.addEventListener("click", () => this.open(this.el.hidden));
-      state.addEventListener("change", () => this.paint()); this.paint();
+      state.addEventListener("change", () => this.paint()); L.addEventListener("change", () => this.paint()); this.paint();
       this.busy = false;
       // computers (owner, 25 Nov 2026, option B): the panel is always open, in a rail on the screen's left edge
       // that runs the height of Browse; the works go three a row. Smaller screens keep the Filter button.
@@ -152,12 +173,12 @@
     }
     paint() {
       const s = this.s;
-      let h = `<div class="fp__head"><h2>Filters</h2><button type="button" class="fp__clear"${s.active ? "" : " disabled"}>Clear all</button></div>`;
-      h += `<section><h3>Rank</h3>${tiers.map((t) => this.box("ranks", t.id, t.name, s.count((w) => w.tier === t.id, "ranks"), `<i class="dot" style="--ri:${RANK_INK[t.id]}"></i>`)).join("")}</section>`;
-      if (s.tab === "All") h += `<section><h3>Room</h3>${ROOM_NAMES.map((r) => this.box("rooms", r, r, s.count((w) => w.room === r, "rooms"))).join("")}</section>`;
+      let h = `<div class="fp__head"><h2>${tx("br.filters")}</h2><button type="button" class="fp__clear"${s.active ? "" : " disabled"}>${tx("br.clearAll")}</button></div>`;
+      h += `<section><h3>${tx("br.rank")}</h3>${tiers.map((t) => this.box("ranks", t.id, t.name, s.count((w) => w.tier === t.id, "ranks"), `<i class="dot" style="--ri:${RANK_INK[t.id]}"></i>`)).join("")}</section>`;
+      if (s.tab === "All") h += `<section><h3>${tx("br.room")}</h3>${ROOM_NAMES.map((r) => this.box("rooms", r, r, s.count((w) => w.room === r, "rooms"))).join("")}</section>`;
       const gr = s.genreRooms;
-      h += `<section><h3>Genre</h3>`;
-      if (!gr.length) h += `<p class="fp__hint">Pick a room above to see its genres.</p>`;
+      h += `<section><h3>${tx("br.genre")}</h3>`;
+      if (!gr.length) h += `<p class="fp__hint">${tx("br.hint")}</p>`;
       gr.forEach((r) => { h += `<div class="fp__group" data-g="${r}">${gr.length > 1 || s.tab === "All" ? `<h4>${r}</h4>` : ""}${rooms[r].map((g) => this.box("genres", g, g, s.count((w) => w.room === r && w.genre === g, "genres"))).join("")}</div>`; });
       h += `</section>`;
       const had = new Set([...this.el.querySelectorAll(".fp__group")].map((g) => g.dataset.g)), focused = document.activeElement && this.el.contains(document.activeElement) ? document.activeElement.value : null;
@@ -232,6 +253,7 @@
       this.activeRank = rankKey(state); this.pendingRank = this.activeRank; this.busy = false;
       this.ex = new Preview(this.grid); window.Grid = this.ex;
       state.addEventListener("change", () => this.onChange());
+      L.addEventListener("change", () => { if (!this.busy) this.paint(true); });
       this.paint();
     }
     onChange() {
@@ -275,10 +297,10 @@
       if (!force && sig === this.sig && this.grid.childElementCount) return false; // same set already on screen
       this.sig = sig;
       this.n.textContent = shown.length;
-      this.t.textContent = this.s.tab === "All" ? "All projects" : this.s.tab;
+      this.t.textContent = this.s.tab === "All" ? tx("br.all") : this.s.tab;
       this.grid.innerHTML = "";
       if (!shown.length) {
-        this.grid.innerHTML = `<p class="none">Nothing matches that yet. <button type="button">Clear the filters</button></p>`;
+        this.grid.innerHTML = `<p class="none">${tx("br.none")} <button type="button">${tx("br.clearF")}</button></p>`;
         $("button", this.grid).addEventListener("click", () => { this.s.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); });
         return true;
       }
