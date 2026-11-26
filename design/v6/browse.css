@@ -361,3 +361,6 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 .sea--c .br__stick>.br__top{position:relative}
 .sea--c .br__stick>.br__top.is-stuck::before{content:none}
 .sea--c .br__stick.is-stuck::before{content:"";position:absolute;z-index:-1;inset:0;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45)}
+.rc__maker{margin:2px 2px 0;font-size:13px;line-height:20px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc--big .rc__maker{margin:6px 4px 0;font-size:14px}
+.rc__by i{margin-left:0}.rc__by i::before{content:none}
