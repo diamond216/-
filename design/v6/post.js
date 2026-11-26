@@ -14,7 +14,7 @@
   const PLATFORMS = { Game: ["Windows", "macOS", "Linux", "Web", "Android", "iOS"], IoT: ["ESP32", "Arduino", "Raspberry Pi", "Android", "iOS"], Web: ["Web", "Android", "iOS"], Idea: ["Pitch deck", "Poster", "Web"] };
   const LIMITS = { name: 40, line: 80, about: 900, files: 8, clip: 60 };
 
-  // words on this page (lang.js). Names, the draft's own text, room, genre and platform names are printed as written.
+  // words on this page (lang.js). Names, the draft's own text and platform names are printed as written; room and genre labels come from L.room / L.genre.
   const L = window.NestLang, tx = (k, v) => L.t(k, v);
   L.add({
     en: {
@@ -203,9 +203,9 @@
   class PostPage {
     constructor(root) { this.root = root; this.d = Draft.load(); this.finished = null; this.render(); }
     // buttons that act like radio (one) or checkboxes (many)
-    choice(name, options, picked, many) {   // options are room, genre and platform names: printed as written
+    choice(name, options, picked, many, label = (o) => o) {   // option values stay the English names; label() is what shows (rooms and genres: L.room / L.genre)
       return `<div class="${many ? "chips2" : "seg2"}" role="${many ? "group" : "radiogroup"}" aria-labelledby="${name}-l" data-name="${name}">${options.map((o) =>
-        `<button type="button" role="${many ? "checkbox" : "radio"}" aria-checked="${many ? picked.includes(o) : picked === o}" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+        `<button type="button" role="${many ? "checkbox" : "radio"}" aria-checked="${many ? picked.includes(o) : picked === o}" data-v="${esc(o)}">${esc(label(o))}</button>`).join("")}</div>`;
     }
     render(keep = null) {
       const d = this.d, mine = ME.works().filter((x) => x.lead);
@@ -221,7 +221,7 @@
               <section class="sec2" id="s-basics"><h2><span>1</span>${tx("po.s1")}</h2>
                 <label class="fld"><span class="fld__l">${tx("po.name")} <em>${tx("po.req")}</em></span><input name="name" maxlength="${LIMITS.name}" value="${esc(d.name)}" placeholder="${tx("po.namePh")}" required><span class="cnt" data-for="name"></span></label>
                 <label class="fld"><span class="fld__l">${tx("po.line")} <em>${tx("po.req")}</em></span><input name="line" maxlength="${LIMITS.line}" value="${esc(d.line)}" placeholder="${tx("po.linePh")}" required><span class="cnt" data-for="line"></span><span class="fld__h">${tx("po.lineH")}</span></label>
-                <div class="fld"><span class="fld__l" id="room-l">${tx("po.room")} <em>${tx("po.req")}</em></span>${this.choice("room", Object.keys(rooms), d.room, false)}</div>
+                <div class="fld"><span class="fld__l" id="room-l">${tx("po.room")} <em>${tx("po.req")}</em></span>${this.choice("room", Object.keys(rooms), d.room, false, (o) => L.room(o))}</div>
                 <div class="fld" id="genre-f"></div>
                 <div class="fld" id="plat-f"></div>
               </section>
@@ -269,7 +269,7 @@
       const d = this.d, g = $("#genre-f", this.root), p = $("#plat-f", this.root);
       if (!d.room) { g.innerHTML = `<span class="fld__l">${tx("po.genre")}</span><p class="fld__h">${tx("po.roomFirst")}</p>`; p.innerHTML = ""; return; }
       d.genres = d.genres.filter((x) => rooms[d.room].includes(x)); d.platforms = d.platforms.filter((x) => PLATFORMS[d.room].includes(x));
-      g.innerHTML = `<span class="fld__l" id="genres-l">${tx("po.genre")} <em>${tx("po.pickOne")}</em></span>${this.choice("genres", rooms[d.room], d.genres, true)}`;
+      g.innerHTML = `<span class="fld__l" id="genres-l">${tx("po.genre")} <em>${tx("po.pickOne")}</em></span>${this.choice("genres", rooms[d.room], d.genres, true, (o) => L.genre(o))}`;
       p.innerHTML = `<span class="fld__l" id="platforms-l">${tx(d.room === "Idea" ? "po.shared" : "po.runs")}</span>${this.choice("platforms", PLATFORMS[d.room], d.platforms, true)}`;
       this.wireChoices(g); this.wireChoices(p);
       if (!calm) [g, p].forEach((el) => el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: E }));
@@ -348,7 +348,7 @@
           : `<p class="pv2__empty">${tx("pv.pickLeft")}</p>`;
         return;
       }
-      const cover = this.media.cover, tags = [d.room, ...d.genres, ...d.platforms].filter(Boolean);
+      const cover = this.media.cover, tags = [d.room && L.room(d.room), ...d.genres.map((g) => L.genre(g)), ...d.platforms].filter(Boolean);
       body.innerHTML = `<div class="pv2__tile">${cover ? (cover.video ? `<video src="${cover.url}" muted autoplay loop playsinline></video>` : `<img src="${cover.url}" alt="">`) : `<span class="pv2__ph">${tx("pv.cover")}</span>`}<span class="pv2__new">${tx("pv.new")}</span></div>
         <p class="pv2__n">${esc(d.name || tx("pv.name"))}</p><p class="pv2__l">${esc(d.line || tx("pv.line"))}</p>
         ${tags.length ? `<p class="pv2__t">${tags.map((t, i) => `<span${i === 0 ? ' class="is-room"' : ""}>${esc(t)}</span>`).join("")}</p>` : ""}

@@ -63,7 +63,7 @@
       this.root.innerHTML = `
         <div class="pj__head">
           <a class="back" href="${NestSession.Paths.home("#browse-page")}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>${tx("pj.back")}</a>
-          <p class="tags"><a class="tag tag--room" href="${NestSession.Paths.browse(w.room)}">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
+          <p class="tags"><a class="tag tag--room" href="${NestSession.Paths.browse(w.room)}">${L.room(w.room)}</a><span class="tag tag--room">${L.genre(w.genre)}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
           <div class="title-row"><h1 class="title">${w.name}</h1><button type="button" class="fav" aria-pressed="false" aria-label="${tx("pj.save", { name: w.name })}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
           <p class="blurb">${w.blurb}</p>
         </div>
@@ -158,7 +158,7 @@
         .sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).slice(0, 10).map(([x]) => x);
     }
     more(w) {
-      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">${tx("pj.more")}</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
+      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">${tx("pj.more")}</h2><span>${L.room(w.room).toUpperCase()} · ${L.genre(w.genre).toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
     }
     fillMore(w) {
       const g = $(".like__g", this.root), { ResultCard, Expander } = window.Tiles;

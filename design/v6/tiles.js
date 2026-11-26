@@ -5,7 +5,7 @@ window.Tiles = (function () {
   // works from any folder (the home page lives in hero/), via session.js when it is loaded
   const projectHref = (id) => (window.NestSession ? NestSession.Paths.page(`project.html#${id}`) : `project.html#${id}`);
   const { tiers, works } = window.NEST;
-  // words on the cards (lang.js); a work's name, maker, room, genre, rank and update text are printed as written
+  // words on the cards (lang.js); a work's name, maker, rank and update text are printed as written; room and genre labels come from L.room / L.genre
   const L = window.NestLang, t = (k, v) => L.t(k, v);
   L.add({
     en: { "rc.follow": "Follow", "rc.following": "Following", "rc.open": "{name}, open the project", "rc.updated": "Updated {when}", "rc.go": "Open project" },
@@ -25,10 +25,10 @@ window.Tiles = (function () {
       a.innerHTML = `<div class="rc__media"><a class="rc__open" href="${projectHref(w.id)}" aria-label="${t("rc.open", { name: w.name })}"><span class="rc__pic"><span class="cv"></span></span></a>
         <span class="rc__flag" aria-hidden="true">${GEM}<b>${tier.name}</b></span>
         <button type="button" class="rc__follow" aria-pressed="${following.has(w.id)}">${FOLLOW}<span>${t(following.has(w.id) ? "rc.following" : "rc.follow")}</span></button></div>
-        <h3 class="rc__name" title="${w.name}"><a href="${projectHref(w.id)}" tabindex="-1">${w.name}</a><span class="rc__tag">${w.room}</span></h3>
+        <h3 class="rc__name" title="${w.name}"><a href="${projectHref(w.id)}" tabindex="-1">${w.name}</a><span class="rc__tag">${L.room(w.room)}</span></h3>
         <p class="rc__maker" title="${w.maker}">${w.maker}</p>
         <div class="rc__more" aria-hidden="true">
-          <p class="rc__by"><i>${w.genre}</i></p>
+          <p class="rc__by"><i>${L.genre(w.genre)}</i></p>
           <p class="rc__upd"><b>${t("rc.updated", { when: L.ago(w.update.when) })}</b>${w.update.what}</p>
           <p class="rc__desc">${w.blurb}</p>
           <a class="rc__go" href="${projectHref(w.id)}">${t("rc.go")}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4.5 3H9v4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
@@ -167,7 +167,7 @@ window.Tiles = (function () {
     show(c) {
       const w = works.find((x) => x.id === c.dataset.id); if (!w || this.card !== c) return;
       const p = this.el;
-      p.innerHTML = `<b class="rcp__name">${esc(w.name)}</b><span class="rcp__upd">${esc(t("rc.updated", { when: L.ago(w.update.when) }))}</span><p class="rcp__desc">${esc(w.blurb)}</p><span class="rcp__by">${esc(w.maker)}</span><span class="rcp__tags"><i>${esc(w.room)}</i><i>${esc(w.genre)}</i></span>`;
+      p.innerHTML = `<b class="rcp__name">${esc(w.name)}</b><span class="rcp__upd">${esc(t("rc.updated", { when: L.ago(w.update.when) }))}</span><p class="rcp__desc">${esc(w.blurb)}</p><span class="rcp__by">${esc(w.maker)}</span><span class="rcp__tags"><i>${esc(L.room(w.room))}</i><i>${esc(L.genre(w.genre))}</i></span>`;
       p.hidden = false;
       const r = c.getBoundingClientRect(), pw = p.offsetWidth, ph = p.offsetHeight, gap = 14, edge = 8;
       const right = r.right + gap + pw <= innerWidth - edge;

@@ -6,7 +6,7 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const pad = (n) => String(n).padStart(2, "0");
 
-  // words on this page (lang.js); room, genre and tier names and every work's own text are printed as written
+  // words on this page (lang.js); tier names and every work's own text are printed as written; room and genre labels come from L.room / L.genre
   const L = window.NestLang, t = (k, v) => L.t(k, v);
   L.add({
     en: {
@@ -38,7 +38,7 @@
       const w = this.work, a = document.createElement("a");
       a.href = "#"; a.className = `card card--${this.size}`;
       a.innerHTML = `<div class="card__pic"><div class="cv"></div><span class="card__play" aria-hidden="true"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg>${t("home.preview")}</span></div>
-        <div class="card__txt"><strong>${w.name}</strong><span>${w.room} · ${w.genre}</span></div>`;
+        <div class="card__txt"><strong>${w.name}</strong><span>${L.room(w.room)} · ${L.genre(w.genre)}</span></div>`;
       Art.fill($(".cv", a), w);
       const pv = previewFor($(".card__pic", a), w);
       a.addEventListener("pointerenter", () => pv.start());
@@ -81,13 +81,13 @@
     open(on) { this.box.hidden = !on; this.btn.setAttribute("aria-expanded", on); }
     paint() {
       const f = this.f, tabs = $(".flt__tabs", this.root), list = $(".flt__genres", this.root);
-      tabs.innerHTML = ["All", ...Object.keys(this.rooms)].map((r) => `<button type="button" role="tab" aria-selected="${r === f.room}" data-room="${r}">${r === "All" ? t("home.f.all") : r}</button>`).join("");
+      tabs.innerHTML = ["All", ...Object.keys(this.rooms)].map((r) => `<button type="button" role="tab" aria-selected="${r === f.room}" data-room="${r}">${r === "All" ? t("home.f.all") : L.room(r)}</button>`).join("");
       tabs.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => f.setRoom(b.dataset.room)));
       if (f.room === "All") list.innerHTML = `<p class="flt__hint">${t("home.f.hint")}</p>`;
       else {
         list.innerHTML = this.rooms[f.room].map((g) => {
           const n = this.all.filter((w) => w.room === f.room && w.genre === g).length;
-          return `<label class="flt__ck"><input type="checkbox" value="${g}"${f.genres.has(g) ? " checked" : ""}><span>${g}</span><em>${n}</em></label>`;
+          return `<label class="flt__ck"><input type="checkbox" value="${g}"${f.genres.has(g) ? " checked" : ""}><span>${L.genre(g)}</span><em>${n}</em></label>`;
         }).join("");
         list.querySelectorAll("input").forEach((i) => i.addEventListener("change", () => f.toggle(i.value)));
       }

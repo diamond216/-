@@ -7,7 +7,7 @@
   const saveData = !!(navigator.connection && navigator.connection.saveData);
 
   // Words for this page. Shared ones (nav, sign in, footer) are in design/v6/lang.js.
-  // A work's own text (RE//SLASH, its room, description and makers) is not translated.
+  // A work's own text (RE//SLASH, its description and makers) is not translated; its room label comes from NestLang.room.
   NestLang.add({
     en: {
       title: 'Hamster Nest',
