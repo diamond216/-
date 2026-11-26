@@ -76,7 +76,7 @@ window.NestLang = (function () {
   // ---------- words every page shares: the bar, the account menu, the footer, "not built yet" notes ----------
   lang.add({
     en: {
-      "title.browse": "Browse · Hamster Nest", "title.devlogs": "Dev logs · Hamster Nest", "title.project": "Project · Hamster Nest", "title.profile": "Profile · Hamster Nest", "title.post": "Post your project · Hamster Nest",
+      "title.browse": "Browse · Hamster Nest", "title.devlogs": "Dev logs · Hamster Nest", "title.post": "Post your project · Hamster Nest",
       "nav.aria": "Main", "nav.browse": "Browse", "nav.devlogs": "Dev logs", "nav.about": "About",
       "brand.home": "Hamster Nest home",
       "search.ph": "Search projects, dev logs and makers", "search.short": "Search", "search.aria": "Search Hamster Nest", "search.clear": "Clear the search",
@@ -96,7 +96,7 @@ window.NestLang = (function () {
       "ago.day": "{n} days ago", "ago.week": "{n} weeks ago", "ago.month": "{n} months ago",
     },
     th: {
-      "title.browse": "สำรวจผลงาน · Hamster Nest", "title.devlogs": "บันทึกการพัฒนา · Hamster Nest", "title.project": "ผลงาน · Hamster Nest", "title.profile": "โปรไฟล์ · Hamster Nest", "title.post": "ลงผลงานของคุณ · Hamster Nest",
+      "title.browse": "สำรวจผลงาน · Hamster Nest", "title.devlogs": "บันทึกการพัฒนา · Hamster Nest", "title.post": "ลงผลงานของคุณ · Hamster Nest",
       "nav.aria": "เมนูหลัก", "nav.browse": "สำรวจผลงาน", "nav.devlogs": "บันทึกการพัฒนา", "nav.about": "เกี่ยวกับเรา",
       "brand.home": "Hamster Nest หน้าแรก",
       "search.ph": "ค้นหาโปรเจกต์ บันทึก และผู้สร้าง", "search.short": "ค้นหา", "search.aria": "ค้นหาใน Hamster Nest", "search.clear": "ล้างคำค้นหา",
