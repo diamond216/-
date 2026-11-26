@@ -12,6 +12,7 @@
       description: 'Hamster Nest shows student projects in games, websites and IoT. Browse the projects and get in touch with the students who made it.',
       brandTop: 'Hamster Nest, back to top',
       browse: 'Browse',
+      devlogs: 'Dev logs',
       about: 'About',
       contact: 'Contact',
       chooseLang: 'Choose language',
@@ -44,6 +45,7 @@
       viewThisProject: 'View this project',
     },
     th: {
+      devlogs: 'บันทึกการพัฒนา',
       title: 'Hamster Nest',
       description: 'Hamster Nest รวมโปรเจกต์ของนักเรียนด้านเกม เว็บไซต์ และ IoT ดูผลงานแล้วติดต่อคนที่สร้างได้เลย',
       brandTop: 'Hamster Nest กลับไปด้านบน',

@@ -4,7 +4,7 @@
 //   Paths        absolute links to pages, worked out from where this file lives, so they hold from any folder
 //   AccountMenu  the avatar menu (or Log in / Sign up), one per page; pages add items with opts.extra / opts.onPick
 //   Footer       the dark Hamster Hub footer, filled into <footer class="foot nest-foot">
-//   NavPill      the sliding highlight in the Browse · About pill
+//   NavPill      the sliding highlight in the Browse · Dev logs · About pill
 //   gate()       swaps a page's content for a short note when it needs you signed in
 window.NestSession = (function () {
   "use strict";
@@ -141,7 +141,7 @@ window.NestSession = (function () {
     }
   }
 
-  // ---------- the Browse · About pill: the highlight slides to the link you choose (owner, 26 Nov 2026) ----------
+  // ---------- the Browse · Dev logs · About pill: the highlight slides to the link you choose (owner, 26 Nov 2026) ----------
   // select(a) moves it; pages can call it too (the home page does, as you scroll to About and back)
   class NavPill {
     constructor(nav) {

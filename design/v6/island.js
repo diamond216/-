@@ -27,12 +27,12 @@
   // ---------- language ----------
   const TEXT = {
     en: {
-      "nav.browse": "Browse", "nav.about": "About", "signin": "Sign in",
+      "nav.browse": "Browse", "nav.devlogs": "Dev logs", "nav.about": "About", "signin": "Sign in",
       "hero.see": "See the project", "say": "“High schoolers can do all this!?”",
       "tier.all": "See all {n}", "tier.how": "How ranking works", "filters": "Filters",
     },
     th: {
-      "nav.browse": "สำรวจผลงาน", "nav.about": "เกี่ยวกับเรา", "signin": "เข้าสู่ระบบ",
+      "nav.browse": "สำรวจผลงาน", "nav.devlogs": "บันทึกการพัฒนา", "nav.about": "เกี่ยวกับเรา", "signin": "เข้าสู่ระบบ",
       "hero.see": "ดูผลงาน", "say": "“เด็ก ม.ปลาย ทำได้ขนาดนี้เลยเหรอ!?”",
       "tier.all": "ดูทั้งหมด {n} ชิ้น", "tier.how": "จัดอันดับยังไง", "filters": "ตัวกรอง",
     },
