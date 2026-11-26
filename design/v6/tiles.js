@@ -9,7 +9,7 @@ window.Tiles = (function () {
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const RANK_INK = { platinum: "#3550A8", diamond: "#1E93C2", gold: "#C08A12", silver: "#7A8794", bronze: "#B0602F" };
   const GEM = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4h11l4.5 5.2L12 21 2 9.2z" fill="currentColor" opacity=".9"/><path d="M2 9.2h20M6.5 4L9.6 9.2 12 21l2.4-11.8L17.5 4M9.6 9.2L12 4l2.4 5.2" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1"/></svg>`;
-  const BELL = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 1112 0v5l1.6 2.2H4.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  const FOLLOW = `<svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-plus" d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path class="i-check" d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   const following = new Set();
   class ResultCard {
     constructor(w) { this.w = w; }
@@ -18,7 +18,7 @@ window.Tiles = (function () {
       a.className = "rc"; a.dataset.id = w.id; a.style.setProperty("--ri", RANK_INK[w.tier]);
       a.innerHTML = `<div class="rc__media"><a class="rc__open" href="${projectHref(w.id)}" aria-label="${w.name}, open the project"><span class="rc__pic"><span class="cv"></span></span></a>
         <span class="rc__flag" aria-hidden="true">${GEM}<b>${t.name}</b></span>
-        <button type="button" class="rc__bell" aria-pressed="${following.has(w.id)}">${BELL}<span>${following.has(w.id) ? "Following" : "Notify me"}</span></button></div>
+        <button type="button" class="rc__follow" aria-pressed="${following.has(w.id)}">${FOLLOW}<span>${following.has(w.id) ? "Following" : "Follow"}</span></button></div>
         <h3 class="rc__name" title="${w.name}"><a href="${projectHref(w.id)}" tabindex="-1">${w.name}</a></h3>
         <p class="rc__maker" title="${w.maker}">${w.maker}</p>
         <div class="rc__more" aria-hidden="true">
@@ -28,11 +28,11 @@ window.Tiles = (function () {
           <a class="rc__go" href="${projectHref(w.id)}">Open project<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9l6-6M4.5 3H9v4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
         </div>`;
       Art.fill($(".cv", a), w);
-      const bell = $(".rc__bell", a);
-      bell.addEventListener("click", () => {
+      const follow = $(".rc__follow", a);
+      follow.addEventListener("click", () => {
         const on = !following.has(w.id); on ? following.add(w.id) : following.delete(w.id);
-        bell.setAttribute("aria-pressed", on); $("span", bell).textContent = on ? "Following" : "Notify me";
-        if (!calm) bell.animate([{ transform: "rotate(0)" }, { transform: "rotate(14deg)" }, { transform: "rotate(-10deg)" }, { transform: "rotate(5deg)" }, { transform: "rotate(0)" }], { duration: 520, easing: "ease-out" });
+        follow.setAttribute("aria-pressed", on); $("span", follow).textContent = on ? "Following" : "Follow";
+        if (!calm) $("svg", follow).animate([{ transform: "scale(.6)" }, { transform: "scale(1.15)" }, { transform: "scale(1)" }], { duration: 320, easing: "ease-out" });
       });
       return a;
     }
