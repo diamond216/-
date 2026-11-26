@@ -12,6 +12,7 @@
   const { SampleDetails } = window.Details;
 
   const ICON = {
+    link: '<path d="M10 14a4.5 4.5 0 006.4 0l3-3a4.5 4.5 0 00-6.4-6.4l-1.2 1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M14 10a4.5 4.5 0 00-6.4 0l-3 3a4.5 4.5 0 006.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
     email: '<path d="M3 6.5h18v11H3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 7l8.5 6.5L20.5 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
     phone: '<path d="M7 3.5h3l1.5 4-2 1.3a10 10 0 005.7 5.7l1.3-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 015 5.7 2 2 0 017 3.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
     line: '<path d="M12 4C7 4 3 7.2 3 11.1c0 3.5 3.1 6.4 7.4 7l-.5 2.4 3.4-2.3c4.3-.5 7.7-3.5 7.7-7.1C21 7.2 17 4 12 4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
@@ -31,16 +32,15 @@
     }
     render(w) {
       const t = tiers.find((x) => x.id === w.tier), d = new SampleDetails(w), ink = INK[w.tier];
-      const updates = d.updates(), team = d.team();
+      const updates = d.updates(), team = d.team(), links = d.links();
       document.title = `${w.name} · Hamster Nest`;
       this.root.style.setProperty("--ri", ink);
       this.root.innerHTML = `
         <div class="pj__head">
           <a class="back" href="${NestSession.Paths.home("#browse-page")}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Browse</a>
           <p class="tags"><a class="tag tag--room" href="${NestSession.Paths.browse(w.room)}">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
-          <h1 class="title">${w.name}</h1>
+          <div class="title-row"><h1 class="title">${w.name}</h1><button type="button" class="fav" aria-pressed="false" aria-label="Save ${w.name} to your favourites"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
           <p class="blurb">${w.blurb}</p>
-          <div class="dl"><span><b>${d.download()[0]}</b><i>${d.download()[1]}</i></span><button type="button" class="fav" aria-pressed="false" aria-label="Save ${w.name} to your favourites"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button><a class="dl__btn" href="#" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</a></div>
         </div>
         <div class="pj__grid">
           <div class="pj__main">
@@ -55,6 +55,7 @@
             <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><span class="log__when">${i ? "" : '<span class="log__new">New</span>'}<time>${when}</time></span><div><b>${what}</b><p>${more}</p>${this.updateFig(w, i, what)}</div></li>`).join("")}</ol></section>
           </div>
           <aside class="pj__side">
+            ${links.length ? `<section class="box" aria-labelledby="ln-h"><h3 id="ln-h">Links</h3><ul class="lk">${links.map(([name, url]) => `<li><a href="${url}" target="_blank" rel="noopener"><span class="ci">${svg("link")}</span><span><b>${name}</b><i>${url.replace(/^https?:\/\//, "")}</i></span></a></li>`).join("")}</ul></section>` : ""}
             <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><a class="team__n" href="profile.html#${n.toLowerCase()}"><b>${n}</b></a><i>${r}</i></span></li>`).join("")}</ul></section>
             <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
               <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${value.replace("@", "@<wbr>")}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
@@ -147,7 +148,7 @@
     }
     enter() {
       const E = "cubic-bezier(.2,.8,.2,1)";
-      const seq = [".back", ".tags", ".title", ".blurb", ".gal", ".thumbs", ".dl", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".about", ".log"];
+      const seq = [".back", ".tags", ".title", ".blurb", ".gal", ".thumbs", ".fav", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".pj__side .box:nth-child(4)", ".about", ".log"];
       seq.forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(14px)", filter: "blur(4px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { duration: 520, delay: i * 55, easing: E, fill: "backwards" }); });
     }
     stop() { if (this.preview) this.preview.stop(); }

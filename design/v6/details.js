@@ -21,9 +21,9 @@ window.Details = (function () {
     };
     static AWARDS = [["Best of the school fair", "Science fair, Aug 2026"], ["People's pick", "Open house, Sep 2026"], ["Best newcomer", "Hamster Hub demo day, Oct 2026"]];
     constructor(w) { this.w = w; }
-    // what you can take home: label, detail, button word
-    download() {
-      return { Game: ["Free download", `${this.w.platforms.join(", ")} · 84 MB`], IoT: ["Code and case files", "ZIP · 2.1 MB"], Web: ["Source code", "ZIP · 640 KB"], Idea: ["The plan, as a PDF", "PDF · 1.2 MB"] }[this.w.room];
+    links() {
+      const id = this.w.id, more = [["GitHub", `https://github.com/hamster-nest-sample/${id}`], ["Website", `https://${id}.hamster-nest-sample.example`], null][seed(id, 3)];
+      return [["itch.io", `https://hamster-nest-sample.itch.io/${id}`], ...(more ? [more] : [])];
     }
     // a few paragraphs about the work, written the way a student would put it
     description() {
