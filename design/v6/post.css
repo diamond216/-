@@ -33,7 +33,7 @@
 .saved{font-size:13px;color:var(--mute)}
 .ghost3{height:46px;padding:0 22px;border-radius:999px;border:1px solid #C9D9DC;background:#fff;font:600 15px/1 var(--f);color:var(--ink)}
 .post{margin-left:auto;height:46px;padding:0 28px;border-radius:999px;border:0;background:linear-gradient(180deg,#3B8CF0,#2368D8);color:#fff;font:600 15px/1 var(--f);box-shadow:0 8px 18px -8px rgba(35,104,216,.8)}
-.pv2__tile{position:relative;aspect-ratio:1.28;border-radius:10px;overflow:hidden}.pv2__tile svg{width:100%;height:100%}
+.pv2__tile{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden}.pv2__tile svg{width:100%;height:100%}
 .pv2__n{font-weight:600;margin-top:10px}.pv2__l{font-size:13.5px;color:var(--mute);margin-top:2px}
 .pv2__t{display:flex;gap:6px;margin-top:10px}.pv2__t span{font-size:12px;padding:3px 9px;border-radius:999px;background:#E6EEF0}
 .chk ul{list-style:none;display:grid}.chk li{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px;color:var(--mute)}.chk li:first-child{border:0}
@@ -98,7 +98,7 @@
 .post{cursor:pointer}.ghost3{cursor:pointer;display:inline-flex;align-items:center}
 .post:focus-visible,.ghost3:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 /* preview */
-.pv2__tile{position:relative;aspect-ratio:1.28;border-radius:10px;overflow:hidden;background:repeating-linear-gradient(135deg,#E3ECEE 0 10px,#EDF3F4 10px 20px);display:grid;place-items:center}
+.pv2__tile{position:relative;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:repeating-linear-gradient(135deg,#E3ECEE 0 10px,#EDF3F4 10px 20px);display:grid;place-items:center}
 .pv2__tile img,.pv2__tile video,.pv2__pic img,.pv2__pic video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pv2__ph{font-size:13px;color:var(--mute);font-weight:600}
 .pv2__new{position:absolute;right:8px;top:8px;padding:0 8px;height:20px;display:inline-flex;align-items:center;border-radius:999px;background:#B0602F;color:#fff;font:600 11px/1 var(--f);text-box:trim-both cap alphabetic}
