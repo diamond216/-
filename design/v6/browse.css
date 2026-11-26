@@ -232,10 +232,7 @@ html:has(.sea--c){background:#F4F8F8}
 .sea--c .br{padding-top:0}
 .br__sentinel{height:1px}
 .sea--c .br__top{position:sticky;z-index:15;padding:10px 0;transition:background .25s,box-shadow .25s}
-.sea--c .br__top.is-stuck{background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45);
-  }
 .sea--c .fbtn.glass{background:#fff;border:1px solid #fff;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 10px 24px -14px rgba(5,60,80,.45);border-radius:12px}
-.sea--c .br__top.is-stuck .fbtn.glass{border-color:var(--line);box-shadow:none}
 .sea--c .fbtn.glass[aria-expanded="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .sea--c .rank__btn{background:#EEF4F5;box-shadow:none}
 .sea--c .rooms{margin-top:14px}
@@ -267,9 +264,6 @@ html:has(.sea--c){background:#F4F8F8}
 /* player opens from its tile */
 .br{transform-origin:50% 20%}
 .rhead .count{position:static;display:inline-block;transform:none;margin:0}
-/* stuck toolbar: full-width white strip, controls stay where they were */
-.sea--c .br__top.is-stuck{padding-left:0;padding-right:0;box-shadow:none;background:none}
-.sea--c .br__top.is-stuck::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45)}
 
 /* ===================== hover to expand (21 Nov 2026) ===================== */
 .grid{grid-auto-flow:row dense}
@@ -343,13 +337,9 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
   .has-rail .frail .fpanel{position:sticky;top:var(--bar-h,78px);max-height:calc(100vh - var(--bar-h,78px));overflow:auto;margin:0;padding:28px 24px 24px;border:0;border-radius:0;box-shadow:none;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
   .has-rail .fbtn{display:none}
   .has-rail .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  /* the stuck search row's white band starts at the rail, not under it */
-  .has-rail .br__top.is-stuck::before{left:calc(50% - (100vw - 280px) / 2);right:calc(50% - (100vw - 280px) / 2)}
 }
 .sea--c .br__stick{position:sticky;z-index:15}
 .sea--c .br__stick>.br__top{position:relative}
-.sea--c .br__stick>.br__top.is-stuck::before{content:none}
-.sea--c .br__stick.is-stuck::before{content:"";position:absolute;z-index:-1;inset:0;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 10px 24px -18px rgba(13,43,51,.45)}
 .rc__maker{margin:2px 2px 0;font-size:13px;line-height:20px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rc--big .rc__maker{margin:6px 4px 0;font-size:14px}
 .rc__by i{margin-left:0}.rc__by i::before{content:none}
