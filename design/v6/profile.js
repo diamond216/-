@@ -10,6 +10,53 @@
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const E = "cubic-bezier(.2,.8,.2,1)";
   const ME = "Pim";
+  // words on this page (lang.js). Names, roles, mottos, "about me" texts, updates, awards and the room, genre and
+  // tier names are a person's or a work's own and are printed as written.
+  const L = window.NestLang, tx = (k, v) => L.t(k, v);
+  L.add({
+    en: {
+      "pf.you": "You", "pf.rank": "best rank", "pf.projects": "projects", "pf.followers": "followers", "pf.awardsN": "awards",
+      "pf.settings": "Profile settings", "pf.hi": "Say hi to {name}", "pf.follow": "Follow", "pf.following": "Following", "pf.tabs": "{name}'s profile",
+      "pf.t.works": "Projects", "pf.t.updates": "Updates", "pf.t.favs": "Favourites", "pf.t.about": "About",
+      "pf.public": "Everyone can see this", "pf.private": "Only you can see this",
+      "pf.worksH": "Projects, best rank first", "pf.lead": "{n} as lead", "pf.leadTag": "Lead", "pf.postedH": "Everything {name} has posted",
+      "pf.favsH": "Favourites", "pf.change": "Change", "pf.shared": "Shared by {name}", "pf.aboutH": "About {name}",
+      "pf.into": "Into", "pf.tools": "Tools", "pf.openTo": "Open to", "pf.since": "On Hamster Nest since", "pf.awards": "Awards", "pf.contact": "Contact",
+      "pf.latest": "Latest from {name}", "pf.allUps": "All {n} updates", "pf.about": "About", "pf.moreAbout": "More about {name}",
+      "pf.empty": "Nothing saved yet. Tap the heart on any project to keep it here.", "pf.copy": "Copy {label}",
+      "pf.copied": "Copied {v}", "pf.select": "Select and copy: {v}",
+      "hi.q1": "Can I try it?", "hi.q2": "Want to team up?", "hi.q3": "Can we talk about investing?", "hi.q4": "Great work, keep going",
+      "hi.title": "Say hi to {name}", "hi.sub": "{name} gets it in their inbox. Hamster Hub gets a copy.", "hi.msg": "Your message",
+      "hi.ph": "Hi {name}, I saw your project and…", "hi.mail": "Where can {name} reply?", "hi.notNow": "Not now", "hi.send": "Send it over",
+      "hi.errMsg": "Write a line or pick one above.", "hi.errMail": "That email doesn't look right. Check it and try again.",
+      "hi.sent": "Sent to {name}", "hi.sentP": "This is a prototype, so nothing actually left the page. On the real site {name} would reply to {mail}.", "hi.done": "Done",
+      "set.favsQ": "Who can see your favourites?", "set.me": "Only me", "set.meNote": "The Favourites tab shows only when you're signed in.",
+      "set.all": "Everyone", "set.allNote": "Anyone who opens your profile can see what you saved.", "set.show": "Show on my profile",
+      "set.contact": "Contact card", "set.phone": "Phone number", "set.cancel": "Cancel", "set.save": "Save",
+      "set.savedPub": "Saved. Everyone can see your favourites now.", "set.savedPriv": "Saved. Only you can see your favourites.",
+    },
+    th: {
+      "pf.you": "คุณ", "pf.rank": "อันดับสูงสุด", "pf.projects": "โปรเจกต์", "pf.followers": "ผู้ติดตาม", "pf.awardsN": "รางวัล",
+      "pf.settings": "ตั้งค่าโปรไฟล์", "pf.hi": "ทักทาย {name}", "pf.follow": "ติดตาม", "pf.following": "กำลังติดตาม", "pf.tabs": "โปรไฟล์ของ {name}",
+      "pf.t.works": "โปรเจกต์", "pf.t.updates": "อัปเดต", "pf.t.favs": "รายการโปรด", "pf.t.about": "เกี่ยวกับ",
+      "pf.public": "ทุกคนเห็นรายการนี้ได้", "pf.private": "เห็นได้แค่คุณคนเดียว",
+      "pf.worksH": "โปรเจกต์ เรียงจากอันดับสูงสุด", "pf.lead": "เป็นหัวหน้าทีม {n} ชิ้น", "pf.leadTag": "หัวหน้าทีม", "pf.postedH": "ทุกอย่างที่ {name} ลงไว้",
+      "pf.favsH": "รายการโปรด", "pf.change": "เปลี่ยน", "pf.shared": "{name} แชร์รายการนี้", "pf.aboutH": "เกี่ยวกับ {name}",
+      "pf.into": "ชอบทำ", "pf.tools": "เครื่องมือ", "pf.openTo": "เปิดรับ", "pf.since": "อยู่ที่ Hamster Nest ตั้งแต่", "pf.awards": "รางวัล", "pf.contact": "ติดต่อ",
+      "pf.latest": "ล่าสุดจาก {name}", "pf.allUps": "อัปเดตทั้งหมด {n} รายการ", "pf.about": "เกี่ยวกับ", "pf.moreAbout": "อ่านเพิ่มเกี่ยวกับ {name}",
+      "pf.empty": "ยังไม่มีอะไรที่บันทึกไว้ กดหัวใจที่ผลงานไหนก็ได้ แล้วมันจะมาอยู่ที่นี่", "pf.copy": "คัดลอก{label}",
+      "pf.copied": "คัดลอก {v} แล้ว", "pf.select": "คัดลอกเองได้เลย: {v}",
+      "hi.q1": "ขอลองเล่นได้ไหม", "hi.q2": "อยากร่วมทีมด้วยกันไหม", "hi.q3": "คุยเรื่องลงทุนกันได้ไหม", "hi.q4": "ผลงานเจ๋งมาก สู้ต่อนะ",
+      "hi.title": "ทักทาย {name}", "hi.sub": "ข้อความจะไปถึงกล่องข้อความของ {name} และ Hamster Hub จะได้รับสำเนาด้วย", "hi.msg": "ข้อความของคุณ",
+      "hi.ph": "สวัสดี {name} ฉันเห็นผลงานของคุณแล้ว…", "hi.mail": "ให้ {name} ตอบกลับทางไหน", "hi.notNow": "ไว้ก่อน", "hi.send": "ส่งเลย",
+      "hi.errMsg": "เขียนสักบรรทัด หรือเลือกข้อความด้านบนก็ได้", "hi.errMail": "อีเมลนี้ดูไม่ถูกต้อง ลองเช็กอีกรอบนะ",
+      "hi.sent": "ส่งถึง {name} แล้ว", "hi.sentP": "นี่เป็นเว็บต้นแบบ เลยยังไม่มีอะไรถูกส่งออกไปจริง ๆ ในเว็บจริง {name} จะตอบกลับไปที่ {mail}", "hi.done": "เรียบร้อย",
+      "set.favsQ": "ใครดูรายการโปรดของคุณได้บ้าง", "set.me": "แค่ฉันคนเดียว", "set.meNote": "แท็บรายการโปรดจะโผล่เฉพาะตอนที่คุณเข้าสู่ระบบ",
+      "set.all": "ทุกคน", "set.allNote": "ใครเปิดโปรไฟล์ของคุณก็เห็นสิ่งที่คุณบันทึกไว้", "set.show": "แสดงในโปรไฟล์ของฉัน",
+      "set.contact": "การ์ดติดต่อ", "set.phone": "เบอร์โทรศัพท์", "set.cancel": "ยกเลิก", "set.save": "บันทึก",
+      "set.savedPub": "บันทึกแล้ว ตอนนี้ทุกคนเห็นรายการโปรดของคุณ", "set.savedPriv": "บันทึกแล้ว ตอนนี้เห็นได้แค่คุณคนเดียว",
+    },
+  });
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
   // ---------- your own saved state ----------
@@ -41,12 +88,13 @@
   };
   const svg = (k, vb = "0 0 16 16") => `<svg viewBox="${vb}" aria-hidden="true">${ICON[k]}</svg>`;
   const avatar = (name, cls = "pf__av") => `<span class="${cls}" style="--h:${new Person(name).hue}" aria-hidden="true">${esc(name[0])}</span>`;
-  const dateLabel = (d) => new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const dateLabel = (d) => new Date(d + "T00:00:00").toLocaleDateString(L.th ? "th-TH" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
 
   // ---------- the page ----------
   class ProfilePage {
-    constructor(root) { this.root = root; this.tab = "works"; }
-    render(person) {
+    constructor(root) { this.root = root; this.tab = "works"; this.following = false; }
+    render(person, animate = true) {
+      if (this.p && this.p.name !== person.name) this.following = false;
       this.p = person; const pr = person.profile(), mine = person.works(), ups = person.updates(), own = person.name === ME && NestSession.Session.signedIn;
       this.own = own; this.followers = pr.followers;
       const best = tiers.find((t) => t.id === mine[0].w.tier), set = own ? Settings.get() : { contact: true, phone: true };
@@ -55,55 +103,55 @@
       this.root.innerHTML = `
         <header class="pf__band">
           <div class="pf__id">${avatar(person.name)}<div>
-            <p class="pf__h">@${esc(person.handle)}${own ? '<span class="pf__you">You</span>' : ""}</p>
+            <p class="pf__h">@${esc(person.handle)}${own ? `<span class="pf__you">${tx("pf.you")}</span>` : ""}</p>
             <h1 class="pf__name">${esc(pr.full)}</h1>
             <p class="pf__role">${esc(pr.role)}</p>
             <p class="pf__motto">“${esc(pr.motto)}”</p></div></div>
           <div class="pf__right">
             <ul class="pf__stats">
-              <li><b style="color:${RANK_INK[best.id]}">${best.name}</b><span>best rank</span></li>
-              <li><b>${mine.length}</b><span>projects</span></li>
-              <li><b class="pf__fn">${this.followers}</b><span>followers</span></li>
-              <li><b>${person.awards().length + mine.filter((x) => x.lead).length}</b><span>awards</span></li></ul>
+              <li><b style="color:${RANK_INK[best.id]}">${best.name}</b><span>${tx("pf.rank")}</span></li>
+              <li><b>${mine.length}</b><span>${tx("pf.projects")}</span></li>
+              <li><b class="pf__fn">${this.followers + (this.following ? 1 : 0)}</b><span>${tx("pf.followers")}</span></li>
+              <li><b>${person.awards().length + mine.filter((x) => x.lead).length}</b><span>${tx("pf.awardsN")}</span></li></ul>
             <div class="pf__acts">${own
-              ? `<button type="button" class="pf__btn pf__btn--line" data-act="settings">${svg("gear")}Profile settings</button>`
-              : `<button type="button" class="pf__btn pf__btn--solid" data-act="hi">${svg("hi", "0 0 20 20")}Say hi to ${esc(person.name)}</button><button type="button" class="pf__btn pf__btn--line" data-act="follow" aria-pressed="false">Follow</button>`}</div>
+              ? `<button type="button" class="pf__btn pf__btn--line" data-act="settings">${svg("gear")}${tx("pf.settings")}</button>`
+              : `<button type="button" class="pf__btn pf__btn--solid" data-act="hi">${svg("hi", "0 0 20 20")}${tx("pf.hi", { name: person.name })}</button><button type="button" class="pf__btn pf__btn--line" data-act="follow" aria-pressed="${this.following}">${tx(this.following ? "pf.following" : "pf.follow")}</button>`}</div>
           </div>
         </header>
-        <nav class="pf__tabs" role="tablist" aria-label="${esc(person.name)}'s profile">
-          ${this.tabBtn("works", `Projects <em>${mine.length}</em>`)}${this.tabBtn("updates", `Updates <em>${ups.length}</em>`)}
-          ${showFavs ? this.tabBtn("favs", `Favourites <em>${favs.length}</em>${own ? `<span class="pf__vis" title="${set.favs === "public" ? "Everyone can see this" : "Only you can see this"}">${svg(set.favs === "public" ? "globe" : "lock")}</span>` : ""}`) : ""}
-          ${this.tabBtn("about", "About")}
+        <nav class="pf__tabs" role="tablist" aria-label="${esc(tx("pf.tabs", { name: person.name }))}">
+          ${this.tabBtn("works", `${tx("pf.t.works")} <em>${mine.length}</em>`)}${this.tabBtn("updates", `${tx("pf.t.updates")} <em>${ups.length}</em>`)}
+          ${showFavs ? this.tabBtn("favs", `${tx("pf.t.favs")} <em>${favs.length}</em>${own ? `<span class="pf__vis" title="${tx(set.favs === "public" ? "pf.public" : "pf.private")}">${svg(set.favs === "public" ? "globe" : "lock")}</span>` : ""}`) : ""}
+          ${this.tabBtn("about", tx("pf.t.about"))}
         </nav>
         <div class="pf__body">
           <div class="pf__main">
             <section class="pf__panel" id="tab-works" role="tabpanel" aria-labelledby="t-works">
-              <div class="pf__lh"><h2>Projects, best rank first</h2><span class="pf__note">${mine.filter((x) => x.lead).length} as lead</span></div>
+              <div class="pf__lh"><h2>${tx("pf.worksH")}</h2><span class="pf__note">${tx("pf.lead", { n: mine.filter((x) => x.lead).length })}</span></div>
               <div class="grid pf__grid" data-works></div>
             </section>
             <section class="pf__panel" id="tab-updates" role="tabpanel" aria-labelledby="t-updates" hidden>
-              <div class="pf__lh"><h2>Everything ${esc(person.name)} has posted</h2></div>
-              <ol class="pf__feed">${ups.map((u) => `<li><time>${esc(u.when)}</time><span class="pf__fw" style="--ri:${RANK_INK[u.w.tier]}"><a href="project.html#${u.w.id}">${esc(u.w.name)}</a></span><div><b>${esc(u.what)}</b><p>${esc(u.more)}</p></div></li>`).join("")}</ol>
+              <div class="pf__lh"><h2>${esc(tx("pf.postedH", { name: person.name }))}</h2></div>
+              <ol class="pf__feed">${ups.map((u) => `<li><time>${esc(L.ago(u.when))}</time><span class="pf__fw" style="--ri:${RANK_INK[u.w.tier]}"><a href="project.html#${u.w.id}">${esc(u.w.name)}</a></span><div><b>${esc(u.what)}</b><p>${esc(u.more)}</p></div></li>`).join("")}</ol>
             </section>
             ${showFavs ? `<section class="pf__panel" id="tab-favs" role="tabpanel" aria-labelledby="t-favs" hidden>
-              <div class="pf__lh"><h2>Favourites</h2>${own ? `<span class="pf__chip">${svg(set.favs === "public" ? "globe" : "lock")}${set.favs === "public" ? "Everyone can see this" : "Only you can see this"}</span><button type="button" class="pf__link" data-act="settings">Change</button>` : `<span class="pf__chip">${svg("globe")}Shared by ${esc(person.name)}</span>`}</div>
+              <div class="pf__lh"><h2>${tx("pf.favsH")}</h2>${own ? `<span class="pf__chip">${svg(set.favs === "public" ? "globe" : "lock")}${tx(set.favs === "public" ? "pf.public" : "pf.private")}</span><button type="button" class="pf__link" data-act="settings">${tx("pf.change")}</button>` : `<span class="pf__chip">${svg("globe")}${esc(tx("pf.shared", { name: person.name }))}</span>`}</div>
               ${this.favGroups(favs)}
             </section>` : ""}
             <section class="pf__panel" id="tab-about" role="tabpanel" aria-labelledby="t-about" hidden>
-              <div class="pf__lh"><h2>About ${esc(person.name)}</h2></div>
+              <div class="pf__lh"><h2>${esc(tx("pf.aboutH", { name: person.name }))}</h2></div>
               <p class="pf__aboutL">${esc(pr.about)}</p>
-              <dl class="pf__facts"><div><dt>Into</dt><dd>${esc(pr.into)}</dd></div><div><dt>Tools</dt><dd>${esc(pr.tools)}</dd></div><div><dt>Open to</dt><dd>${esc(pr.open)}</dd></div><div><dt>On Hamster Nest since</dt><dd>${esc(pr.joined)}</dd></div></dl>
-              ${person.awards().length ? `<h3 class="pf__sub">Awards</h3><ul class="pf__aw">${person.awards().map(([a, s, , w]) => `<li><span class="medal" aria-hidden="true">★</span><span><b>${esc(a)}</b><i>${esc(s)} · <a href="project.html#${w.id}">${esc(w.name)}</a></i></span></li>`).join("")}</ul>` : ""}
+              <dl class="pf__facts"><div><dt>${tx("pf.into")}</dt><dd>${esc(pr.into)}</dd></div><div><dt>${tx("pf.tools")}</dt><dd>${esc(pr.tools)}</dd></div><div><dt>${tx("pf.openTo")}</dt><dd>${esc(pr.open)}</dd></div><div><dt>${tx("pf.since")}</dt><dd>${esc(pr.joined)}</dd></div></dl>
+              ${person.awards().length ? `<h3 class="pf__sub">${tx("pf.awards")}</h3><ul class="pf__aw">${person.awards().map(([a, s, , w]) => `<li><span class="medal" aria-hidden="true">★</span><span><b>${esc(a)}</b><i>${esc(s)} · <a href="project.html#${w.id}">${esc(w.name)}</a></i></span></li>`).join("")}</ul>` : ""}
             </section>
           </div>
           <aside class="pf__side">
-            ${set.contact ? `<section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3>
-              <ul>${person.contact().filter(([k]) => k !== "phone" || set.phone).map(([k, label, value, href]) => `<li><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${esc(value).replace("@", "@<wbr>")}</a>` : `<b>${esc(value)}</b>`}</span><button type="button" class="cp" data-v="${esc(value)}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
+            ${set.contact ? `<section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">${tx("pf.contact")}</h3>
+              <ul>${person.contact().filter(([k]) => k !== "phone" || set.phone).map(([k, label, value, href]) => `<li><span class="cv2"><i>${tx("ct." + k)}</i>${href ? `<a href="${href}">${esc(value).replace("@", "@<wbr>")}</a>` : `<b>${esc(value)}</b>`}</span><button type="button" class="cp" data-v="${esc(value)}" aria-label="${tx("pf.copy", { label: tx("ct." + k) })}">${svg("copy")}</button></li>`).join("")}</ul>
               <p class="contact__note" role="status" aria-live="polite"></p>
-              ${own ? "" : `<button type="button" class="say" data-act="hi">Say hi to ${esc(person.name)}</button>`}</section>` : ""}
-            <section class="box"><h3>Latest from ${esc(person.name)}</h3><ol class="pf__ups">${ups.filter((u, i, a) => a.findIndex((x) => x.what === u.what) === i).slice(0, 4).map((u) => `<li><time>${esc(u.when)}</time><span><b>${esc(u.what)}</b><a href="project.html#${u.w.id}">${esc(u.w.name)}</a></span></li>`).join("")}</ol>
-              <button type="button" class="pf__link pf__more" data-tab="updates">All ${ups.length} updates</button></section>
-            <section class="box"><h3>About</h3><p class="pf__about">${esc(pr.about)}</p><button type="button" class="pf__link pf__more" data-tab="about">More about ${esc(person.name)}</button></section>
+              ${own ? "" : `<button type="button" class="say" data-act="hi">${esc(tx("pf.hi", { name: person.name }))}</button>`}</section>` : ""}
+            <section class="box"><h3>${esc(tx("pf.latest", { name: person.name }))}</h3><ol class="pf__ups">${ups.filter((u, i, a) => a.findIndex((x) => x.what === u.what) === i).slice(0, 4).map((u) => `<li><time>${esc(L.ago(u.when))}</time><span><b>${esc(u.what)}</b><a href="project.html#${u.w.id}">${esc(u.w.name)}</a></span></li>`).join("")}</ol>
+              <button type="button" class="pf__link pf__more" data-tab="updates">${tx("pf.allUps", { n: ups.length })}</button></section>
+            <section class="box"><h3>${tx("pf.about")}</h3><p class="pf__about">${esc(pr.about)}</p><button type="button" class="pf__link pf__more" data-tab="about">${esc(tx("pf.moreAbout", { name: person.name }))}</button></section>
           </aside>
         </div>`;
       // tiles
@@ -111,12 +159,12 @@
       this.root.querySelectorAll(".pf__grid[data-fav]").forEach((g) => favs.filter((f) => f.saved === g.dataset.fav).forEach((f) => { const w = works.find((x) => x.id === f.id); if (w) g.appendChild(this.tile(w)); }));
       this.root.querySelectorAll(".pf__grid").forEach((g) => new Expander(g));
       this.wire(); this.show(this.tab in { works: 1, updates: 1, favs: 1, about: 1 } && (this.tab !== "favs" || showFavs) ? this.tab : "works", false);
-      if (!calm) [".pf__id", ".pf__right", ".pf__tabs", ".pf__main", ".pf__side"].forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 480, delay: i * 60, easing: E, fill: "backwards" }); });
+      if (animate && !calm) [".pf__id", ".pf__right", ".pf__tabs", ".pf__main", ".pf__side"].forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 480, delay: i * 60, easing: E, fill: "backwards" }); });
     }
     tabBtn(id, label) { return `<button type="button" role="tab" id="t-${id}" aria-controls="tab-${id}" data-tab="${id}" aria-selected="false" tabindex="-1">${label}</button>`; }
     // grouped by the day you saved them, newest day first (like a browsing history)
     favGroups(favs) {
-      if (!favs.length) return `<p class="pf__empty">Nothing saved yet. Tap the heart on any project to keep it here.</p>`;
+      if (!favs.length) return `<p class="pf__empty">${tx("pf.empty")}</p>`;
       const days = [...new Set(favs.map((f) => f.saved))].sort().reverse();
       return days.map((d) => `<div class="pf__day"><h3>${dateLabel(d)}<em>${favs.filter((f) => f.saved === d).length}</em></h3><div class="grid pf__grid" data-fav="${d}"></div></div>`).join("");
     }
@@ -126,7 +174,7 @@
       if (role) {
         const by = $(".rc__by i", el); if (by) by.textContent = role;
         const t = tiers.find((x) => x.id === w.tier);
-        $(".rc__name", el).insertAdjacentHTML("afterend", `<p class="pf__rk" style="--ri:${RANK_INK[t.id]}"><i></i>${t.name}<span>${lead ? "Lead" : esc(role.split(",")[0])}</span></p>`);
+        $(".rc__name", el).insertAdjacentHTML("afterend", `<p class="pf__rk" style="--ri:${RANK_INK[t.id]}"><i></i>${t.name}<span>${lead ? tx("pf.leadTag") : esc(role.split(",")[0])}</span></p>`);
       }
       return el;
     }
@@ -145,10 +193,10 @@
       this.root.querySelectorAll('[data-act="hi"]').forEach((b) => b.addEventListener("click", () => hello.open(this.p.name, b)));
       this.root.querySelectorAll('[data-act="settings"]').forEach((b) => b.addEventListener("click", () => settings.open(b)));
       const f = $('[data-act="follow"]', this.root);
-      if (f) f.addEventListener("click", () => { const on = f.getAttribute("aria-pressed") !== "true"; f.setAttribute("aria-pressed", on); f.textContent = on ? "Following" : "Follow"; $(".pf__fn", this.root).textContent = this.followers + (on ? 1 : 0); });
+      if (f) f.addEventListener("click", () => { const on = f.getAttribute("aria-pressed") !== "true"; this.following = on; f.setAttribute("aria-pressed", on); f.textContent = tx(on ? "pf.following" : "pf.follow"); $(".pf__fn", this.root).textContent = this.followers + (on ? 1 : 0); });
       this.root.querySelectorAll(".cp").forEach((b) => b.addEventListener("click", () => {
         const note = $(".contact__note", this.root), done = (m) => { note.textContent = m; b.innerHTML = svg("ok"); b.classList.add("is-done"); };
-        navigator.clipboard.writeText(b.dataset.v).then(() => done(`Copied ${b.dataset.v}`), () => done(`Select and copy: ${b.dataset.v}`));
+        navigator.clipboard.writeText(b.dataset.v).then(() => done(tx("pf.copied", { v: b.dataset.v })), () => done(tx("pf.select", { v: b.dataset.v })));
       }));
     }
   }
@@ -163,25 +211,26 @@
     }
     open(name, back) {
       this.back = back;
-      const quick = ["Can I try it?", "Want to team up?", "Can we talk about investing?", "Great work, keep going"];
+      const quick = ["hi.q1", "hi.q2", "hi.q3", "hi.q4"], nm = esc(name);
       this.el.innerHTML = `<form class="dlg__box" role="dialog" aria-modal="true" aria-labelledby="hi-h" novalidate>
-        <div class="hi__to">${avatar(name, "hi__av")}<div><h2 id="hi-h">Say hi to ${esc(name)}</h2><p>${esc(name)} gets it in their inbox. Hamster Hub gets a copy.</p></div></div>
-        <div class="hi__quick">${quick.map((q) => `<button type="button" class="hi__q">${q}</button>`).join("")}</div>
-        <label class="hi__l" for="hi-msg">Your message</label>
-        <textarea id="hi-msg" rows="4" placeholder="Hi ${esc(name)}, I saw your project and…" required></textarea>
-        <label class="hi__l" for="hi-mail">Where can ${esc(name)} reply?</label>
+        <div class="hi__to">${avatar(name, "hi__av")}<div><h2 id="hi-h" data-i18n="hi.title" data-name="${nm}">${esc(tx("hi.title", { name }))}</h2><p data-i18n="hi.sub" data-name="${nm}">${esc(tx("hi.sub", { name }))}</p></div></div>
+        <div class="hi__quick">${quick.map((q) => `<button type="button" class="hi__q" data-i18n="${q}">${tx(q)}</button>`).join("")}</div>
+        <label class="hi__l" for="hi-msg" data-i18n="hi.msg">${tx("hi.msg")}</label>
+        <textarea id="hi-msg" rows="4" placeholder="${esc(tx("hi.ph", { name }))}" data-i18n-attr="placeholder:hi.ph" data-name="${nm}" required></textarea>
+        <label class="hi__l" for="hi-mail" data-i18n="hi.mail" data-name="${nm}">${esc(tx("hi.mail", { name }))}</label>
         <input id="hi-mail" type="email" placeholder="you@example.com" required>
         <p class="hi__err" role="alert"></p>
-        <div class="dlg__acts"><button type="button" class="ghost2" data-x>Not now</button><button type="submit" class="solid2">Send it over</button></div></form>`;
+        <div class="dlg__acts"><button type="button" class="ghost2" data-x data-i18n="hi.notNow">${tx("hi.notNow")}</button><button type="submit" class="solid2" data-i18n="hi.send">${tx("hi.send")}</button></div></form>`;
       const f = $("form", this.el), t = $("#hi-msg", this.el);
       this.el.querySelectorAll(".hi__q").forEach((q) => q.addEventListener("click", () => { t.value = (t.value ? t.value.trimEnd() + " " : "") + q.textContent; t.focus(); }));
       $("[data-x]", this.el).addEventListener("click", () => this.close());
       f.addEventListener("submit", (e) => {
         e.preventDefault();
         const err = $(".hi__err", this.el), mail = $("#hi-mail", this.el);
-        if (!t.value.trim()) { err.textContent = "Write a line or pick one above."; t.focus(); return; }
-        if (!mail.checkValidity()) { err.textContent = "That email doesn't look right. Check it and try again."; mail.focus(); return; }
-        f.innerHTML = `<div class="hi__done"><span class="hi__tick">${svg("ok")}</span><h2>Sent to ${esc(name)}</h2><p>This is a prototype, so nothing actually left the page. On the real site ${esc(name)} would reply to ${esc(mail.value)}.</p><div class="dlg__acts"><button type="button" class="solid2" data-x>Done</button></div></div>`;
+        const say = (k) => { err.dataset.i18n = k; err.textContent = tx(k); };
+        if (!t.value.trim()) { say("hi.errMsg"); t.focus(); return; }
+        if (!mail.checkValidity()) { say("hi.errMail"); mail.focus(); return; }
+        f.innerHTML = `<div class="hi__done"><span class="hi__tick">${svg("ok")}</span><h2 data-i18n="hi.sent" data-name="${nm}">${esc(tx("hi.sent", { name }))}</h2><p data-i18n="hi.sentP" data-name="${nm}" data-mail="${esc(mail.value)}">${esc(tx("hi.sentP", { name, mail: mail.value }))}</p><div class="dlg__acts"><button type="button" class="solid2" data-x data-i18n="hi.done">${tx("hi.done")}</button></div></div>`;
         $("[data-x]", this.el).addEventListener("click", () => this.close()); $("[data-x]", this.el).focus();
       });
       this.el.hidden = false;
@@ -200,20 +249,20 @@
     }
     open(back) {
       this.back = back; const s = Settings.get();
-      this.el.innerHTML = `<form class="dlg__box" role="dialog" aria-modal="true" aria-labelledby="set-h"><h2 id="set-h">Profile settings</h2>
-        <fieldset><legend>Who can see your favourites?</legend>
-          <label class="rad"><input type="radio" name="favs" value="private"${s.favs === "private" ? " checked" : ""}><span><b>${svg("lock")}Only me</b><i>The Favourites tab shows only when you're signed in.</i></span></label>
-          <label class="rad"><input type="radio" name="favs" value="public"${s.favs === "public" ? " checked" : ""}><span><b>${svg("globe")}Everyone</b><i>Anyone who opens your profile can see what you saved.</i></span></label></fieldset>
-        <fieldset><legend>Show on my profile</legend>
-          <label class="sw"><span>Contact card</span><input type="checkbox" name="contact"${s.contact ? " checked" : ""}></label>
-          <label class="sw"><span>Phone number</span><input type="checkbox" name="phone"${s.phone ? " checked" : ""}></label></fieldset>
-        <div class="dlg__acts"><button type="button" class="ghost2" data-x>Cancel</button><button type="submit" class="solid2">Save</button></div></form>`;
+      this.el.innerHTML = `<form class="dlg__box" role="dialog" aria-modal="true" aria-labelledby="set-h"><h2 id="set-h" data-i18n="pf.settings">${tx("pf.settings")}</h2>
+        <fieldset><legend data-i18n="set.favsQ">${tx("set.favsQ")}</legend>
+          <label class="rad"><input type="radio" name="favs" value="private"${s.favs === "private" ? " checked" : ""}><span><b>${svg("lock")}<span data-i18n="set.me">${tx("set.me")}</span></b><i data-i18n="set.meNote">${tx("set.meNote")}</i></span></label>
+          <label class="rad"><input type="radio" name="favs" value="public"${s.favs === "public" ? " checked" : ""}><span><b>${svg("globe")}<span data-i18n="set.all">${tx("set.all")}</span></b><i data-i18n="set.allNote">${tx("set.allNote")}</i></span></label></fieldset>
+        <fieldset><legend data-i18n="set.show">${tx("set.show")}</legend>
+          <label class="sw"><span data-i18n="set.contact">${tx("set.contact")}</span><input type="checkbox" name="contact"${s.contact ? " checked" : ""}></label>
+          <label class="sw"><span data-i18n="set.phone">${tx("set.phone")}</span><input type="checkbox" name="phone"${s.phone ? " checked" : ""}></label></fieldset>
+        <div class="dlg__acts"><button type="button" class="ghost2" data-x data-i18n="set.cancel">${tx("set.cancel")}</button><button type="submit" class="solid2" data-i18n="set.save">${tx("set.save")}</button></div></form>`;
       const f = $("form", this.el);
       $("[data-x]", this.el).addEventListener("click", () => this.close());
       f.addEventListener("submit", (e) => {
         e.preventDefault();
         Settings.set({ favs: f.favs.value, contact: f.contact.checked, phone: f.phone.checked });
-        this.close(); page.render(page.p); toast(f.favs.value === "public" ? "Saved. Everyone can see your favourites now." : "Saved. Only you can see your favourites.");
+        this.close(); page.render(page.p); toast(tx(f.favs.value === "public" ? "set.savedPub" : "set.savedPriv"));
       });
       this.el.hidden = false;
       if (!calm) $(".dlg__box", this.el).animate([{ opacity: 0, transform: "translateY(14px) scale(.98)" }, { opacity: 1, transform: "none" }], { duration: 300, easing: E });
@@ -231,7 +280,7 @@
   const page = new ProfilePage($("#main")), hello = new Hello(), settings = new SettingsDialog();
   // the shared account menu (session.js), plus Settings; Your profile / Favourites open the right tab here
   NestSession.menuOptions = {
-    extra: [["Settings", "settings"]],
+    extra: [["acct.settings", "settings"]],
     onPick(go, e) {
       const me = new Person(ME);
       if (go === "settings") { e.preventDefault(); if (page.own) settings.open($(".me__btn")); else { page.tab = "works"; location.hash = me.handle; queueMicrotask(() => settings.open($(".me__btn"))); } return; }
@@ -244,6 +293,8 @@
     page.render(new Person(name)); scrollTo({ top: 0, behavior: "auto" });
   };
   addEventListener("hashchange", show); show();
+  // a language switch redraws the page where it is: same person, same tab, same scroll position
+  L.addEventListener("change", () => { const y = scrollY; page.render(page.p, false); scrollTo({ top: y, behavior: "auto" }); });
   const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 240);
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
   window.NestFavs = Favs;

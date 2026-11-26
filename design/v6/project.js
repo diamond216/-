@@ -11,6 +11,30 @@
 
   const { SampleDetails } = window.Details;
 
+  // words on this page (lang.js). A work's name, texts, updates, team, roles, awards, links and tags, and the room,
+  // genre and tier names, are printed as written.
+  const L = window.NestLang, tx = (k, v) => L.t(k, v);
+  L.add({
+    en: {
+      "pj.back": "Back to Browse", "pj.save": "Save {name} to your favourites", "pj.unsave": "Remove {name} from your favourites",
+      "pj.inFavs": "In your favourites", "pj.toFavs": "Save to favourites", "pj.gal": "Clip and pictures of {name}",
+      "pj.clip": "Clip", "pj.pic": "Picture {n}", "pj.play": "Play the clip of {name}", "pj.pause": "Pause the clip of {name}",
+      "pj.prev": "Previous", "pj.next": "Next", "pj.show": "Show {label}", "pj.about": "About this project",
+      "pj.updates": "Updates", "pj.updatesAria": "Updates, newest first", "pj.new": "New", "pj.links": "Links", "pj.team": "Team", "pj.contact": "Contact",
+      "pj.reach": "Reach {name}, who leads the team.", "pj.copy": "Copy {label}", "pj.awards": "Awards", "pj.more": "EXPLORE MORE",
+      "pj.copied": "Copied {v}", "pj.select": "Select and copy: {v}",
+    },
+    th: {
+      "pj.back": "กลับไปสำรวจผลงาน", "pj.save": "บันทึก {name} ไว้ในรายการโปรด", "pj.unsave": "เอา {name} ออกจากรายการโปรด",
+      "pj.inFavs": "อยู่ในรายการโปรดแล้ว", "pj.toFavs": "บันทึกไว้ในรายการโปรด", "pj.gal": "คลิปและรูปของ {name}",
+      "pj.clip": "คลิป", "pj.pic": "รูปที่ {n}", "pj.play": "เล่นคลิปของ {name}", "pj.pause": "หยุดคลิปของ {name}",
+      "pj.prev": "ก่อนหน้า", "pj.next": "ถัดไป", "pj.show": "ดู{label}", "pj.about": "เกี่ยวกับผลงานนี้",
+      "pj.updates": "อัปเดต", "pj.updatesAria": "อัปเดต เรียงจากใหม่สุด", "pj.new": "ใหม่", "pj.links": "ลิงก์", "pj.team": "ทีม", "pj.contact": "ติดต่อ",
+      "pj.reach": "ติดต่อ {name} หัวหน้าทีมได้ที่นี่", "pj.copy": "คัดลอก{label}", "pj.awards": "รางวัล", "pj.more": "ดูผลงานอื่นเพิ่ม",
+      "pj.copied": "คัดลอก {v} แล้ว", "pj.select": "คัดลอกเองได้เลย: {v}",
+    },
+  });
+
   const ICON = {
     link: '<path d="M10 14a4.5 4.5 0 006.4 0l3-3a4.5 4.5 0 00-6.4-6.4l-1.2 1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M14 10a4.5 4.5 0 00-6.4 0l-3 3a4.5 4.5 0 006.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
     email: '<path d="M3 6.5h18v11H3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 7l8.5 6.5L20.5 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
@@ -30,38 +54,39 @@
       const src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(Art.draw({ ...w, scribble: "" }, i % 7));
       return `<figure class="up-fig"><img class="up-img" src="${src}" alt="${alt || title}" width="240" height="135"${i ? ' loading="lazy"' : ""} decoding="async"></figure>`;
     }
-    render(w) {
+    render(w, animate = true) {
+      this.w = w;
       const t = tiers.find((x) => x.id === w.tier), d = new SampleDetails(w), ink = INK[w.tier];
       const updates = d.updates(), team = d.team(), links = d.links();
       document.title = `${w.name} · Hamster Nest`;
       this.root.style.setProperty("--ri", ink);
       this.root.innerHTML = `
         <div class="pj__head">
-          <a class="back" href="${NestSession.Paths.home("#browse-page")}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Browse</a>
+          <a class="back" href="${NestSession.Paths.home("#browse-page")}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>${tx("pj.back")}</a>
           <p class="tags"><a class="tag tag--room" href="${NestSession.Paths.browse(w.room)}">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
-          <div class="title-row"><h1 class="title">${w.name}</h1><button type="button" class="fav" aria-pressed="false" aria-label="Save ${w.name} to your favourites"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
+          <div class="title-row"><h1 class="title">${w.name}</h1><button type="button" class="fav" aria-pressed="false" aria-label="${tx("pj.save", { name: w.name })}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
           <p class="blurb">${w.blurb}</p>
         </div>
         <div class="pj__grid">
           <div class="pj__main">
-            <div class="gal" role="region" aria-roledescription="carousel" aria-label="Clip and pictures of ${w.name}">
-              <div class="gal__track" tabindex="0">${this.slides(w).map((s, i) => `<figure class="gal__slide${s.clip ? " media" : ""}" data-i="${i}" aria-label="${s.label}"><div class="cv"></div>${s.clip ? `<button type="button" class="play" aria-label="Play the clip of ${w.name}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z" fill="currentColor"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button><span class="gal__kind">Clip</span>` : ""}</figure>`).join("")}</div>
-              <button type="button" class="gal__nav gal__nav--prev" aria-label="Previous"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              <button type="button" class="gal__nav gal__nav--next" aria-label="Next"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="gal" role="region" aria-roledescription="carousel" aria-label="${tx("pj.gal", { name: w.name })}">
+              <div class="gal__track" tabindex="0">${this.slides(w).map((s, i) => `<figure class="gal__slide${s.clip ? " media" : ""}" data-i="${i}" aria-label="${s.label}"><div class="cv"></div>${s.clip ? `<button type="button" class="play" aria-label="${tx("pj.play", { name: w.name })}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z" fill="currentColor"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button><span class="gal__kind">${tx("pj.clip")}</span>` : ""}</figure>`).join("")}</div>
+              <button type="button" class="gal__nav gal__nav--prev" aria-label="${tx("pj.prev")}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button type="button" class="gal__nav gal__nav--next" aria-label="${tx("pj.next")}"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               <span class="gal__count" aria-live="polite"></span>
             </div>
-            <div class="thumbs">${this.slides(w).map((s, i) => `<button type="button" class="thumb" data-i="${i}" aria-label="Show ${s.label}"><span class="cv"></span>${s.clip ? '<i aria-hidden="true">▶</i>' : ""}</button>`).join("")}</div>
-            <section class="about" aria-labelledby="about-h"><h2 id="about-h">About this project</h2>${d.description().map((p, i) => `<p${i ? "" : ' class="about__lead"'}>${p}</p>`).join("")}</section>
-            <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><span class="log__when">${i ? "" : '<span class="log__new">New</span>'}<time>${when}</time></span><div><b>${what}</b><p>${more}</p>${this.updateFig(w, i, what)}</div></li>`).join("")}</ol></section>
+            <div class="thumbs">${this.slides(w).map((s, i) => `<button type="button" class="thumb" data-i="${i}" aria-label="${tx("pj.show", { label: s.label })}"><span class="cv"></span>${s.clip ? '<i aria-hidden="true">▶</i>' : ""}</button>`).join("")}</div>
+            <section class="about" aria-labelledby="about-h"><h2 id="about-h">${tx("pj.about")}</h2>${d.description().map((p, i) => `<p${i ? "" : ' class="about__lead"'}>${p}</p>`).join("")}</section>
+            <section class="log" aria-labelledby="log-h"><h2 id="log-h">${tx("pj.updates")} <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="${tx("pj.updatesAria")}">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><span class="log__when">${i ? "" : `<span class="log__new">${tx("pj.new")}</span>`}<time>${L.ago(when)}</time></span><div><b>${what}</b><p>${more}</p>${this.updateFig(w, i, what)}</div></li>`).join("")}</ol></section>
           </div>
           <aside class="pj__side">
-            ${links.length ? `<section class="box" aria-labelledby="ln-h"><h3 id="ln-h">Links</h3><ul class="lk">${links.map(([name, url]) => `<li><a href="${url}" target="_blank" rel="noopener"><span class="ci">${svg("link")}</span><span><b>${name}</b><i>${url.replace(/^https?:\/\//, "")}</i></span></a></li>`).join("")}</ul></section>` : ""}
-            <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><a class="team__n" href="profile.html#${n.toLowerCase()}"><b>${n}</b></a><i>${r}</i></span></li>`).join("")}</ul></section>
-            <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
-              <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${value.replace("@", "@<wbr>")}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
+            ${links.length ? `<section class="box" aria-labelledby="ln-h"><h3 id="ln-h">${tx("pj.links")}</h3><ul class="lk">${links.map(([name, url]) => `<li><a href="${url}" target="_blank" rel="noopener"><span class="ci">${svg("link")}</span><span><b>${name}</b><i>${url.replace(/^https?:\/\//, "")}</i></span></a></li>`).join("")}</ul></section>` : ""}
+            <section class="box"><h3>${tx("pj.team")}</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><a class="team__n" href="profile.html#${n.toLowerCase()}"><b>${n}</b></a><i>${r}</i></span></li>`).join("")}</ul></section>
+            <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">${tx("pj.contact")}</h3><p class="contact__who">${tx("pj.reach", { name: w.maker })}</p>
+              <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${tx("ct." + k)}</i>${href ? `<a href="${href}">${value.replace("@", "@<wbr>")}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="${tx("pj.copy", { label: tx("ct." + k) })}">${svg("copy")}</button></li>`).join("")}</ul>
               <p class="contact__note" role="status" aria-live="polite"></p></section>
 
-            <section class="box"><h3>Awards</h3><ul class="aw">${d.awards().map(([a, s, rank]) => `<li><span class="medal${rank ? " medal--rank" : ""}" aria-hidden="true">${rank ? "◆" : "★"}</span><span><b>${a}</b><i>${s}</i></span></li>`).join("")}</ul></section>
+            <section class="box"><h3>${tx("pj.awards")}</h3><ul class="aw">${d.awards().map(([a, s, rank]) => `<li><span class="medal${rank ? " medal--rank" : ""}" aria-hidden="true">${rank ? "◆" : "★"}</span><span><b>${a}</b><i>${s}</i></span></li>`).join("")}</ul></section>
           </aside>
         </div>
         ${this.more(w)}`;
@@ -70,14 +95,14 @@
       this.scroller($(".log__list", this.root));
       this.fillMore(w);
       this.root.querySelectorAll(".cp").forEach((b) => b.addEventListener("click", () => this.copy(b)));
-      if (!calm) this.enter();
+      if (animate && !calm) this.enter();
     }
     // heart: saves the work to your favourites (the same list the profile page reads)
     favButton(w) {
       const b = $(".fav", this.root), key = "nest-favs";
       const read = () => { try { return JSON.parse(localStorage.getItem(key)) || null; } catch (e) { return null; } };
       const seedList = () => [["wheelsense", "2026-11-23"], ["nestboard", "2026-11-23"], ["moonwheel", "2026-11-20"], ["rain-jar", "2026-11-20"], ["sunflower-bank", "2026-11-16"], ["book-loop", "2026-11-16"], ["lantern-run", "2026-11-10"]].map(([id, saved]) => ({ id, saved }));
-      const paint = (on) => { b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", `${on ? "Remove" : "Save"} ${w.name} ${on ? "from" : "to"} your favourites`); b.title = on ? "In your favourites" : "Save to favourites"; };
+      const paint = (on) => { b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", tx(on ? "pj.unsave" : "pj.save", { name: w.name })); b.title = tx(on ? "pj.inFavs" : "pj.toFavs"); };
       paint((read() || seedList()).some((f) => f.id === w.id));
       b.addEventListener("click", () => {
         const l = read() || seedList(), on = !l.some((f) => f.id === w.id);
@@ -86,7 +111,7 @@
       });
     }
     // the clip first, then pictures (frames of the work's art stand in for screenshots)
-    slides(w) { return [{ clip: true, label: "Clip", frame: 1 }, ...[2, 3, 4, 5].map((f, i) => ({ clip: false, label: `Picture ${i + 1}`, frame: f }))]; }
+    slides(w) { return [{ clip: true, label: tx("pj.clip"), frame: 1 }, ...[2, 3, 4, 5].map((f, i) => ({ clip: false, label: tx("pj.pic", { n: i + 1 }), frame: f }))]; }
     gallery(w) {
       const root = $(".gal", this.root), track = $(".gal__track", root), slides = [...track.children], thumbs = [...this.root.querySelectorAll(".thumb")];
       const list = this.slides(w), bare = { ...w, scribble: "" };
@@ -95,7 +120,7 @@
       // the clip
       const clip = slides[0], play = $(".play", clip);
       this.preview = window.Previews.for(clip, bare); clip.insertBefore(clip.lastElementChild, play);
-      const setPlay = (on) => { play.setAttribute("aria-pressed", on); play.setAttribute("aria-label", `${on ? "Pause" : "Play"} the clip of ${w.name}`); clip.classList.toggle("is-playing", on); on ? this.preview.start() : this.preview.stop(); };
+      const setPlay = (on) => { play.setAttribute("aria-pressed", on); play.setAttribute("aria-label", tx(on ? "pj.pause" : "pj.play", { name: w.name })); clip.classList.toggle("is-playing", on); on ? this.preview.start() : this.preview.stop(); };
       play.addEventListener("click", () => setPlay(play.getAttribute("aria-pressed") !== "true"));
       // moving between slides: scroll-snap does the swipe; buttons, thumbnails and arrow keys scroll to a slide
       let at = 0;
@@ -133,7 +158,7 @@
         .sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).slice(0, 10).map(([x]) => x);
     }
     more(w) {
-      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">EXPLORE MORE</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
+      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">${tx("pj.more")}</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
     }
     fillMore(w) {
       const g = $(".like__g", this.root), { ResultCard, Expander } = window.Tiles;
@@ -144,7 +169,7 @@
     copy(btn) {
       const note = $(".contact__note", this.root), done = (msg) => { note.textContent = msg; btn.innerHTML = svg("ok"); btn.classList.add("is-done");
         btn.animate([{ transform: "scale(.8)" }, { transform: "scale(1)" }], { duration: 220, easing: "cubic-bezier(.34,1.5,.64,1)" }).finished.then(() => btn.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 1600 }).finished).then(() => { btn.innerHTML = svg("copy"); btn.classList.remove("is-done"); }); };
-      navigator.clipboard.writeText(btn.dataset.v).then(() => done(`Copied ${btn.dataset.v}`), () => done(`Select and copy: ${btn.dataset.v}`));
+      navigator.clipboard.writeText(btn.dataset.v).then(() => done(tx("pj.copied", { v: btn.dataset.v })), () => done(tx("pj.select", { v: btn.dataset.v })));
     }
     enter() {
       const E = "cubic-bezier(.2,.8,.2,1)";
@@ -162,6 +187,8 @@
     scrollTo({ top: log ? log.getBoundingClientRect().top + scrollY - $(".gbar").offsetHeight - 16 : 0, behavior: calm || log ? "auto" : "smooth" });
   };
   addEventListener("hashchange", show); show();
+  // a language switch redraws the page where it is: same work, same scroll position
+  L.addEventListener("change", () => { const y = scrollY; page.stop(); page.render(page.w, false); scrollTo({ top: y, behavior: "auto" }); });
 
   // the bar turns white once you scroll past the water
   const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 260);
