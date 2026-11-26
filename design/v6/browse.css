@@ -226,8 +226,6 @@ html:has(.sea--c){background:#F4F8F8}
 /* band */
 .band{padding:40px 0 26px}
 .band h1{font:600 clamp(30px,3.2vw,42px)/1.1 var(--f);letter-spacing:-.02em;color:#06303A;text-wrap:balance}
-.band p{margin-top:8px;font-size:17px;color:#1F5561}
-.band__n{font-variant-numeric:tabular-nums;font-weight:600}
 /* toolbar: solid white controls with a soft shadow; sticks under the bar */
 .sea--c .br{padding-top:0}
 .br__sentinel{height:1px}
@@ -291,7 +289,7 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 /* ---- roomier layout (owner chose C, 22 Nov 2026): five to a row (four with the panel), quieter header ---- */
 .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:44px 30px}
 .has-panel .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.band{padding:30px 0 18px}.band h1{font-size:32px}.band p{font-size:15px}
+.band{padding:30px 0 18px}.band h1{font-size:32px}
 .sea--c .room,.room{width:132px;height:40px;font-size:14px}
 .rc__media{border-radius:10px}
 .sea--c .br__body,.br__body{margin-top:40px}
@@ -378,9 +376,6 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 .rc__name{display:flex;align-items:center;gap:8px}
 .rc__name a{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rc__tag{flex:none;padding:3px 8px;border-radius:999px;background:var(--sea-soft);color:var(--sea-acc);font:600 11.5px/1.2 var(--f)}
-.sea--c .br__stick{display:flow-root;padding-bottom:6px}
-.sea--c .br__stick>.br__top{padding:12px 0 0}
-.sea--c .br__stick>.rooms{margin-top:6px}
 @media (max-width:700px){.rc__name{font-size:15px}.rc__maker{font-size:13.5px}}
 .rcp{position:fixed;z-index:70;width:300px;padding:14px 16px 16px;border-radius:12px;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--sea-line,#DCE7E8);box-shadow:0 24px 48px -20px rgba(13,43,51,.45);pointer-events:none;color:var(--ink,#0D2B33);font-family:var(--f)}
 .rcp[hidden]{display:none}
@@ -391,3 +386,8 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 .rcp__tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .rcp__tags i{font-style:normal;padding:3px 8px;border-radius:999px;background:var(--sea-soft);color:var(--sea-acc);font:600 11.5px/1.2 var(--f)}
 @media (hover:none){.rc__follow{opacity:1;transform:none;pointer-events:auto;height:34px;padding:0 12px 0 10px;font-size:13px}}
+.sea--c .br__stick{display:flex;align-items:center;gap:12px;padding:6px calc((100% - min(1292px, 100% - 36px)) / 2);transition:background-color .25s,box-shadow .25s}
+.sea--c .br__stick>.br__top{flex:none;width:auto;margin:0;padding:0 0 0 6px}
+.sea--c .br__stick>.rooms{flex:1;min-width:0;width:auto;margin:0}
+.sea--c .br__stick.is-stuck{background-color:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);box-shadow:inset 0 -1px 0 rgba(13,43,51,.08),0 10px 24px -22px rgba(13,43,51,.45)}
+html.calm .sea--c .br__stick{transition:none}

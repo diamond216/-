@@ -294,7 +294,6 @@
   // ---------- page chrome: count in the heading, sort box, white frame on the bar and toolbar once they stick ----------
   class Chrome {
     constructor(state) {
-      $(".band__n").textContent = works.length;
       const sort = $("#sort"); sort.addEventListener("change", () => state.set((s) => (s.sort = sort.value)));
       stickTop();
     }
