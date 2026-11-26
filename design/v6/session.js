@@ -11,6 +11,7 @@ window.NestSession = (function () {
   const BASE = new URL(".", document.currentScript.src);          // .../design/v6/
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const L = window.NestLang, t = (k, v) => L.t(k, v);                  // words: lang.js
   const hue = (s) => [...s].reduce((n, c) => n + c.charCodeAt(0), 0) % 360;   // same as Person.hue in details.js
 
   const Paths = {
@@ -51,7 +52,7 @@ window.NestSession = (function () {
 
   // ---------- account menu ----------
   // new AccountMenu(slot) draws Log in / Sign up, or the avatar button and its menu, into slot (every page's .acct).
-  // opts.extra = [[label, go]] adds page-only items; opts.onPick(go, event) handles them (and may handle works/favs);
+  // opts.extra = [[labelKey, go]] adds page-only items (labelKey is a key in lang.js or the page's own words); opts.onPick(go, event) handles them (and may handle works/favs);
   // opts.requires = true sends you home when you log out (pages that need you signed in).
   class AccountMenu {
     constructor(slot, opts = {}) {
@@ -59,28 +60,29 @@ window.NestSession = (function () {
       document.addEventListener("click", (e) => { if (this.menu && !this.menu.hidden && !e.composedPath().includes(this.wrap)) this.open(false); });
       addEventListener("keydown", (e) => { if (e.key === "Escape" && this.menu && !this.menu.hidden) { this.open(false); this.btn.focus(); } });
       addEventListener("nest:session", () => this.render());
+      L.addEventListener("change", () => this.render());
       this.render();
     }
     items() {
       const u = Session.user;
       return [
-        ["Your profile", Paths.page(`profile.html#${u.handle}`), "works"], ["Post your project", Paths.page("post.html")],
-        ["Favourites", Paths.page(`profile.html#${u.handle}`), "favs"], "hr",
+        ["acct.profile", Paths.page(`profile.html#${u.handle}`), "works"], ["acct.post", Paths.page("post.html")],
+        ["acct.favs", Paths.page(`profile.html#${u.handle}`), "favs"], "hr",
         ...(this.o.extra || []).map(([label, go]) => [label, null, go]),
-        ...(this.o.extra && this.o.extra.length ? ["hr"] : []), ["Log out", null, "out"]];
+        ...(this.o.extra && this.o.extra.length ? ["hr"] : []), ["acct.logout", null, "out"]];
     }
     render() {
       this.menu = null;
       if (!Session.signedIn) {
-        this.slot.innerHTML = `<a class="gbtn glass acct__wide" href="#" data-in>Log in</a><a class="gbtn gbtn--solid acct__wide" href="#" data-in>Sign up</a>`
-          + `<div class="me acct__mini"><button type="button" class="gbtn glass acct__ico" aria-haspopup="menu" aria-expanded="false" aria-label="Log in or sign up"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 17c1-3.3 3.5-5 6.5-5s5.5 1.7 6.5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>`
-          + `<div class="me__menu" role="menu" hidden><button type="button" role="menuitem" data-in>Log in</button><button type="button" role="menuitem" data-in>Sign up</button></div></div>`;
+        this.slot.innerHTML = `<a class="gbtn glass acct__wide" href="#" data-in>${t("acct.login")}</a><a class="gbtn gbtn--solid acct__wide" href="#" data-in>${t("acct.signup")}</a>`
+          + `<div class="me acct__mini"><button type="button" class="gbtn glass acct__ico" aria-haspopup="menu" aria-expanded="false" aria-label="${t("acct.either")}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 17c1-3.3 3.5-5 6.5-5s5.5 1.7 6.5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>`
+          + `<div class="me__menu" role="menu" hidden><button type="button" role="menuitem" data-in>${t("acct.login")}</button><button type="button" role="menuitem" data-in>${t("acct.signup")}</button></div></div>`;
         this.wrap = this.slot.querySelector(".acct__mini"); this.btn = this.wrap.firstElementChild; this.menu = this.wrap.lastElementChild;
         this.btn.addEventListener("click", () => this.open(this.menu.hidden));
-        this.slot.querySelectorAll("[data-in]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); Session.signIn(); toast(`Signed in as ${Session.user.name}`); }));
+        this.slot.querySelectorAll("[data-in]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); Session.signIn(); toast(t("toast.in", { name: Session.user.name })); }));
         return;
       }
-      this.slot.innerHTML = `<div class="me"><button type="button" class="me__btn" aria-haspopup="menu" aria-expanded="false" aria-label="Your account">${avatar(Session.user, "me__av")}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="me__menu" role="menu" hidden></div></div>`;
+      this.slot.innerHTML = `<div class="me"><button type="button" class="me__btn" aria-haspopup="menu" aria-expanded="false" aria-label="${t("acct.account")}">${avatar(Session.user, "me__av")}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="me__menu" role="menu" hidden></div></div>`;
       this.wrap = this.slot.firstElementChild; this.btn = this.wrap.firstElementChild; this.menu = this.wrap.lastElementChild;
       this.btn.addEventListener("click", () => this.open(this.menu.hidden));
       this.fill();
@@ -92,14 +94,14 @@ window.NestSession = (function () {
         if (it === "hr") return "<hr>";
         const [label, href, go] = it, here = href && !marked && sameDoc(href);
         if (here) marked = true;
-        return href ? `<a role="menuitem" href="${href}"${go ? ` data-go="${go}"` : ""}${here ? ' aria-current="page"' : ""}>${esc(label)}</a>`
-          : `<button type="button" role="menuitem" data-go="${go}">${esc(label)}</button>`;
+        return href ? `<a role="menuitem" href="${href}"${go ? ` data-go="${go}"` : ""}${here ? ' aria-current="page"' : ""}>${esc(t(label))}</a>`
+          : `<button type="button" role="menuitem" data-go="${go}">${esc(t(label))}</button>`;
       }).join("");
       this.menu.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", (e) => this.pick(a.dataset.go, e)));
     }
     pick(go, e) {
       this.open(false);
-      if (go === "out") { Session.signOut(); toast("Logged out"); if (this.o.requires) location.href = Paths.home(); return; }
+      if (go === "out") { Session.signOut(); toast(t("toast.out")); if (this.o.requires) location.href = Paths.home(); return; }
       if (this.o.onPick) this.o.onPick(go, e);
     }
     open(on) {
@@ -131,17 +133,18 @@ window.NestSession = (function () {
       el.id = el.id || "contact-page";
       el.innerHTML = `<div class="wrap foot__top" id="about-page">
         <div class="foot__brand"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#FFD24A"/><circle cx="11" cy="12" r="5" fill="#F2A65A"/><circle cx="29" cy="12" r="5" fill="#F2A65A"/><ellipse cx="20" cy="23" rx="13" ry="11" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="9" ry="7" fill="#FBEBDD"/><circle cx="15" cy="21" r="1.8" fill="#1A1A20"/><circle cx="25" cy="21" r="1.8" fill="#1A1A20"/></svg>
-          <div><strong>Hamster Hub</strong><span>a technology community</span></div></div>
-        <div class="foot__contact"><small>Get in touch</small><h3>Contacts</h3><ul>
+          <div><strong>Hamster Hub</strong><span data-i18n="foot.tag">a technology community</span></div></div>
+        <div class="foot__contact"><small data-i18n="foot.touch">Get in touch</small><h3 data-i18n="foot.contacts">Contacts</h3><ul>
           ${CONTACTS.map(([ic, label, href, ext]) => `<li><a href="${href}"${ext ? ' target="_blank" rel="noopener noreferrer"' : ""}>${ICON[ic]}${label}</a></li>`).join("")}</ul></div></div>`;
       // Animations on / off (motion.js); switching reloads the page
       if (window.NestMotion) {
         const on = NestMotion.on, b = document.createElement("button");
         b.type = "button"; b.className = "foot__motion"; b.setAttribute("role", "switch"); b.setAttribute("aria-checked", on);
-        b.innerHTML = `<span>Animations</span><i aria-hidden="true"></i><b>${on ? "On" : "Off"}</b>`;
+        b.innerHTML = `<span data-i18n="foot.anim">Animations</span><i aria-hidden="true"></i><b data-i18n="foot.${on ? "on" : "off"}">${on ? "On" : "Off"}</b>`;
         b.addEventListener("click", () => NestMotion.set(!on));
         el.appendChild(b);
       }
+      L.apply(el);
     }
   }
 
@@ -184,16 +187,17 @@ window.NestSession = (function () {
   // links to pages that don't exist yet say so instead of jumping to the top
   document.addEventListener("click", (e) => {
     const a = e.target.closest && e.target.closest('a[href="#"]');
-    if (a && !a.hasAttribute("data-in")) { e.preventDefault(); toast(`"${a.textContent.trim()}" isn't built yet`); }
+    if (a && !a.hasAttribute("data-in")) { e.preventDefault(); toast(t("toast.soon", { label: a.textContent.trim() })); }
   });
 
   // ---------- pages that need you signed in (posting) ----------
   function gate(main) {
     if (Session.signedIn) return true;
     main.innerHTML = `<section class="gate"><span class="gate__ic" aria-hidden="true">✎</span>
-      <h1>Sign in to post your project</h1>
-      <p>Posting is free for every Hamster Hub student. Sign in and your draft is saved as you go.</p>
-      <div class="gate__acts"><button type="button" class="post">Sign in</button><a class="ghost3" href="${Paths.home("#browse-page")}">Back to Browse</a></div></section>`;
+      <h1 data-i18n="gate.title">Sign in to post your project</h1>
+      <p data-i18n="gate.text">Posting is free for every Hamster Hub student. Sign in and your draft is saved as you go.</p>
+      <div class="gate__acts"><button type="button" class="post" data-i18n="acct.signin">Sign in</button><a class="ghost3" href="${Paths.home("#browse-page")}" data-i18n="gate.back">Back to Browse</a></div></section>`;
+    L.apply(main);
     main.querySelector(".gate .post").addEventListener("click", () => { Session.signIn(); location.reload(); });
     return false;
   }
@@ -228,8 +232,7 @@ window.NestSession = (function () {
     set(v) { this.input.value = v; this.paint(); this.input.dispatchEvent(new Event("input", { bubbles: true })); }
     paint() { const has = !!this.input.value; this.form.classList.toggle("has-q", has); this.clear.hidden = !has; }
     label() {
-      const th = document.documentElement.lang === "th";
-      this.input.placeholder = this.phone.matches ? (th ? "ค้นหา" : "Search") : (th ? "ค้นหาโปรเจกต์ บันทึก และผู้สร้าง" : "Search projects, dev logs and makers");
+      this.input.placeholder = t(this.phone.matches ? "search.short" : "search.ph");
     }
     measure() {
       const l = this.bar.querySelector(".gleft"), e = this.bar.querySelector(".gbar__end");

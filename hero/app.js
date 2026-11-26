@@ -6,19 +6,19 @@
   const reduced = !motionOk.matches;
   const saveData = !!(navigator.connection && navigator.connection.saveData);
 
-  const I18N = {
+  // Words for this page. Shared ones (nav, sign in, footer) are in design/v6/lang.js.
+  // A work's own text (RE//SLASH, its room, description and makers) is not translated.
+  NestLang.add({
     en: {
       title: 'Hamster Nest',
       description: 'Hamster Nest shows student projects in games, websites and IoT. Browse the projects and get in touch with the students who made it.',
       brandTop: 'Hamster Nest, back to top',
-      browse: 'Browse',
-      devlogs: 'Dev logs',
-      about: 'About',
       contact: 'Contact',
+      'hero.by': 'by',
+      'hero.browseSection': 'Browse projects',
       chooseLang: 'Choose language',
       langLabel: 'Language: {name}',
       profile: 'My profile',
-      signIn: 'Sign in',
       h1: 'Hamster Nest: student projects',
       featured: 'Featured projects',
       slides: 'Slides',
@@ -26,9 +26,6 @@
       slideAnnounce: '{n} of {total}: {title}',
       projectTitle: 'Project title {n}',
       projectDesc: 'Placeholder description: a short line or two about the project and the student team behind it.',
-      catGame: 'Game',
-      reslashDesc: 'Fast first-person hack-and-slash: parry everything, go Slash Mode with the katana, keep your momentum.',
-      reslashBy: 'by Phoom.x, PetePeachPeat, Dnsw',
       viewReslash: 'View this project: RE//SLASH (opens in a new tab)',
       goToProject: 'Go to project {n}: Project title {n}',
       prev: 'Previous project',
@@ -45,14 +42,15 @@
       viewThisProject: 'View this project',
     },
     th: {
-      devlogs: 'บันทึกการพัฒนา',
       title: 'Hamster Nest',
       description: 'Hamster Nest รวมโปรเจกต์ของนักเรียนด้านเกม เว็บไซต์ และ IoT ดูผลงานแล้วติดต่อคนที่สร้างได้เลย',
       brandTop: 'Hamster Nest กลับไปด้านบน',
       chooseLang: 'เลือกภาษา',
+      contact: 'ติดต่อ',
+      'hero.by': 'โดย',
+      'hero.browseSection': 'สำรวจผลงาน',
       langLabel: 'ภาษา: {name}',
       profile: 'โปรไฟล์ของฉัน',
-      signIn: 'เข้าสู่ระบบ',
       h1: 'Hamster Nest: โปรเจกต์ของนักเรียน',
       featured: 'โปรเจกต์แนะนำ',
       slides: 'สไลด์',
@@ -60,9 +58,6 @@
       slideAnnounce: '{n} จาก {total}: {title}',
       projectTitle: 'ชื่อโปรเจกต์ {n}',
       projectDesc: 'ข้อความตัวอย่าง: คำอธิบายสั้น ๆ หนึ่งหรือสองบรรทัดเกี่ยวกับโปรเจกต์และทีมนักเรียนผู้สร้าง',
-      catGame: 'เกม',
-      reslashDesc: 'แอ็กชันฟันดาบมุมมองบุคคลที่หนึ่งสุดเร็ว: ปัดป้องทุกการโจมตี เข้าสู่ Slash Mode ด้วยดาบคาตานะ และรักษาโมเมนตัมไว้',
-      reslashBy: 'โดย Phoom.x, PetePeachPeat, Dnsw',
       viewReslash: 'ดูโปรเจกต์นี้: RE//SLASH (เปิดในแท็บใหม่)',
       goToProject: 'ไปที่โปรเจกต์ {n}: ชื่อโปรเจกต์ {n}',
       prev: 'โปรเจกต์ก่อนหน้า',
@@ -78,12 +73,9 @@
       scrollDown: 'เลื่อนลง',
       viewThisProject: 'ดูโปรเจกต์นี้',
     },
-  };
-  const LANG_KEY = 'hamster-nest-lang';
+  });
   const LANG_NAMES = { th: 'ภาษาไทย', en: 'English' };
-  let lang = 'en';
-  try { const saved = localStorage.getItem(LANG_KEY); if (saved === 'th' || saved === 'en') lang = saved; } catch { }
-  const t = (key, vars = {}) => (I18N[lang][key] ?? I18N.en[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+  const t = (key, vars) => NestLang.t(key, vars);
   const langListeners = [];
 
   if (!Object.hasOwn(HTMLElement.prototype, 'popover')) {
@@ -111,14 +103,9 @@
   const langBtn = $('#lang-btn');
   const langMenu = $('#lang-menu');
 
-  function applyLang(next) {
-    lang = next;
-    rootEl.lang = lang;
-    try { localStorage.setItem(LANG_KEY, lang); } catch { }
-    $$('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n, el.dataset); });
-    $$('[data-i18n-attr]').forEach((el) => el.dataset.i18nAttr.split(',').forEach((pair) => {
-      const [attr, key] = pair.split(':'); el.setAttribute(attr, t(key, el.dataset));
-    }));
+  // NestLang has already written every [data-i18n] text; this adds what only this page knows
+  function applyLang() {
+    const lang = NestLang.get();
     document.title = t('title');
     $('meta[name="description"]').setAttribute('content', t('description'));
     $$('[data-lang]', langMenu).forEach((i) => (i.dataset.lang === lang ? i.setAttribute('aria-current', 'true') : i.removeAttribute('aria-current')));
@@ -126,9 +113,10 @@
     langBtn.setAttribute('aria-label', t('langLabel', { name: LANG_NAMES[lang] }));
     langListeners.forEach((fn) => fn());
   }
+  NestLang.addEventListener('change', applyLang);
   $$('[data-lang]', langMenu).forEach((item) => {
     item.addEventListener('click', () => {
-      applyLang(item.dataset.lang);
+      NestLang.set(item.dataset.lang);
       langMenu.hidePopover();
       langBtn.focus();
     });
@@ -295,6 +283,6 @@
   addEventListener('resize', () => { track.scrollTo({ left: current * track.clientWidth, behavior: 'auto' }); });
   markCurrent(0);
 
-  if (lang !== 'en') applyLang(lang);
+  applyLang();
   startHero();
 })();

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="motion.js"></script>
+<script src="lang.js"></script>
 <title>Hamster Nest</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Kaushan+Script&family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&family=Mali:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../v5/v5.css">
@@ -13,51 +14,51 @@
 <div class="amb" aria-hidden="true"></div>
 <div class="fx" aria-hidden="true"></div>
 <header class="isl-bar"><div class="wrap isl-bar__in">
-<a class="brand" href="index.html" aria-label="Hamster Nest home"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg><span>HAMSTER <em>NEST</em></span></a>
-<nav class="island" aria-label="Main"><span class="island__pill" aria-hidden="true"></span><a href="browse.html" data-i18n="nav.browse">Browse</a><a href="devlogs.html" data-i18n="nav.devlogs">Dev logs</a><a href="#" data-i18n="nav.about">About</a></nav>
+<a class="brand" href="index.html" aria-label="Hamster Nest home" data-i18n-attr="aria-label:brand.home"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg><span>HAMSTER <em>NEST</em></span></a>
+<nav class="island" aria-label="Main" data-i18n-attr="aria-label:nav.aria"><span class="island__pill" aria-hidden="true"></span><a href="browse.html" data-i18n="nav.browse">Browse</a><a href="devlogs.html" data-i18n="nav.devlogs">Dev logs</a><a href="#" data-i18n="nav.about">About</a></nav>
 <div class="isl-bar__end">
-  <div class="lang-sw" role="group" aria-label="Language"><button type="button" data-lang="th" aria-pressed="false" lang="th">TH</button><button type="button" data-lang="en" aria-pressed="true">EN</button></div>
-  <a class="signin" href="#" data-i18n="signin">Sign in</a>
+  <div class="lang-sw" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.aria"><button type="button" data-set-lang="th" aria-pressed="false" lang="th">TH</button><button type="button" data-set-lang="en" aria-pressed="true">EN</button></div>
+  <a class="signin" href="#" data-i18n="acct.signin">Sign in</a>
 </div>
 </div></header>
 
 
-<section class="hero" id="hero" aria-roledescription="carousel" aria-label="Best of the Platinum tier">
+<section class="hero" id="hero" aria-roledescription="carousel" aria-label="Best of the Platinum tier" data-i18n-attr="aria-label:home.heroAria">
 <div class="hero__bg" aria-hidden="true"></div>
 <div class="hero__text in"><h1></h1><p></p>
-<div class="hero__acts"><a class="b" href="#" data-i18n="hero.see">See the project</a><a class="b b--line hero__hi" href="#"></a></div></div>
+<div class="hero__acts"><a class="b" href="#" data-i18n="home.see">See the project</a><a class="b b--line hero__hi" href="#"></a></div></div>
 <div class="strip"><div class="strip__track"></div></div>
 <div class="hero__nav"><div class="hero__dots" aria-hidden="true"></div>
-<button type="button" class="hero__arrow" data-step="-1" aria-label="Previous work"><svg viewBox="0 0 20 20"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-<button type="button" class="hero__arrow" data-step="1" aria-label="Next work"><svg viewBox="0 0 20 20"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+<button type="button" class="hero__arrow" data-step="-1" aria-label="Previous work" data-i18n-attr="aria-label:home.prev"><svg viewBox="0 0 20 20"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<button type="button" class="hero__arrow" data-step="1" aria-label="Next work" data-i18n-attr="aria-label:home.next"><svg viewBox="0 0 20 20"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
 </section>
 
-<section class="say" data-light="a" aria-label="Statement">
+<section class="say" data-light="a" aria-label="Statement" data-i18n-attr="aria-label:home.statement">
 <div class="wrap say__in"><div class="say__lamp" aria-hidden="true"></div>
-<h2 class="say__h" data-i18n="say">“High schoolers can do all this!?”</h2></div>
+<h2 class="say__h" data-i18n="home.say">“High schoolers can do all this!?”</h2></div>
 </section>
 
 <div class="wrap shelf">
-<nav class="rail" id="rail" aria-label="Tiers"><p class="rail__title">Tiers</p></nav>
+<nav class="rail" id="rail" aria-label="Tiers" data-i18n-attr="aria-label:home.tiers"><p class="rail__title" data-i18n="home.tiers">Tiers</p></nav>
 <div id="tiers"></div>
 </div>
 
 <footer class="foot"><div class="wrap foot__top">
 <div class="foot__brand"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#FFD24A"/><circle cx="11" cy="12" r="5" fill="#F2A65A"/><circle cx="29" cy="12" r="5" fill="#F2A65A"/><ellipse cx="20" cy="23" rx="13" ry="11" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="9" ry="7" fill="#FBEBDD"/><circle cx="15" cy="21" r="1.8" fill="#1A1A20"/><circle cx="25" cy="21" r="1.8" fill="#1A1A20"/></svg>
-<div><strong>Hamster Hub</strong><span>a technology community</span></div></div>
-<div class="foot__contact"><small>Get in touch</small><h3>Contacts</h3><ul>
+<div><strong>Hamster Hub</strong><span data-i18n="foot.tag">a technology community</span></div></div>
+<div class="foot__contact"><small data-i18n="foot.touch">Get in touch</small><h3 data-i18n="foot.contacts">Contacts</h3><ul>
 <li><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-1.6 19.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 12 2z"/></svg>Hamster Hub</li>
 <li><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="15" rx="4" fill="currentColor"/><path d="M7 9v4M7 13h2.5M11.5 9v4M14 13V9l3 4V9" stroke="#111115" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>@smart-school</li>
 <li><svg viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>090-060-2555</li>
 <li><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>hamsterhub_ig</li>
 </ul></div></div>
 <div class="wrap foot__links">
-<div><h4>Hamster Nest</h4><a href="#">How we pick</a><a href="#">How ranking works</a><a href="#">For investors</a><a href="#">Post your work</a></div>
-<div><h4>Rooms</h4><a href="#">Game</a><a href="#">IoT</a><a href="#">Web</a><a href="#">Idea</a></div>
-<div><h4>Hamster Hub</h4><a href="#">Home</a><a href="#">Course</a><a href="#">Activity</a><a href="#">About</a></div>
-<div><h4>Help</h4><a href="#">Get in touch</a><a href="#">Privacy</a><a href="#">Cookies</a></div>
+<div><h4>Hamster Nest</h4><a href="#" data-i18n="foot.how">How we pick</a><a href="#" data-i18n="foot.rank">How ranking works</a><a href="#" data-i18n="foot.invest">For investors</a><a href="#" data-i18n="foot.post">Post your work</a></div>
+<div><h4 data-i18n="foot.rooms">Rooms</h4><a href="#">Game</a><a href="#">IoT</a><a href="#">Web</a><a href="#">Idea</a></div>
+<div><h4>Hamster Hub</h4><a href="#" data-i18n="foot.home">Home</a><a href="#" data-i18n="foot.course">Course</a><a href="#" data-i18n="foot.activity">Activity</a><a href="#" data-i18n="nav.about">About</a></div>
+<div><h4 data-i18n="foot.help">Help</h4><a href="#" data-i18n="foot.touch">Get in touch</a><a href="#" data-i18n="foot.privacy">Privacy</a><a href="#" data-i18n="foot.cookies">Cookies</a></div>
 </div>
-<p class="foot__copy">© 2026 Hamster Hub. All rights reserved. Projects, names and quotes on this draft are placeholders.</p>
+<p class="foot__copy" data-i18n="foot.copy">© 2026 Hamster Hub. All rights reserved. Projects, names and quotes on this draft are placeholders.</p>
 </footer>
 <script src="intro.js"></script>
 <script src="art.js"></script>

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="../design/v6/motion.js"></script>
+<script src="../design/v6/lang.js"></script>
 <title>Hamster Nest</title>
 <meta name="description" content="Hamster Nest shows student projects in games, websites and IoT. Browse the projects and get in touch with the students who made it.">
 <meta name="theme-color" content="#f7fbfe">
@@ -39,10 +40,10 @@
 
 <!-- top bar: the same glass bar as the other pages (owner, 25 Nov 2026) -->
 <header class="gbar gbar--hero" id="top"><div class="gbar__in">
-<div class="gleft"><a class="brand" href="#page-top" aria-label="Hamster Nest, back to top"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg></a><nav class="gnav glass" aria-label="Main"><a href="#browse-page" aria-current="page" data-i18n="browse">Browse</a><a href="../design/v6/devlogs.html" data-i18n="devlogs">Dev logs</a><a href="#about-page" data-i18n="about">About</a></nav></div>
-<form class="gsearch glass" role="search" action="../design/v6/browse.html"><svg class="gsearch__ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" name="q" placeholder="Search projects, dev logs and makers" aria-label="Search Hamster Nest" autocomplete="off" enterkeyhint="search"><button type="button" class="gclear" aria-label="Clear the search" hidden>&times;</button><kbd aria-hidden="true">/</kbd></form>
+<div class="gleft"><a class="brand" href="#page-top" aria-label="Hamster Nest, back to top" data-i18n-attr="aria-label:brandTop"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg></a><nav class="gnav glass" aria-label="Main" data-i18n-attr="aria-label:nav.aria"><a href="#browse-page" aria-current="page" data-i18n="nav.browse">Browse</a><a href="../design/v6/devlogs.html" data-i18n="nav.devlogs">Dev logs</a><a href="#about-page" data-i18n="nav.about">About</a></nav></div>
+<form class="gsearch glass" role="search" action="../design/v6/browse.html"><svg class="gsearch__ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" name="q" placeholder="Search projects, dev logs and makers" aria-label="Search Hamster Nest" data-i18n-attr="aria-label:search.aria" autocomplete="off" enterkeyhint="search"><button type="button" class="gclear" aria-label="Clear the search" data-i18n-attr="aria-label:search.clear" hidden>&times;</button><kbd aria-hidden="true">/</kbd></form>
 <div class="gbar__end">
-  <div class="glang glass" role="group" aria-label="Language"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="th" aria-pressed="false" lang="th">ไทย</button></div>
+  <div class="glang glass" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.aria"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="th" aria-pressed="false" lang="th">ไทย</button></div>
   <div class="acct"></div>
 </div>
 </div></header>
@@ -54,8 +55,8 @@
   <nav class="site-nav" aria-label="Primary" style="--k:1">
     <div class="island" id="island">
       <ul class="site-menu" id="site-menu">
-        <li><a href="#browse-page" aria-current="page" data-i18n="browse">Browse</a></li>
-        <li><a href="#about-page" data-i18n="about">About</a></li>
+        <li><a href="#browse-page" aria-current="page" data-i18n="nav.browse">Browse</a></li>
+        <li><a href="#about-page" data-i18n="nav.about">About</a></li>
         <li><a href="#contact-page" data-i18n="contact">Contact</a></li>
       </ul>
       <span class="island-sep" aria-hidden="true"></span>
@@ -81,7 +82,7 @@
       </ul>
     </div>
     <a class="btn-rainbow is-round profile-btn" href="#profile-page" data-auth="in" aria-label="My profile" data-i18n-attr="aria-label:profile"><svg aria-hidden="true"><use href="#i-person"/></svg></a>
-    <a class="btn-rainbow" href="#sign-in-page" data-auth="out" data-i18n="signIn">Sign in</a>
+    <a class="btn-rainbow" href="#sign-in-page" data-auth="out" data-i18n="acct.signin">Sign in</a>
   </div>
 </div>
 
@@ -107,10 +108,10 @@
           <div class="hero-track" id="hero-track" tabindex="0" role="group" aria-label="Slides" data-i18n-attr="aria-label:slides">
         <article class="slide" aria-roledescription="slide" aria-label="1 of 4" data-marker-name="Go to project 1: RE//SLASH">
           <div class="slide-copy">
-            <p class="slide-kicker" data-i18n="catGame">Game</p>
+            <p class="slide-kicker">Game</p>
             <h2>RE//SLASH</h2>
-            <p data-i18n="reslashDesc">Fast first-person hack-and-slash: parry everything, go Slash Mode with the katana, keep your momentum.</p>
-            <p class="slide-credit" data-i18n="reslashBy">by Phoom.x, PetePeachPeat, Dnsw</p>
+            <p>Fast first-person hack-and-slash: parry everything, go Slash Mode with the katana, keep your momentum.</p>
+            <p class="slide-credit"><span data-i18n="hero.by">by</span> Phoom.x, PetePeachPeat, Dnsw</p>
             <div class="slide-actions"><a class="btn-light" href="https://phoomx.itch.io/reslash" target="_blank" rel="noopener noreferrer" aria-label="View this project: RE//SLASH (opens in a new tab)" data-i18n-attr="aria-label:viewReslash"><span data-i18n="viewThisProject">View this project</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="btn-ghost" href="#browse-page"><span data-i18n="explore">Explore projects</span></a></div>
           </div>
         </article>
@@ -154,25 +155,25 @@
   </section>
 
   <!-- Browse, straight under the hero (from design/v6/browse.html) -->
-  <section class="nest-browse sea--c" id="browse-page" aria-label="Browse projects" data-tone="lagoon">
+  <section class="nest-browse sea--c" id="browse-page" aria-label="Browse projects" data-i18n-attr="aria-label:hero.browseSection" data-tone="lagoon">
     <canvas class="water" aria-hidden="true"></canvas>
     <div class="br">
 <section class="band wrap" aria-labelledby="band-h">
-  <h1 id="band-h">Browse Hamster projects</h1>
+  <h1 id="band-h" data-i18n="br.title">Browse Hamster projects</h1>
 </section>
 <div class="br__sentinel" aria-hidden="true"></div>
 <div class="br__stick">
 <div class="br__top wrap">
-  <button type="button" class="fbtn glass" aria-expanded="false" aria-controls="fpanel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Filter<b hidden></b></button>
+  <button type="button" class="fbtn glass" aria-expanded="false" aria-controls="fpanel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="br.filter">Filter</span><b hidden></b></button>
 </div>
-<nav class="rooms wrap" aria-label="Rooms"></nav>
+<nav class="rooms wrap" aria-label="Rooms" data-i18n-attr="aria-label:br.rooms"></nav>
 </div>
 <div class="br__body wrap">
-  <aside class="fpanel" id="fpanel" aria-label="Filters" hidden></aside>
+  <aside class="fpanel" id="fpanel" aria-label="Filters" data-i18n-attr="aria-label:br.filters" hidden></aside>
   <section class="results">
     <div class="rhead">
-      <h2><span class="rhead__t">All projects</span> <span class="count" aria-live="polite">50</span></h2>
-      <div class="rhead__tools"><div class="rank"><button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span>All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="rank__menu" role="listbox" aria-label="Rank" hidden></ul></div><label class="sort">Sorted by <select id="sort" aria-label="Sort projects"><option value="rank">most updates</option><option value="az">name, A to Z</option><option value="maker">maker, A to Z</option></select><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></label></div>
+      <h2><span class="rhead__t" data-i18n="br.all">All projects</span> <span class="count" aria-live="polite">50</span></h2>
+      <div class="rhead__tools"><div class="rank"><button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span data-i18n="br.allRanks">All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="rank__menu" role="listbox" aria-label="Rank" data-i18n-attr="aria-label:br.rank" hidden></ul></div><label class="sort"><span data-i18n="br.sorted">Sorted by</span> <select id="sort" aria-label="Sort projects" data-i18n-attr="aria-label:br.sort"><option value="rank" data-i18n="br.s.rank">most updates</option><option value="az" data-i18n="br.s.az">name, A to Z</option><option value="maker" data-i18n="br.s.maker">maker, A to Z</option></select><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></label></div>
     </div>
     <div class="grid"></div>
   </section>
