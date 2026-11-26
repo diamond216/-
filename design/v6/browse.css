@@ -388,3 +388,9 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 .sea--c .br__stick>.rooms{flex:1;min-width:0;width:auto;margin:0}
 .sea--c .br__stick.is-stuck{background-color:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);box-shadow:inset 0 -1px 0 rgba(13,43,51,.08),0 10px 24px -22px rgba(13,43,51,.45)}
 html.calm .sea--c .br__stick{transition:none}
+
+/* once the Rooms row is stuck under the top bar the heading has gone, so the water behind it fades out;
+   otherwise its lower edge shows as a blue band behind the room tabs (seen when coming back to Browse mid-page) */
+.water{transition:opacity .35s ease}
+html:has(.br__stick.is-stuck) .water{opacity:0}
+html.calm .water{transition:none}
