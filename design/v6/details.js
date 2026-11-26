@@ -99,7 +99,7 @@ window.Details = (function () {
     profile() {
       const room = this.room, i = seed(this.name, 3);
       return { full: `${this.name} ${SURNAME[seed(this.name, SURNAME.length)]}`, role: `${ROOM_ROLE[room]} · ${GRADE[i]}, Hamster Hub`, motto: MOTTO[room][i],
-        about: `I make ${{ Game: "small games you can play on a school laptop", IoT: "gadgets that measure things around school", Web: "small sites people at school actually use", Idea: "plans for things the school is missing" }[room]}. I started in ${GRADE[Math.max(0, i - 1)].toLowerCase()} and haven't stopped. Ask me anything about the works below.`,
+        about: `I make ${{ Game: "small games you can play on a school laptop", IoT: "gadgets that measure things around school", Web: "small sites people at school actually use", Idea: "plans for things the school is missing" }[room]}. I started in ${GRADE[Math.max(0, i - 1)].toLowerCase()} and haven't stopped. Ask me anything about the projects below.`,
         into: INTO[room], tools: TOOLS[room], open: OPEN[i], followers: 40 + seed(this.name, 220), joined: ["Jun 2025", "Nov 2025", "Feb 2026"][i] };
     }
     contact() { const m = this.works(); return SampleDetails.contactFor(this.name, (m.find((x) => x.lead) || m[0]).w); }

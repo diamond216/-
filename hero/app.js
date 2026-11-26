@@ -9,7 +9,7 @@
   const I18N = {
     en: {
       title: 'Hamster Nest',
-      description: 'Hamster Nest shows student projects in games, websites and IoT. Browse the work and get in touch with the students who made it.',
+      description: 'Hamster Nest shows student projects in games, websites and IoT. Browse the projects and get in touch with the students who made it.',
       brandTop: 'Hamster Nest, back to top',
       browse: 'Browse',
       about: 'About',

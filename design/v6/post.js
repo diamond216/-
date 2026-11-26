@@ -133,7 +133,7 @@
       const d = this.d, mine = ME.works().filter((x) => x.lead);
       this.root.innerHTML = `
         <div class="po__head"><div><a class="back" href="profile.html#pim"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Your profile</a>
-          <h1>Post your work</h1><p>Takes about five minutes. Everything saves as you go, so you can leave and come back.</p></div>
+          <h1>Post your project</h1><p>Takes about five minutes. Everything saves as you go, so you can leave and come back.</p></div>
           <div class="po__headr"><button type="button" class="ghost3 sm guide-btn" data-act="guide"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3 2.5h6.5l3.5 3.5v7.5H3z M9.5 2.5V6H13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M5.5 9h5M5.5 11.5h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Posting guide and rules</button>
           <div class="mode" role="radiogroup" aria-label="What are you posting?"><button type="button" role="radio" data-mode="new" aria-checked="${d.mode === "new"}">New project</button><button type="button" role="radio" data-mode="update" aria-checked="${d.mode === "update"}">Update a project</button></div></div></div>
         <div class="po__grid">
@@ -174,7 +174,7 @@
           </form>
           <aside class="po__side">
             <section class="box pv2" aria-label="Preview"><h3>How it will look</h3><div class="pv2__body"></div></section>
-            <section class="box chk"><h3>Before it goes up</h3><ul></ul><p>Only the ones marked required stop you posting. Hamster Hub reads every new work within two days against <a href="#rules" class="rules-link">the rules</a>.</p></section>
+            <section class="box chk"><h3>Before it goes up</h3><ul></ul><p>Only the ones marked required stop you posting. Hamster Hub reads every new project within two days against <a href="#rules" class="rules-link">the rules</a>.</p></section>
           </aside>
         </div>`;
       this.media = new MediaField($("#media", this.root), () => this.update());
@@ -290,7 +290,7 @@
       const box = $(".po__grid", this.root);
       box.innerHTML = `<section class="done" role="status"><span class="hi__tick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <h2>${d.mode === "update" ? `Update posted to ${esc(w.name)}` : `${esc(d.name)} is in the queue`}</h2>
-        <p>${d.mode === "update" ? "It shows at the top of the project's Updates, and the project moves up in its rank for posting something new." : "Hamster Hub reads every new work within two days. Once it's up, it starts in Bronze and climbs as you post updates."}</p>
+        <p>${d.mode === "update" ? "It shows at the top of the project's Updates, and the project moves up in its rank for posting something new." : "Hamster Hub reads every new project within two days. Once it's up, it starts in Bronze and climbs as you post updates."}</p>
         <p class="done__note">This is a prototype, so nothing was sent.</p>
         <div class="dlg__acts"><a class="ghost3" href="profile.html#pim">Go to your profile</a><button type="button" class="post" data-act="again">Post something else</button></div></section>`;
       if (!calm) box.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 400, easing: E });

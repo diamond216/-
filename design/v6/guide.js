@@ -12,16 +12,16 @@ window.NestGuide = (function () {
   const GOOD = [
     ["name", "A name and one line", "Say what it is in one sentence a classmate would get. “Dig, fight and get lost underground with a friend” beats “An innovative co-op experience.”"],
     ["cover", "A cover that shows the real thing", "A screenshot, a photo of the gadget, or the first page of the plan. No logos on a blank background."],
-    ["clip", "A short clip of someone using it", "Ten to sixty seconds. Phone video is fine. Works with a clip get far more “Say hi” messages."],
+    ["clip", "A short clip of someone using it", "Ten to sixty seconds. Phone video is fine. Projects with a clip get far more “Say hi” messages."],
     ["team", "Everyone on the team, with a role", "“Pim, lead and game design” tells an investor who to talk to. Add teammates by name."],
     ["about", "Three short paragraphs", "How it started, what it does, what's next. Credit any art, music or code you didn't make (rule 1) and say what AI helped with (rule 8)."],
     ["link", "Something people can try", "A download, a web link, or the plan as a PDF. Early versions are welcome if they open (rule 10)."],
   ];
   const AFTER = [
-    ["Hamster Hub reads it", "An admin looks at every new work within two days and checks it against the rules."],
-    ["It gets a tier", "Most new works start in Bronze. Strong work can start higher. Posting updates moves it up."],
+    ["Hamster Hub reads it", "An admin looks at every new project within two days and checks it against the rules."],
+    ["It gets a tier", "Most new projects start in Bronze. Strong ones can start higher. Posting updates moves it up."],
     ["Or you get a note", "If something needs to change, you get a comment and the rule it's about. Fix it and send it again; there's no limit."],
-    ["Then keep it moving", "Post an update whenever something changes. Works that update often rise to the top of Browse."],
+    ["Then keep it moving", "Post an update whenever something changes. Projects that update often rise to the top of Browse."],
   ];
 
   function build() {
@@ -39,7 +39,7 @@ window.NestGuide = (function () {
               <p class="gd__team"><span>P</span><span>K</span>Pim, lead · Kaew, pixel art <b class="pin pin--i" data-n="4">4</b></p>
               <p class="gd__dl">Free download · Windows, Web <b class="pin pin--i" data-n="6">6</b></p></div>
             <ol class="gd__list">${GOOD.map(([, t, d], i) => `<li><b class="pin">${i + 1}</b><div><b>${t}</b><p>${d}</p></div></li>`).join("")}</ol></div></section>
-        <section data-p="rules" role="tabpanel" hidden><p class="gd__intro">Every work is checked against these. If one isn't met, an admin tells you which and what to change.</p>
+        <section data-p="rules" role="tabpanel" hidden><p class="gd__intro">Every project is checked against these. If one isn't met, an admin tells you which and what to change.</p>
           <ol class="gd__rules">${RULES.map((r) => `<li id="rule-${r.id}"><details><summary><span class="gd__no">${r.id}</span><span><b>${esc(r.title)}</b><i>${esc(r.short)}</i></span></summary>
             <div class="gd__more"><p>${esc(r.detail)}</p><p class="gd__fix"><b>If it's flagged:</b> ${esc(r.fix)}</p></div></details></li>`).join("")}</ol></section>
         <section data-p="after" role="tabpanel" hidden><ol class="gd__after">${AFTER.map(([t, d], i) => `<li><span class="gd__no">${i + 1}</span><div><b>${t}</b><p>${d}</p></div></li>`).join("")}</ol></section>

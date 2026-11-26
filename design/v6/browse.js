@@ -10,11 +10,13 @@
 
   // ---------- state ----------
   class BrowseState extends EventTarget {
-    constructor() { super(); this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); }
+    constructor() { super(); this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.reveal = false; }
     set(fn) { fn(this); this.dispatchEvent(new Event("change")); }
     setTab(tab) { this.set((s) => { s.tab = tab; s.rooms.clear(); s.genres.clear(); }); }
-    toggle(setName, v) { this.set((s) => { const set = s[setName]; set.has(v) ? set.delete(v) : set.add(v); if (setName === "rooms") s.dropOrphanGenres(); }); }
-    onlyRank(id) { this.set((s) => { s.ranks.clear(); if (id) s.ranks.add(id); }); }
+    toggle(setName, v) { this.set((s) => { s.reveal = false; const set = s[setName]; set.has(v) ? set.delete(v) : set.add(v); if (setName === "rooms") s.dropOrphanGenres(); }); }
+    // the rank menu (All ranks button) is the only thing that plays the rank reveal (owner, 26 Nov 2026);
+    // ticking ranks in the filter changes the results without it
+    onlyRank(id, reveal = false) { this.set((s) => { s.ranks.clear(); if (id) s.ranks.add(id); s.reveal = reveal && !!id; }); }
     clear() { this.set((s) => { s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); }
     // the rooms whose genres can be picked right now
     get genreRooms() { return this.tab === "All" ? ROOM_NAMES.filter((r) => this.rooms.has(r)) : [this.tab]; }
@@ -67,7 +69,7 @@
       const opts = [{ id: "", name: "All ranks" }, ...tiers];
       this.menu.innerHTML = opts.map((t) => `<li role="option" tabindex="-1" data-id="${t.id}" aria-selected="${t.id ? r.size === 1 && r.has(t.id) : r.size === 0}">${t.id ? `<i style="--ri:${RANK_INK[t.id]}"></i>` : ""}${t.name}</li>`).join("");
       this.menu.querySelectorAll("li").forEach((li) => {
-        const pick = () => { this.s.onlyRank(li.dataset.id); this.open(false); this.btn.focus(); };
+        const pick = () => { this.s.onlyRank(li.dataset.id, true); this.open(false); this.btn.focus(); };
         li.addEventListener("click", pick); li.addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), pick()));
       });
     }
@@ -81,7 +83,7 @@
       ["All", "Game", "Web", "IoT", "Idea"].forEach((r) => {
         const b = document.createElement("button");
         b.type = "button"; b.className = "room"; b.dataset.room = r;
-        b.innerHTML = `<span class="room__art" aria-hidden="true">${Art.draw(works.find((w) => w.id === cover[r]))}</span><span class="room__name">${r === "All" ? "All work" : r}</span>`;
+        b.innerHTML = `<span class="room__art" aria-hidden="true">${Art.draw(works.find((w) => w.id === cover[r]))}</span><span class="room__name">${r === "All" ? "All projects" : r}</span>`;
         b.addEventListener("click", () => state.setTab(r));
         this.el.appendChild(b);
       });
@@ -248,7 +250,7 @@
           const one = this.s.ranks.size === 1 ? [...this.s.ranks][0] : "";
           await CardMotion.exit(this.grid);                         // 1. old set leaves; it stays in the DOM until this resolves
           let revealed = "";
-          if (one && window.RankReveal.has(one)) {                    // 2. a single rank: the reveal covers the screen
+          if (one && this.s.reveal && window.RankReveal.has(one)) {   // 2. one rank picked from the rank menu: the reveal covers the screen
             revealed = one; await window.RankReveal.enter(one, this.tierName(one));
             const now = this.s.ranks.size === 1 ? [...this.s.ranks][0] : "";
             if (now && now !== revealed) { revealed = now; await window.RankReveal.retitle(now, this.tierName(now)); }
@@ -273,7 +275,7 @@
       if (!force && sig === this.sig && this.grid.childElementCount) return false; // same set already on screen
       this.sig = sig;
       this.n.textContent = shown.length;
-      this.t.textContent = this.s.tab === "All" ? "All work" : this.s.tab;
+      this.t.textContent = this.s.tab === "All" ? "All projects" : this.s.tab;
       this.grid.innerHTML = "";
       if (!shown.length) {
         this.grid.innerHTML = `<p class="none">Nothing matches that yet. <button type="button">Clear the filters</button></p>`;

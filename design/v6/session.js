@@ -63,7 +63,7 @@ window.NestSession = (function () {
     items() {
       const u = Session.user;
       return [
-        ["Your profile", Paths.page(`profile.html#${u.handle}`), "works"], ["Post your work", Paths.page("post.html")],
+        ["Your profile", Paths.page(`profile.html#${u.handle}`), "works"], ["Post your project", Paths.page("post.html")],
         ["Favourites", Paths.page(`profile.html#${u.handle}`), "favs"], "hr",
         ...(this.o.extra || []).map(([label, go]) => [label, null, go]),
         ...(this.o.extra && this.o.extra.length ? ["hr"] : []), ["Log out", null, "out"]];
@@ -124,7 +124,7 @@ window.NestSession = (function () {
         <div class="foot__contact"><small>Get in touch</small><h3>Contacts</h3><ul>
           <li>${ICON.fb}Hamster Hub</li><li>${ICON.line}@smart-school</li><li>${ICON.tel}090-060-2555</li><li>${ICON.ig}hamsterhub_ig</li></ul></div></div>
         <div class="wrap foot__links">
-          ${col("Hamster Nest", [["How we pick", Paths.page("post.html#rules")], ["How ranking works", Paths.page("post.html#after")], ["For investors", "#"], ["Post your work", Paths.page("post.html")]])}
+          ${col("Hamster Nest", [["How we pick", Paths.page("post.html#rules")], ["How ranking works", Paths.page("post.html#after")], ["For investors", "#"], ["Post your project", Paths.page("post.html")]])}
           ${col("Rooms", ["Game", "IoT", "Web", "Idea"].map((r) => [r, Paths.browse(r)]))}
           ${col("Hamster Hub", [["Home", Paths.home()], ["Course", "#"], ["Activity", "#"], ["About", "#"]])}
           ${col("Help", [["Get in touch", "#contact-page"], ["Privacy", "#"], ["Cookies", "#"]])}
@@ -159,7 +159,7 @@ window.NestSession = (function () {
   function gate(main) {
     if (Session.signedIn) return true;
     main.innerHTML = `<section class="gate"><span class="gate__ic" aria-hidden="true">✎</span>
-      <h1>Sign in to post your work</h1>
+      <h1>Sign in to post your project</h1>
       <p>Posting is free for every Hamster Hub student. Sign in and your draft is saved as you go.</p>
       <div class="gate__acts"><button type="button" class="post">Sign in</button><a class="ghost3" href="${Paths.home("#browse-page")}">Back to Browse</a></div></section>`;
     main.querySelector(".gate .post").addEventListener("click", () => { Session.signIn(); location.reload(); });

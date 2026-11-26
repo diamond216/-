@@ -62,7 +62,7 @@
           <div class="pf__right">
             <ul class="pf__stats">
               <li><b style="color:${RANK_INK[best.id]}">${best.name}</b><span>best rank</span></li>
-              <li><b>${mine.length}</b><span>works</span></li>
+              <li><b>${mine.length}</b><span>projects</span></li>
               <li><b class="pf__fn">${this.followers}</b><span>followers</span></li>
               <li><b>${person.awards().length + mine.filter((x) => x.lead).length}</b><span>awards</span></li></ul>
             <div class="pf__acts">${own
@@ -71,14 +71,14 @@
           </div>
         </header>
         <nav class="pf__tabs" role="tablist" aria-label="${esc(person.name)}'s profile">
-          ${this.tabBtn("works", `Works <em>${mine.length}</em>`)}${this.tabBtn("updates", `Updates <em>${ups.length}</em>`)}
+          ${this.tabBtn("works", `Projects <em>${mine.length}</em>`)}${this.tabBtn("updates", `Updates <em>${ups.length}</em>`)}
           ${showFavs ? this.tabBtn("favs", `Favourites <em>${favs.length}</em>${own ? `<span class="pf__vis" title="${set.favs === "public" ? "Everyone can see this" : "Only you can see this"}">${svg(set.favs === "public" ? "globe" : "lock")}</span>` : ""}`) : ""}
           ${this.tabBtn("about", "About")}
         </nav>
         <div class="pf__body">
           <div class="pf__main">
             <section class="pf__panel" id="tab-works" role="tabpanel" aria-labelledby="t-works">
-              <div class="pf__lh"><h2>Works, best rank first</h2><span class="pf__note">${mine.filter((x) => x.lead).length} as lead</span></div>
+              <div class="pf__lh"><h2>Projects, best rank first</h2><span class="pf__note">${mine.filter((x) => x.lead).length} as lead</span></div>
               <div class="grid pf__grid" data-works></div>
             </section>
             <section class="pf__panel" id="tab-updates" role="tabpanel" aria-labelledby="t-updates" hidden>
@@ -168,7 +168,7 @@
         <div class="hi__to">${avatar(name, "hi__av")}<div><h2 id="hi-h">Say hi to ${esc(name)}</h2><p>${esc(name)} gets it in their inbox. Hamster Hub gets a copy.</p></div></div>
         <div class="hi__quick">${quick.map((q) => `<button type="button" class="hi__q">${q}</button>`).join("")}</div>
         <label class="hi__l" for="hi-msg">Your message</label>
-        <textarea id="hi-msg" rows="4" placeholder="Hi ${esc(name)}, I saw your work and…" required></textarea>
+        <textarea id="hi-msg" rows="4" placeholder="Hi ${esc(name)}, I saw your project and…" required></textarea>
         <label class="hi__l" for="hi-mail">Where can ${esc(name)} reply?</label>
         <input id="hi-mail" type="email" placeholder="you@example.com" required>
         <p class="hi__err" role="alert"></p>
