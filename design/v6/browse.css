@@ -247,14 +247,6 @@ html:has(.sea--c){background:#F4F8F8}
 .sort svg{position:absolute;right:0;width:11px;height:11px;pointer-events:none;color:var(--ink)}
 .sort select:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
 /* active filter chips */
-.active{display:flex;flex-wrap:wrap;gap:8px;margin:-2px 0 18px}
-.active[hidden]{display:none}
-.chipx{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 10px 0 12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);font:500 14px/1 var(--f);cursor:pointer;transition:border-color .2s,background .2s}
-.chipx i{width:8px;height:8px;border-radius:2px;transform:rotate(45deg);background:var(--ri)}
-.chipx svg{width:11px;height:11px;color:var(--mute)}
-.chipx:hover{border-color:var(--ink)}.chipx:hover svg{color:var(--ink)}
-.chipx--all{border:0;background:none;color:var(--acc,#0B7F86);text-decoration:underline;text-underline-offset:3px;padding:0 6px}
-.chipx:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 /* filter panel: a plain column on the paper */
 .sea--c .fpanel{background:#fff;border:1px solid var(--line);box-shadow:none;border-radius:14px;top:150px}
 .sea--c .rc__name{color:var(--ink)}
@@ -311,9 +303,8 @@ html.calm {.rc--arming .rc__media::before {transition:none}}
 /* ---- optical centring for pills and chips (22 Nov 2026) ----
    IBM Plex Sans Thai Looped reserves a tall space under the baseline for Thai marks, so Latin text in a pill sits high.
    Trim each label to cap height and baseline, then centre it in a fixed-height pill. */
-.tag,.rk,.chipx,.rank__btn,.gnav a,.glang button,.gbtn,.fbtn,.rc__follow,.rc__upd b,.rhead .count,.say,.room__name,.lang-sw button,.signin,.mark__btn{
+.tag,.rk,.rank__btn,.gnav a,.glang button,.gbtn,.fbtn,.rc__follow,.rc__upd b,.rhead .count,.say,.room__name,.lang-sw button,.signin,.mark__btn{
   text-box:trim-both cap alphabetic}
-.chipx{height:32px;line-height:1}
 .rc__upd b{display:inline-flex;align-items:center;height:22px;padding:0 8px;line-height:1}
 .rhead .count{display:inline-flex;align-items:center;height:22px;padding:0 7px;line-height:1}
 .gnav a{display:inline-flex;align-items:center;height:38px;padding:0 22px;line-height:1}

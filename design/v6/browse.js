@@ -291,29 +291,6 @@
   const sortWorks = (list, by) => by === "az" ? [...list].sort((a, b) => a.name.localeCompare(b.name))
     : by === "maker" ? [...list].sort((a, b) => a.maker.localeCompare(b.maker) || a.name.localeCompare(b.name)) : list;
 
-  // ---------- chips for every active filter, each removable, plus clear all ----------
-  class ActiveChips {
-    constructor(state) {
-      this.s = state; this.el = $(".active");
-      state.addEventListener("change", () => this.paint()); this.paint();
-    }
-    paint() {
-      const s = this.s, chips = [];
-      if (s.q.trim()) chips.push(["q", "", `“${s.q.trim()}”`]);
-      tiers.filter((t) => s.ranks.has(t.id)).forEach((t) => chips.push(["ranks", t.id, t.name, RANK_INK[t.id]]));
-      [...s.rooms].forEach((r) => chips.push(["rooms", r, r]));
-      [...s.genres].forEach((g) => chips.push(["genres", g, g]));
-      this.el.hidden = !chips.length;
-      this.el.innerHTML = chips.map(([k, v, l, ink]) => `<button type="button" class="chipx" data-k="${k}" data-v="${v}" aria-label="Remove ${l.replace(/[“”]/g, "")}">${ink ? `<i style="--ri:${ink}"></i>` : ""}${l}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>`).join("")
-        + (chips.length > 1 ? `<button type="button" class="chipx chipx--all">Clear all</button>` : "");
-      this.el.querySelectorAll(".chipx").forEach((b) => b.addEventListener("click", () => {
-        if (b.classList.contains("chipx--all")) return s.set((x) => { x.q = ""; x.ranks.clear(); x.rooms.clear(); x.genres.clear(); });
-        if (b.dataset.k === "q") return s.set((x) => (x.q = ""));
-        s.toggle(b.dataset.k, b.dataset.v);
-      }));
-    }
-  }
-
   // ---------- page chrome: count in the heading, sort box, white frame on the bar and toolbar once they stick ----------
   class Chrome {
     constructor(state) {
@@ -329,11 +306,11 @@
     const pin = () => { stick.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin);
   }
 
-  window.BrowseKit = { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, ActiveChips, stickTop };
+  window.BrowseKit = { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, stickTop };
   if (!$(".grid")) return;
 
   const state = new BrowseState();
-  new Chrome(state); new ActiveChips(state);
+  new Chrome(state);
   const hero = $(".gbar--hero"), page = $("#browse-page");
   new SearchBar(state, hero && page ? () => scrollTo({ top: page.getBoundingClientRect().top + scrollY - hero.offsetHeight, behavior: calm ? "auto" : "smooth" }) : null); new RankMenu(state); new RoomTabs(state); new FilterPanel(state); new ResultGrid(state);
 

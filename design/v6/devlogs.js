@@ -2,7 +2,7 @@
   "use strict";
   const { works } = window.NEST;
   const { SampleDetails } = window.Details;
-  const { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, ActiveChips, stickTop } = window.BrowseKit;
+  const { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, stickTop } = window.BrowseKit;
   const $ = (s, r = document) => r.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const PAGE = 24;
@@ -81,7 +81,7 @@
   }
 
   stickTop();
-  new ActiveChips(state); new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state);
+  new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state);
   const feed = new LogFeed();
 
   function applyLang(next) {
