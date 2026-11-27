@@ -1,5 +1,5 @@
 ### 2026-11-26 — Q-20261126-baseline — Baseline: set up the Quest/Log and department system
-- Status: active
+- Status: ready-to-close
 - Owner: PM chat (this session)
 - Department: pm
 - Goal: Quest/Log system, Design + Build departments, Sub Agent definitions and the first Quests exist; every chat answers its role and queue; one dry run passes.

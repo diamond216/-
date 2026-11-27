@@ -13,4 +13,4 @@ Lead chat name: `Design`. You order and check; Sub Agents do the work (see `Cont
 | designer | Opus | options, mockups, design spec |
 | researcher | Sonnet | references, library checks |
 
-- **Brief template:** Quest ID · goal · reference pictures · Files (exact paths) · done means (PNG in `output/`, checked at 1440 and 390 wide) · worktree.
+- **Brief template:** Quest ID · goal · reference pictures · Files (exact paths) · done means (PNG in `output/`, checked at 1440 and 390 wide) · worktree. First step of every Sub Agent brief: `git checkout --detach <lead HEAD sha>`, then `ls Context tools` (worktrees start from `origin/main`, not from the lead's branch).

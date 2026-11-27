@@ -26,6 +26,7 @@ This file adds the Quest/Log flow on top of the existing setup. It does not repl
 
 - Each department has one lead chat and a path scope (`Context/departments/`).
 - The lead orders and checks. It does not do the work itself: one new Sub Agent per job, run with `isolation: worktree`, never in the main working tree. Sub Agents do not message other chats.
+- **Worktree base (found in the dry run, 2026-11-26):** a worktree created by `isolation: worktree` starts from `origin/main`, not from the lead's branch, so it has no `Context/`, `tools/` or `src/` from the working branch. Every Sub Agent brief must start with: `git checkout --detach <lead's HEAD sha>` (the commit exists in the shared repo, no fetch needed), then `ls Context tools` to confirm it is there. If the files are missing, the Sub Agent stops and reports instead of working from the wrong base.
 - Queue: `Context/quests/<dept>/`. A sub-Quest has `Parent:`.
 - Who may set `queued`: the owner, the PM, or a lead handing work across departments under an approved Parent (then tell the PM in one line).
 - Blocked: if it is about scope, the PM decides. If it is taste, data only the owner has, or something the system forces, the PM asks the owner.

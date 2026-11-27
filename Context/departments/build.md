@@ -15,4 +15,4 @@ Lead chat name: `Build`. You order and check; Sub Agents do the work (see `Conte
 | qa | Sonnet | build/lint/test and screenshot comparison |
 | researcher | Sonnet | stack, library and API checks |
 
-- **Brief template:** Quest ID · goal · Files (exact paths) · done means (commands that must pass, screenshots) · worktree · "do not push or deploy".
+- **Brief template:** Quest ID · goal · Files (exact paths) · done means (commands that must pass, screenshots) · worktree · "do not push or deploy". First step of every Sub Agent brief: `git checkout --detach <lead HEAD sha>`, then `ls Context tools` (worktrees start from `origin/main`, not from the lead's branch).
