@@ -499,7 +499,6 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 @media (prefers-reduced-motion:no-preference){html:not(.calm) #side .press{animation:press-ring .5s var(--ease) forwards}}
 .chips{background:color-mix(in srgb,var(--page) 80%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2)}
 .phead .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.cbox:focus{outline:none}.cbox.fv{outline:2px solid var(--acc);outline-offset:6px;border-radius:6px}
 .cbox .crow:first-of-type{border-top:0}
 .tm--av{justify-content:flex-start;gap:12px;padding:4px 0}
 .tmw{display:flex;flex-direction:column;min-width:0}.tmw .tmn{min-height:24px}.tmw>span{line-height:1.4}

@@ -28,7 +28,7 @@
       const more = this.similar(w).slice(0, isPhone() ? 4 : 10), on = Follows.has(w.id), [bl, bh] = back(), ph = isPhone();
       this.ch = ch;
       document.title = `${w.name} · Hamster Nest`;
-      this.root.innerHTML = `<div class="phead"><div><a class="backl" href="${bh}">${ic("back")}${esc(bl)}</a><span class="pmeta">${esc(w.genre)} / ${w.platforms.map(esc).join(" / ")}</span><div class="wt"><h1>${esc(w.name)}</h1><span class="tag">${esc(w.room)}</span></div><p class="pitch">${esc(w.blurb)}</p><span class="btns"><button type="button" class="btn btn--acc" data-act="follow" aria-pressed="${on}">${ic("follow")}<span>${on ? "Following" : "Follow"}</span></button>${ch.length ? `<button type="button" class="btn btn--line" data-act="contact" aria-controls="contact">${ic("mail")}Contact</button>` : ""}</span></div>
+      this.root.innerHTML = `<div class="phead"><div><a class="backl" href="${bh}">${ic("back")}${esc(bl)}</a><span class="pmeta">${esc(w.genre)} / ${w.platforms.map(esc).join(" / ")}</span><div class="wt"><h1>${esc(w.name)}</h1><span class="tag">${esc(w.room)}</span></div><p class="pitch">${esc(w.blurb)}</p><span class="btns"><button type="button" class="btn btn--acc" data-act="follow" aria-pressed="${on}">${ic("follow")}<span>${on ? "Following" : "Follow"}</span></button></span></div>
         <div class="owner sumbox"><dl><div><dt>Rank</dt><dd><i style="background:${RC[w.tier]}"></i>${t.name} · #${place} of ${works.length}</dd></div><div><dt>Last update</dt><dd>${esc(w.update.when[0].toUpperCase() + w.update.when.slice(1))}</dd></div><div><dt>Made by</dt><dd>${team.map(([n]) => esc(n)).join(", ")}</dd></div><div><dt>Runs on</dt><dd>${w.platforms.map(esc).join(", ")}</dd></div></dl></div></div>
         <div class="watch"><div>
           <div class="galw"><div class="gal" role="region" aria-label="Clip and pictures of ${esc(w.name)}" tabindex="0"><span class="gal__art"></span><button type="button" class="gal__play" aria-pressed="false" aria-label="Play the clip of ${esc(w.name)}" style="border:0;cursor:pointer">${ic("play")}</button><button type="button" class="gal__nav" data-go="-1" style="left:12px;border:0;cursor:pointer" aria-label="Previous picture">${ic("back")}</button><button type="button" class="gal__nav" data-go="1" style="right:12px;border:0;cursor:pointer" aria-label="Next picture">${ic("next")}</button><span class="gal__count"></span></div>
@@ -38,7 +38,7 @@
         </div><aside>
           ${links.length ? `<section class="box"><h3>Links</h3>${links.map(([k, u]) => `<a class="lk" href="${esc(u)}" target="_blank" rel="noopener"><span class="li">${ic("link")}</span><span><b>${esc(k)}</b><span>${wb(u.replace(/^https?:\/\//, ""))}</span></span></a>`).join("")}</section>` : ""}
           <section class="box"><h3>Team</h3>${team.map(([n, r]) => `<div class="tm tm--av">${face(n)}<span class="tmw"><a class="tmn" href="${Paths.page(`profile.html#${n.toLowerCase()}`)}">${esc(n)}</a><span>${esc(r)}</span></span></div>`).join("")}</section>
-          ${ch.length ? `<section class="box cbox" id="contact" tabindex="-1" aria-labelledby="contact-h"><h3 id="contact-h">Contact</h3>${this.contactRows()}</section>` : ""}
+          ${ch.length ? `<section class="box cbox" id="contact" aria-labelledby="contact-h"><h3 id="contact-h">Contact</h3>${this.contactRows()}</section>` : ""}
           <section class="box"><h3>Awards</h3>${d.awards().map(([a, s]) => `<div class="tm" style="display:block"><b>${esc(a)}</b><br><span>${esc(s)}</span></div>`).join("")}</section>
           <div class="side-list"><h3>More projects</h3>${more.map((x, i) => `<a class="sl" href="${Paths.page(`project.html#${x.id}`)}"><span class="p" aria-hidden="true">${window.Art.draw(x, i % 7)}</span><span><span class="slr"><b>${esc(x.name)}</b><span class="tag">${esc(x.room)}</span></span><span>${esc(x.maker)}</span><span>Updated ${esc(x.update.when)}</span></span></a>`).join("")}</div>
         </aside></div>`;
@@ -72,13 +72,6 @@
       return works.filter((x) => x.id !== w.id).map((x) => [x, score(x)]).sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).map(([x]) => x);
     }
     contactRows() { return this.ch.map(([, k, v]) => `<div class="crow"><b>${esc(k)}</b><span>${wb(v)}</span><button type="button" class="cp" data-v="${esc(v)}">${ic("copy")}<span>Copy</span></button></div>`).join(""); }
-    toContact() {
-      const box = $("#contact", this.root); if (!box) return;
-      const calm = matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("calm");
-      box.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
-      box.focus({ preventScroll: true });
-      box.classList.add("fv"); clearTimeout(this.lit); this.lit = setTimeout(() => box.classList.remove("fv"), 1600);
-    }
     wire() {
       document.addEventListener("click", (e) => {
         const b = e.target.closest("[data-act], .cp");
@@ -90,7 +83,6 @@
         }
         const a = b.dataset.act;
         if (a === "follow") { const on = Follows.toggle(this.w.id); b.setAttribute("aria-pressed", String(on)); $("span", b).textContent = on ? "Following" : "Follow"; }
-        else if (a === "contact") this.toContact();
         else if (a === "allups") { $$(".ups li", this.root).forEach((li) => (li.hidden = false)); b.remove(); }
       });
     }
