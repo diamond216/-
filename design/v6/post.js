@@ -21,7 +21,7 @@
   L.add({
     en: {
       "po.back": "Your profile", "po.title": "Post your project", "po.lead": "Takes about five minutes. Everything saves as you go, so you can leave and come back.",
-      "po.guide": "Posting guide and rules", "po.modeAria": "What are you posting?", "po.mNew": "New project", "po.mUpd": "Update a project",
+      "po.modeAria": "What are you posting?", "po.mNew": "New project", "po.mUpd": "Update a project",
       "po.s1": "The basics", "po.name": "Name", "po.req": "Required", "po.opt": "Optional", "po.namePh": "What is it called?", "po.line": "One line about it",
       "po.linePh": "What does it do, in one sentence?", "po.lineH": "This shows under the name everywhere: on Browse, on your profile and on the project page.",
       "plat.Pitch deck": "Pitch deck", "plat.Poster": "Poster", "po.room": "Room", "po.genre": "Genre", "po.pickOne": "Pick one or two", "po.roomFirst": "Pick a room first.", "po.runs": "Runs on", "po.shared": "Shared as",
@@ -34,7 +34,7 @@
       "po.uText": "A few words about it", "po.uTextPh": "What's new, and what should people try first?", "po.u3": "Show it",
       "po.save": "Save for later", "po.reset": "Start over", "po.resetSure": "Click again to clear everything", "po.post": "Post it",
       "po.preview": "Preview", "po.how": "How it will look", "po.before": "Before it goes up",
-      "po.chkNote": "Only the ones marked required stop you posting. Hamster Hub reads every new project within two days against <a href=\"#rules\" class=\"rules-link\">the rules</a>.",
+      "po.chkNote": "Only the ones marked required stop you posting. Hamster Hub reads every new project within two days.",
       "po.saved0": "Saved just now", "po.savedS": "Saved {n} seconds ago", "po.savedM": "Saved {n} min ago",
       "po.draft": "Your draft is back. Pictures and clips aren't kept in a draft, so add them again.", "po.twoGenres": "Two genres at most. Untick one first.",
       "po.done": "done", "po.notYet": "not yet",
@@ -57,7 +57,7 @@
     },
     th: {
       "po.back": "โปรไฟล์ของคุณ", "po.title": "ลงผลงานของคุณ", "po.lead": "ใช้เวลาราวห้านาที ทุกอย่างบันทึกให้ระหว่างที่เขียน ออกไปแล้วกลับมาต่อได้",
-      "po.guide": "คู่มือการลงผลงานและกติกา", "po.modeAria": "คุณจะลงอะไร", "po.mNew": "โปรเจกต์ใหม่", "po.mUpd": "อัปเดตโปรเจกต์เดิม",
+      "po.modeAria": "คุณจะลงอะไร", "po.mNew": "โปรเจกต์ใหม่", "po.mUpd": "อัปเดตโปรเจกต์เดิม",
       "po.s1": "ข้อมูลพื้นฐาน", "po.name": "ชื่อ", "po.req": "จำเป็น", "po.opt": "ไม่บังคับ", "po.namePh": "ผลงานนี้ชื่ออะไร", "po.line": "แนะนำสั้น ๆ หนึ่งบรรทัด",
       "po.linePh": "มันทำอะไรได้ บอกเป็นประโยคเดียว", "po.lineH": "บรรทัดนี้จะแสดงใต้ชื่อทุกที่ ทั้งหน้าสำรวจ โปรไฟล์ของคุณ และหน้าผลงาน",
       "plat.Pitch deck": "สไลด์นำเสนอ", "plat.Poster": "โปสเตอร์", "po.room": "ห้อง", "po.genre": "แนว", "po.pickOne": "เลือกหนึ่งหรือสองแนว", "po.roomFirst": "เลือกห้องก่อนนะ", "po.runs": "ใช้งานได้บน", "po.shared": "แชร์ในรูปแบบ",
@@ -70,7 +70,7 @@
       "po.uText": "เล่าสั้น ๆ", "po.uTextPh": "มีอะไรใหม่ และอยากให้คนลองอะไรก่อน", "po.u3": "โชว์ให้ดู",
       "po.save": "เก็บไว้ก่อน", "po.reset": "เริ่มใหม่", "po.resetSure": "กดอีกครั้งเพื่อล้างทั้งหมด", "po.post": "ลงเลย",
       "po.preview": "ตัวอย่าง", "po.how": "หน้าตาจะเป็นแบบนี้", "po.before": "ก่อนขึ้นเว็บ",
-      "po.chkNote": "เฉพาะข้อที่ระบุว่าจำเป็นเท่านั้นที่ขวางการลงผลงาน Hamster Hub จะอ่านทุกโปรเจกต์ใหม่ภายในสองวัน และตรวจกับ<a href=\"#rules\" class=\"rules-link\">กติกา</a>",
+      "po.chkNote": "เฉพาะข้อที่ระบุว่าจำเป็นเท่านั้นที่ขวางการลงผลงาน Hamster Hub จะอ่านทุกโปรเจกต์ใหม่ภายในสองวัน",
       "po.saved0": "เพิ่งบันทึก", "po.savedS": "บันทึกเมื่อ {n} วินาทีที่แล้ว", "po.savedM": "บันทึกเมื่อ {n} นาทีที่แล้ว",
       "po.draft": "ร่างของคุณกลับมาแล้ว รูปและคลิปไม่ถูกเก็บไว้ในร่าง ต้องเพิ่มใหม่อีกครั้ง", "po.twoGenres": "เลือกได้สูงสุดสองแนว ยกเลิกอันหนึ่งก่อนนะ",
       "po.done": "เสร็จแล้ว", "po.notYet": "ยังไม่เสร็จ",
@@ -215,8 +215,7 @@
       this.root.innerHTML = `
         <div class="po__head"><div><a class="back" href="profile.html#pim"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>${tx("po.back")}</a>
           <h1>${tx("po.title")}</h1><p>${tx("po.lead")}</p></div>
-          <div class="po__headr"><button type="button" class="ghost3 sm guide-btn" data-act="guide"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3 2.5h6.5l3.5 3.5v7.5H3z M9.5 2.5V6H13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M5.5 9h5M5.5 11.5h3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>${tx("po.guide")}</button>
-          <div class="mode" role="radiogroup" aria-label="${tx("po.modeAria")}"><button type="button" role="radio" data-mode="new" aria-checked="${d.mode === "new"}">${tx("po.mNew")}</button><button type="button" role="radio" data-mode="update" aria-checked="${d.mode === "update"}">${tx("po.mUpd")}</button></div></div></div>
+          <div class="po__headr"><div class="mode" role="radiogroup" aria-label="${tx("po.modeAria")}"><button type="button" role="radio" data-mode="new" aria-checked="${d.mode === "new"}">${tx("po.mNew")}</button><button type="button" role="radio" data-mode="update" aria-checked="${d.mode === "update"}">${tx("po.mUpd")}</button></div></div></div>
         <div class="po__grid">
           <form class="po__form" novalidate>
             <div class="m-new">
@@ -288,9 +287,7 @@
     flash(el, msg) { const h = el.previousElementSibling; const old = h.innerHTML; h.innerHTML = `${old.split("<em")[0]}<em class="warn">${msg}</em>`; setTimeout(() => (h.innerHTML = old), 1800); }
     wire() {
       const f = $("form", this.root), d = this.d;
-      $('[data-act="guide"]', this.root).addEventListener("click", () => window.NestGuide.open());
-      $(".rules-link", this.root).addEventListener("click", (e) => { e.preventDefault(); window.NestGuide.open("rules"); });
-      this.root.querySelectorAll(".mode [data-mode]").forEach((b) => b.addEventListener("click", () => { if (b.dataset.mode === "new" && d.mode !== "new") window.NestGuide.auto(); d.mode = b.dataset.mode; this.root.querySelectorAll(".mode [data-mode]").forEach((x) => x.setAttribute("aria-checked", x === b)); this.update(); }));
+      this.root.querySelectorAll(".mode [data-mode]").forEach((b) => b.addEventListener("click", () => { d.mode = b.dataset.mode; this.root.querySelectorAll(".mode [data-mode]").forEach((x) => x.setAttribute("aria-checked", x === b)); this.update(); }));
       this.wireChoices($("#s-basics", this.root));
       f.addEventListener("input", (e) => {
         const n = e.target.name; if (!n) return;
@@ -401,8 +398,6 @@
   if (NestSession.gate($("#main"))) {
     const page = new PostPage($("#main"));
     L.addEventListener("change", () => page.relabel());
-    // starting a new project opens the guide (unless they asked us not to, or a link points at the guide)
-    if (page.d.mode === "new" && !/^#(rules?|after)/.test(location.hash)) window.NestGuide.auto();
     setInterval(() => page.stamp(), 15000);
   }
   const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 160);
