@@ -244,7 +244,7 @@ window.NestSession = (function () {
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("footer.nest-foot").forEach((f) => new Footer(f));
     const nav = document.querySelector(".gnav"); if (nav) api.nav = new NavPill(nav);
-    const slot = document.querySelector(".acct");
+    const slot = document.querySelector("div.acct");
     if (slot) api.menu = new AccountMenu(slot, api.menuOptions);
   });
   return api;
