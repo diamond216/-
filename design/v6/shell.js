@@ -258,6 +258,10 @@ window.NestShell = (function () {
         if (body.classList.contains("ph")) openSearch(); else { search.input.focus(); search.input.select(); }
       }
     });
+    const press = (el) => { if (!el) return; el.classList.remove("press"); void el.offsetWidth; el.classList.add("press"); clearTimeout(el._pt); el._pt = setTimeout(() => el.classList.remove("press"), 520); };
+    const sideBtn = (t) => t && t.closest && t.closest("#side .si, #side .btn, #side .ibtn, #side .lang button, #side .sw");
+    document.addEventListener("pointerdown", (e) => press(sideBtn(e.target)));
+    document.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") press(sideBtn(e.target)); });
     addEventListener("resize", layout);
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("nest:session", () => { render(); });
