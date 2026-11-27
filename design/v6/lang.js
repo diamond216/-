@@ -116,7 +116,7 @@ window.NestLang = (function () {
     },
     th: {
       "title.browse": "สำรวจผลงาน · Hamster Nest", "title.devlogs": "บันทึกการพัฒนา · Hamster Nest", "title.post": "ลงผลงานของคุณ · Hamster Nest",
-      "nav.aria": "เมนูหลัก", "nav.browse": "สำรวจผลงาน", "nav.devlogs": "บันทึกการพัฒนา", "nav.about": "เกี่ยวกับเรา",
+      "nav.aria": "เมนูหลัก", "nav.browse": "สำรวจผลงาน", "nav.devlogs": "บันทึกการพัฒนา", "nav.about": "เกี่ยวกับ",
       "brand.home": "Hamster Nest หน้าแรก",
       "search.ph": "ค้นหาโปรเจกต์ บันทึก และผู้สร้าง", "search.short": "ค้นหา", "search.aria": "ค้นหาใน Hamster Nest", "search.clear": "ล้างคำค้นหา",
       "lang.aria": "ภาษา",

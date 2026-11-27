@@ -32,7 +32,7 @@ window.NestGuide = (function () {
     },
     th: {
       "gd.k": "คู่มือการลงผลงาน", "gd.h": "ลงผลงานบน Hamster Nest ยังไง", "gd.close": "ปิดคู่มือ",
-      "gd.tGood": "โพสต์ที่ดี", "gd.tRules": "กติกา", "gd.tAfter": "หลังจากลงผลงาน",
+      "gd.tGood": "ก่อนโพสต์", "gd.tRules": "กติกา", "gd.tAfter": "หลังโพสต์",
       "gd.intro": "ทุกโปรเจกต์จะถูกตรวจตามข้อเหล่านี้ ถ้าข้อไหนยังไม่ผ่าน แอดมินจะบอกว่าข้อไหน และต้องแก้อะไร", "gd.flagged": "ถ้าโดนทัก:",
       "gd.hide": "ไม่ต้องเปิดคู่มือนี้ตอนฉันเริ่มโปรเจกต์ใหม่", "gd.start": "เริ่มลงผลงาน",
       "gd.good.name": "ชื่อและคำแนะนำหนึ่งบรรทัด", "gd.good.name.d": "บอกว่ามันคืออะไรด้วยประโยคเดียวที่เพื่อนในห้องฟังแล้วเข้าใจ “Dig, fight and get lost underground with a friend” ชัดกว่า “An innovative co-op experience.” เยอะ",
