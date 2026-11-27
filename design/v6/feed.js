@@ -56,17 +56,18 @@ window.NestFeed = (function () {
   }
 
   function mount(host, cfg) {
-    const state = new BrowseState();
+    const items = cfg.items || works, of = cfg.of || ((w) => w), noun = cfg.noun || ["project", "projects"];
+    const state = new BrowseState(cfg.items ? { items, of, text: cfg.text } : {});
     const from = cfg.from || "Browse";
     const per = () => (cfg.per ? cfg.per() : isPhone() ? 8 : 16);
     let shown = per(), panel = false;
     host.innerHTML = `<div class="chips" role="toolbar" aria-label="Rooms and filters"></div><div class="fp-host"></div>
       <div class="sh"><${cfg.h} class="sh__t"></${cfg.h}>${cfg.h === "h1" ? '<h2 class="vh">Projects</h2>' : ""}<span class="n" aria-live="polite"></span><span class="sort-host"></span></div>
-      <div class="grid"></div><div class="more" hidden><button type="button" class="btn btn--line">Show more</button></div>`;
-    const chipsEl = $(".chips", host), fpHost = $(".fp-host", host), grid = $(".grid", host), more = $(".more", host);
+      <div class="${cfg.listClass || "grid"}"></div><div class="more" hidden><button type="button" class="btn btn--line">Show more</button></div>`;
+    const chipsEl = $(".chips", host), fpHost = $(".fp-host", host), grid = $("." + (cfg.listClass || "grid"), host), more = $(".more", host);
     const hv = wireCards(grid, from);
 
-    const roomCount = (r) => (r === "All" ? works.length : works.filter((w) => w.room === r).length);
+    const roomCount = (r) => (r === "All" ? items.length : items.filter((x) => of(x).room === r).length);
     function chips() {
       const ph = isPhone();
       chipsEl.innerHTML = `<button type="button" class="chip ${ph ? "chip--fbtn" : "chip--filter"}" data-c="filters" aria-expanded="${panel}" aria-controls="fpanel">${ic("filter")}Filters${state.active ? `<span class="cc">${state.active}</span>` : ""}</button>${ph ? "" : '<span class="chip-sep" aria-hidden="true"></span>'}
@@ -77,13 +78,13 @@ window.NestFeed = (function () {
     const top = (arr) => { const m = {}; arr.forEach((k) => (m[k] = (m[k] || 0) + 1)); return Object.entries(m).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k]) => k); };
     function panelHTML() {
       const g = (h, set, rows) => `<div><h3>${h}</h3>${rows.map(([v, label, n]) => `<label class="ck"><input type="checkbox" data-set="${set}" value="${esc(v)}"${state[set].has(v) ? " checked" : ""}><span>${esc(label)}</span><small>${n}</small></label>`).join("")}</div>`;
-      const total = works.filter((w) => state.matches(w)).length;
+      const total = items.filter((x) => state.matches(x)).length;
       return `<section class="fpanel" id="fpanel" role="region" aria-label="Filters"><div class="fp__cols">
         ${g("Rank", "ranks", tiers.map((t) => [t.id, t.name, cnt("ranks", (w) => w.tier === t.id, "ranks")]))}
         ${g("Room", "rooms", ROOMS.map((r) => [r, r, cnt("rooms", (w) => w.room === r, "rooms")]))}
         ${g("Genre", "genres", top(works.map((w) => w.genre)).map((x) => [x, x, cnt("genres", (w) => w.genre === x, "genres")]))}
         ${g("Runs on", "plats", top(works.flatMap((w) => w.platforms)).map((x) => [x, x, cnt("plats", (w) => w.platforms.includes(x), "plats")]))}
-        </div><div class="fp__bar"><button type="button" class="btn btn--ghost" data-c="clear">Clear all</button><button type="button" class="btn btn--ink" data-c="show">Show ${total} projects</button></div></section>`;
+        </div><div class="fp__bar"><button type="button" class="btn btn--ghost" data-c="clear">Clear all</button><button type="button" class="btn btn--ink" data-c="show">Show ${total} ${total === 1 ? noun[0] : noun[1]}</button></div></section>`;
     }
     function paintPanel() {
       $$(".sheet,.sheet-scrim").forEach((e) => e.remove());
@@ -108,13 +109,15 @@ window.NestFeed = (function () {
     }
     function paint() {
       hv.hide();
-      const q = state.q.trim(), list = sortWorks(works.filter((w) => state.matches(w)), state.sort);
+      const q = state.q.trim(), hit = items.filter((x) => state.matches(x)), list = cfg.items ? hit : sortWorks(hit, state.sort);
       const sh = $(".sh", host); sh.classList.toggle("res", !!q);
-      $(".sh__t", host).textContent = q ? `Results for “${q}”` : cfg.title;
-      $(".n", host).textContent = `${list.length} ${list.length === 1 ? "project" : "projects"}`;
-      $(".sort-host", host).innerHTML = sortHTML();
+      $(".sh__t", host).textContent = q ? `Results for “${q}”` : (typeof cfg.title === "function" ? cfg.title() : cfg.title);
+      $(".n", host).textContent = `${list.length} ${list.length === 1 ? noun[0] : noun[1]}`;
+      $(".sort-host", host).innerHTML = cfg.items ? "" : sortHTML();
       grid.style.setProperty("--cols", cfg.cols ? cfg.cols() : "");
-      grid.innerHTML = list.length ? list.slice(0, shown).map((w, i) => card(w, i)).join("") : `<p class="empty" style="grid-column:1/-1">No projects match “${esc(q || "these filters")}”<button type="button" class="btn btn--line" data-c="reset">Clear</button></p>`;
+      const empty = `<p class="empty" style="grid-column:1/-1">No ${noun[1]} match`;
+      if (list.length && cfg.render) cfg.render(grid, list.slice(0, shown));
+      else grid.innerHTML = list.length ? list.slice(0, shown).map((w, i) => card(w, i)).join("") : `${empty} “${esc(q || "these filters")}”<button type="button" class="btn btn--line" data-c="reset">Clear</button></p>`;
       more.hidden = list.length <= shown;
       thai(grid);
       if (panel && !isPhone()) { fpHost.innerHTML = panelHTML(); wirePanel(fpHost); }
@@ -131,7 +134,7 @@ window.NestFeed = (function () {
       if (e.target.closest('[data-c="reset"]')) { state.set((x) => { x.q = ""; x.ranks.clear(); x.rooms.clear(); x.genres.clear(); x.plats.clear(); }); if (search.input) { search.input.value = ""; search.paint(); } }
     });
     host.addEventListener("change", (e) => { if (e.target.matches(".sort-host select")) state.set((x) => (x.sort = e.target.value)); });
-    $("button", more).addEventListener("click", () => { const first = shown; shown += per(); paint(); const c = $$(".pc__link", grid)[first]; if (c) c.focus(); });
+    $("button", more).addEventListener("click", () => { const first = shown; shown += per(); paint(); const c = $$(".pc__link, a.lc", grid)[first]; if (c) c.focus(); });
     state.addEventListener("change", () => { shown = per(); chips(); paint(); });
 
     if (search.input) {
@@ -144,6 +147,7 @@ window.NestFeed = (function () {
     const R = ROOMS.find((r) => r.toLowerCase() === room.toLowerCase()); if (R) state.tab = R;
     let wasPhone = isPhone();
     addEventListener("resize", () => { if (isPhone() !== wasPhone) { wasPhone = isPhone(); chips(); paintPanel(); paint(); } });
+    addEventListener("nest:lang", () => paint());
     chips(); paint();
     return { state, paint };
   }
