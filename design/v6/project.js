@@ -1,169 +1,124 @@
-// Project page. Reads the work's id from the URL hash (project.html#burrow-knights), so "More from the class"
-// can move between works without a reload. Team, roles, awards and older updates are sample data built from the work.
 (function () {
   "use strict";
   const { works, tiers } = window.NEST;
-  const $ = (s, r = document) => r.querySelector(s);
-  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const INK = { platinum: "#3550A8", diamond: "#1E93C2", gold: "#C08A12", silver: "#7A8794", bronze: "#B0602F" };
-  const hue = (s) => [...s].reduce((n, c) => n + c.charCodeAt(0), 0) % 360;
-  const seed = (s, n) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % n;
-
   const { SampleDetails } = window.Details;
-
-  const ICON = {
-    link: '<path d="M10 14a4.5 4.5 0 006.4 0l3-3a4.5 4.5 0 00-6.4-6.4l-1.2 1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M14 10a4.5 4.5 0 00-6.4 0l-3 3a4.5 4.5 0 006.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
-    email: '<path d="M3 6.5h18v11H3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 7l8.5 6.5L20.5 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
-    phone: '<path d="M7 3.5h3l1.5 4-2 1.3a10 10 0 005.7 5.7l1.3-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 015 5.7 2 2 0 017 3.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
-    line: '<path d="M12 4C7 4 3 7.2 3 11.1c0 3.5 3.1 6.4 7.4 7l-.5 2.4 3.4-2.3c4.3-.5 7.7-3.5 7.7-7.1C21 7.2 17 4 12 4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
-    ig: '<rect x="4" y="4" width="16" height="16" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16.8" cy="7.2" r="1" fill="currentColor"/>',
-    copy: '<rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3" fill="none" stroke="currentColor" stroke-width="1.7"/>',
-    ok: '<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  const { ic, esc, wb, thai, Follows, Paths } = window.NestShell;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const RC = { platinum: "var(--plat)", diamond: "var(--dia)", gold: "var(--gold)", silver: "var(--silver)", bronze: "var(--bronze)" };
+  const DAYS = { today: 0, yesterday: 1, "2 days ago": 2, "3 days ago": 3, "4 days ago": 4, "5 days ago": 5, "6 days ago": 6, "last week": 7, "1 week ago": 8, "2 weeks ago": 14, "3 weeks ago": 21, "last month": 30, "2 months ago": 60 };
+  const isPhone = () => innerWidth < 900;
+  const dday = (when) => { if (!(when in DAYS)) return ""; const d = new Date(); d.setDate(d.getDate() - DAYS[when]); return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }); };
+  const back = () => {
+    let f = ""; try { f = sessionStorage.getItem("nest-from") || ""; } catch (e) {}
+    if (f === "Home") return ["Back to Home", Paths.home()];
+    if (f === "Browse") return ["Back to Browse", Paths.page("browse.html")];
+    if (f === "Dev logs") return ["Back to Dev logs", Paths.page("devlogs.html")];
+    return ["Back", Paths.page("browse.html")];
   };
-  const svg = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg>`;
+  const FIG = [0, 2, 3, 6];
+  const slides = () => [{ clip: true, frame: 0 }, ...[1, 2, 3, 4].map((f) => ({ clip: false, frame: f }))];
 
-  // ---------- page ----------
   class ProjectPage {
-    constructor(root) { this.root = root; this.preview = null; }
-    updateFig(w, i, title, alt = "") {
-      if (![0, 2, 3, 6].includes(i)) return "";
-      const src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(Art.draw({ ...w, scribble: "" }, i % 7));
-      return `<figure class="up-fig"><img class="up-img" src="${src}" alt="${alt || title}" width="240" height="135"${i ? ' loading="lazy"' : ""} decoding="async"></figure>`;
-    }
+    constructor(root) { this.root = root; this.preview = null; this.at = 0; }
     render(w) {
-      const t = tiers.find((x) => x.id === w.tier), d = new SampleDetails(w), ink = INK[w.tier];
-      const updates = d.updates(), team = d.team(), links = d.links();
+      this.w = w;
+      const d = new SampleDetails(w), ups = d.updates(), t = tiers.find((x) => x.id === w.tier);
+      const place = tiers.indexOf(t) * 10 + w.place, team = d.team(), links = d.links(), ch = d.contact().filter(([k]) => k !== "phone");
+      const more = this.similar(w).slice(0, isPhone() ? 4 : 10), on = Follows.has(w.id), [bl, bh] = back(), ph = isPhone();
+      this.ch = ch;
       document.title = `${w.name} · Hamster Nest`;
-      this.root.style.setProperty("--ri", ink);
-      this.root.innerHTML = `
-        <div class="pj__head">
-          <a class="back" href="${NestSession.Paths.home("#browse-page")}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Browse</a>
-          <p class="tags"><a class="tag tag--room" href="${NestSession.Paths.browse(w.room)}">${w.room}</a><span class="tag tag--room">${w.genre}</span>${w.platforms.map((p) => `<span class="tag">${p}</span>`).join("")}<span class="rk"><i></i>${t.name}</span></p>
-          <div class="title-row"><h1 class="title">${w.name}</h1><button type="button" class="fav" aria-pressed="false" aria-label="Save ${w.name} to your favourites"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 16.5s-6.5-3.9-6.5-8.6A3.6 3.6 0 0110 5.6a3.6 3.6 0 016.5 2.3c0 4.7-6.5 8.6-6.5 8.6z" fill="var(--fill,none)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button></div>
-          <p class="blurb">${w.blurb}</p>
-        </div>
-        <div class="pj__grid">
-          <div class="pj__main">
-            <div class="gal" role="region" aria-roledescription="carousel" aria-label="Clip and pictures of ${w.name}">
-              <div class="gal__track" tabindex="0">${this.slides(w).map((s, i) => `<figure class="gal__slide${s.clip ? " media" : ""}" data-i="${i}" aria-label="${s.label}"><div class="cv"></div>${s.clip ? `<button type="button" class="play" aria-label="Play the clip of ${w.name}" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5v14l11-7z" fill="currentColor"/><path class="i-pause" d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button><span class="gal__kind">Clip</span>` : ""}</figure>`).join("")}</div>
-              <button type="button" class="gal__nav gal__nav--prev" aria-label="Previous"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              <button type="button" class="gal__nav gal__nav--next" aria-label="Next"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              <span class="gal__count" aria-live="polite"></span>
-            </div>
-            <div class="thumbs">${this.slides(w).map((s, i) => `<button type="button" class="thumb" data-i="${i}" aria-label="Show ${s.label}"><span class="cv"></span>${s.clip ? '<i aria-hidden="true">▶</i>' : ""}</button>`).join("")}</div>
-            <section class="about" aria-labelledby="about-h"><h2 id="about-h">About this project</h2>${d.description().map((p, i) => `<p${i ? "" : ' class="about__lead"'}>${p}</p>`).join("")}</section>
-            <section class="log" aria-labelledby="log-h"><h2 id="log-h">Updates <span class="log__n">${updates.length}</span></h2><ol class="log__list" tabindex="0" aria-label="Updates, newest first">${updates.map(([when, what, more], i) => `<li${i ? "" : ' class="is-new"'}><span class="log__when">${i ? "" : '<span class="log__new">New</span>'}<time>${when}</time></span><div><b>${what}</b><p>${more}</p>${this.updateFig(w, i, what)}</div></li>`).join("")}</ol></section>
-          </div>
-          <aside class="pj__side">
-            ${links.length ? `<section class="box" aria-labelledby="ln-h"><h3 id="ln-h">Links</h3><ul class="lk">${links.map(([name, url]) => `<li><a href="${url}" target="_blank" rel="noopener"><span class="ci">${svg("link")}</span><span><b>${name}</b><i>${url.replace(/^https?:\/\//, "")}</i></span></a></li>`).join("")}</ul></section>` : ""}
-            <section class="box"><h3>Team</h3><ul class="team">${team.map(([n, r]) => `<li><span class="av" style="--h:${hue(n)}" aria-hidden="true">${n[0]}</span><span><a class="team__n" href="profile.html#${n.toLowerCase()}"><b>${n}</b></a><i>${r}</i></span></li>`).join("")}</ul></section>
-            <section class="box contact" aria-labelledby="ct-h"><h3 id="ct-h">Contact</h3><p class="contact__who">Reach ${w.maker}, who leads the team.</p>
-              <ul>${d.contact().map(([k, label, value, href]) => `<li><span class="ci">${svg(k)}</span><span class="cv2"><i>${label}</i>${href ? `<a href="${href}">${value.replace("@", "@<wbr>")}</a>` : `<b>${value}</b>`}</span><button type="button" class="cp" data-v="${value}" aria-label="Copy ${label}">${svg("copy")}</button></li>`).join("")}</ul>
-              <p class="contact__note" role="status" aria-live="polite"></p></section>
-
-            <section class="box"><h3>Awards</h3><ul class="aw">${d.awards().map(([a, s, rank]) => `<li><span class="medal${rank ? " medal--rank" : ""}" aria-hidden="true">${rank ? "◆" : "★"}</span><span><b>${a}</b><i>${s}</i></span></li>`).join("")}</ul></section>
-          </aside>
-        </div>
-        ${this.more(w)}`;
-      this.favButton(w);
+      this.root.innerHTML = `<div class="phead"><div><a class="backl" href="${bh}">${ic("back")}${esc(bl)}</a><span class="pmeta">${esc(w.genre)} / ${w.platforms.map(esc).join(" / ")}</span><div class="wt"><h1>${esc(w.name)}</h1><span class="tag">${esc(w.room)}</span></div><p class="pitch">${esc(w.blurb)}</p></div>
+        <div class="owner sumbox"><dl><div><dt>Rank</dt><dd><i style="background:${RC[w.tier]}"></i>${t.name} · #${place} of ${works.length}</dd></div><div><dt>Last update</dt><dd>${esc(w.update.when[0].toUpperCase() + w.update.when.slice(1))}</dd></div><div><dt>Made by</dt><dd>${team.map(([n]) => esc(n)).join(", ")}</dd></div><div><dt>Runs on</dt><dd>${w.platforms.map(esc).join(", ")}</dd></div></dl><span class="btns"><button type="button" class="btn btn--acc" data-act="follow" aria-pressed="${on}">${ic("follow")}<span>${on ? "Following" : "Follow"}</span></button>${ch.length ? `<button type="button" class="btn btn--line" data-act="contact" aria-expanded="false" aria-haspopup="dialog">${ic("mail")}Contact</button>` : ""}</span></div></div>
+        <div class="watch"><div>
+          <div class="galw"><div class="gal" role="region" aria-label="Clip and pictures of ${esc(w.name)}" tabindex="0"><span class="gal__art"></span><button type="button" class="gal__play" aria-pressed="false" aria-label="Play the clip of ${esc(w.name)}" style="border:0;cursor:pointer">${ic("play")}</button><button type="button" class="gal__nav" data-go="-1" style="left:12px;border:0;cursor:pointer" aria-label="Previous picture">${ic("back")}</button><button type="button" class="gal__nav" data-go="1" style="right:12px;border:0;cursor:pointer" aria-label="Next picture">${ic("next")}</button><span class="gal__count"></span></div>
+            <div class="thumbs" role="group" aria-label="Pictures">${slides().map((s, i) => `<button type="button" data-i="${i}" aria-label="${i ? `Picture ${i + 1} of 5` : "Clip, 1 of 5"}"><span>${window.Art.draw({ ...w, scribble: "" }, s.frame)}</span></button>`).join("")}</div></div>
+          <div class="desc"><h2 class="dh">About this project</h2>${d.description().map((p, i) => `<p${i >= (ph ? 1 : 2) ? " hidden" : ""}>${esc(p)}</p>`).join("")}${d.description().length > (ph ? 1 : 2) ? '<button type="button" class="more2" data-act="desc" aria-expanded="false" style="border:0;background:none;cursor:pointer;color:inherit">Show more</button>' : ""}</div>
+          <section class="ups" id="updates" aria-labelledby="ups-h"><h2 id="ups-h">Updates <span class="cnt">${ups.length}</span></h2><div class="upsbox"${ph ? "" : ' tabindex="0" role="region" aria-label="Updates, newest first"'}><ol>${ups.map(([when, what, note], i) => `<li${ph && i > 2 ? " hidden" : ""}><span>${i ? "" : '<span class="new">new</span>'}<time><span class="dd">${dday(when)}</span>${esc(when)}</time></span><div><b>${esc(what)}</b><p>${esc(note)}</p>${FIG.includes(i) ? `<figure><img src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(window.Art.draw({ ...w, scribble: "" }, i + 1))}" alt="${esc(what)}, image" width="168" height="95"${i ? ' loading="lazy"' : ""} decoding="async" style="display:block;width:100%;height:100%;object-fit:cover"></figure>` : ""}</div></li>`).join("")}</ol></div>${ph && ups.length > 3 ? `<button type="button" class="btn btn--line showall" data-act="allups">Show all ${ups.length} updates</button>` : ""}</section>
+        </div><aside>
+          ${links.length ? `<section class="box"><h3>Links</h3>${links.map(([k, u]) => `<a class="lk" href="${esc(u)}" target="_blank" rel="noopener"><span class="li">${ic("link")}</span><span><b>${esc(k)}</b><span>${wb(u.replace(/^https?:\/\//, ""))}</span></span></a>`).join("")}</section>` : ""}
+          <section class="box"><h3>Team</h3>${team.map(([n, r]) => `<div class="tm"><a class="tmn" href="${Paths.page(`profile.html#${n.toLowerCase()}`)}">${esc(n)}</a><span>${esc(r)}</span></div>`).join("")}</section>
+          ${ch.length ? `<section class="box cbox"><h3>Contact</h3><div class="chan">${ch.map(([k, label]) => `<span>${ic(k === "email" ? "mail" : "link")}${esc(label)}</span>`).join("")}</div><button type="button" class="btn btn--line" data-act="contact" aria-haspopup="dialog" aria-expanded="false">Show contact</button></section>` : ""}
+          <section class="box"><h3>Awards</h3>${d.awards().map(([a, s]) => `<div class="tm" style="display:block"><b>${esc(a)}</b><br><span>${esc(s)}</span></div>`).join("")}</section>
+          <div class="side-list"><h3>More projects</h3>${more.map((x, i) => `<a class="sl" href="${Paths.page(`project.html#${x.id}`)}"><span class="p" aria-hidden="true">${window.Art.draw(x, i % 7)}</span><span><span class="slr"><b>${esc(x.name)}</b><span class="tag">${esc(x.room)}</span></span><span>${esc(x.maker)}</span><span>Updated ${esc(x.update.when)}</span></span></a>`).join("")}</div>
+        </aside></div>`;
       this.gallery(w);
-      this.scroller($(".log__list", this.root));
-      this.fillMore(w);
-      this.root.querySelectorAll(".cp").forEach((b) => b.addEventListener("click", () => this.copy(b)));
-      if (!calm) this.enter();
+      thai(this.root);
     }
-    // heart: saves the work to your favourites (the same list the profile page reads)
-    favButton(w) {
-      const b = $(".fav", this.root), key = "nest-favs";
-      const read = () => { try { return JSON.parse(localStorage.getItem(key)) || null; } catch (e) { return null; } };
-      const seedList = () => [["wheelsense", "2026-11-23"], ["nestboard", "2026-11-23"], ["moonwheel", "2026-11-20"], ["rain-jar", "2026-11-20"], ["sunflower-bank", "2026-11-16"], ["book-loop", "2026-11-16"], ["lantern-run", "2026-11-10"]].map(([id, saved]) => ({ id, saved }));
-      const paint = (on) => { b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", `${on ? "Remove" : "Save"} ${w.name} ${on ? "from" : "to"} your favourites`); b.title = on ? "In your favourites" : "Save to favourites"; };
-      paint((read() || seedList()).some((f) => f.id === w.id));
-      b.addEventListener("click", () => {
-        const l = read() || seedList(), on = !l.some((f) => f.id === w.id);
-        try { localStorage.setItem(key, JSON.stringify(on ? [{ id: w.id, saved: new Date().toISOString().slice(0, 10) }, ...l] : l.filter((f) => f.id !== w.id))); } catch (e) {}
-        paint(on); if (!calm) b.animate([{ transform: "scale(1)" }, { transform: "scale(1.25)" }, { transform: "scale(1)" }], { duration: 320, easing: "cubic-bezier(.34,1.5,.64,1)" });
-      });
-    }
-    // the clip first, then pictures (frames of the work's art stand in for screenshots)
-    slides(w) { return [{ clip: true, label: "Clip", frame: 1 }, ...[2, 3, 4, 5].map((f, i) => ({ clip: false, label: `Picture ${i + 1}`, frame: f }))]; }
     gallery(w) {
-      const root = $(".gal", this.root), track = $(".gal__track", root), slides = [...track.children], thumbs = [...this.root.querySelectorAll(".thumb")];
-      const list = this.slides(w), bare = { ...w, scribble: "" };
-      slides.forEach((s, i) => Art.fill($(".cv", s), bare, list[i].frame));
-      thumbs.forEach((t, i) => Art.fill($(".cv", t), bare, list[i].frame));
-      // the clip
-      const clip = slides[0], play = $(".play", clip);
-      this.preview = window.Previews.for(clip, bare); clip.insertBefore(clip.lastElementChild, play);
-      const setPlay = (on) => { play.setAttribute("aria-pressed", on); play.setAttribute("aria-label", `${on ? "Pause" : "Play"} the clip of ${w.name}`); clip.classList.toggle("is-playing", on); on ? this.preview.start() : this.preview.stop(); };
-      play.addEventListener("click", () => setPlay(play.getAttribute("aria-pressed") !== "true"));
-      // moving between slides: scroll-snap does the swipe; buttons, thumbnails and arrow keys scroll to a slide
-      let at = 0;
-      const go = (i) => { i = Math.max(0, Math.min(slides.length - 1, i)); track.scrollTo({ left: slides[i].offsetLeft, behavior: calm ? "auto" : "smooth" }); };
-      const mark = () => {
-        // the slide whose left edge is nearest (a phone's track is not exactly one slide wide)
-        const i = slides.reduce((best, s, k) => (Math.abs(s.offsetLeft - track.scrollLeft) < Math.abs(slides[best].offsetLeft - track.scrollLeft) ? k : best), 0);
-        if (i === at && root.dataset.ready) return;
-        at = i; root.dataset.ready = 1;
-        thumbs.forEach((t, k) => t.setAttribute("aria-current", k === i));
-        $(".gal__count", root).textContent = `${i + 1} / ${slides.length}`;
-        $(".gal__nav--prev", root).disabled = i === 0; $(".gal__nav--next", root).disabled = i === slides.length - 1;
-        if (i !== 0 && play.getAttribute("aria-pressed") === "true") setPlay(false);   // leaving the clip pauses it
-        thumbs[i].scrollIntoView({ block: "nearest", inline: "nearest", behavior: calm ? "auto" : "smooth" });
+      const gal = $(".gal", this.root), art = $(".gal__art", gal), play = $(".gal__play", gal), thumbs = $$(".thumbs button", this.root), list = slides(), bare = { ...w, scribble: "" };
+      const setPlay = (on) => {
+        play.setAttribute("aria-pressed", String(on)); play.setAttribute("aria-label", `${on ? "Pause" : "Play"} the clip of ${w.name}`); play.innerHTML = ic(on ? "pause" : "play");
+        if (this.preview) on ? this.preview.start() : this.preview.stop();
       };
-      track.addEventListener("scroll", () => requestAnimationFrame(mark), { passive: true });
-      $(".gal__nav--prev", root).addEventListener("click", () => go(at - 1));
-      $(".gal__nav--next", root).addEventListener("click", () => go(at + 1));
-      thumbs.forEach((t, i) => t.addEventListener("click", () => go(i)));
-      track.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); go(at + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(at - 1); } });
-      mark();
-    }
-    // a scrolling list shows a fade at whichever end still has more
-    scroller(el) {
-      const set = () => {
-        el.classList.toggle("has-more-below", el.scrollTop + el.clientHeight < el.scrollHeight - 2);
-        el.classList.toggle("has-more-above", el.scrollTop > 2);
+      const go = (i) => {
+        if (this.preview) { this.preview.stop(); this.preview = null; }
+        $$(".gal > :not(.gal__art):not(.gal__play):not(.gal__nav):not(.gal__count)", this.root).forEach((e) => e.remove());
+        this.at = Math.max(0, Math.min(list.length - 1, i));
+        const s = list[this.at];
+        art.innerHTML = window.Art.draw(bare, s.frame);
+        play.hidden = !s.clip;
+        if (s.clip && window.Previews) { this.preview = window.Previews.for(gal, bare); gal.lastElementChild.className = "gal__clip"; gal.append(play, ...$$(".gal__nav, .gal__count", gal)); setPlay(false); }
+        $(".gal__count", gal).textContent = `${this.at + 1} / ${list.length}`;
+        thumbs.forEach((t, k) => (k === this.at ? t.setAttribute("aria-current", "true") : t.removeAttribute("aria-current")));
       };
-      el.addEventListener("scroll", set, { passive: true }); addEventListener("resize", set); set();
+      gal.addEventListener("click", (e) => { const n = e.target.closest("[data-go]"); if (n) go(this.at + +n.dataset.go); if (e.target.closest(".gal__play")) setPlay(play.getAttribute("aria-pressed") !== "true"); });
+      gal.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); go(this.at + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(this.at - 1); } });
+      thumbs.forEach((t, i) => { t.addEventListener("click", () => go(i)); t.addEventListener("focus", () => t.scrollIntoView({ block: "nearest", inline: "nearest" })); });
+      go(0);
     }
-    // works that share this one's room, genre or platforms, most alike first
     similar(w) {
       const score = (x) => (x.room === w.room ? 4 : 0) + (x.genre === w.genre ? 3 : 0) + x.platforms.filter((p) => w.platforms.includes(p)).length;
-      return works.filter((x) => x.id !== w.id).map((x) => [x, score(x)]).filter(([, s]) => s > 0)
-        .sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).slice(0, 10).map(([x]) => x);
+      return works.filter((x) => x.id !== w.id).map((x) => [x, score(x)]).sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).map(([x]) => x);
     }
-    more(w) {
-      return `<section class="like" aria-labelledby="like-h"><div class="like__h"><h2 id="like-h">EXPLORE MORE</h2><span>${w.room.toUpperCase()} · ${w.genre.toUpperCase()}</span></div><div class="grid like__g"></div></section>`;
+    contactRows() { return this.ch.map(([, k, v]) => `<div class="crow"><b>${esc(k)}</b><span>${wb(v)}</span><button type="button" class="cp" data-v="${esc(v)}">${ic("copy")}<span>Copy</span></button></div>`).join(""); }
+    closeContact(focus = true) {
+      const b = $$('[data-act="contact"][aria-expanded="true"]', this.root)[0];
+      $$(".cpop, .sheet, .sheet-scrim").forEach((e) => e.remove());
+      $$('[data-act="contact"]', this.root).forEach((x) => x.setAttribute("aria-expanded", "false"));
+      if (b && focus) b.focus();
     }
-    fillMore(w) {
-      const g = $(".like__g", this.root), { ResultCard, Expander } = window.Tiles;
-      this.similar(w).forEach((x) => g.appendChild(new ResultCard(x).render()));
-      if (this.ex) this.ex.collapse(false);
-      this.ex = new Expander(g);
+    openContact(btn) {
+      const open = btn.getAttribute("aria-expanded") === "true";
+      this.closeContact(false);
+      if (open) { btn.focus(); return; }
+      btn.setAttribute("aria-expanded", "true");
+      if (isPhone()) {
+        document.body.insertAdjacentHTML("beforeend", `<div class="sheet-scrim"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cs-h"><div class="grab"></div><h4 id="cs-h" style="margin:0 0 4px;font:600 16px/1.3 var(--f)">Contact the team</h4>${this.contactRows()}<button type="button" class="btn btn--line" data-act="cclose" style="width:100%;margin-top:12px">Close</button></div>`);
+        $(".sheet-scrim").addEventListener("click", () => this.closeContact());
+      } else {
+        btn.closest(".btns, .cbox").insertAdjacentHTML("beforeend", `<span class="cpop" role="dialog" aria-modal="false" aria-labelledby="cp-h"><h4 id="cp-h">Contact the team</h4><button type="button" class="x" data-act="cclose" aria-label="Close">${ic("x")}</button>${this.contactRows()}</span>`);
+      }
+      const f = $(".cpop .cp, .sheet .cp"); if (f) f.focus();
     }
-    copy(btn) {
-      const note = $(".contact__note", this.root), done = (msg) => { note.textContent = msg; btn.innerHTML = svg("ok"); btn.classList.add("is-done");
-        btn.animate([{ transform: "scale(.8)" }, { transform: "scale(1)" }], { duration: 220, easing: "cubic-bezier(.34,1.5,.64,1)" }).finished.then(() => btn.animate([{ opacity: 1 }, { opacity: 1 }], { duration: 1600 }).finished).then(() => { btn.innerHTML = svg("copy"); btn.classList.remove("is-done"); }); };
-      navigator.clipboard.writeText(btn.dataset.v).then(() => done(`Copied ${btn.dataset.v}`), () => done(`Select and copy: ${btn.dataset.v}`));
+    wire() {
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-act], .cp");
+        if (!b) { if ($(".cpop") && !e.target.closest(".cpop")) this.closeContact(false); return; }
+        if (b.matches(".cp")) {
+          const done = () => { $("span", b).textContent = "Copied"; setTimeout(() => { if (b.isConnected) $("span", b).textContent = "Copy"; }, 1600); };
+          (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.v) : Promise.reject()).then(done, done);
+          return;
+        }
+        const a = b.dataset.act;
+        if (a === "follow") { const on = Follows.toggle(this.w.id); b.setAttribute("aria-pressed", String(on)); $("span", b).textContent = on ? "Following" : "Follow"; }
+        else if (a === "contact") this.openContact(b);
+        else if (a === "cclose") this.closeContact();
+        else if (a === "desc") { const on = b.getAttribute("aria-expanded") !== "true"; $$(".desc p", this.root).forEach((p, i) => { if (i >= (isPhone() ? 1 : 2)) p.hidden = !on; }); b.setAttribute("aria-expanded", String(on)); b.textContent = on ? "Show less" : "Show more"; }
+        else if (a === "allups") { $$(".ups li", this.root).forEach((li) => (li.hidden = false)); b.remove(); }
+      });
+      addEventListener("keydown", (e) => { if (e.key === "Escape" && $(".cpop, .sheet")) this.closeContact(); });
     }
-    enter() {
-      const E = "cubic-bezier(.2,.8,.2,1)";
-      const seq = [".back", ".tags", ".title", ".blurb", ".gal", ".thumbs", ".fav", ".pj__side .box:nth-child(1)", ".pj__side .box:nth-child(2)", ".pj__side .box:nth-child(3)", ".pj__side .box:nth-child(4)", ".about", ".log"];
-      seq.forEach((s, i) => { const el = $(s, this.root); el && el.animate([{ opacity: 0, transform: "translateY(14px)", filter: "blur(4px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], { duration: 520, delay: i * 55, easing: E, fill: "backwards" }); });
-    }
-    stop() { if (this.preview) this.preview.stop(); }
+    stop() { if (this.preview) this.preview.stop(); this.closeContact(false); }
   }
 
-  const page = new ProjectPage($("#main"));
+  const page = new ProjectPage($("#proj"));
+  page.wire();
   const show = () => {
     const [id, part] = decodeURIComponent(location.hash.slice(1)).split("&"), w = works.find((x) => x.id === id) || works[0];
     page.stop(); page.render(w);
-    const log = part === "updates" && $(".log", page.root);
-    scrollTo({ top: log ? log.getBoundingClientRect().top + scrollY - $(".gbar").offsetHeight - 16 : 0, behavior: calm || log ? "auto" : "smooth" });
+    const ups = part === "updates" && $("#updates");
+    scrollTo({ top: ups ? ups.getBoundingClientRect().top + scrollY - 72 : 0, behavior: "auto" });
   };
   addEventListener("hashchange", show); show();
-
-  // the bar turns white once you scroll past the water
-  const bar = $(".gbar"), onScroll = () => bar.classList.toggle("gbar--framed", scrollY > 260);
-  addEventListener("scroll", onScroll, { passive: true }); onScroll();
 })();
