@@ -43,7 +43,7 @@
   document.getElementById("feed").addEventListener("click", (e) => { if (e.target.closest("a.lc")) { try { sessionStorage.setItem("nest-from", "Dev logs"); } catch (x) {} } });
   NestFeed.mount(document.getElementById("feed"), {
     title: () => t().title, h: "h1", from: "Dev logs", items: posts, of: (p) => p.w,
-    text: (p) => `${p.title} ${p.w.name} ${p.w.maker} ${p.excerpt}`, noun: ["log", "logs"], listClass: "mas",
+    text: (p) => `${p.title} ${p.w.name} ${p.w.maker} ${p.excerpt}`, noun: ["log", "logs"], listClass: "mas", noRank: true,
     per: () => (innerWidth < 900 ? 10 : 24), render,
   });
 })();

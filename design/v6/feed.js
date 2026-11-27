@@ -119,7 +119,7 @@ window.NestFeed = (function () {
       const ph = isPhone();
       chipsEl.innerHTML = `<button type="button" class="chip ${ph ? "chip--fbtn" : "chip--filter"}" data-c="filters" aria-expanded="${panel}" aria-controls="fpanel">${ic("filter")}Filters${state.active ? `<span class="cc">${state.active}</span>` : ""}</button>${ph ? "" : '<span class="chip-sep" aria-hidden="true"></span>'}
         ${["All", ...ROOMS].map((r) => `<button type="button" class="chip" data-room="${r}" aria-pressed="${state.tab === r}">${r === "All" ? (ph ? "All" : "All projects") : r}${ph ? "" : `<span class="cc">${roomCount(r)}</span>`}</button>`).join("")}
-        ${ph ? "" : `<span class="chip-sep rk" aria-hidden="true"></span>${tiers.map((t) => `<button type="button" class="chip rk" data-rank="${t.id}" aria-pressed="${state.ranks.has(t.id)}">${rankIcon(t.id)}${t.name}</button>`).join("")}`}`;
+        ${ph || cfg.noRank ? "" : `<span class="chip-sep rk" aria-hidden="true"></span>${tiers.map((t) => `<button type="button" class="chip rk" data-rank="${t.id}" aria-pressed="${state.ranks.has(t.id)}">${rankIcon(t.id)}${t.name}</button>`).join("")}`}`;
     }
     const cnt = (key, test, ignore) => state.count(test, ignore);
     const top = (arr) => { const m = {}; arr.forEach((k) => (m[k] = (m[k] || 0) + 1)); return Object.entries(m).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k]) => k); };
@@ -127,7 +127,7 @@ window.NestFeed = (function () {
       const g = (h, set, rows) => `<div><h3>${h}</h3>${rows.map(([v, label, n]) => `<label class="ck"><input type="checkbox" data-set="${set}" value="${esc(v)}"${state[set].has(v) ? " checked" : ""}><span>${esc(label)}</span><small>${n}</small></label>`).join("")}</div>`;
       const total = items.filter((x) => state.matches(x)).length;
       return `<section class="fpanel" id="fpanel" role="region" aria-label="Filters"><div class="fp__cols">
-        ${g("Rank", "ranks", tiers.map((t) => [t.id, t.name, cnt("ranks", (w) => w.tier === t.id, "ranks")]))}
+        ${cfg.noRank ? "" : g("Rank", "ranks", tiers.map((t) => [t.id, t.name, cnt("ranks", (w) => w.tier === t.id, "ranks")]))}
         ${g("Room", "rooms", ROOMS.map((r) => [r, r, cnt("rooms", (w) => w.room === r, "rooms")]))}
         ${g("Genre", "genres", top(works.map((w) => w.genre)).map((x) => [x, x, cnt("genres", (w) => w.genre === x, "genres")]))}
         ${g("Runs on", "plats", top(works.flatMap((w) => w.platforms)).map((x) => [x, x, cnt("plats", (w) => w.platforms.includes(x), "plats")]))}
