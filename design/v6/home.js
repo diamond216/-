@@ -33,6 +33,7 @@
       setTimeout(() => g.remove(), 600);
     }
     paint();
+    hero.dispatchEvent(new Event("hero:slide"));
   }
   $(".hero__dots", hero).innerHTML = SLIDES.map((s, i) => `<button type="button" aria-label="Show ${esc(s.title)}"><i></i></button>`).join("");
   $(".hero__dots", hero).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cur = [...b.parentElement.children].indexOf(b); swap(); });
@@ -45,14 +46,36 @@
     const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
   }, { passive: true });
+  const AUTO = 6000;
+  const autoOk = () => motionOn() && !rm.matches;
+  let stopped = !autoOk(), hovered = false, focused = false, timer = 0;
+  const tick = () => {
+    clearTimeout(timer);
+    if (stopped || hovered || focused || document.hidden || !autoOk()) return;
+    timer = setTimeout(() => go(1), AUTO);
+  };
+  hero.addEventListener("hero:slide", tick);
+  hero.addEventListener("mouseenter", () => { hovered = true; tick(); });
+  hero.addEventListener("mouseleave", () => { hovered = false; tick(); });
+  hero.addEventListener("focusin", (e) => { if (e.target.matches(":focus-visible")) { focused = true; tick(); } });
+  hero.addEventListener("focusout", (e) => { if (!hero.contains(e.relatedTarget)) { focused = false; tick(); } });
+  document.addEventListener("visibilitychange", tick);
   const pauseBtn = $(".hero__pause", hero);
-  const setPause = () => { const playing = video && !video.paused; pauseBtn.innerHTML = ic(playing ? "pause" : "play"); pauseBtn.setAttribute("aria-label", playing ? "Pause background video" : "Play background video"); };
-  pauseBtn.addEventListener("click", () => { if (!video) return; if (video.paused) video.play().catch(() => {}); else video.pause(); setPause(); });
+  const setPause = () => {
+    const playing = autoOk() ? !stopped : video && !video.paused;
+    pauseBtn.innerHTML = ic(playing ? "pause" : "play");
+    pauseBtn.setAttribute("aria-label", autoOk() ? (playing ? "Pause the slides and video" : "Play the slides and video") : (playing ? "Pause background video" : "Play background video"));
+  };
+  pauseBtn.addEventListener("click", () => {
+    if (autoOk()) { stopped = !stopped; if (video) stopped ? video.pause() : video.play().catch(() => {}); tick(); }
+    else if (video) video.paused ? video.play().catch(() => {}) : video.pause();
+    setPause();
+  });
   if (video) {
     video.addEventListener("play", setPause); video.addEventListener("pause", setPause);
     if (motionOn()) video.play().catch(() => {});
-    addEventListener("nest:motion", (e) => { if (!e.detail.on) video.pause(); });
+    addEventListener("nest:motion", (e) => { if (!e.detail.on) { video.pause(); stopped = true; tick(); setPause(); } });
   }
-  paint(); setPause();
+  paint(); setPause(); tick();
   NestFeed.mount(document.getElementById("feed"), { title: "Projects", h: "h2", from: "Home", per: () => (innerWidth < 900 ? 3 : 12), onSubmit: (q) => { if (q) location.href = Paths.page(`browse.html?q=${encodeURIComponent(q)}`); } });
 })();
