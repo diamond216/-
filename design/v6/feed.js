@@ -17,10 +17,13 @@ window.NestFeed = (function () {
     const on = Follows.has(w.id);
     const fol = opts.noFollow ? "" : `<button type="button" class="pc__follow" data-follow="${w.id}" aria-pressed="${on}" aria-label="Follow ${esc(name)}">${ic("follow")}<span class="fl">${on ? "Following" : "Follow"}</span></button>`;
     const href = opts.href || Paths.page(`project.html#${w.id}`);
-    return `<div class="pc" data-id="${w.id}"><a class="pc__link" href="${href}"><span class="pc__pic" aria-hidden="true">${window.Art.draw(w, (opts.frame ?? i) % 7)}${flag}</span>
+    const did = `pcd-${w.id}-${++seq}`;
+    const vtag = w.video ? `<span class="pc__vtag">${ic("play")}Video</span>` : "";
+    return `<div class="pc" data-id="${w.id}"><span class="pc__hl" aria-hidden="true"><span class="sp"></span><span class="pc__more"></span></span><a class="pc__link" href="${href}" aria-describedby="${did}"><span class="pc__pic" aria-hidden="true">${window.Art.draw(w, (opts.frame ?? i) % 7)}${flag}${vtag}</span>
       <span class="pc__row"><h3 class="pc__name">${esc(name)}<span class="vh">, ${rank}</span></h3><span class="tag">${esc(opts.room || w.room)}</span></span>
-      <span class="pc__by">${esc(opts.maker || w.maker)}</span><span class="pc__upd">${esc(opts.upd || `Updated ${w.update.when}`)}</span></a>${fol}</div>`;
+      <span class="pc__by">${esc(opts.maker || w.maker)}</span><span class="pc__upd">${esc(opts.upd || `Updated ${w.update.when}`)}</span></a>${fol}<span class="vh" id="${did}">${esc(w.blurb)}</span></div>`;
   };
+  let seq = 0;
 
   function wireCards(grid, from) {
     grid.addEventListener("click", (e) => {
@@ -33,44 +36,71 @@ window.NestFeed = (function () {
       }
       if (e.target.closest(".pc__link") && from) { try { sessionStorage.setItem("nest-from", from); } catch (x) {} }
     });
-    let timer = 0, cur = null;
-    const hide = () => { clearTimeout(timer); if (cur) { cur.classList.remove("is-hover", "pv-l"); const p = $(".pv", cur); if (p) p.remove(); } cur = null; };
-    const show = (c) => {
-      const w = works.find((x) => x.id === c.dataset.id); if (!w) return;
-      const pic = $(".pc__pic", c);
-      document.body.style.setProperty("--pich", pic.offsetHeight + "px"); document.body.style.setProperty("--colw", pic.offsetWidth + "px");
-      const r = c.getBoundingClientRect(), room = r.right + 16 + r.width <= grid.getBoundingClientRect().right + 2;
-      c.classList.add("is-hover"); c.classList.toggle("pv-l", !room);
-      c.insertAdjacentHTML("beforeend", `<span class="pv" aria-hidden="true"><h4>${esc(w.name)}</h4><p>${esc(w.blurb)}</p><span class="upd" style="display:block"><b>Updated ${esc(w.update.when)}</b>${esc(w.update.what)}</span></span>`);
-      thai(c);
-    };
-    grid.addEventListener("pointerover", (e) => {
-      if (e.pointerType !== "mouse" || !fine.matches) return;
-      const c = e.target.closest(".pc"); if (!c || c === cur) return;
-      hide(); cur = c; timer = setTimeout(() => { if (cur === c) show(c); }, 500);
-    });
-    grid.addEventListener("pointerout", (e) => { const c = e.target.closest(".pc"); if (c && c === cur && !c.contains(e.relatedTarget)) hide(); });
-    addEventListener("scroll", hide, { passive: true });
-    addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
-    let vid = null, vc = null;
     const still = () => document.documentElement.classList.contains("calm") || matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const stopVid = () => { if (vid) { vid.pause(); vid.removeAttribute("src"); vid.load(); vid.remove(); } vid = vc = null; };
-    const startVid = (c) => {
-      const w = works.find((x) => x.id === c.dataset.id), pic = $(".pc__pic", c);
-      if (!w || !w.video || !pic || still()) return;
-      vc = c; vid = document.createElement("video");
-      vid.className = "pc__vid"; vid.muted = true; vid.loop = true; vid.playsInline = true; vid.preload = "auto"; vid.setAttribute("aria-hidden", "true"); vid.src = w.video;
+    const rich = () => fine.matches && innerWidth >= 600;
+    let cur = null, how = "", t1 = 0, t2 = 0, vid = null;
+    const stopVid = () => {
+      clearTimeout(t1);
+      if (vid) { vid.pause(); vid.removeAttribute("src"); vid.load(); vid.remove(); vid = null; }
+      if (cur) { cur.classList.remove("v-play"); const pr = $(".pc__prog", cur); if (pr) pr.remove(); }
+    };
+    const shut = () => {
+      clearTimeout(t2); stopVid();
+      if (!cur) return;
+      cur.classList.remove("s-open", "s-up");
+      $(".pc__more", cur).innerHTML = "";
+    };
+    const hide = () => { shut(); if (cur) cur.classList.remove("s-hl"); cur = null; how = ""; };
+    const startVid = (c, w) => {
+      const pic = $(".pc__pic", c); if (!pic || !w.video || still()) return;
+      vid = document.createElement("video");
+      vid.className = "pc__vid"; vid.muted = true; vid.playsInline = true; vid.preload = "auto";
+      vid.setAttribute("disablepictureinpicture", ""); vid.setAttribute("aria-hidden", "true"); vid.src = w.video;
       pic.firstElementChild.after(vid);
-      vid.play().catch(() => {});
+      const v = vid;
+      v.addEventListener("playing", () => {
+        if (v !== vid) return;
+        v.classList.add("on"); c.classList.add("v-play");
+        if (!$(".pc__prog", pic)) pic.insertAdjacentHTML("beforeend", '<span class="pc__prog"><i></i></span>');
+      }, { once: true });
+      v.addEventListener("timeupdate", () => { const i = $(".pc__prog i", pic); if (i && v.duration) i.style.width = `${(v.currentTime / v.duration) * 100}%`; });
+      v.play().catch(() => {});
+    };
+    const open = (c, w) => {
+      const more = $(".pc__more", c);
+      more.innerHTML = `<p class="bl">${esc(w.blurb)}</p><p class="fx">${esc(w.genre)} · Runs on ${esc(w.platforms.join(", "))}</p><p class="lu"><i></i>Latest update</p><p class="ut">${esc(w.update.what)}</p>`;
+      thai(more);
+      c.style.setProperty("--ch", `${c.offsetHeight + 16}px`);
+      c.classList.add("s-open");
+      const r = c.getBoundingClientRect();
+      c.classList.toggle("s-up", r.bottom + more.offsetHeight + 8 > innerHeight);
+    };
+    const start = (c, mode) => {
+      if (c === cur) return;
+      hide();
+      const w = works.find((x) => x.id === c.dataset.id); if (!w) return;
+      cur = c; how = mode;
+      if (mode === "mouse") c.classList.add("s-hl");
+      t1 = setTimeout(() => { if (cur === c) startVid(c, w); }, 300);
+      t2 = setTimeout(() => { if (cur === c) open(c, w); }, 500);
     };
     grid.addEventListener("pointerover", (e) => {
-      if (e.pointerType !== "mouse" || !fine.matches) return;
-      const c = e.target.closest(".pc"); if (!c || c === vc) return;
-      stopVid(); startVid(c);
+      if (e.pointerType !== "mouse" || !rich()) return;
+      const c = e.target.closest(".pc"); if (c && grid.contains(c) && !c.classList.contains("pc--sk")) start(c, "mouse");
     });
-    grid.addEventListener("pointerout", (e) => { const c = e.target.closest(".pc"); if (c && c === vc && !c.contains(e.relatedTarget)) stopVid(); });
+    grid.addEventListener("pointerout", (e) => { const c = e.target.closest(".pc"); if (c && c === cur && how === "mouse" && !c.contains(e.relatedTarget)) hide(); });
+    grid.addEventListener("focusin", (e) => {
+      const l = e.target.closest(".pc__link");
+      if (!l || !rich() || !l.matches(":focus-visible")) { if (cur && !cur.contains(e.target)) hide(); return; }
+      start(l.closest(".pc"), "key");
+    });
+    grid.addEventListener("focusout", (e) => { if (cur && how === "key" && !cur.contains(e.relatedTarget)) hide(); });
+    grid.addEventListener("click", (e) => { const m = e.target.closest(".pc__more"); if (m) { const l = $(".pc__link", m.closest(".pc")); if (l) l.click(); } });
+    addEventListener("scroll", () => { if (how === "mouse") hide(); }, { passive: true });
+    addEventListener("resize", hide);
+    addEventListener("keydown", (e) => { if (e.key === "Escape" && cur) { shut(); } });
     addEventListener("nest:motion", (e) => { if (!e.detail.on) stopVid(); });
-    return { hide: () => { hide(); stopVid(); } };
+    return { hide };
   }
 
   function mount(host, cfg) {
