@@ -22,6 +22,15 @@
   }
   $(".hero__dots", hero).innerHTML = SLIDES.map((s, i) => `<button type="button" aria-label="Show ${esc(s.title)}"><i></i></button>`).join("");
   $(".hero__dots", hero).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cur = [...b.parentElement.children].indexOf(b); paint(); });
+  const go = (d) => { cur = (cur + d + SLIDES.length) % SLIDES.length; paint(); };
+  hero.querySelectorAll(".hero__side").forEach((b) => { b.innerHTML = ic(+b.dataset.go < 0 ? "back" : "next"); b.addEventListener("click", () => go(+b.dataset.go)); });
+  let sx = null, sy = 0;
+  hero.addEventListener("touchstart", (e) => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+  hero.addEventListener("touchend", (e) => {
+    if (sx === null) return;
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
   const pauseBtn = $(".hero__pause", hero);
   const setPause = () => { const playing = video && !video.paused; pauseBtn.innerHTML = ic(playing ? "pause" : "play"); pauseBtn.setAttribute("aria-label", playing ? "Pause background video" : "Play background video"); };
   pauseBtn.addEventListener("click", () => { if (!video) return; if (video.paused) video.play().catch(() => {}); else video.pause(); setPause(); });
