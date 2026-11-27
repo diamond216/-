@@ -491,3 +491,6 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .gd__box{color:var(--t1)}
 .gd__k{background:var(--raised)!important;color:var(--t2)!important;border-radius:6px!important}
 .pc__follow{justify-content:center}.pc__follow .fl{display:block;margin:0;line-height:1}
+.tb .mark{display:flex;width:auto;gap:8px;padding:0 8px 0 4px;border-radius:8px}
+.mark__w{font:600 17px/1 var(--disp);letter-spacing:-.01em;color:var(--t1);white-space:nowrap}
+@media (max-width:599px){.mark__w{display:none}.tb .mark{padding:0;width:40px;justify-content:center}}
