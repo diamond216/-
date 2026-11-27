@@ -126,7 +126,7 @@ window.NestShell = (function () {
     const rooms = ["Game", "IoT", "Web", "Idea"];
     side.innerHTML = `
       <div class="drawer-head"><button type="button" class="ibtn" data-act="menu-close" aria-label="Close menu">${ic("menu")}</button><span class="mark">${MARK}</span></div>
-      ${signed ? `<div class="dacct"><div class="who"><a href="${Paths.page(`profile.html#${u.handle}`)}">${avatar(40)}<span><b>${esc(u.name)}</b><small>View your profile</small></span></a><button type="button" class="btn btn--line" data-act="logout">Log out</button></div><a class="btn btn--line post" href="${Paths.page("post.html")}">${ic("plus")}Build</a><hr></div>` : ""}
+      ${signed ? `<div class="dacct"><div class="who"><a href="${Paths.page(`profile.html#${u.handle}`)}">${avatar(40)}<span><b>${esc(Me.get().name || u.name)}</b><small>View your profile</small></span></a><button type="button" class="btn btn--line" data-act="logout">Log out</button></div><a class="btn btn--line post" href="${Paths.page("post.html")}">${ic("plus")}Build</a><hr></div>` : ""}
       ${si("home", "Home", Paths.home())}${si("browse", "Browse", Paths.page("browse.html"))}${si("logs", "Dev logs", Paths.page("devlogs.html"))}${si("about", "About", Paths.home("#about"))}
       <div class="full-only"><hr><h4>Following</h4>
         ${fol.length ? fol.slice(0, 5).map((w) => `<a class="si" href="${Paths.page(`project.html#${w.id}`)}"><span class="thumb" aria-hidden="true">${window.Art ? window.Art.draw(w) : ""}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(w.name)}</span>${Follows.isNew(w) ? '<small class="nw"><span class="vh">, </span>new<span class="vh"> update</span></small>' : ""}</a>`).join("") : `<p class="side__foot" style="margin-top:0">Follow a project to see it here</p>`}
@@ -282,6 +282,7 @@ window.NestShell = (function () {
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("nest:session", () => { render(); });
     addEventListener("nest:follows", () => sideMenu());
+    addEventListener("nest:me", () => { $$(".acct-menu").forEach((m) => m.remove()); render(); });
     addEventListener("storage", (e) => { if (e.key === "nest-theme" && e.newValue) theme.set(e.newValue === "dark"); });
   }
 
