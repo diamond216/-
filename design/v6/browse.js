@@ -12,18 +12,18 @@
   class BrowseState extends EventTarget {
     constructor(o = {}) {
       super(); this.items = o.items || works; this.of = o.of || ((w) => w); this.text = o.text || ((w) => `${w.name} ${w.blurb} ${w.maker} ${w.genre} ${w.room}`);
-      this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.reveal = false; }
+      this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.plats = new Set(); this.reveal = false; }
     set(fn) { fn(this); this.dispatchEvent(new Event("change")); }
     setTab(tab) { this.set((s) => { s.tab = tab; s.rooms.clear(); s.genres.clear(); }); }
     toggle(setName, v) { this.set((s) => { s.reveal = false; const set = s[setName]; set.has(v) ? set.delete(v) : set.add(v); if (setName === "rooms") s.dropOrphanGenres(); }); }
     // the rank menu (All ranks button) is the only thing that plays the rank reveal (owner, 26 Nov 2026);
     // ticking ranks in the filter changes the results without it
     onlyRank(id, reveal = false) { this.set((s) => { s.ranks.clear(); if (id) s.ranks.add(id); s.reveal = reveal && !!id; }); }
-    clear() { this.set((s) => { s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }); }
+    clear() { this.set((s) => { s.ranks.clear(); s.rooms.clear(); s.genres.clear(); s.plats.clear(); }); }
     // the rooms whose genres can be picked right now
     get genreRooms() { return this.tab === "All" ? ROOM_NAMES.filter((r) => this.rooms.has(r)) : [this.tab]; }
     dropOrphanGenres() { const ok = new Set(this.genreRooms.flatMap((r) => rooms[r])); [...this.genres].forEach((g) => !ok.has(g) && this.genres.delete(g)); }
-    get active() { return this.ranks.size + this.rooms.size + this.genres.size; }
+    get active() { return this.ranks.size + this.rooms.size + this.genres.size + this.plats.size; }
     matches(x, ignore = "") {
       const q = this.q.trim().toLowerCase(), w = this.of(x);
       if (q && !this.text(x).toLowerCase().includes(q)) return false;
@@ -31,6 +31,7 @@
       if (ignore !== "ranks" && this.ranks.size && !this.ranks.has(w.tier)) return false;
       if (ignore !== "rooms" && this.tab === "All" && this.rooms.size && !this.rooms.has(w.room)) return false;
       if (ignore !== "genres" && this.genres.size && !this.genres.has(w.genre)) return false;
+      if (ignore !== "plats" && this.plats.size && !w.platforms.some((p) => this.plats.has(p))) return false;
       return true;
     }
     count(test, ignore) { return this.items.filter((x) => this.matches(x, ignore) && test(this.of(x))).length; }
@@ -305,8 +306,8 @@
     const pin = () => { stick.style.top = bar.offsetHeight + "px"; document.documentElement.style.setProperty("--bar-h", bar.offsetHeight + "px"); }; pin(); addEventListener("resize", pin);
   }
 
-  window.BrowseKit = { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, stickTop };
-  if (!$(".grid")) return;
+  window.BrowseKit = { BrowseState, SearchBar, RankMenu, RoomTabs, FilterPanel, stickTop, sortWorks: (l, b) => sortWorks(l, b), RANK_INK };
+  if (!$(".grid") || !$(".rooms")) return;
 
   const state = new BrowseState();
   new Chrome(state);
