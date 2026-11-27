@@ -356,6 +356,14 @@ window.NestShell = (function () {
     });
     const press = (el) => { if (!el) return; el.classList.remove("press"); void el.offsetWidth; el.classList.add("press"); clearTimeout(el._pt); el._pt = setTimeout(() => el.classList.remove("press"), 520); };
     const sideBtn = (t) => t && t.closest && t.closest("#side .si, #side .btn, #side .ibtn, #side .lang button, #side .sw");
+    document.addEventListener("click", (e) => {
+      const f = e.target.closest('[data-act="follow"],[data-follow]'); if (!f) return;
+      setTimeout(() => {
+        const on = f.getAttribute("aria-pressed") === "true";
+        f.classList.remove("f-on", "f-off"); void f.offsetWidth; f.classList.add(on ? "f-on" : "f-off");
+        clearTimeout(f._ft); f._ft = setTimeout(() => f.classList.remove("f-on", "f-off"), 600);
+      });
+    });
     document.addEventListener("pointerdown", (e) => press(sideBtn(e.target)));
     document.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") press(sideBtn(e.target)); });
     addEventListener("resize", layout);

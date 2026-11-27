@@ -428,6 +428,15 @@ body.m-drawer .side{display:block;top:0;z-index:60;padding-top:8px;background:va
 }
 .d-scrim{position:fixed;inset:0;z-index:59;background:none}
 html.calm *,html.calm *::before,html.calm *::after{transition:none!important;animation:none!important}
+:is([data-act=follow],.pc__follow)[aria-pressed=true] .ico path{fill:currentColor}
+@media (prefers-reduced-motion:no-preference){
+  html:not(.calm) .f-on .ico{animation:f-pop .42s cubic-bezier(.3,1.5,.5,1)}
+  html:not(.calm) .f-on{animation:f-ring .5s var(--ease)}
+  html:not(.calm) .f-off .ico{animation:f-soft .24s var(--ease)}
+}
+@keyframes f-pop{0%{transform:scale(1)}35%{transform:scale(1.4) rotate(-8deg)}70%{transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes f-ring{from{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 60%,transparent)}to{box-shadow:0 0 0 8px color-mix(in srgb,var(--acc) 0%,transparent)}}
+@keyframes f-soft{50%{transform:scale(.86)}}
 .acct-wrap{position:relative}
 .acct[aria-expanded=true],.acct-ph[aria-expanded=true]{background:var(--raised)}
 .acct-menu{position:fixed;right:16px;top:calc(var(--top) - 4px);z-index:80;width:264px;padding:6px;border-radius:12px;background:var(--card);border:1px solid var(--line);box-shadow:var(--float);animation:am-in .12s var(--ease)}
