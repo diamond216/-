@@ -147,7 +147,7 @@ window.NestShell = (function () {
 
   function sideMenu() {
     const side = $("#side"); if (!side) return;
-    const cur = { home: "home", browse: "browse", devlogs: "logs", settings: "gear" }[page] || "";
+    const cur = { home: "home", browse: "browse", devlogs: "logs" }[page] || "";
     const signed = Session.signedIn, u = Session.user;
     const fol = Follows.list().map((id) => works.find((w) => w.id === id)).filter(Boolean);
     const si = (k, label, href) => `<a class="si" href="${href}"${cur === k ? ' aria-current="page"' : ""}>${ic(k)}<span>${label}</span></a>`;
@@ -155,14 +155,14 @@ window.NestShell = (function () {
     side.innerHTML = `
       <div class="drawer-head"><button type="button" class="ibtn" data-act="menu-close" aria-label="Close menu">${ic("menu")}</button><span class="mark">${MARK}</span></div>
       ${signed ? `<div class="dacct"><div class="who"><a href="${Paths.page(`profile.html#${u.handle}`)}">${avatar(40)}<span><b>${esc(Me.get().name || u.name)}</b><small>View your profile</small></span></a><button type="button" class="btn btn--line" data-act="logout">Log out</button></div><a class="btn btn--line post" href="${Paths.page("post.html")}">${ic("plus")}Build</a><hr></div>` : ""}
-      ${si("home", "Home", Paths.home())}${si("browse", "Browse", Paths.page("browse.html"))}${si("logs", "Dev logs", Paths.page("devlogs.html"))}${si("about", "About", Paths.home("#about"))}
-      <div class="mini-only"><hr>${si("follow", "Following", Paths.page(`profile.html#${u.handle}/following`))}${si("gear", "Settings", Paths.page("settings.html"))}</div>
+      ${si("home", "Home", Paths.home())}${si("browse", "Browse", Paths.page("browse.html"))}${si("logs", "Dev logs", Paths.page("devlogs.html"))}
+      <div class="mini-only"><hr>${si("follow", "Following", Paths.page(`profile.html#${u.handle}/following`))}${si("about", "About", Paths.home("#about"))}</div>
       <div class="full-only"><hr><h4>Following</h4>
         ${fol.length ? fol.slice(0, 5).map((w) => `<a class="si" href="${Paths.page(`project.html#${w.id}`)}"><span class="thumb" aria-hidden="true">${window.Art ? window.Art.draw(w) : ""}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(w.name)}</span>${Follows.isNew(w) ? '<small class="nw"><span class="vh">, </span>new<span class="vh"> update</span></small>' : ""}</a>`).join("") : `<p class="side__foot" style="margin-top:0">Follow a project to see it here</p>`}
         <a class="si" href="${Paths.page(`profile.html#${u.handle}/following`)}">${ic("follow")}<span>All followed (${fol.length})</span></a>
         <hr><h4>Rooms</h4>
         ${rooms.map((r) => `<a class="si" href="${Paths.page(`browse.html?room=${r}`)}"><span>${r}</span><small>${works.filter((w) => w.room === r).length}</small></a>`).join("")}
-        <hr>${si("gear", "Settings", Paths.page("settings.html"))}
+        <hr>${si("about", "About", Paths.home("#about"))}
         <div class="drawer-extra"><hr><div style="display:flex;gap:10px;align-items:center;padding:4px 12px">${langGroup()}</div><div class="drow"><span id="thm-l">Dark theme</span><button type="button" class="sw" data-sw="theme" role="switch" aria-checked="${theme.dark}" aria-labelledby="thm-l"><i></i></button></div>${signed ? "" : `<div style="display:flex;gap:8px;padding:12px"><a class="btn btn--line" href="#" data-in style="flex:1">Log in</a><a class="btn btn--acc" href="#" data-in style="flex:1">Sign up</a></div>`}</div></div>`;
   }
 
