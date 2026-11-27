@@ -1,196 +1,40 @@
 <!doctype html>
-<html lang="en" data-auth="out">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="../design/v6/motion.js"></script>
+<script>try{var d=document.documentElement,t=localStorage.getItem("nest-theme");if(t!=="dark"&&t!=="light")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";d.dataset.theme=t;var m=localStorage.getItem("nest-motion");if(m==="off"||(m===null&&matchMedia("(prefers-reduced-motion: reduce)").matches))d.classList.add("calm");var l=localStorage.getItem("nest-lang");if(l==="th")d.lang="th"}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bai+Jamjuree:wght@500;600&display=swap" rel="stylesheet">
 <title>Hamster Nest</title>
-<meta name="description" content="Hamster Nest shows student projects in games, websites and IoT. Browse the projects and get in touch with the students who made it.">
-<meta name="theme-color" content="#f7fbfe">
+<meta name="description" content="Hamster Nest shows student projects in games, websites and IoT. Browse the projects and get in touch with the students who made them.">
 <link rel="icon" href="assets/logo-hamster.svg" type="image/svg+xml">
-<script>{const a=new URLSearchParams(location.search).get('auth');if(a==='in'||a==='out')document.documentElement.dataset.auth=a;}</script>
-<link rel="preload" as="image" href="assets/reslash/reslash-1920.avif" type="image/avif" fetchpriority="high">
-<link rel="preload" as="image" href="assets/video/hero-poster-d.jpg">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/IBMPlexSansThaiLooped-400-latin.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/IBMPlexSansThaiLooped-600-latin.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/IBMPlexSansThaiLooped-700-latin.woff2">
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="../design/v6/browse.css">
-<link rel="stylesheet" href="../design/v6/bridge.css">
+<link rel="stylesheet" href="../design/v6/nest.css">
 <link rel="stylesheet" href="../design/v6/session.css">
-<script src="app.js" defer></script>
 </head>
-<body class="sea" id="page-top" data-tone="lagoon">
-<script src="../design/v6/intro.js"></script>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <symbol id="flag-th" viewBox="0 0 24 24"><rect width="24" height="24" fill="#F4F5F8"/><rect width="24" height="4" fill="#A51931"/><rect y="20" width="24" height="4" fill="#A51931"/><rect y="8" width="24" height="8" fill="#2D2A4A"/></symbol>
-    <symbol id="flag-gb" viewBox="0 0 24 24"><rect width="24" height="24" fill="#012169"/><path d="M0 0L24 24M24 0L0 24" stroke="#fff" stroke-width="5"/><path d="M0 0L24 24M24 0L0 24" stroke="#C8102E" stroke-width="2"/><path d="M12 0V24M0 12H24" stroke="#fff" stroke-width="7"/><path d="M12 0V24M0 12H24" stroke="#C8102E" stroke-width="4"/></symbol>
-    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4.5 20c.8-4 3.8-6 7.5-6s6.7 2 7.5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M14.5 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="i-next" viewBox="0 0 24 24"><path d="M9.5 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol>
-    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></symbol>
-    <symbol id="i-sound" viewBox="0 0 24 24"><path fill="currentColor" d="M3.5 9.5v5h3.8l5.2 4.2V5.3L7.3 9.5H3.5z"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  </defs>
-</svg>
-
-<!-- top bar: the same glass bar as the other pages (owner, 25 Nov 2026) -->
-<header class="gbar gbar--hero" id="top"><div class="gbar__in">
-<div class="gleft"><a class="brand" href="#page-top" aria-label="Hamster Nest, back to top"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg></a><nav class="gnav glass" aria-label="Main"><a href="#browse-page" aria-current="page" data-i18n="browse">Browse</a><a href="../design/v6/devlogs.html" data-i18n="devlogs">Dev logs</a><a href="#about-page" data-i18n="about">About</a></nav></div>
-<form class="gsearch glass" role="search" action="../design/v6/browse.html"><svg class="gsearch__ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" name="q" placeholder="Search projects, dev logs and makers" aria-label="Search Hamster Nest" autocomplete="off" enterkeyhint="search"><button type="button" class="gclear" aria-label="Clear the search" hidden>&times;</button><kbd aria-hidden="true">/</kbd></form>
-<div class="gbar__end">
-  <div class="glang glass" role="group" aria-label="Language"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="th" aria-pressed="false" lang="th">ไทย</button></div>
-  <div class="acct"></div>
-</div>
-</div></header>
-
-<!-- the hero's first header, kept hidden: app.js still drives its language menu and ocean sound from these -->
-<div class="hero-hooks" hidden>
-  <a class="brand" href="#page-top" aria-label="Hamster Nest, back to top" data-i18n-attr="aria-label:brandTop" style="--k:0"><img class="brand-logo" src="assets/logo-hamster.svg" alt="" width="32" height="32"><span class="brand-name">HAMSTER <b>NEST</b></span></a>
-
-  <nav class="site-nav" aria-label="Primary" style="--k:1">
-    <div class="island" id="island">
-      <ul class="site-menu" id="site-menu">
-        <li><a href="#browse-page" aria-current="page" data-i18n="browse">Browse</a></li>
-        <li><a href="#about-page" data-i18n="about">About</a></li>
-        <li><a href="#contact-page" data-i18n="contact">Contact</a></li>
-      </ul>
-      <span class="island-sep" aria-hidden="true"></span>
-      <button class="sound-btn" id="sound-btn" type="button" role="switch" aria-checked="false" aria-label="Ocean ambience sound" data-i18n-attr="aria-label:soundLabel">
-        <svg class="sound-ico" aria-hidden="true"><use href="#i-sound"/></svg>
-        <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
-        <svg class="sound-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <span class="sound-label" aria-hidden="true"><span id="sound-toast">Ocean ambience · Off</span></span>
-      </button>
-    </div>
-    <span class="sound-hint" id="sound-hint" aria-hidden="true" data-i18n="soundHint">Tap to hear</span>
-    <p class="sr-only" id="sound-status" role="status" aria-live="polite"></p>
-  </nav>
-
-  <div class="header-actions" style="--k:2">
-    <button class="icon-btn flag-btn" id="lang-btn" type="button" popovertarget="lang-menu" aria-controls="lang-menu" aria-expanded="false" aria-label="Language: English">
-      <svg class="flag" aria-hidden="true"><use href="#flag-gb"/></svg>
-    </button>
-    <div class="menu" id="lang-menu" popover="auto" role="group" aria-label="Choose language" data-i18n-attr="aria-label:chooseLang">
-      <ul>
-        <li><button class="menu-item" type="button" data-lang="th" lang="th"><svg class="flag" aria-hidden="true"><use href="#flag-th"/></svg><span>ภาษาไทย</span><svg class="check" aria-hidden="true"><use href="#i-check"/></svg></button></li>
-        <li><button class="menu-item" type="button" data-lang="en" lang="en" aria-current="true"><svg class="flag" aria-hidden="true"><use href="#flag-gb"/></svg><span>English</span><svg class="check" aria-hidden="true"><use href="#i-check"/></svg></button></li>
-      </ul>
-    </div>
-    <a class="btn-rainbow is-round profile-btn" href="#profile-page" data-auth="in" aria-label="My profile" data-i18n-attr="aria-label:profile"><svg aria-hidden="true"><use href="#i-person"/></svg></a>
-    <a class="btn-rainbow" href="#sign-in-page" data-auth="out" data-i18n="signIn">Sign in</a>
-  </div>
-</div>
-
-<main id="main">
-  <h1 class="sr-only" data-i18n="h1">Hamster Nest: student projects</h1>
-  <section class="hero" id="hero">
-    <div class="hero-panel" id="hero-panel">
-      <div class="hero-frame" id="hero-frame" data-slide="0" aria-hidden="true">
-        <img class="hero-poster" src="assets/video/hero-poster-d.jpg" alt="" width="1600" height="900" fetchpriority="high" decoding="async">
-        <video class="hero-video" id="hero-video" muted loop playsinline preload="metadata" poster="assets/video/hero-poster-d.jpg" tabindex="-1" aria-hidden="true">
-          <source src="assets/video/hero-1920.mp4" type="video/mp4">
-          <source src="assets/video/hero-1920.webm" type="video/webm">
-        </video>
-        <picture class="hero-art" id="hero-art">
-          <source type="image/avif" srcset="assets/reslash/reslash-1280.avif 1280w, assets/reslash/reslash-1920.avif 1920w" sizes="100vw">
-          <source type="image/webp" srcset="assets/reslash/reslash-1280.webp 1280w, assets/reslash/reslash-1920.webp 1920w" sizes="100vw">
-          <img src="assets/reslash/reslash-1920.jpg" alt="" width="1920" height="931" fetchpriority="high" decoding="async">
-        </picture>
-        <div class="hero-scrim"></div>
-      </div>
-      <div class="hero-ui" id="hero-ui" aria-roledescription="carousel" role="group" aria-label="Featured projects" data-i18n-attr="aria-label:featured">
-        <div class="hero-layer">
-          <div class="hero-track" id="hero-track" tabindex="0" role="group" aria-label="Slides" data-i18n-attr="aria-label:slides">
-        <article class="slide" aria-roledescription="slide" aria-label="1 of 4" data-marker-name="Go to project 1: RE//SLASH">
-          <div class="slide-copy">
-            <p class="slide-kicker" data-i18n="catGame">Game</p>
-            <h2>RE//SLASH</h2>
-            <p data-i18n="reslashDesc">Fast first-person hack-and-slash: parry everything, go Slash Mode with the katana, keep your momentum.</p>
-            <p class="slide-credit" data-i18n="reslashBy">by Phoom.x, PetePeachPeat, Dnsw</p>
-            <div class="slide-actions"><a class="btn-light" href="https://phoomx.itch.io/reslash" target="_blank" rel="noopener noreferrer" aria-label="View this project: RE//SLASH (opens in a new tab)" data-i18n-attr="aria-label:viewReslash"><span data-i18n="viewThisProject">View this project</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="btn-ghost" href="#browse-page"><span data-i18n="explore">Explore projects</span></a></div>
-          </div>
-        </article>
-        <article class="slide" aria-roledescription="slide" aria-label="2 of 4" data-marker-name="Go to project 2: Project title 2">
-          <div class="slide-copy">
-            <h2 data-i18n="projectTitle" data-n="2">Project title 2</h2>
-            <p data-i18n="projectDesc">Placeholder description: a short line or two about the project and the student team behind it.</p>
-            <div class="slide-actions"><button class="btn-light" type="button"><span data-i18n="viewThisProject">View this project</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></button><a class="btn-ghost" href="#browse-page"><span data-i18n="explore">Explore projects</span></a></div>
-          </div>
-        </article>
-        <article class="slide" aria-roledescription="slide" aria-label="3 of 4" data-marker-name="Go to project 3: Project title 3">
-          <div class="slide-copy">
-            <h2 data-i18n="projectTitle" data-n="3">Project title 3</h2>
-            <p data-i18n="projectDesc">Placeholder description: a short line or two about the project and the student team behind it.</p>
-            <div class="slide-actions"><button class="btn-light" type="button"><span data-i18n="viewThisProject">View this project</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></button><a class="btn-ghost" href="#browse-page"><span data-i18n="explore">Explore projects</span></a></div>
-          </div>
-        </article>
-        <article class="slide" aria-roledescription="slide" aria-label="4 of 4" data-marker-name="Go to project 4: Project title 4">
-          <div class="slide-copy">
-            <h2 data-i18n="projectTitle" data-n="4">Project title 4</h2>
-            <p data-i18n="projectDesc">Placeholder description: a short line or two about the project and the student team behind it.</p>
-            <div class="slide-actions"><button class="btn-light" type="button"><span data-i18n="viewThisProject">View this project</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></button><a class="btn-ghost" href="#browse-page"><span data-i18n="explore">Explore projects</span></a></div>
-          </div>
-        </article>
-          </div>
-        </div>
-        <div class="hero-ctrl">
-          <button class="hero-arrow prev" type="button" data-direction="previous" aria-label="Previous project" data-i18n-attr="aria-label:prev"><svg aria-hidden="true"><use href="#i-prev"/></svg></button>
-          <button class="hero-arrow next" type="button" data-direction="next" aria-label="Next project" data-i18n-attr="aria-label:next"><svg aria-hidden="true"><use href="#i-next"/></svg></button>
-          <div class="hero-bar">
-            <nav class="hero-dots" id="hero-dots" aria-label="Choose a project" data-i18n-attr="aria-label:chooseProject"></nav>
-            <button class="hero-pause" id="hero-pause" type="button" data-state="paused" aria-label="Play background video">
-              <svg class="i-pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="i-play" aria-hidden="true"><use href="#i-play"/></svg>
-            </button>
-          </div>
-        </div>
-        <p class="sr-only" id="hero-status" role="status" aria-live="polite"></p>
-      </div>
-    </div>
-    <a class="scroll-cue" href="#browse-page"><span data-i18n="scrollDown">Scroll down</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-  </section>
-
-  <!-- Browse, straight under the hero (from design/v6/browse.html) -->
-  <section class="nest-browse sea--c" id="browse-page" aria-label="Browse projects" data-tone="lagoon">
-    <canvas class="water" aria-hidden="true"></canvas>
-    <div class="br">
-<section class="band wrap" aria-labelledby="band-h">
-  <h1 id="band-h">Browse Hamster projects</h1>
+<body data-page="home">
+<a class="skip" href="#main">Skip to content</a>
+<header class="tb" id="tb"></header>
+<nav class="tabs2" aria-label="Sections"></nav>
+<nav class="side" id="side" aria-label="Main"></nav>
+<main class="main" id="main">
+<h1 class="vh">Hamster Nest</h1>
+<section class="hero" id="hero" aria-label="Featured projects">
+<video muted loop playsinline preload="metadata" poster="assets/video/hero-poster-d.jpg" aria-hidden="true" tabindex="-1"><source src="assets/video/hero-1920.mp4" type="video/mp4"><source src="assets/video/hero-1920.webm" type="video/webm"></video>
+<div class="hero__img"></div>
+<div class="hero__in"></div>
+<span class="hero__dots"></span>
+<button type="button" class="hero__pause" aria-label="Pause background video"></button>
 </section>
-<div class="br__sentinel" aria-hidden="true"></div>
-<div class="br__stick">
-<div class="br__top wrap">
-  <button type="button" class="fbtn glass" aria-expanded="false" aria-controls="fpanel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Filter<b hidden></b></button>
-</div>
-<nav class="rooms wrap" aria-label="Rooms"></nav>
-</div>
-<div class="br__body wrap">
-  <aside class="fpanel" id="fpanel" aria-label="Filters" hidden></aside>
-  <section class="results">
-    <div class="rhead">
-      <h2><span class="rhead__t">All projects</span> <span class="count" aria-live="polite">50</span></h2>
-      <div class="rhead__tools"><div class="rank"><button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span>All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="rank__menu" role="listbox" aria-label="Rank" hidden></ul></div><label class="sort">Sorted by <select id="sort" aria-label="Sort projects"><option value="rank">most updates</option><option value="az">name, A to Z</option><option value="maker">maker, A to Z</option></select><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></label></div>
-    </div>
-    <div class="grid"></div>
-  </section>
-</div>
-</div>
-  </section>
+<div id="feed"></div>
 </main>
-
-<footer class="foot nest-foot"></footer>
-
-<script src="../design/v6/session.js"></script>
-<script src="../design/v6/art.js"></script>
 <script src="../design/v6/works.js"></script>
-<script src="../design/v6/preview.js"></script>
-<script src="../design/v6/water.js"></script>
-<script src="../design/v6/reveal.js"></script>
+<script src="../design/v6/art.js"></script>
+<script src="../design/v6/session.js"></script>
 <script src="../design/v6/tiles.js"></script>
 <script src="../design/v6/browse.js"></script>
-<script src="../design/v6/bridge.js"></script>
+<script src="../design/v6/shell.js"></script>
+<script src="../design/v6/feed.js"></script>
+<script src="../design/v6/home.js"></script>
 </body>
 </html>

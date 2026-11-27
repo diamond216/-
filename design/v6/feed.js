@@ -58,7 +58,7 @@ window.NestFeed = (function () {
   function mount(host, cfg) {
     const state = new BrowseState();
     const from = cfg.from || "Browse";
-    const per = () => (isPhone() ? 8 : 16);
+    const per = () => (cfg.per ? cfg.per() : isPhone() ? 8 : 16);
     let shown = per(), panel = false;
     host.innerHTML = `<div class="chips" role="toolbar" aria-label="Rooms and filters"></div><div class="fp-host"></div>
       <div class="sh"><${cfg.h} class="sh__t"></${cfg.h}>${cfg.h === "h1" ? '<h2 class="vh">Projects</h2>' : ""}<span class="n" aria-live="polite"></span><span class="sort-host"></span></div>
