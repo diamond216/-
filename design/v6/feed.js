@@ -81,7 +81,7 @@ window.NestFeed = (function () {
     let shown = per(), panel = false;
     host.innerHTML = `<div class="chips" role="toolbar" aria-label="Rooms and filters"></div><div class="fp-host"></div>
       <div class="sh"><${cfg.h} class="sh__t"></${cfg.h}>${cfg.h === "h1" ? '<h2 class="vh">Projects</h2>' : ""}<span class="n" aria-live="polite"></span><span class="sort-host"></span></div>
-      <div class="${cfg.listClass || "grid"}"></div><div class="more" hidden><button type="button" class="btn btn--line">Show more</button></div>`;
+      <div class="${cfg.listClass || "grid"}"></div><div class="more" hidden aria-hidden="true"></div>`;
     const chipsEl = $(".chips", host), fpHost = $(".fp-host", host), grid = $("." + (cfg.listClass || "grid"), host), more = $(".more", host);
     const hv = wireCards(grid, from);
 
@@ -137,6 +137,7 @@ window.NestFeed = (function () {
       if (list.length && cfg.render) cfg.render(grid, list.slice(0, shown));
       else grid.innerHTML = list.length ? list.slice(0, shown).map((w, i) => card(w, i)).join("") : `${empty} “${esc(q || "these filters")}”<button type="button" class="btn btn--line" data-c="reset">Clear</button></p>`;
       more.hidden = list.length <= shown;
+      total = list.length; grid.removeAttribute("aria-busy");
       thai(grid);
       if (panel && !isPhone()) { fpHost.innerHTML = panelHTML(); wirePanel(fpHost); }
     }
@@ -152,8 +153,24 @@ window.NestFeed = (function () {
       if (e.target.closest('[data-c="reset"]')) { state.set((x) => { x.q = ""; x.ranks.clear(); x.rooms.clear(); x.genres.clear(); x.plats.clear(); }); if (search.input) { search.input.value = ""; search.paint(); } }
     });
     host.addEventListener("change", (e) => { if (e.target.matches(".sort-host select")) state.set((x) => (x.sort = e.target.value)); });
-    $("button", more).addEventListener("click", () => { const first = shown; shown += per(); paint(); const c = $$(".pc__link, a.lc", grid)[first]; if (c) c.focus(); });
-    state.addEventListener("change", () => { shown = per(); chips(); paint(); });
+    let total = 0, gen = 0, loading = false;
+    const SK = '<div class="pc pc--sk" aria-hidden="true"><span class="pc__pic sk"></span><span class="sk sk--t"></span><span class="sk sk--s"></span></div>';
+    const skel = (n) => {
+      const cols = $$(".mas__col", grid);
+      if (!cols.length) { grid.insertAdjacentHTML("beforeend", Array.from({ length: n }, () => SK).join("")); return; }
+      for (let i = 0; i < n; i++) {
+        const c = cols.reduce((a, b) => (b.offsetHeight < a.offsetHeight ? b : a));
+        c.insertAdjacentHTML("beforeend", `<div class="lc lc--sk" aria-hidden="true"><span class="lc__pic sk" style="aspect-ratio:1 / ${[1.25, 0.75, 1, 1.5][i % 4]}"></span><span class="sk sk--t"></span><span class="sk sk--s"></span></div>`);
+      }
+    };
+    const io = new IntersectionObserver((es) => {
+      if (loading || more.hidden || !es.some((e) => e.isIntersecting)) return;
+      loading = true; const g = gen;
+      grid.setAttribute("aria-busy", "true"); skel(Math.min(per(), total - shown));
+      setTimeout(() => { loading = false; if (g !== gen) return; shown += per(); paint(); io.unobserve(more); io.observe(more); }, 450);
+    }, { rootMargin: "0px 0px 400px 0px" });
+    io.observe(more);
+    state.addEventListener("change", () => { gen++; loading = false; shown = per(); chips(); paint(); });
 
     if (search.input) {
       search.input.addEventListener("input", () => state.set((s) => (s.q = search.input.value)));

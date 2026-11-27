@@ -520,3 +520,9 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .hero__side:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @media (min-width:900px) and (hover:hover){.hero__in{padding-left:80px}}
 @media (max-width:899px),(hover:none){.hero__side{display:none}}
+.more{display:block;height:1px;margin-top:0}
+.sk{display:block;border-radius:6px;background:var(--raised)}
+.pc__pic.sk{border-radius:8px}.lc__pic.sk{border-radius:8px}
+.sk--t{height:14px;width:72%;margin-top:14px}.sk--s{height:12px;width:44%;margin-top:8px}
+@keyframes sk-shine{from{background-position:150% 0}to{background-position:-50% 0}}
+@media (prefers-reduced-motion:no-preference){html:not(.calm) .sk{background:linear-gradient(90deg,var(--raised) 30%,var(--raised2) 50%,var(--raised) 70%) 0 0/200% 100%;animation:sk-shine 1.2s linear infinite}}
