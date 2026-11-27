@@ -20,9 +20,23 @@
     hero.querySelectorAll(".hero__dots button").forEach((b, i) => (i === cur ? b.setAttribute("aria-current", "true") : b.removeAttribute("aria-current")));
     thai(hero);
   }
+  const motionOn = () => !document.documentElement.classList.contains("calm");
+  const rm = matchMedia("(prefers-reduced-motion: reduce)");
+  function swap() {
+    hero.querySelectorAll(".hero__ghost").forEach((g) => g.remove());
+    if (motionOn() && !rm.matches) {
+      const g = document.createElement("div");
+      g.className = "hero__ghost"; g.setAttribute("aria-hidden", "true"); g.inert = true;
+      g.append($(".hero__img", hero).cloneNode(true), $(".hero__in", hero).cloneNode(true));
+      $(".hero__in", hero).after(g);
+      g.addEventListener("animationend", () => g.remove());
+      setTimeout(() => g.remove(), 600);
+    }
+    paint();
+  }
   $(".hero__dots", hero).innerHTML = SLIDES.map((s, i) => `<button type="button" aria-label="Show ${esc(s.title)}"><i></i></button>`).join("");
-  $(".hero__dots", hero).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cur = [...b.parentElement.children].indexOf(b); paint(); });
-  const go = (d) => { cur = (cur + d + SLIDES.length) % SLIDES.length; paint(); };
+  $(".hero__dots", hero).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cur = [...b.parentElement.children].indexOf(b); swap(); });
+  const go = (d) => { cur = (cur + d + SLIDES.length) % SLIDES.length; swap(); };
   hero.querySelectorAll(".hero__side").forEach((b) => { b.innerHTML = ic(+b.dataset.go < 0 ? "back" : "next"); b.addEventListener("click", () => go(+b.dataset.go)); });
   let sx = null, sy = 0;
   hero.addEventListener("touchstart", (e) => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
@@ -34,7 +48,6 @@
   const pauseBtn = $(".hero__pause", hero);
   const setPause = () => { const playing = video && !video.paused; pauseBtn.innerHTML = ic(playing ? "pause" : "play"); pauseBtn.setAttribute("aria-label", playing ? "Pause background video" : "Play background video"); };
   pauseBtn.addEventListener("click", () => { if (!video) return; if (video.paused) video.play().catch(() => {}); else video.pause(); setPause(); });
-  const motionOn = () => !document.documentElement.classList.contains("calm");
   if (video) {
     video.addEventListener("play", setPause); video.addEventListener("pause", setPause);
     if (motionOn()) video.play().catch(() => {});
