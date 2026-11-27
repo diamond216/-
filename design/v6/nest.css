@@ -505,7 +505,7 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .tmw{display:flex;flex-direction:column;min-width:0}.tmw .tmn{min-height:24px}.tmw>span{line-height:1.4}
 .face{display:inline-grid;place-items:center;flex:none;width:36px;height:36px;border-radius:50%;overflow:hidden;background:var(--raised2)}
 .face svg,.face img{display:block;width:100%;height:100%;object-fit:cover}
-.face--i{background:hsl(var(--h) 45% 38%);color:#fff;font:600 15px/1 var(--disp)}
+.face--i{background:hsl(var(--h) 45% 30%);color:#fff;font:600 15px/1 var(--disp)}
 .av img{display:block;width:100%;height:100%;object-fit:cover}
 .pc__pic{transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
 .pc:hover .pc__pic{box-shadow:0 0 0 2px var(--t1),var(--float)}
@@ -540,3 +540,4 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .pedit .in.ta{height:auto;min-height:88px;padding:8px 12px;line-height:1.5;resize:vertical}
 .pedit .fbar{margin-top:8px}
 @media (max-width:599px){.pedit__f{padding:16px}.pedit__av{width:72px;height:72px}}
+.tm .face--i{color:#fff;font:600 15px/1 var(--disp)}
