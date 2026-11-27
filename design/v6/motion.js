@@ -1,5 +1,3 @@
-// Animations on or off, chosen on the site (owner, 25 Nov 2026): this prototype is a showcase, so motion plays by
-// default even when the device asks for reduced motion; the footer's "Animations" switch turns it off.
 // Load it first in <head>. It puts class "calm" on <html> when motion is off (the CSS keys its motion rules on
 // html.calm / html:not(.calm)) and answers every matchMedia("(prefers-reduced-motion: ...)") in the scripts the same way.
 window.NestMotion = (function () {
@@ -14,10 +12,11 @@ window.NestMotion = (function () {
     try { localStorage.setItem(KEY, v); } catch (e) {}
     try { const o = JSON.parse(window.name || "{}"); o[KEY] = v; window.name = JSON.stringify(o); } catch (e) { window.name = JSON.stringify({ [KEY]: v }); }
   };
-  const on = get() !== "off";
+  const real = window.matchMedia.bind(window);
+  const saved = get();
+  const on = saved === null ? !real("(prefers-reduced-motion: reduce)").matches : saved !== "off";
   document.documentElement.classList.toggle("calm", !on);
 
-  const real = window.matchMedia.bind(window);
   window.matchMedia = (q) => {
     if (!/prefers-reduced-motion/.test(q)) return real(q);
     // look at the value after the colon: the feature name itself contains "reduce"
