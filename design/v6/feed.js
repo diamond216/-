@@ -109,16 +109,15 @@ window.NestFeed = (function () {
     const per = () => (cfg.per ? cfg.per() : isPhone() ? 8 : 16);
     let shown = per(), panel = false;
     host.innerHTML = `<div class="chips" role="toolbar" aria-label="Rooms and filters"></div><div class="fp-host"></div>
-      <div class="sh"><${cfg.h} class="sh__t"></${cfg.h}>${cfg.h === "h1" ? '<h2 class="vh">Projects</h2>' : ""}<span class="n" aria-live="polite"></span><span class="sort-host"></span></div>
+      <div class="sh"><${cfg.h} class="sh__t"></${cfg.h}>${cfg.h === "h1" ? '<h2 class="vh">Projects</h2>' : ""}<span class="sort-host"></span></div>
       <div class="${cfg.listClass || "grid"}"></div><div class="more" hidden aria-hidden="true"></div>`;
     const chipsEl = $(".chips", host), fpHost = $(".fp-host", host), grid = $("." + (cfg.listClass || "grid"), host), more = $(".more", host);
     const hv = wireCards(grid, from);
 
-    const roomCount = (r) => (r === "All" ? items.length : items.filter((x) => of(x).room === r).length);
     function chips() {
       const ph = isPhone();
       chipsEl.innerHTML = `<button type="button" class="chip ${ph ? "chip--fbtn" : "chip--filter"}" data-c="filters" aria-expanded="${panel}" aria-controls="fpanel">${ic("filter")}Filters${state.active ? `<span class="cc">${state.active}</span>` : ""}</button>${ph ? "" : '<span class="chip-sep" aria-hidden="true"></span>'}
-        ${["All", ...ROOMS].map((r) => `<button type="button" class="chip" data-room="${r}" aria-pressed="${state.tab === r}">${r === "All" ? (ph ? "All" : "All projects") : r}${ph ? "" : `<span class="cc">${roomCount(r)}</span>`}</button>`).join("")}
+        ${["All", ...ROOMS].map((r) => `<button type="button" class="chip" data-room="${r}" aria-pressed="${state.tab === r}">${r === "All" ? (ph ? "All" : "All projects") : r}</button>`).join("")}
         ${ph || cfg.noRank ? "" : `<span class="chip-sep rk" aria-hidden="true"></span>${tiers.map((t) => `<button type="button" class="chip rk" data-rank="${t.id}" aria-pressed="${state.ranks.has(t.id)}">${rankIcon(t.id)}${t.name}</button>`).join("")}`}`;
     }
     const cnt = (key, test, ignore) => state.count(test, ignore);
@@ -159,7 +158,6 @@ window.NestFeed = (function () {
       const q = state.q.trim(), hit = items.filter((x) => state.matches(x)), list = cfg.items ? hit : sortWorks(hit, state.sort);
       const sh = $(".sh", host); sh.classList.toggle("res", !!q);
       $(".sh__t", host).textContent = q ? `Results for “${q}”` : (typeof cfg.title === "function" ? cfg.title() : cfg.title);
-      $(".n", host).textContent = `${list.length} ${list.length === 1 ? noun[0] : noun[1]}`;
       $(".sort-host", host).innerHTML = cfg.items ? "" : sortHTML();
       grid.style.setProperty("--cols", cfg.cols ? cfg.cols() : "");
       const empty = `<p class="empty" style="grid-column:1/-1">No ${noun[1]} match`;
