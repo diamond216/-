@@ -454,3 +454,4 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .gal .gal__clip.pv--on{opacity:1}
 .gal__clip svg,.gal__clip video{display:block;width:100%;height:100%;object-fit:cover}
 .gal__play[hidden]{display:none}
+.phd .acts{position:relative}

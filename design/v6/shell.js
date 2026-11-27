@@ -139,7 +139,7 @@ window.NestShell = (function () {
     body.classList.toggle("signed", Session.signedIn);
     const stored = Store.get("nest-menu");
     let m;
-    if (ph || detail) m = "none";
+    if (ph || page === "project") m = "none";
     else if (w >= 1280) m = (expanded ?? stored !== "mini") ? "full" : "mini";
     else m = expanded ? "full" : "mini";
     if (body.classList.contains("m-drawer")) return;
@@ -165,7 +165,7 @@ window.NestShell = (function () {
   }
   function toggleMenu() {
     const w = innerWidth;
-    if (w < 900 || detail) return body.classList.contains("m-drawer") ? closeDrawer() : openDrawer();
+    if (w < 900 || page === "project") return body.classList.contains("m-drawer") ? closeDrawer() : openDrawer();
     if (w >= 1280) { const full = mode === "full"; expanded = !full; Store.set("nest-menu", full ? "mini" : "full"); }
     else expanded = mode !== "full";
     layout();
