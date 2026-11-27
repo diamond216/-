@@ -490,3 +490,4 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .gd__box,.gd__box *{--ink:var(--t1);--mute:var(--t3);--f:"IBM Plex Sans Thai Looped",system-ui,sans-serif}
 .gd__box{color:var(--t1)}
 .gd__k{background:var(--raised)!important;color:var(--t2)!important;border-radius:6px!important}
+.pc__follow{justify-content:center}.pc__follow .fl{display:block;margin:0;line-height:1}
