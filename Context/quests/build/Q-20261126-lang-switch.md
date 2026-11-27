@@ -7,4 +7,5 @@
 - Files: design/v6/*.js, design/v6/*.html, hero/index.html, hero/app.js (only what the fix needs; no new design)
 - Context: owner said "เปลี่ยนภาษายังมีบางหัวข้อไม่เปลี่ยน แต่ผลงานไม่ต้องเปลี่ยนภาษา สายผลงานด้วย". PM scan, checked by Build: data-i18n only in design/v6/index.html (4) and hero/index.html (30); two storage keys: `nest-lang` (island.js, devlogs.js) and `hamster-nest-lang` (hero/app.js). PM decisions: no visual design change, text only; Thai copy follows docs/WORKFLOW.md section 8; unify on `nest-lang`, read old `hamster-nest-lang` once as fallback. Thai still needs a reader later (Q-20261126-th-proofread stays waiting).
 - Validation: qa at 350468f: npm test 54 OK, lint 0 errors / 78 warnings (same as a5a844b), build OK, no console errors, EN text identical to a5a844b, TH sweep clean, carry-over OK. Open: home 390 overflow 138px in TH vs 125px pre-existing in EN. Screenshots: output/lang-switch/qa-final3/
-- Next action: PM reports to owner; owner checks; no push yet. Merged locally as 7028f7c.
+- Next action: PM reports to owner; owner checks; pushed as b73005a. Merged as 7028f7c.
+- live: b73005a (pushed to origin/26/11-7.30, 2026-11-27, owner approved via PM)
