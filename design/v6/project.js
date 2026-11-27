@@ -46,9 +46,14 @@
     }
     gallery(w) {
       const gal = $(".gal", this.root), art = $(".gal__art", gal), play = $(".gal__play", gal), thumbs = $$(".thumbs button", this.root), list = slides(), bare = { ...w, scribble: "" };
+      const still = document.documentElement.classList.contains("calm") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let userPaused = false;
       const setPlay = (on) => {
         play.setAttribute("aria-pressed", String(on)); play.setAttribute("aria-label", `${on ? "Pause" : "Play"} the clip of ${w.name}`); play.innerHTML = ic(on ? "pause" : "play");
-        if (this.preview) on ? this.preview.start() : this.preview.stop();
+        if (!this.preview) return;
+        if (!on) return this.preview.stop();
+        const p = this.preview, r = p.start();
+        if (r && r.then) r.then((ok) => { if (!ok && this.preview === p) setPlay(false); });
       };
       const go = (i) => {
         if (this.preview) { this.preview.stop(); this.preview = null; }
@@ -57,11 +62,11 @@
         const s = list[this.at];
         art.innerHTML = window.Art.draw(bare, s.frame);
         play.hidden = !s.clip;
-        if (s.clip && window.Previews) { this.preview = window.Previews.for(gal, bare); gal.lastElementChild.className = "gal__clip"; gal.append(play, ...$$(".gal__nav, .gal__count", gal)); setPlay(false); }
+        if (s.clip && window.Previews) { this.preview = window.Previews.for(gal, bare); gal.lastElementChild.className = "gal__clip"; gal.append(play, ...$$(".gal__nav, .gal__count", gal)); setPlay(!still && !userPaused); }
         $(".gal__count", gal).textContent = `${this.at + 1} / ${list.length}`;
         thumbs.forEach((t, k) => (k === this.at ? t.setAttribute("aria-current", "true") : t.removeAttribute("aria-current")));
       };
-      gal.addEventListener("click", (e) => { const n = e.target.closest("[data-go]"); if (n) go(this.at + +n.dataset.go); if (e.target.closest(".gal__play")) setPlay(play.getAttribute("aria-pressed") !== "true"); });
+      gal.addEventListener("click", (e) => { const n = e.target.closest("[data-go]"); if (n) go(this.at + +n.dataset.go); if (e.target.closest(".gal__play")) { const on = play.getAttribute("aria-pressed") !== "true"; userPaused = !on; setPlay(on); } });
       gal.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); go(this.at + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(this.at - 1); } });
       thumbs.forEach((t, i) => { t.addEventListener("click", () => go(i)); t.addEventListener("focus", () => t.scrollIntoView({ block: "nearest", inline: "nearest" })); });
       go(0);

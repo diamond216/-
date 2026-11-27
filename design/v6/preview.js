@@ -20,7 +20,7 @@ window.Previews = (function () {
       this.v = Object.assign(document.createElement("video"), { src: work.video, muted: true, loop: true, playsInline: true, preload: "none", className: "pv" });
       box.appendChild(this.v);
     }
-    start() { this.v.classList.add("pv--on"); if (!calm) this.v.play().catch(() => {}); }
+    start() { this.v.classList.add("pv--on"); return calm ? Promise.resolve(false) : this.v.play().then(() => true, () => false); }
     stop() { this.v.pause(); this.v.classList.remove("pv--on"); }
   }
   return { for: (box, work) => (work.video ? new VideoPreview(box, work) : new FramePreview(box, work)) };
