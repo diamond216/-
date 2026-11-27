@@ -32,7 +32,8 @@ svg{display:block}
 .btn--ghost:hover{background:var(--raised)}
 .btn--soft{background:var(--raised);color:var(--t1)}
 .btn svg{width:18px;height:18px}
-.side{position:fixed;top:var(--top);bottom:0;left:0;width:var(--side);overflow-y:auto;background:var(--page);padding:8px 12px 24px;z-index:30}
+.side{position:fixed;top:var(--top);bottom:0;left:0;width:var(--side);overflow-y:auto;scrollbar-width:none;scroll-padding-block:8px;background:var(--page);padding:8px 12px 24px;z-index:30}
+.side::-webkit-scrollbar{display:none}
 .side h4{margin:24px 8px 8px;font:500 13px/16px var(--f);color:var(--t3)}
 .side hr{display:block;height:0;margin:12px 8px;border:0;border-top:1px solid var(--line)}
 .side hr+h4{margin-top:16px}
