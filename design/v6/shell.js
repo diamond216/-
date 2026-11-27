@@ -33,9 +33,25 @@ window.NestShell = (function () {
   const MARK = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg>';
   const SIL = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7" fill="var(--sil)"/><path d="M6 38c1.6-8.4 7.2-13 14-13s12.4 4.6 14 13z" fill="var(--sil)"/></svg>';
   const AVATAR_WORK = "cheek-pouch";
+  const Me = {
+    KEY: "nest-me",
+    get() { try { return JSON.parse(Store.get(this.KEY)) || {}; } catch (e) { return {}; } },
+    set(v) { Store.set(this.KEY, JSON.stringify(v)); dispatchEvent(new CustomEvent("nest:me")); },
+  };
+  const myPic = () => {
+    const m = Me.get();
+    if (m.pic === "none") return [SIL, true];
+    if (m.pic) return [`<img src="${esc(m.pic)}" alt="">`, false];
+    const w = window.NEST.byId && window.NEST.byId(AVATAR_WORK);
+    return w && window.Art ? [window.Art.draw(w, 0), false] : [SIL, true];
+  };
   const avatar = (size, label = "") => {
-    const w = window.NEST.byId && window.NEST.byId(AVATAR_WORK), pic = w && window.Art ? window.Art.draw(w, 0) : SIL;
-    return `<span class="av av--${size}${w ? "" : " av--none"}"${label ? ` role="img" aria-label="${esc(label)}"` : ' aria-hidden="true"'}>${pic}</span>`;
+    const [pic, none] = myPic();
+    return `<span class="av av--${size}${none ? " av--none" : ""}"${label ? ` role="img" aria-label="${esc(label)}"` : ' aria-hidden="true"'}>${pic}</span>`;
+  };
+  const face = (name) => {
+    if (name === Session.user.name) { const [pic, none] = myPic(); return `<span class="face${none ? " av--none" : ""}" aria-hidden="true">${pic}</span>`; }
+    return `<span class="face face--i" style="--h:${window.NestSession.hue(name)}" aria-hidden="true">${esc(String(name)[0] || "")}</span>`;
   };
   const wb = (s) => esc(s).replace(s.includes("@") ? /@/ : /([\/.])/g, s.includes("@") ? "@<wbr>" : "$1<wbr>");
   const thai = (root2 = document) => $$(".pc__name,.pc__by,.lc__title,.lc__ex,.sl b,.si span,.wt h1,.pv h4,.pv p,.pitch,.tmn", root2).forEach((e) => { if (/[฀-๿]/.test(e.textContent)) e.lang = "th"; });
@@ -279,5 +295,5 @@ window.NestShell = (function () {
   try { const l = localStorage.getItem("nest-lang"); if (l === "th" && !document.querySelector("#lang-menu")) root.lang = "th"; } catch (e) {}
   render(); footer(); motion.apply(); wire();
   if (window.NestSession) window.NestSession.search = search;
-  return { I, ic, MARK, SIL, avatar, esc, wb, thai, Follows, theme, motion, lang, search, Paths, closeDrawer, layout };
+  return { I, ic, MARK, SIL, avatar, face, Me, esc, wb, thai, Follows, theme, motion, lang, search, Paths, closeDrawer, layout };
 })();

@@ -2,7 +2,7 @@
   "use strict";
   const { works, tiers } = window.NEST;
   const { SampleDetails } = window.Details;
-  const { ic, esc, wb, thai, Follows, Paths } = window.NestShell;
+  const { ic, esc, wb, thai, Follows, Paths, face } = window.NestShell;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const RC = { platinum: "var(--plat)", diamond: "var(--dia)", gold: "var(--gold)", silver: "var(--silver)", bronze: "var(--bronze)" };
@@ -28,17 +28,17 @@
       const more = this.similar(w).slice(0, isPhone() ? 4 : 10), on = Follows.has(w.id), [bl, bh] = back(), ph = isPhone();
       this.ch = ch;
       document.title = `${w.name} · Hamster Nest`;
-      this.root.innerHTML = `<div class="phead"><div><a class="backl" href="${bh}">${ic("back")}${esc(bl)}</a><span class="pmeta">${esc(w.genre)} / ${w.platforms.map(esc).join(" / ")}</span><div class="wt"><h1>${esc(w.name)}</h1><span class="tag">${esc(w.room)}</span></div><p class="pitch">${esc(w.blurb)}</p></div>
-        <div class="owner sumbox"><dl><div><dt>Rank</dt><dd><i style="background:${RC[w.tier]}"></i>${t.name} · #${place} of ${works.length}</dd></div><div><dt>Last update</dt><dd>${esc(w.update.when[0].toUpperCase() + w.update.when.slice(1))}</dd></div><div><dt>Made by</dt><dd>${team.map(([n]) => esc(n)).join(", ")}</dd></div><div><dt>Runs on</dt><dd>${w.platforms.map(esc).join(", ")}</dd></div></dl><span class="btns"><button type="button" class="btn btn--acc" data-act="follow" aria-pressed="${on}">${ic("follow")}<span>${on ? "Following" : "Follow"}</span></button>${ch.length ? `<button type="button" class="btn btn--line" data-act="contact" aria-expanded="false" aria-haspopup="dialog">${ic("mail")}Contact</button>` : ""}</span></div></div>
+      this.root.innerHTML = `<div class="phead"><div><a class="backl" href="${bh}">${ic("back")}${esc(bl)}</a><span class="pmeta">${esc(w.genre)} / ${w.platforms.map(esc).join(" / ")}</span><div class="wt"><h1>${esc(w.name)}</h1><span class="tag">${esc(w.room)}</span></div><p class="pitch">${esc(w.blurb)}</p><span class="btns"><button type="button" class="btn btn--acc" data-act="follow" aria-pressed="${on}">${ic("follow")}<span>${on ? "Following" : "Follow"}</span></button>${ch.length ? `<button type="button" class="btn btn--line" data-act="contact" aria-controls="contact">${ic("mail")}Contact</button>` : ""}</span></div>
+        <div class="owner sumbox"><dl><div><dt>Rank</dt><dd><i style="background:${RC[w.tier]}"></i>${t.name} · #${place} of ${works.length}</dd></div><div><dt>Last update</dt><dd>${esc(w.update.when[0].toUpperCase() + w.update.when.slice(1))}</dd></div><div><dt>Made by</dt><dd>${team.map(([n]) => esc(n)).join(", ")}</dd></div><div><dt>Runs on</dt><dd>${w.platforms.map(esc).join(", ")}</dd></div></dl></div></div>
         <div class="watch"><div>
           <div class="galw"><div class="gal" role="region" aria-label="Clip and pictures of ${esc(w.name)}" tabindex="0"><span class="gal__art"></span><button type="button" class="gal__play" aria-pressed="false" aria-label="Play the clip of ${esc(w.name)}" style="border:0;cursor:pointer">${ic("play")}</button><button type="button" class="gal__nav" data-go="-1" style="left:12px;border:0;cursor:pointer" aria-label="Previous picture">${ic("back")}</button><button type="button" class="gal__nav" data-go="1" style="right:12px;border:0;cursor:pointer" aria-label="Next picture">${ic("next")}</button><span class="gal__count"></span></div>
             <div class="thumbs" role="group" aria-label="Pictures">${slides().map((s, i) => `<button type="button" data-i="${i}" aria-label="${i ? `Picture ${i + 1} of 5` : "Clip, 1 of 5"}"><span>${window.Art.draw({ ...w, scribble: "" }, s.frame)}</span></button>`).join("")}</div></div>
-          <div class="desc"><h2 class="dh">About this project</h2>${d.description().map((p, i) => `<p${i >= (ph ? 1 : 2) ? " hidden" : ""}>${esc(p)}</p>`).join("")}${d.description().length > (ph ? 1 : 2) ? '<button type="button" class="more2" data-act="desc" aria-expanded="false" style="border:0;background:none;cursor:pointer;color:inherit">Show more</button>' : ""}</div>
+          <div class="desc">${d.description().map((p) => `<p>${esc(p)}</p>`).join("")}</div>
           <section class="ups" id="updates" aria-labelledby="ups-h"><h2 id="ups-h">Updates <span class="cnt">${ups.length}</span></h2><div class="upsbox"${ph ? "" : ' tabindex="0" role="region" aria-label="Updates, newest first"'}><ol>${ups.map(([when, what, note], i) => `<li${ph && i > 2 ? " hidden" : ""}><span>${i ? "" : '<span class="new">new</span>'}<time><span class="dd">${dday(when)}</span>${esc(when)}</time></span><div><b>${esc(what)}</b><p>${esc(note)}</p>${FIG.includes(i) ? `<figure><img src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(window.Art.draw({ ...w, scribble: "" }, i + 1))}" alt="${esc(what)}, image" width="168" height="95"${i ? ' loading="lazy"' : ""} decoding="async" style="display:block;width:100%;height:100%;object-fit:cover"></figure>` : ""}</div></li>`).join("")}</ol></div>${ph && ups.length > 3 ? `<button type="button" class="btn btn--line showall" data-act="allups">Show all ${ups.length} updates</button>` : ""}</section>
         </div><aside>
           ${links.length ? `<section class="box"><h3>Links</h3>${links.map(([k, u]) => `<a class="lk" href="${esc(u)}" target="_blank" rel="noopener"><span class="li">${ic("link")}</span><span><b>${esc(k)}</b><span>${wb(u.replace(/^https?:\/\//, ""))}</span></span></a>`).join("")}</section>` : ""}
-          <section class="box"><h3>Team</h3>${team.map(([n, r]) => `<div class="tm"><a class="tmn" href="${Paths.page(`profile.html#${n.toLowerCase()}`)}">${esc(n)}</a><span>${esc(r)}</span></div>`).join("")}</section>
-          ${ch.length ? `<section class="box cbox"><h3>Contact</h3><div class="chan">${ch.map(([k, label]) => `<span>${ic(k === "email" ? "mail" : "link")}${esc(label)}</span>`).join("")}</div><button type="button" class="btn btn--line" data-act="contact" aria-haspopup="dialog" aria-expanded="false">Show contact</button></section>` : ""}
+          <section class="box"><h3>Team</h3>${team.map(([n, r]) => `<div class="tm tm--av">${face(n)}<span class="tmw"><a class="tmn" href="${Paths.page(`profile.html#${n.toLowerCase()}`)}">${esc(n)}</a><span>${esc(r)}</span></span></div>`).join("")}</section>
+          ${ch.length ? `<section class="box cbox" id="contact" tabindex="-1" aria-labelledby="contact-h"><h3 id="contact-h">Contact</h3>${this.contactRows()}</section>` : ""}
           <section class="box"><h3>Awards</h3>${d.awards().map(([a, s]) => `<div class="tm" style="display:block"><b>${esc(a)}</b><br><span>${esc(s)}</span></div>`).join("")}</section>
           <div class="side-list"><h3>More projects</h3>${more.map((x, i) => `<a class="sl" href="${Paths.page(`project.html#${x.id}`)}"><span class="p" aria-hidden="true">${window.Art.draw(x, i % 7)}</span><span><span class="slr"><b>${esc(x.name)}</b><span class="tag">${esc(x.room)}</span></span><span>${esc(x.maker)}</span><span>Updated ${esc(x.update.when)}</span></span></a>`).join("")}</div>
         </aside></div>`;
@@ -72,29 +72,17 @@
       return works.filter((x) => x.id !== w.id).map((x) => [x, score(x)]).sort((a, b) => b[1] - a[1] || tiers.findIndex((t) => t.id === a[0].tier) - tiers.findIndex((t) => t.id === b[0].tier)).map(([x]) => x);
     }
     contactRows() { return this.ch.map(([, k, v]) => `<div class="crow"><b>${esc(k)}</b><span>${wb(v)}</span><button type="button" class="cp" data-v="${esc(v)}">${ic("copy")}<span>Copy</span></button></div>`).join(""); }
-    closeContact(focus = true) {
-      const b = $$('[data-act="contact"][aria-expanded="true"]', this.root)[0];
-      $$(".cpop, .sheet, .sheet-scrim").forEach((e) => e.remove());
-      $$('[data-act="contact"]', this.root).forEach((x) => x.setAttribute("aria-expanded", "false"));
-      if (b && focus) b.focus();
-    }
-    openContact(btn) {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      this.closeContact(false);
-      if (open) { btn.focus(); return; }
-      btn.setAttribute("aria-expanded", "true");
-      if (isPhone()) {
-        document.body.insertAdjacentHTML("beforeend", `<div class="sheet-scrim"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="cs-h"><div class="grab"></div><h4 id="cs-h" style="margin:0 0 4px;font:600 16px/1.3 var(--f)">Contact the team</h4>${this.contactRows()}<button type="button" class="btn btn--line" data-act="cclose" style="width:100%;margin-top:12px">Close</button></div>`);
-        $(".sheet-scrim").addEventListener("click", () => this.closeContact());
-      } else {
-        btn.closest(".btns, .cbox").insertAdjacentHTML("beforeend", `<span class="cpop" role="dialog" aria-modal="false" aria-labelledby="cp-h"><h4 id="cp-h">Contact the team</h4><button type="button" class="x" data-act="cclose" aria-label="Close">${ic("x")}</button>${this.contactRows()}</span>`);
-      }
-      const f = $(".cpop .cp, .sheet .cp"); if (f) f.focus();
+    toContact() {
+      const box = $("#contact", this.root); if (!box) return;
+      const calm = matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("calm");
+      box.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
+      box.focus({ preventScroll: true });
+      box.classList.add("fv"); clearTimeout(this.lit); this.lit = setTimeout(() => box.classList.remove("fv"), 1600);
     }
     wire() {
       document.addEventListener("click", (e) => {
         const b = e.target.closest("[data-act], .cp");
-        if (!b) { if ($(".cpop") && !e.target.closest(".cpop")) this.closeContact(false); return; }
+        if (!b) return;
         if (b.matches(".cp")) {
           const done = () => { $("span", b).textContent = "Copied"; setTimeout(() => { if (b.isConnected) $("span", b).textContent = "Copy"; }, 1600); };
           (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.v) : Promise.reject()).then(done, done);
@@ -102,14 +90,11 @@
         }
         const a = b.dataset.act;
         if (a === "follow") { const on = Follows.toggle(this.w.id); b.setAttribute("aria-pressed", String(on)); $("span", b).textContent = on ? "Following" : "Follow"; }
-        else if (a === "contact") this.openContact(b);
-        else if (a === "cclose") this.closeContact();
-        else if (a === "desc") { const on = b.getAttribute("aria-expanded") !== "true"; $$(".desc p", this.root).forEach((p, i) => { if (i >= (isPhone() ? 1 : 2)) p.hidden = !on; }); b.setAttribute("aria-expanded", String(on)); b.textContent = on ? "Show less" : "Show more"; }
+        else if (a === "contact") this.toContact();
         else if (a === "allups") { $$(".ups li", this.root).forEach((li) => (li.hidden = false)); b.remove(); }
       });
-      addEventListener("keydown", (e) => { if (e.key === "Escape" && $(".cpop, .sheet")) this.closeContact(); });
     }
-    stop() { if (this.preview) this.preview.stop(); this.closeContact(false); }
+    stop() { if (this.preview) this.preview.stop(); }
   }
 
   const page = new ProjectPage($("#proj"));
