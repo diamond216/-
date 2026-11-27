@@ -507,3 +507,9 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .face svg,.face img{display:block;width:100%;height:100%;object-fit:cover}
 .face--i{background:hsl(var(--h) 45% 38%);color:#fff;font:600 15px/1 var(--disp)}
 .av img{display:block;width:100%;height:100%;object-fit:cover}
+.pc__pic{transition:box-shadow .2s var(--ease),transform .2s var(--ease)}
+.pc:hover .pc__pic{box-shadow:0 0 0 2px var(--t1),var(--float)}
+.pc__link:focus-visible{outline:none}.pc__link:focus-visible .pc__pic{box-shadow:0 0 0 3px var(--acc),var(--float)}
+.pc:hover .pc__name,.pc__link:focus-visible .pc__name{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+@media (prefers-reduced-motion:no-preference){html:not(.calm) .pc:hover .pc__pic,html:not(.calm) .pc__link:focus-visible .pc__pic{transform:translateY(-2px)}}
+.pc__vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}

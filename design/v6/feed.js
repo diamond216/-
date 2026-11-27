@@ -52,7 +52,25 @@ window.NestFeed = (function () {
     grid.addEventListener("pointerout", (e) => { const c = e.target.closest(".pc"); if (c && c === cur && !c.contains(e.relatedTarget)) hide(); });
     addEventListener("scroll", hide, { passive: true });
     addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
-    return { hide };
+    let vid = null, vc = null;
+    const still = () => document.documentElement.classList.contains("calm") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const stopVid = () => { if (vid) { vid.pause(); vid.removeAttribute("src"); vid.load(); vid.remove(); } vid = vc = null; };
+    const startVid = (c) => {
+      const w = works.find((x) => x.id === c.dataset.id), pic = $(".pc__pic", c);
+      if (!w || !w.video || !pic || still()) return;
+      vc = c; vid = document.createElement("video");
+      vid.className = "pc__vid"; vid.muted = true; vid.loop = true; vid.playsInline = true; vid.preload = "auto"; vid.setAttribute("aria-hidden", "true"); vid.src = w.video;
+      pic.firstElementChild.after(vid);
+      vid.play().catch(() => {});
+    };
+    grid.addEventListener("pointerover", (e) => {
+      if (e.pointerType !== "mouse" || !fine.matches) return;
+      const c = e.target.closest(".pc"); if (!c || c === vc) return;
+      stopVid(); startVid(c);
+    });
+    grid.addEventListener("pointerout", (e) => { const c = e.target.closest(".pc"); if (c && c === vc && !c.contains(e.relatedTarget)) stopVid(); });
+    addEventListener("nest:motion", (e) => { if (!e.detail.on) stopVid(); });
+    return { hide: () => { hide(); stopVid(); } };
   }
 
   function mount(host, cfg) {

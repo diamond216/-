@@ -112,10 +112,11 @@ window.NEST = (function () {
   const AGO = ["today", "yesterday", "2 days ago", "3 days ago", "5 days ago", "last week", "2 weeks ago"];
 
   const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const VIDEOS = {};
   const works = [];
   for (const t of TIERS) {
     ROWS[t.id].forEach(([name, room, maker, blurb, scribble], i) =>
-      works.push({ update: { what: UPDATES[room][(name.length * 3 + i) % UPDATES[room].length], when: AGO[(i + t.id.length) % AGO.length] }, platforms: PLATFORMS[room][(name.length + i) % PLATFORMS[room].length], id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: null }));
+      works.push({ update: { what: UPDATES[room][(name.length * 3 + i) % UPDATES[room].length], when: AGO[(i + t.id.length) % AGO.length] }, platforms: PLATFORMS[room][(name.length + i) % PLATFORMS[room].length], id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: VIDEOS[slug(name)] || null }));
   }
   // The hero shows the best of each room from the top tier.
   const hero = ["burrow-knights", "wheelsense", "nestboard", "sunflower-bank"];
