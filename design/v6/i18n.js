@@ -20,7 +20,7 @@ window.NestI18n = (function () {
     "Last update": "อัปเดตล่าสุด", "Made by": "สร้างโดย", "Updates": "อัปเดต", "Links": "ลิงก์", "Team": "ทีม", "Email": "อีเมล", "Copy": "คัดลอก",
     "Copied": "คัดลอกแล้ว", "Awards": "รางวัล", "More projects": "โปรเจกต์อื่น ๆ", "Previous picture": "ภาพก่อนหน้า", "Next picture": "ภาพถัดไป",
     "Pictures": "ภาพ", "Updates, newest first": "อัปเดต ล่าสุดก่อน",
-    "Edit profile": "แก้ไขโปรไฟล์", "Sort": "เรียง", "Best rank": "อันดับดีที่สุด", "Newest update": "อัปเดตล่าสุด", "Into": "สนใจ", "Tools": "เครื่องมือ",
+    "Edit profile": "แก้ไขโปรไฟล์", "Sort": "เรียง", "Newest": "ใหม่สุด", "Oldest": "เก่าสุด", "Popular": "ยอดนิยม", "Best rank": "อันดับดีที่สุด", "Newest update": "อัปเดตล่าสุด", "Into": "สนใจ", "Tools": "เครื่องมือ",
     "Open to": "เปิดรับ", "Joined": "เข้าร่วมเมื่อ", "followers": "ผู้ติดตาม", "Choose picture": "เลือกรูป", "Remove picture": "ลบรูป", "Display name": "ชื่อที่แสดง",
     "Bio": "แนะนำตัว", "Cancel": "ยกเลิก", "Save": "บันทึก", "Pick a picture file.": "เลือกไฟล์รูปภาพ", "New picture ready. Save to keep it.": "รูปใหม่พร้อมแล้ว กดบันทึกเพื่อเก็บไว้",
     "Picture removed. Save to keep it.": "ลบรูปแล้ว กดบันทึกเพื่อยืนยัน", "That picture could not be opened.": "เปิดรูปนี้ไม่ได้", "Add a display name": "ใส่ชื่อที่แสดง",

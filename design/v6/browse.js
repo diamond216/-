@@ -12,7 +12,7 @@
   class BrowseState extends EventTarget {
     constructor(o = {}) {
       super(); this.items = o.items || works; this.of = o.of || ((w) => w); this.text = o.text || ((w) => `${w.name} ${w.blurb} ${w.maker} ${w.genre} ${w.room}`);
-      this.q = ""; this.tab = "All"; this.sort = "rank"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.plats = new Set(); this.reveal = false; }
+      this.q = ""; this.tab = "All"; this.sort = "new"; this.ranks = new Set(); this.rooms = new Set(); this.genres = new Set(); this.plats = new Set(); this.reveal = false; }
     set(fn) { fn(this); this.dispatchEvent(new Event("change")); }
     setTab(tab) { this.set((s) => { s.tab = tab; s.rooms.clear(); s.genres.clear(); }); }
     toggle(setName, v) { this.set((s) => { s.reveal = false; const set = s[setName]; set.has(v) ? set.delete(v) : set.add(v); if (setName === "rooms") s.dropOrphanGenres(); }); }
@@ -289,8 +289,8 @@
   }
 
   // ---------- sort ----------
-  const sortWorks = (list, by) => by === "az" ? [...list].sort((a, b) => a.name.localeCompare(b.name))
-    : by === "maker" ? [...list].sort((a, b) => a.maker.localeCompare(b.maker) || a.name.localeCompare(b.name)) : list;
+  const SORTS = { new: (a, b) => b.posted.localeCompare(a.posted), old: (a, b) => a.posted.localeCompare(b.posted), pop: (a, b) => b.favs - a.favs };
+  const sortWorks = (list, by) => { const f = SORTS[by] || SORTS.new; return [...list].sort((a, b) => f(a, b) || a.name.localeCompare(b.name)); };
 
   // ---------- page chrome: count in the heading, sort box, white frame on the bar and toolbar once they stick ----------
   class Chrome {

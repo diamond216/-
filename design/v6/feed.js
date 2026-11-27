@@ -148,17 +148,32 @@ window.NestFeed = (function () {
     }
     function setPanel(on) { panel = on; chips(); paintPanel(); if (!on) { const b = $('[data-c="filters"]', chipsEl); if (b) b.focus(); } }
 
-    function sortHTML() {
-      const opts = [["rank", "Most updates"], ["az", "Name A to Z"], ["maker", "Maker A to Z"]];
-      return isPhone() ? `<span class="tools"><span>Sort</span><select aria-label="Sort projects">${opts.map(([v, l]) => `<option value="${v}"${state.sort === v ? " selected" : ""}>${l}</option>`).join("")}</select></span>`
-        : `<div class="sortt" role="group" aria-label="Sort projects">${opts.map(([v, l]) => `<button type="button" data-sort="${v}" aria-pressed="${state.sort === v}">${l}</button>`).join("")}</div>`;
+    const SORTS = [["new", "Newest"], ["old", "Oldest"], ["pop", "Popular"]], sid = `sortd-${++seq}`;
+    let sortOpen = false;
+    function sortSync() {
+      const sh = $(".sort-host", host);
+      if (!SORTS.some(([v]) => v === state.sort)) state.sort = "new";
+      if (!$(".sortd", sh)) sh.innerHTML = `<div class="sortd"><span class="vh" id="${sid}-l">Sort projects</span><button type="button" class="sortd__btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="${sid}-m" aria-labelledby="${sid}-l ${sid}-v"><span class="sortd__k">Sort</span><span class="sortd__v" id="${sid}-v"></span><svg class="ico sortd__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="sortd__menu" id="${sid}-m" role="listbox" aria-label="Sort projects" hidden>${SORTS.map(([v, l]) => `<li role="option" class="sortd__o" data-sort="${v}" tabindex="-1"><span>${l}</span><svg class="ico sortd__ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li>`).join("")}</ul></div>`;
+      const v = $(".sortd__v", sh), cur = SORTS.find(([k]) => k === state.sort);
+      if (v.dataset.v !== cur[0]) { v.dataset.v = cur[0]; v.textContent = cur[1]; }
+      $$(".sortd__o", sh).forEach((o) => o.setAttribute("aria-selected", String(o.dataset.sort === cur[0])));
     }
+    function setSort(on, focus) {
+      const d = $(".sortd", host); if (!d) return;
+      sortOpen = on;
+      const b = $(".sortd__btn", d), m = $(".sortd__menu", d);
+      b.setAttribute("aria-expanded", String(on)); m.hidden = !on;
+      if (on) ($('.sortd__o[aria-selected="true"]', m) || $(".sortd__o", m)).focus();
+      else if (focus) b.focus();
+    }
+    function pickSort(v) { setSort(false, true); if (v !== state.sort) state.set((x) => (x.sort = v)); }
     function paint() {
       hv.hide();
       const q = state.q.trim(), hit = items.filter((x) => state.matches(x)), list = cfg.items ? hit : sortWorks(hit, state.sort);
       const sh = $(".sh", host); sh.classList.toggle("res", !!q);
       $(".sh__t", host).textContent = q ? `Results for “${q}”` : (typeof cfg.title === "function" ? cfg.title() : cfg.title);
-      $(".sort-host", host).innerHTML = cfg.items ? "" : sortHTML();
+      if (!cfg.items) sortSync();
       grid.style.setProperty("--cols", cfg.cols ? cfg.cols() : "");
       const empty = `<p class="empty" style="grid-column:1/-1">No ${noun[1]} match`;
       if (list.length && cfg.render) cfg.render(grid, list.slice(0, shown));
@@ -176,10 +191,23 @@ window.NestFeed = (function () {
       if (b.dataset.rank) state.toggle("ranks", b.dataset.rank);
     });
     host.addEventListener("click", (e) => {
-      const s = e.target.closest("[data-sort]"); if (s) state.set((x) => (x.sort = s.dataset.sort));
+      if (e.target.closest(".sortd__btn")) return setSort(!sortOpen);
+      const s = e.target.closest(".sortd__o"); if (s) return pickSort(s.dataset.sort);
       if (e.target.closest('[data-c="reset"]')) { state.set((x) => { x.q = ""; x.ranks.clear(); x.rooms.clear(); x.genres.clear(); x.plats.clear(); }); if (search.input) { search.input.value = ""; search.paint(); } }
     });
-    host.addEventListener("change", (e) => { if (e.target.matches(".sort-host select")) state.set((x) => (x.sort = e.target.value)); });
+    host.addEventListener("keydown", (e) => {
+      if (e.target.matches(".sortd__btn")) { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); setSort(true); } return; }
+      const o = e.target.closest(".sortd__o"); if (!o) return;
+      const all = $$(".sortd__o", host), i = all.indexOf(o), go = (j) => all[(j + all.length) % all.length].focus();
+      if (e.key === "ArrowDown") { e.preventDefault(); go(i + 1); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); go(i - 1); }
+      else if (e.key === "Home") { e.preventDefault(); go(0); }
+      else if (e.key === "End") { e.preventDefault(); go(all.length - 1); }
+      else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pickSort(o.dataset.sort); }
+      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setSort(false, true); }
+      else if (e.key === "Tab") setSort(false);
+    });
+    document.addEventListener("pointerdown", (e) => { const d = $(".sortd", host); if (sortOpen && d && !d.contains(e.target)) setSort(false); });
     let total = 0, gen = 0, loading = false;
     const SK = '<div class="pc pc--sk" aria-hidden="true"><span class="pc__pic sk"></span><span class="sk sk--t"></span><span class="sk sk--s"></span></div>';
     const skel = (n) => {

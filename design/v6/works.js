@@ -116,7 +116,7 @@ window.NEST = (function () {
   const works = [];
   for (const t of TIERS) {
     ROWS[t.id].forEach(([name, room, maker, blurb, scribble], i) =>
-      works.push({ update: { what: UPDATES[room][(name.length * 3 + i) % UPDATES[room].length], when: AGO[(i + t.id.length) % AGO.length] }, platforms: PLATFORMS[room][(name.length + i) % PLATFORMS[room].length], id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: VIDEOS[slug(name)] || null }));
+      works.push({ posted: new Date(Date.UTC(2026, 10, 28) - ((works.length * 67 + name.length * 13) % 360) * 864e5).toISOString().slice(0, 10), favs: (works.length * 41 + name.length * 97) % 600 + 3, update: { what: UPDATES[room][(name.length * 3 + i) % UPDATES[room].length], when: AGO[(i + t.id.length) % AGO.length] }, platforms: PLATFORMS[room][(name.length + i) % PLATFORMS[room].length], id: slug(name), name, room, genre: GENRE[name], maker, blurb, scribble, tier: t.id, place: i + 1, frames: 7, video: VIDEOS[slug(name)] || null }));
   }
   // The hero shows the best of each room from the top tier.
   const hero = ["burrow-knights", "wheelsense", "nestboard", "sunflower-bank"];
