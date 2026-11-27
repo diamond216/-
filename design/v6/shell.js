@@ -98,8 +98,8 @@ window.NestShell = (function () {
     get cur() { return root.lang === "th" ? "th" : "en"; },
     set(l) {
       try { localStorage.setItem("nest-lang", l); } catch (e) {}
-      const hook = document.querySelector(`#lang-menu [data-lang="${l}"]`);
-      if (hook) hook.click(); else root.lang = l;
+      root.lang = l;
+      if (window.NestI18n) window.NestI18n.apply();
       paintLang();
       dispatchEvent(new CustomEvent("nest:lang", { detail: { lang: l } }));
     },
@@ -283,7 +283,7 @@ window.NestShell = (function () {
     addEventListener("nest:session", () => { render(); });
     addEventListener("nest:follows", () => sideMenu());
     addEventListener("nest:me", () => { $$(".acct-menu").forEach((m) => m.remove()); render(); });
-    addEventListener("storage", (e) => { if (e.key === "nest-theme" && e.newValue) theme.set(e.newValue === "dark"); });
+    addEventListener("storage", (e) => { if (e.key === "nest-theme" && e.newValue) theme.set(e.newValue === "dark"); if (e.key === "nest-lang" && e.newValue && e.newValue !== lang.cur) lang.set(e.newValue); });
   }
 
   function render() {
@@ -293,7 +293,7 @@ window.NestShell = (function () {
     paintLang(); thai();
   }
 
-  try { const l = localStorage.getItem("nest-lang"); if (l === "th" && !document.querySelector("#lang-menu")) root.lang = "th"; } catch (e) {}
+  try { const l = localStorage.getItem("nest-lang"); if (l === "th") root.lang = "th"; } catch (e) {}
   render(); footer(); motion.apply(); wire();
   if (window.NestSession) window.NestSession.search = search;
   return { I, ic, MARK, SIL, avatar, face, Me, esc, wb, thai, Follows, theme, motion, lang, search, Paths, closeDrawer, layout };
