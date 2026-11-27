@@ -33,7 +33,10 @@ svg{display:block}
 .btn svg{width:18px;height:18px}
 .side{position:fixed;top:var(--top);bottom:0;left:0;width:var(--side);overflow-y:auto;background:var(--page);padding:8px 12px 24px;z-index:30}
 .side h4{margin:24px 8px 8px;font:500 13px/16px var(--f);color:var(--t3)}
-.side hr{display:none}
+.side hr{display:block;height:0;margin:12px 8px;border:0;border-top:1px solid var(--line)}
+.side hr+h4{margin-top:16px}
+.side .dacct hr{display:none}
+body.m-mini .side hr{margin:8px 12px}
 .si{display:flex;align-items:center;gap:12px;height:36px;margin-bottom:2px;padding:0 8px;border-radius:8px;font:400 15px/1 var(--f);color:var(--t1);transition:background-color .15s var(--ease)}
 .si:hover{background:var(--raised)}
 .si[aria-current]{background:var(--raised2);font-weight:500}
@@ -58,7 +61,7 @@ body.m-drawer .main{margin-left:0}
 .drawer-head{display:none;align-items:center;gap:4px;height:48px;margin-bottom:4px}
 body.m-drawer .drawer-head{display:flex}
 .drawer-extra{display:none}
-body.m-drawer.ph .drawer-extra{display:block;margin-top:24px}
+body.m-drawer.ph .drawer-extra{display:block}
 .dacct{display:none}
 .chips{position:sticky;top:var(--top);z-index:20;display:flex;align-items:center;gap:8px;padding:12px 32px;margin:0 -32px;background:var(--page);overflow-x:auto;scrollbar-width:none}
 .chip{flex:none;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:6px;border:1px solid transparent;background:var(--raised);font:400 14px/1 var(--f);color:var(--t1);cursor:pointer;white-space:nowrap;transition:background-color .15s var(--ease)}
@@ -603,7 +606,6 @@ html.ld #main :is(.pc__name,.pc__by,.pc__upd,.sh .n,.lc__title,.lc__meta,.lc__ex
 @media (max-width:599px){.pedit__f{padding:16px}.pedit__av{width:72px;height:72px}}
 .tm .face--i{color:#fff;font:600 15px/1 var(--disp)}
 .mini-only{display:none}
-.side hr.hl{display:block;height:0;margin:12px 8px;border:0;border-top:1px solid var(--line)}
 body.m-mini .side .mini-only{display:block}
 .set{max-width:720px;padding-top:24px}
 .set h1{margin:0;font:600 28px/1.25 var(--disp)}
