@@ -67,7 +67,7 @@
       if (!p.ratio) return `<a class="lc lc--text" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}">${body(`<span class="lc__roomt">${esc(L.room(p.w.room))}</span>`, `<span class="lc__ex">${esc(p.excerpt)}</span>`)}</a>`;
       const [rw, rh] = p.ratio, hw = Math.min(1.5, Math.max(0.5, rh / rw)), iw = 600, ih = Math.round(iw * rh / rw);
       const src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(Art.draw({ ...p.w, scribble: "" }, p.frame));
-      return `<a class="lc" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}"><span class="lc__img" style="aspect-ratio:1 / ${hw.toFixed(3)}"><img src="${src}" alt="${esc(`${p.title}, ${tx("dl.image")}`)}" width="${iw}" height="${ih}"${i < 4 ? "" : ' loading="lazy"'} decoding="async"><span class="lc__room">${esc(p.w.room)}</span></span>${body("", "")}</a>`;
+      return `<a class="lc" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}"><span class="lc__img" style="aspect-ratio:1 / ${hw.toFixed(3)}"><img src="${src}" alt="${esc(`${p.title}, ${tx("dl.image")}`)}" width="${iw}" height="${ih}"${i < 4 ? "" : ' loading="lazy"'} decoding="async"><span class="lc__room">${esc(L.room(p.w.room))}</span></span>${body("", "")}</a>`;
     }
     paint() {
       const pick = posts.filter((p) => state.matches(p));

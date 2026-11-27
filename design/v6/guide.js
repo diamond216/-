@@ -15,7 +15,7 @@ window.NestGuide = (function () {
   const AFTER = [1, 2, 3, 4];
   L.add({
     en: {
-      "gd.k": "Posting guide", "gd.h": "How to post on Hamster Nest", "gd.close": "Close the guide",
+      "gd.free": "Free download", "gd.k": "Posting guide", "gd.h": "How to post on Hamster Nest", "gd.close": "Close the guide",
       "gd.tGood": "A good post", "gd.tRules": "The rules", "gd.tAfter": "After you post",
       "gd.intro": "Every project is checked against these. If one isn't met, an admin tells you which and what to change.", "gd.flagged": "If it's flagged:",
       "gd.hide": "Don't open this when I start a new project", "gd.start": "Start posting",
@@ -31,7 +31,7 @@ window.NestGuide = (function () {
       "gd.after.4": "Then keep it moving", "gd.after.4.d": "Post an update whenever something changes. Projects that update often rise to the top of Browse.",
     },
     th: {
-      "gd.k": "คู่มือการลงผลงาน", "gd.h": "ลงผลงานบน Hamster Nest ยังไง", "gd.close": "ปิดคู่มือ",
+      "gd.free": "ดาวน์โหลดฟรี", "gd.k": "คู่มือการลงผลงาน", "gd.h": "ลงผลงานบน Hamster Nest ยังไง", "gd.close": "ปิดคู่มือ",
       "gd.tGood": "ก่อนโพสต์", "gd.tRules": "กติกา", "gd.tAfter": "หลังโพสต์",
       "gd.intro": "ทุกโปรเจกต์จะถูกตรวจตามข้อเหล่านี้ ถ้าข้อไหนยังไม่ผ่าน แอดมินจะบอกว่าข้อไหน และต้องแก้อะไร", "gd.flagged": "ถ้าโดนทัก:",
       "gd.hide": "ไม่ต้องเปิดคู่มือนี้ตอนฉันเริ่มโปรเจกต์ใหม่", "gd.start": "เริ่มลงผลงาน",
@@ -63,7 +63,7 @@ window.NestGuide = (function () {
             <div class="gd__card"><span class="gd__pic"><span class="cv"></span><b class="pin" data-n="2">2</b><b class="pin pin--c" data-n="3">3</b></span>
               <p class="gd__n">Burrow Knights <b class="pin pin--i" data-n="1">1</b></p><p class="gd__l">Dig, fight, and get lost underground with a friend.</p>
               <p class="gd__team"><span>P</span><span>K</span>Pim, lead · Kaew, pixel art <b class="pin pin--i" data-n="4">4</b></p>
-              <p class="gd__dl">Free download · Windows, Web <b class="pin pin--i" data-n="6">6</b></p></div>
+              <p class="gd__dl">${tx("gd.free")} · Windows, Web <b class="pin pin--i" data-n="6">6</b></p></div>
             <ol class="gd__list">${GOOD.map((k, i) => `<li><b class="pin">${i + 1}</b><div><b>${tx("gd.good." + k)}</b><p>${tx("gd.good." + k + ".d")}</p></div></li>`).join("")}</ol></div></section>
         <section data-p="rules" role="tabpanel" hidden><p class="gd__intro">${tx("gd.intro")}</p>
           <ol class="gd__rules">${RULES.map(rule).map((r) => `<li id="rule-${r.id}"><details><summary><span class="gd__no">${r.id}</span><span><b>${esc(r.title)}</b><i>${esc(r.short)}</i></span></summary>

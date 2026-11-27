@@ -16,13 +16,15 @@
 
   // words on this page (lang.js). Names, the draft's own text and platform names are printed as written; room and genre labels come from L.room / L.genre.
   const L = window.NestLang, tx = (k, v) => L.t(k, v);
+  // a platform or format name for display (values stay English); only the Idea room formats have Thai words
+  const plat = (o) => { const k = "plat." + o, s = tx(k); return s === k ? o : s; };
   L.add({
     en: {
       "po.back": "Your profile", "po.title": "Post your project", "po.lead": "Takes about five minutes. Everything saves as you go, so you can leave and come back.",
       "po.guide": "Posting guide and rules", "po.modeAria": "What are you posting?", "po.mNew": "New project", "po.mUpd": "Update a project",
       "po.s1": "The basics", "po.name": "Name", "po.req": "Required", "po.opt": "Optional", "po.namePh": "What is it called?", "po.line": "One line about it",
       "po.linePh": "What does it do, in one sentence?", "po.lineH": "This shows under the name everywhere: on Browse, on your profile and on the project page.",
-      "po.room": "Room", "po.genre": "Genre", "po.pickOne": "Pick one or two", "po.roomFirst": "Pick a room first.", "po.runs": "Runs on", "po.shared": "Shared as",
+      "plat.Pitch deck": "Pitch deck", "plat.Poster": "Poster", "po.room": "Room", "po.genre": "Genre", "po.pickOne": "Pick one or two", "po.roomFirst": "Pick a room first.", "po.runs": "Runs on", "po.shared": "Shared as",
       "po.s2": "Clip and pictures", "po.s3": "About it", "po.aboutL": "About this project", "po.aboutPh": "How did it start? What does it do? What's next?",
       "po.aboutH": "Three short paragraphs are plenty. Leave a blank line between them.", "po.s4": "Team", "po.s5": "How to reach you",
       "po.reachH": "From your profile. Change them here for this project only.", "po.showPhone": "Show my phone number on this project",
@@ -58,7 +60,7 @@
       "po.guide": "คู่มือการลงผลงานและกติกา", "po.modeAria": "คุณจะลงอะไร", "po.mNew": "โปรเจกต์ใหม่", "po.mUpd": "อัปเดตโปรเจกต์เดิม",
       "po.s1": "ข้อมูลพื้นฐาน", "po.name": "ชื่อ", "po.req": "จำเป็น", "po.opt": "ไม่บังคับ", "po.namePh": "ผลงานนี้ชื่ออะไร", "po.line": "แนะนำสั้น ๆ หนึ่งบรรทัด",
       "po.linePh": "มันทำอะไรได้ บอกเป็นประโยคเดียว", "po.lineH": "บรรทัดนี้จะแสดงใต้ชื่อทุกที่ ทั้งหน้าสำรวจ โปรไฟล์ของคุณ และหน้าผลงาน",
-      "po.room": "ห้อง", "po.genre": "แนว", "po.pickOne": "เลือกหนึ่งหรือสองแนว", "po.roomFirst": "เลือกห้องก่อนนะ", "po.runs": "ใช้งานได้บน", "po.shared": "แชร์ในรูปแบบ",
+      "plat.Pitch deck": "สไลด์นำเสนอ", "plat.Poster": "โปสเตอร์", "po.room": "ห้อง", "po.genre": "แนว", "po.pickOne": "เลือกหนึ่งหรือสองแนว", "po.roomFirst": "เลือกห้องก่อนนะ", "po.runs": "ใช้งานได้บน", "po.shared": "แชร์ในรูปแบบ",
       "po.s2": "คลิปและรูปภาพ", "po.s3": "เล่าเกี่ยวกับผลงาน", "po.aboutL": "เกี่ยวกับผลงานนี้", "po.aboutPh": "เริ่มต้นยังไง ทำอะไรได้ แล้วจะทำอะไรต่อ",
       "po.aboutH": "สามย่อหน้าสั้น ๆ ก็พอ เว้นบรรทัดว่างระหว่างย่อหน้า", "po.s4": "ทีม", "po.s5": "ติดต่อคุณได้ทางไหน",
       "po.reachH": "ดึงมาจากโปรไฟล์ของคุณ แก้ตรงนี้ได้เฉพาะโปรเจกต์นี้", "po.showPhone": "แสดงเบอร์โทรของฉันในโปรเจกต์นี้",
@@ -270,7 +272,7 @@
       if (!d.room) { g.innerHTML = `<span class="fld__l">${tx("po.genre")}</span><p class="fld__h">${tx("po.roomFirst")}</p>`; p.innerHTML = ""; return; }
       d.genres = d.genres.filter((x) => rooms[d.room].includes(x)); d.platforms = d.platforms.filter((x) => PLATFORMS[d.room].includes(x));
       g.innerHTML = `<span class="fld__l" id="genres-l">${tx("po.genre")} <em>${tx("po.pickOne")}</em></span>${this.choice("genres", rooms[d.room], d.genres, true, (o) => L.genre(o))}`;
-      p.innerHTML = `<span class="fld__l" id="platforms-l">${tx(d.room === "Idea" ? "po.shared" : "po.runs")}</span>${this.choice("platforms", PLATFORMS[d.room], d.platforms, true)}`;
+      p.innerHTML = `<span class="fld__l" id="platforms-l">${tx(d.room === "Idea" ? "po.shared" : "po.runs")}</span>${this.choice("platforms", PLATFORMS[d.room], d.platforms, true, plat)}`;
       this.wireChoices(g); this.wireChoices(p);
       if (!calm) [g, p].forEach((el) => el.animate([{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: E }));
     }
@@ -348,7 +350,7 @@
           : `<p class="pv2__empty">${tx("pv.pickLeft")}</p>`;
         return;
       }
-      const cover = this.media.cover, tags = [d.room && L.room(d.room), ...d.genres.map((g) => L.genre(g)), ...d.platforms].filter(Boolean);
+      const cover = this.media.cover, tags = [d.room && L.room(d.room), ...d.genres.map((g) => L.genre(g)), ...d.platforms.map(plat)].filter(Boolean);
       body.innerHTML = `<div class="pv2__tile">${cover ? (cover.video ? `<video src="${cover.url}" muted autoplay loop playsinline></video>` : `<img src="${cover.url}" alt="">`) : `<span class="pv2__ph">${tx("pv.cover")}</span>`}<span class="pv2__new">${tx("pv.new")}</span></div>
         <p class="pv2__n">${esc(d.name || tx("pv.name"))}</p><p class="pv2__l">${esc(d.line || tx("pv.line"))}</p>
         ${tags.length ? `<p class="pv2__t">${tags.map((t, i) => `<span${i === 0 ? ' class="is-room"' : ""}>${esc(t)}</span>`).join("")}</p>` : ""}
