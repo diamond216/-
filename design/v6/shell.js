@@ -42,6 +42,7 @@ window.NestShell = (function () {
   const ic = (k, cls = "ico") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
   const IMG = new URL("img/", document.currentScript.src).href;
   const MARK = `<img class="logo" src="${IMG}logo-mark.png" width="52" height="40" alt="" decoding="async">`;
+  const rankIcon = (id, size = 16) => `<img class="rki" src="${IMG}rank-${id}.png" srcset="${IMG}rank-${id}@2x.png 2x" width="${size}" height="${size}" alt="" decoding="async">`;
   const SIL = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7" fill="var(--sil)"/><path d="M6 38c1.6-8.4 7.2-13 14-13s12.4 4.6 14 13z" fill="var(--sil)"/></svg>';
   const AVATAR_WORK = "cheek-pouch";
   const Me = {
@@ -399,5 +400,5 @@ window.NestShell = (function () {
   render(); motion.apply(); wire();
   if (location.hash === "#about") addEventListener("load", () => setTimeout(showAbout, 0), { once: true });
   if (window.NestSession) window.NestSession.search = search;
-  return { I, ic, MARK, SIL, avatar, face, Me, esc, wb, thai, Follows, theme, motion, lang, search, Paths, closeDrawer, layout };
+  return { I, ic, MARK, rankIcon, SIL, avatar, face, Me, esc, wb, thai, Follows, theme, motion, lang, search, Paths, closeDrawer, layout };
 })();

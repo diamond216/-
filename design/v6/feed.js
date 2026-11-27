@@ -1,11 +1,10 @@
 window.NestFeed = (function () {
   "use strict";
   const { works, tiers } = window.NEST;
-  const { ic, esc, Follows, thai, Paths, search } = window.NestShell;
+  const { ic, esc, Follows, thai, Paths, search, rankIcon } = window.NestShell;
   const { BrowseState, sortWorks } = window.BrowseKit;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const RC = { platinum: "var(--plat)", diamond: "var(--dia)", gold: "var(--gold)", silver: "var(--silver)", bronze: "var(--bronze)" };
   const ROOMS = ["Game", "IoT", "Web", "Idea"];
   const tierName = (id) => tiers.find((t) => t.id === id).name;
   const isPhone = () => innerWidth < 900;
@@ -13,7 +12,7 @@ window.NestFeed = (function () {
 
   const card = (w, i, opts = {}) => {
     const name = opts.name || w.name, rank = opts.noRank ? "new, not ranked yet" : tierName(w.tier);
-    const flag = opts.noRank ? `<span class="pc__rank">New · not ranked yet</span>` : `<span class="pc__rank"><i style="background:${RC[w.tier]}"></i>${tierName(w.tier)}</span>`;
+    const flag = opts.noRank ? `<span class="pc__rank">New · not ranked yet</span>` : `<span class="pc__rank">${rankIcon(w.tier)}${tierName(w.tier)}</span>`;
     const on = Follows.has(w.id);
     const fol = opts.noFollow ? "" : `<button type="button" class="pc__follow" data-follow="${w.id}" aria-pressed="${on}" aria-label="Follow ${esc(name)}">${ic("follow")}<span class="fl">${on ? "Following" : "Follow"}</span></button>`;
     const href = opts.href || Paths.page(`project.html#${w.id}`);
@@ -120,7 +119,7 @@ window.NestFeed = (function () {
       const ph = isPhone();
       chipsEl.innerHTML = `<button type="button" class="chip ${ph ? "chip--fbtn" : "chip--filter"}" data-c="filters" aria-expanded="${panel}" aria-controls="fpanel">${ic("filter")}Filters${state.active ? `<span class="cc">${state.active}</span>` : ""}</button>${ph ? "" : '<span class="chip-sep" aria-hidden="true"></span>'}
         ${["All", ...ROOMS].map((r) => `<button type="button" class="chip" data-room="${r}" aria-pressed="${state.tab === r}">${r === "All" ? (ph ? "All" : "All projects") : r}${ph ? "" : `<span class="cc">${roomCount(r)}</span>`}</button>`).join("")}
-        ${ph ? "" : `<span class="chip-sep rk" aria-hidden="true"></span>${tiers.map((t) => `<button type="button" class="chip rk" data-rank="${t.id}" aria-pressed="${state.ranks.has(t.id)}"><span class="rdot" style="background:${RC[t.id]}"></span>${t.name}</button>`).join("")}`}`;
+        ${ph ? "" : `<span class="chip-sep rk" aria-hidden="true"></span>${tiers.map((t) => `<button type="button" class="chip rk" data-rank="${t.id}" aria-pressed="${state.ranks.has(t.id)}">${rankIcon(t.id)}${t.name}</button>`).join("")}`}`;
     }
     const cnt = (key, test, ignore) => state.count(test, ignore);
     const top = (arr) => { const m = {}; arr.forEach((k) => (m[k] = (m[k] || 0) + 1)); return Object.entries(m).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([k]) => k); };
@@ -217,5 +216,5 @@ window.NestFeed = (function () {
     return { state, paint };
   }
 
-  return { mount, card, wireCards, RC, tierName };
+  return { mount, card, wireCards, tierName };
 })();
