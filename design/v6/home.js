@@ -5,8 +5,8 @@
   const $ = (s, r = document) => r.querySelector(s);
   const pick = (id) => works.find((w) => w.id === id);
   const SLIDES = [
-    { room: "Game", title: "RE//SLASH", text: "Fast first-person hack-and-slash: parry everything, go Slash Mode with the katana, keep your momentum.", by: "by Phoom.x, PetePeachPeat, Dnsw", href: "https://phoomx.itch.io/reslash", ext: true, img: new URL("../../hero/assets/reslash/reslash-1920.jpg", document.currentScript.src).href, alt: "RE//SLASH: a sword fighter mid-slash in a neon arena" },
-    ...["burrow-knights", "wheelsense", "nestboard"].map(pick).filter(Boolean).map((w) => ({ room: w.room, title: w.name, text: w.blurb, by: `by ${w.maker}`, href: Paths.page(`project.html#${w.id}`), art: w })),
+    { room: "Game", title: "RE//SLASH", text: "Fast first-person hack-and-slash: parry everything, go Slash Mode with the katana, keep your momentum.", href: "https://phoomx.itch.io/reslash", ext: true, img: new URL("../../hero/assets/reslash/reslash-1920.jpg", document.currentScript.src).href, alt: "RE//SLASH: a sword fighter mid-slash in a neon arena" },
+    ...["burrow-knights", "wheelsense", "nestboard"].map(pick).filter(Boolean).map((w) => ({ room: w.room, title: w.name, text: w.blurb, href: Paths.page(`project.html#${w.id}`), art: w })),
   ];
   const hero = $("#hero"); if (!hero) return;
   const video = $("video", hero);
@@ -16,7 +16,7 @@
     const img = $(".hero__img", hero);
     img.innerHTML = s.img ? `<img src="${s.img}" alt="${esc(s.alt)}" style="width:100%;height:100%;object-fit:cover;display:block">` : `<span role="img" aria-label="${esc(s.title)}" style="display:block;width:100%;height:100%">${window.Art.draw({ ...s.art, scribble: "" }, 0)}</span>`;
     const svg = $("svg", img); if (svg) { svg.setAttribute("preserveAspectRatio", "xMidYMid slice"); svg.style.cssText = "width:100%;height:100%;display:block"; }
-    $(".hero__in", hero).innerHTML = `<span class="tag">${esc(s.room)}</span><h2>${esc(s.title)}</h2><p>${esc(s.text)}</p><span class="hero__by">${esc(s.by)}</span><div class="hero__acts"><a class="btn" style="background:#fff;color:#1F1B16" href="${s.href}"${s.ext ? ' target="_blank" rel="noopener" aria-label="See the project: ' + esc(s.title) + ' (opens in a new tab)"' : ""}>See the project</a><a class="btn" style="background:none;border-color:rgba(255,255,255,.5);color:#fff" href="${Paths.page("browse.html")}">Browse projects</a></div>`;
+    $(".hero__in", hero).innerHTML = `<span class="tag">${esc(s.room)}</span><h2>${esc(s.title)}</h2><p>${esc(s.text)}</p><div class="hero__acts"><a class="btn" style="background:#fff;color:#1F1B16" href="${s.href}"${s.ext ? ' target="_blank" rel="noopener" aria-label="See the project: ' + esc(s.title) + ' (opens in a new tab)"' : ""}>See the project</a></div>`;
     hero.querySelectorAll(".hero__dots button").forEach((b, i) => (i === cur ? b.setAttribute("aria-current", "true") : b.removeAttribute("aria-current")));
     thai(hero);
   }
