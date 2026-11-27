@@ -110,7 +110,7 @@
     render() {
       const d = this.d, mine = ME.works().filter((x) => x.lead);
       this.root.innerHTML = `<div class="pf"><div>
-        <h1>Post your project</h1><p class="lead">Name, one line and room are enough to post. The rest can wait. <a href="#rules" class="rules-link">Posting guide and rules</a></p>
+        <h1>Build</h1><p class="lead">Name, one line and room are enough to post. The rest can wait. <a href="#rules" class="rules-link">Posting guide and rules</a></p>
         <div class="seg mode" role="radiogroup" aria-label="What are you posting?" style="margin-bottom:16px"><button type="button" class="chip" role="radio" data-mode="new" aria-checked="${d.mode === "new"}">New project</button><button type="button" class="chip" role="radio" data-mode="update" aria-checked="${d.mode === "update"}">Update a project</button></div>
         <form novalidate>
           <div class="m-new">
