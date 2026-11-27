@@ -6,6 +6,12 @@ window.NestShell = (function () {
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const body = document.body, root = document.documentElement;
+  (() => {
+    const main = document.getElementById("main"); if (!main) return;
+    root.classList.add("ld"); main.setAttribute("aria-busy", "true");
+    const done = () => setTimeout(() => { root.classList.remove("ld"); main.removeAttribute("aria-busy"); }, Math.max(0, 600 - performance.now()));
+    if (document.readyState === "loading") addEventListener("DOMContentLoaded", done, { once: true }); else done();
+  })();
   const page = body.dataset.page || "";
   const detail = ["project", "profile", "post"].includes(page);
   const I = {
