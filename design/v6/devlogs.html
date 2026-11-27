@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="motion.js"></script>
-<title>Dev logs · Hamster Nest</title>
+<script src="lang.js"></script>
+<title data-i18n="title.devlogs">Dev logs · Hamster Nest</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&family=Mali:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../v5/v5.css">
 <link rel="stylesheet" href="v6.css">
@@ -15,32 +16,32 @@
 <body class="sea sea--c" data-tone="lagoon">
 <canvas class="water" aria-hidden="true"></canvas>
 <header class="gbar"><div class="gbar__in">
-<div class="gleft"><a class="brand" href="../../hero/index.html" aria-label="Hamster Nest home"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg></a><nav class="gnav glass" aria-label="Main"><a href="../../hero/index.html#browse-page">Browse</a><a href="devlogs.html" aria-current="page">Dev logs</a><a href="../../hero/index.html#about-page">About</a></nav></div>
-<form class="gsearch glass" role="search" action="browse.html"><svg class="gsearch__ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" name="q" placeholder="Search projects, dev logs and makers" aria-label="Search Hamster Nest" autocomplete="off" enterkeyhint="search"><button type="button" class="gclear" aria-label="Clear the search" hidden>&times;</button><kbd aria-hidden="true">/</kbd></form>
+<div class="gleft"><a class="brand" href="../../hero/index.html" aria-label="Hamster Nest home" data-i18n-attr="aria-label:brand.home"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg></a><nav class="gnav glass" aria-label="Main" data-i18n-attr="aria-label:nav.aria"><a href="../../hero/index.html#browse-page" data-i18n="nav.browse">Browse</a><a href="devlogs.html" aria-current="page" data-i18n="nav.devlogs">Dev logs</a><a href="../../hero/index.html#about-page" data-i18n="nav.about">About</a></nav></div>
+<form class="gsearch glass" role="search" action="browse.html"><svg class="gsearch__ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" name="q" placeholder="Search projects, dev logs and makers" aria-label="Search Hamster Nest" data-i18n-attr="aria-label:search.aria" autocomplete="off" enterkeyhint="search"><button type="button" class="gclear" aria-label="Clear the search" data-i18n-attr="aria-label:search.clear" hidden>&times;</button><kbd aria-hidden="true">/</kbd></form>
 <div class="gbar__end">
-  <div class="glang glass" role="group" aria-label="Language"><button type="button" aria-pressed="true">EN</button><button type="button" aria-pressed="false" lang="th">ไทย</button></div>
+  <div class="glang glass" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.aria"><button type="button" data-set-lang="en" aria-pressed="true">EN</button><button type="button" data-set-lang="th" aria-pressed="false" lang="th">ไทย</button></div>
   <div class="acct"></div>
 </div>
 </div></header>
 
 <main class="dl-page br" id="main">
 <section class="dl-band wrap" aria-labelledby="dl-h">
-  <h1 id="dl-h" data-t="title">Dev logs</h1>
-  <p data-t="lead">What students changed in their projects lately, newest first. Sample content.</p>
+  <h1 id="dl-h" data-i18n="dl.title">Dev logs</h1>
+  <p data-i18n="dl.lead">What students changed in their projects lately, newest first. Sample content.</p>
 </section>
 <div class="br__sentinel" aria-hidden="true"></div>
 <div class="br__stick">
 <div class="br__top wrap">
-  <button type="button" class="fbtn glass" aria-expanded="false" aria-controls="fpanel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Filter<b hidden></b></button>
+  <button type="button" class="fbtn glass" aria-expanded="false" aria-controls="fpanel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M8.5 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="br.filter">Filter</span><b hidden></b></button>
 </div>
-<nav class="rooms wrap" aria-label="Rooms"></nav>
+<nav class="rooms wrap" aria-label="Rooms" data-i18n-attr="aria-label:br.rooms"></nav>
 </div>
 <div class="br__body wrap">
-  <aside class="fpanel" id="fpanel" aria-label="Filters" hidden></aside>
+  <aside class="fpanel" id="fpanel" aria-label="Filters" data-i18n-attr="aria-label:br.filters" hidden></aside>
   <section class="dl-feed" aria-labelledby="ml-h">
-    <div class="ml-head"><h2 id="ml-h" data-t="latest">Latest logs</h2><span class="ml-n" aria-live="polite"></span><div class="rhead__tools"><div class="rank"><button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span>All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="rank__menu" role="listbox" aria-label="Rank" hidden></ul></div></div></div>
+    <div class="ml-head"><h2 id="ml-h" data-i18n="dl.latest">Latest logs</h2><span class="ml-n" aria-live="polite"></span><div class="rhead__tools"><div class="rank"><button type="button" class="rank__btn" aria-haspopup="listbox" aria-expanded="false"><span>All ranks</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="rank__menu" role="listbox" aria-label="Rank" data-i18n-attr="aria-label:br.rank" hidden></ul></div></div></div>
     <div class="ml"></div>
-    <button type="button" class="dl-more" data-t="more" hidden>Show more</button>
+    <button type="button" class="dl-more" data-i18n="dl.more" hidden>Show more</button>
   </section>
 </div>
 </main>

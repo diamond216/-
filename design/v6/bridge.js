@@ -1,6 +1,6 @@
 // Bridge between the hero and Browse on hero/index.html: the glass top bar turns white once Browse reaches it,
 // in-page links glide (Scroll down, Explore projects, Browse, a room from the footer, About and Contact),
-// and EN / ไทย switch the hero's language (app.js does the work through the hidden first header).
+// and EN / ไทย switch the language (lang.js).
 // The account area in the bar is the shared one (session.js fills .acct).
 (function () {
   "use strict";
@@ -37,10 +37,5 @@
   });
   // arriving from another page with a hash (e.g. a room link in the project page's footer)
   addEventListener("load", () => { if (target(location.hash)) glide(location.hash, false); });
-
-  // EN / ไทย: press the matching item of the hero's own language menu, so app.js translates the page
-  const langs = [...header.querySelectorAll("[data-set-lang]")];
-  const showLang = () => langs.forEach((b) => b.setAttribute("aria-pressed", b.dataset.setLang === (document.documentElement.lang === "th" ? "th" : "en")));
-  langs.forEach((b) => b.addEventListener("click", () => { document.querySelector(`#lang-menu [data-lang="${b.dataset.setLang}"]`)?.click(); showLang(); }));
-  addEventListener("load", showLang); showLang();
+  // EN / ไทย: the buttons carry data-set-lang, so lang.js switches the page (app.js adds the hero's own parts)
 })();

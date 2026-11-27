@@ -77,3 +77,5 @@ html.calm .gnav__pill{transition:none}
 .nest-foot .foot__contact a:hover svg{color:#fff}
 .nest-foot .foot__contact a:focus-visible{outline:2px solid #fff;outline-offset:2px}
 html.calm .nest-foot .foot__contact a{transition:none}
+/* Thai: balance the two lines so the heading does not split inside a word */
+html[lang=th] .gate h1{text-wrap:balance}

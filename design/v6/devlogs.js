@@ -8,10 +8,14 @@
   const PAGE = 24;
   const DAYS = { "today": 0, "yesterday": 1, "2 days ago": 2, "3 days ago": 3, "5 days ago": 5, "last week": 7, "1 week ago": 8, "2 weeks ago": 14, "3 weeks ago": 21, "last month": 30, "2 months ago": 60 };
   const RATIOS = [[4, 5], [16, 9], null, [1, 1], [2, 3], [3, 2], [9, 16], [4, 3], null, [3, 4], [21, 9], [1, 1]];
-  const TEXT = {
-    en: { title: "Dev logs", lead: "What students changed in their projects lately, newest first. Sample content.", latest: "Latest logs", more: "Show more", none: (q) => q ? `No logs match “${q}”.` : "No logs match these filters.", clear: "Clear", open: "Open the project's updates", image: "image" },
-    th: { title: "บันทึกการพัฒนา", lead: "สิ่งที่นักเรียนเปลี่ยนในโปรเจกต์ช่วงนี้ ใหม่สุดก่อน (ข้อมูลตัวอย่าง)", latest: "บันทึกล่าสุด", more: "ดูเพิ่ม", none: (q) => q ? `ไม่พบบันทึกที่ตรงกับ “${q}”` : "ไม่พบบันทึกที่ตรงกับตัวกรองนี้", clear: "ล้าง", open: "เปิดอัปเดตของโปรเจกต์", image: "รูปภาพ" },
-  };
+  // words on this page (lang.js); the logs themselves (titles, texts, project names, makers) are printed as written; room labels come from L.room
+  const L = window.NestLang, tx = (k, v) => L.t(k, v);
+  L.add({
+    en: { "dl.title": "Dev logs", "dl.lead": "What students changed in their projects lately, newest first. Sample content.", "dl.latest": "Latest logs", "dl.more": "Show more",
+      "dl.none": "No logs match these filters.", "dl.noneQ": "No logs match “{q}”.", "dl.clear": "Clear", "dl.open": "Open the project's updates", "dl.image": "image" },
+    th: { "dl.title": "บันทึกการพัฒนา", "dl.lead": "สิ่งที่นักเรียนแก้ไขในโปรเจกต์ช่วงนี้ ใหม่สุดอยู่บนสุด (ข้อมูลตัวอย่าง)", "dl.latest": "บันทึกล่าสุด", "dl.more": "ดูเพิ่ม",
+      "dl.none": "ไม่พบบันทึกที่ตรงกับตัวกรองนี้", "dl.noneQ": "ไม่พบบันทึกที่ตรงกับ “{q}”", "dl.clear": "ล้าง", "dl.open": "เปิดอัปเดตของโปรเจกต์", "dl.image": "รูปภาพ" },
+  });
   const updatesHref = (id) => NestSession.Paths.page(`project.html#${id}&updates`);
 
   const posts = works.flatMap((w, wi) => new SampleDetails(w).updates().slice(0, 2).map(([when, title, note], k) => ({ w, when, title, excerpt: k ? note : w.blurb, days: DAYS[when] ?? 90, order: wi * 2 + k })))
@@ -19,7 +23,7 @@
     .map((p, i) => ({ ...p, ratio: RATIOS[i % RATIOS.length], frame: i % 7 }));
 
   const state = new BrowseState({ items: posts, of: (p) => p.w, text: (p) => `${p.title} ${p.w.name} ${p.w.maker} ${p.excerpt}` });
-  let lang = "en", shown = PAGE;
+  let shown = PAGE;
 
   class Masonry {
     constructor(el) {
@@ -53,24 +57,24 @@
     }
     date(days) {
       const d = new Date(); d.setDate(d.getDate() - days);
-      return { iso: d.toISOString().slice(0, 10), label: d.toLocaleDateString(lang === "th" ? "th-TH" : "en-GB", { day: "numeric", month: "short" }) };
+      return { iso: d.toISOString().slice(0, 10), label: d.toLocaleDateString(L.th ? "th-TH" : "en-GB", { day: "numeric", month: "short" }) };
     }
     card(p, i) {
-      const t = TEXT[lang], d = this.date(p.days);
-      const label = `${p.title}, ${p.w.name}, ${d.label}. ${t.open}`;
+      const d = this.date(p.days);
+      const label = `${p.title}, ${p.w.name}, ${d.label}. ${tx("dl.open")}`;
       const meta = `<span class="lc__meta"><span>${esc(p.w.name)}</span><time datetime="${d.iso}">${esc(d.label)}</time></span>`;
       const body = (top, ex) => `<span class="lc__body">${top}${meta}<span class="lc__title">${esc(p.title)}</span>${ex}<span class="lc__by">${esc(p.w.maker)}</span></span>`;
-      if (!p.ratio) return `<a class="lc lc--text" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}">${body(`<span class="lc__roomt">${esc(p.w.room)}</span>`, `<span class="lc__ex">${esc(p.excerpt)}</span>`)}</a>`;
+      if (!p.ratio) return `<a class="lc lc--text" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}">${body(`<span class="lc__roomt">${esc(L.room(p.w.room))}</span>`, `<span class="lc__ex">${esc(p.excerpt)}</span>`)}</a>`;
       const [rw, rh] = p.ratio, hw = Math.min(1.5, Math.max(0.5, rh / rw)), iw = 600, ih = Math.round(iw * rh / rw);
       const src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(Art.draw({ ...p.w, scribble: "" }, p.frame));
-      return `<a class="lc" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}"><span class="lc__img" style="aspect-ratio:1 / ${hw.toFixed(3)}"><img src="${src}" alt="${esc(`${p.title}, ${t.image}`)}" width="${iw}" height="${ih}"${i < 4 ? "" : ' loading="lazy"'} decoding="async"><span class="lc__room">${esc(p.w.room)}</span></span>${body("", "")}</a>`;
+      return `<a class="lc" href="${updatesHref(p.w.id)}" aria-label="${esc(label)}"><span class="lc__img" style="aspect-ratio:1 / ${hw.toFixed(3)}"><img src="${src}" alt="${esc(`${p.title}, ${tx("dl.image")}`)}" width="${iw}" height="${ih}"${i < 4 ? "" : ' loading="lazy"'} decoding="async"><span class="lc__room">${esc(L.room(p.w.room))}</span></span>${body("", "")}</a>`;
     }
     paint() {
-      const t = TEXT[lang], pick = posts.filter((p) => state.matches(p));
+      const pick = posts.filter((p) => state.matches(p));
       this.n.textContent = pick.length;
       this.more.hidden = pick.length <= shown;
       if (!pick.length) {
-        this.el.innerHTML = `<p class="none">${esc(t.none(state.q.trim()))} <button type="button">${esc(t.clear)}</button></p>`;
+        this.el.innerHTML = `<p class="none">${esc(state.q.trim() ? tx("dl.noneQ", { q: state.q.trim() }) : tx("dl.none"))} <button type="button">${esc(tx("dl.clear"))}</button></p>`;
         $("button", this.el).addEventListener("click", () => state.set((s) => { s.q = ""; s.ranks.clear(); s.rooms.clear(); s.genres.clear(); }));
         this.el.style.height = "";
         return;
@@ -84,18 +88,7 @@
   new SearchBar(state); new RankMenu(state); new RoomTabs(state); new FilterPanel(state);
   const feed = new LogFeed();
 
-  function applyLang(next) {
-    lang = next === "th" ? "th" : "en";
-    const t = TEXT[lang];
-    document.documentElement.lang = lang;
-    document.title = `${t.title} · Hamster Nest`;
-    document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t[el.dataset.t]; });
-    document.querySelectorAll(".glang button").forEach((b) => b.setAttribute("aria-pressed", String((b.textContent.trim() === "ไทย") === (lang === "th"))));
-    try { localStorage.setItem("nest-lang", lang); } catch (e) {}
-    feed.paint();
-  }
-  document.querySelectorAll(".glang button").forEach((b) => b.addEventListener("click", () => applyLang(b.textContent.trim() === "ไทย" ? "th" : "en")));
-
-  let saved = "en"; try { saved = localStorage.getItem("nest-lang") || "en"; } catch (e) {}
-  applyLang(saved);
+  // lang.js writes the [data-i18n] words and the page title; the cards are drawn here
+  L.addEventListener("change", () => feed.paint());
+  feed.paint();
 })();

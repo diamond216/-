@@ -3,6 +3,11 @@
 window.Details = (function () {
   "use strict";
   const { works, tiers } = window.NEST;
+  // the site's own rank award (not a maker's text); its words come from here, the tier name stays English
+  window.NestLang.add({
+    en: { "aw.rank": "{tier} rank", "aw.place": "Hamster Nest, place {n} of 50" },
+    th: { "aw.rank": "อันดับ {tier}", "aw.place": "Hamster Nest อันดับที่ {n} จาก 50" },
+  });
   const hue = (s) => [...s].reduce((n, c) => n + c.charCodeAt(0), 0) % 360;
   const seed = (s, n) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % n;
   // ---------- sample details, one place to swap for real data later ----------
@@ -65,7 +70,7 @@ window.Details = (function () {
     awards() {
       const t = tiers.find((x) => x.id === this.w.tier);
       const extra = SampleDetails.AWARDS.filter((_, i) => (seed(this.w.id, 5) >> i) & 1).slice(0, 2);
-      return [[`${t.name} rank`, `Hamster Nest, place ${tiers.indexOf(t) * 10 + this.w.place} of 50`, true], ...extra.map(([a, b]) => [a, b, false])];
+      return [[NestLang.t("aw.rank", { tier: t.name }), NestLang.t("aw.place", { n: tiers.indexOf(t) * 10 + this.w.place }), true], ...extra.map(([a, b]) => [a, b, false])];
     }
   }
 
