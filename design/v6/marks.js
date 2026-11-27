@@ -7,9 +7,9 @@ window.TierMarks = (function () {
   "use strict";
   const grad = (c) => `linear-gradient(90deg,${c.join(",")})`;
   const kinds = {
-    badge: (t, m) => `<h2 class="mark mark--badge" style="--ink:${grad(m.metal)}"><b>${t.name.toUpperCase()}</b><span class="mark__light">TIER</span></h2>`,
-    script: (t, m) => `<h2 class="mark mark--script"><span class="mark__script" style="--ink:${grad(m.ink)}">${t.name}</span> tier</h2>`,
-    ink: (t, m) => `<h2 class="mark mark--ink"><span class="mark__fade" style="--ink:${grad(m.ink)}">${t.name}</span> tier</h2>`,
+    badge: (t, m) => `<h2 class="mark mark--badge" style="--ink:${grad(m.metal)}"><b>${t.name.toUpperCase()}</b><span class="mark__light mark__tw" data-i18n="tier.wordCaps">TIER</span></h2>`,
+    script: (t, m) => `<h2 class="mark mark--script"><span class="mark__script" style="--ink:${grad(m.ink)}">${t.name}</span><span class="mark__tw" data-i18n="tier.word">tier</span></h2>`,
+    ink: (t, m) => `<h2 class="mark mark--ink"><span class="mark__fade" style="--ink:${grad(m.ink)}">${t.name}</span><span class="mark__tw" data-i18n="tier.word">tier</span></h2>`,
   };
   return {
     head(tier, count) {

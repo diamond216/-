@@ -12,7 +12,7 @@
     en: {
       "home.see": "See the project", "home.say": "“High schoolers can do all this!?”", "home.statement": "Statement",
       "home.heroAria": "Best of the Platinum tier", "home.prev": "Previous work", "home.next": "Next work", "home.tiers": "Tiers",
-      "tier.all": "See all {n}", "tier.how": "How ranking works", "filters": "Filters",
+      "tier.word": "tier", "tier.wordCaps": "TIER", "tier.all": "See all {n}", "tier.how": "How ranking works", "filters": "Filters",
       "home.hi": "Say hi to {name}", "home.work": "{name}, work {i} of {n}", "home.pic": "Picture {i} of {n}", "home.preview": "Preview",
       "home.f.aria": "Filter works", "home.f.all": "All", "home.f.hint": "Pick a room to see its genres.", "home.f.clear": "Clear all",
       "home.f.show1": "Show {n} work", "home.f.showN": "Show {n} works",
@@ -21,7 +21,7 @@
     th: {
       "home.see": "ดูผลงาน", "home.say": "“เด็ก ม.ปลาย ทำได้ขนาดนี้เลยเหรอ!?”", "home.statement": "ข้อความเด่น",
       "home.heroAria": "ผลงานเด่นของระดับ Platinum", "home.prev": "ผลงานก่อนหน้า", "home.next": "ผลงานถัดไป", "home.tiers": "ระดับ",
-      "tier.all": "ดูทั้งหมด {n} ชิ้น", "tier.how": "จัดอันดับยังไง", "filters": "ตัวกรอง",
+      "tier.word": "ระดับ", "tier.wordCaps": "ระดับ", "tier.all": "ดูทั้งหมด {n} ชิ้น", "tier.how": "จัดอันดับยังไง", "filters": "ตัวกรอง",
       "home.hi": "ทักทาย {name}", "home.work": "{name} ผลงานที่ {i} จาก {n}", "home.pic": "รูปที่ {i} จาก {n}", "home.preview": "ดูตัวอย่าง",
       "home.f.aria": "กรองผลงาน", "home.f.all": "ทั้งหมด", "home.f.hint": "เลือกห้องเพื่อดูแนวของห้องนั้น", "home.f.clear": "ล้างทั้งหมด",
       "home.f.show1": "ดูผลงาน {n} ชิ้น", "home.f.showN": "ดูผลงาน {n} ชิ้น",

@@ -337,3 +337,5 @@ html:lang(th) .say__h{font-family:"IBM Plex Sans Thai Looped",sans-serif;font-we
 /* v5's "footer .wrap{display:flex}" beats .foot__links; keep the link columns a grid, two a row on phones */
 footer .wrap.foot__links{display:grid}
 @media (max-width:900px){footer .wrap.foot__links{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px;justify-content:start}}
+/* Thai: the word for tier comes first ("ระดับ Gold"); English is untouched */
+html[lang=th] .mark__tw{order:-1}html[lang=th] .mark--badge .mark__light{margin:0 .08em 0 0;font-weight:400}
