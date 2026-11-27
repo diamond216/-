@@ -151,11 +151,14 @@
   const page = new ProfilePage($("#prof"));
   page.wire();
   const show = () => {
-    const [h, tab] = decodeURIComponent(location.hash.slice(1)).split("/");
+    let [h, tab] = decodeURIComponent(location.hash.slice(1)).split("/");
+    const edit = tab === "edit";
+    if (edit) { tab = ""; history.replaceState(null, "", `#${h}`); }
     const name = Person.find(h) || ME, same = page.p && page.p.name === name;
     page.closeContact(false);
     if (same) { page.tab = tab || "projects"; page.render(page.p, page.tab); const t = $(`#tab-${page.tab}`); if (t && document.activeElement && document.activeElement.matches('[role="tab"]')) t.focus(); }
     else { page.render(new Person(name), tab || "projects"); scrollTo({ top: 0, behavior: "auto" }); }
+    if (edit && $('[data-act="edit"]')) page.edit();
   };
   addEventListener("hashchange", show); addEventListener("nest:session", () => { if (page.p) page.render(page.p, page.tab); }); show();
 })();

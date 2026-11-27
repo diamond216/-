@@ -13,7 +13,8 @@ window.NestShell = (function () {
     if (document.readyState === "loading") addEventListener("DOMContentLoaded", done, { once: true }); else done();
   })();
   const page = body.dataset.page || "";
-  const detail = ["project", "profile", "post"].includes(page);
+  const detail = ["project", "profile", "post", "settings"].includes(page);
+  const GEAR = (() => { const p = []; for (let k = 0; k < 8; k++) { const a = (k * Math.PI) / 4; [[-0.2, 8.6], [0.2, 8.6], [0.32, 6.4], [0.47, 6.4]].forEach(([o, r]) => { const t = a + o; p.push((p.length ? "L" : "M") + (12 + r * Math.cos(t)).toFixed(2) + " " + (12 + r * Math.sin(t)).toFixed(2)); }); } return '<path d="' + p.join("") + 'z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/>'; })();
   const I = {
     menu: '<path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
     browse: '<rect x="4" y="4" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="4" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="13" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="13" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>',
@@ -34,6 +35,9 @@ window.NestShell = (function () {
     alert: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7.5v5.5M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
     lamp: '<path d="M9 18h6M10 21h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 3a6 6 0 00-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0012 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>',
     x: '<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+    user: '<circle cx="12" cy="9" r="3.8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 19.5c1.2-3.4 3.9-5 7-5s5.8 1.6 7 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    gear: GEAR,
+    out: '<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
   };
   const ic = (k, cls = "ico") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
   const MARK = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg>';
@@ -80,15 +84,33 @@ window.NestShell = (function () {
     isNew(w) { return ["today", "yesterday"].includes(w.update.when); },
   };
 
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  let themeMem = null;
   const theme = {
     get dark() { return root.dataset.theme === "dark"; },
-    set(dark) {
+    get pick() {
+      try { const v = localStorage.getItem("nest-theme"); return v === "dark" || v === "light" ? v : "device"; } catch (e) { return themeMem || "device"; }
+    },
+    get device() { return darkMQ.matches ? "dark" : "light"; },
+    paint(dark) {
       root.dataset.theme = dark ? "dark" : "light";
-      try { localStorage.setItem("nest-theme", dark ? "dark" : "light"); } catch (e) {}
       $$(".thm").forEach((b) => b.setAttribute("aria-pressed", String(dark)));
       $$(".sw[data-sw=theme]").forEach((b) => b.setAttribute("aria-checked", String(dark)));
+      dispatchEvent(new CustomEvent("nest:theme", { detail: { pick: this.pick, dark } }));
+    },
+    set(dark) {
+      themeMem = dark ? "dark" : "light";
+      try { localStorage.setItem("nest-theme", themeMem); } catch (e) {}
+      this.paint(dark);
+    },
+    choose(v) {
+      if (v !== "device") return this.set(v === "dark");
+      themeMem = null;
+      try { localStorage.removeItem("nest-theme"); } catch (e) {}
+      this.paint(darkMQ.matches);
     },
   };
+  darkMQ.addEventListener("change", () => { if (theme.pick === "device") theme.paint(darkMQ.matches); });
   const motion = {
     reduced: matchMedia("(prefers-reduced-motion: reduce)").matches,
     get on() { const v = Store.get("nest-motion"); return v === null ? !this.reduced : v === "on"; },
@@ -125,7 +147,7 @@ window.NestShell = (function () {
 
   function sideMenu() {
     const side = $("#side"); if (!side) return;
-    const cur = { home: "home", browse: "browse", devlogs: "logs" }[page] || "";
+    const cur = { home: "home", browse: "browse", devlogs: "logs", settings: "gear" }[page] || "";
     const signed = Session.signedIn, u = Session.user;
     const fol = Follows.list().map((id) => works.find((w) => w.id === id)).filter(Boolean);
     const si = (k, label, href) => `<a class="si" href="${href}"${cur === k ? ' aria-current="page"' : ""}>${ic(k)}<span>${label}</span></a>`;
@@ -134,11 +156,13 @@ window.NestShell = (function () {
       <div class="drawer-head"><button type="button" class="ibtn" data-act="menu-close" aria-label="Close menu">${ic("menu")}</button><span class="mark">${MARK}</span></div>
       ${signed ? `<div class="dacct"><div class="who"><a href="${Paths.page(`profile.html#${u.handle}`)}">${avatar(40)}<span><b>${esc(Me.get().name || u.name)}</b><small>View your profile</small></span></a><button type="button" class="btn btn--line" data-act="logout">Log out</button></div><a class="btn btn--line post" href="${Paths.page("post.html")}">${ic("plus")}Build</a><hr></div>` : ""}
       ${si("home", "Home", Paths.home())}${si("browse", "Browse", Paths.page("browse.html"))}${si("logs", "Dev logs", Paths.page("devlogs.html"))}${si("about", "About", Paths.home("#about"))}
+      <div class="mini-only">${si("follow", "Following", Paths.page(`profile.html#${u.handle}/following`))}${si("gear", "Settings", Paths.page("settings.html"))}</div>
       <div class="full-only"><hr><h4>Following</h4>
         ${fol.length ? fol.slice(0, 5).map((w) => `<a class="si" href="${Paths.page(`project.html#${w.id}`)}"><span class="thumb" aria-hidden="true">${window.Art ? window.Art.draw(w) : ""}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(w.name)}</span>${Follows.isNew(w) ? '<small class="nw"><span class="vh">, </span>new<span class="vh"> update</span></small>' : ""}</a>`).join("") : `<p class="side__foot" style="margin-top:0">Follow a project to see it here</p>`}
         <a class="si" href="${Paths.page(`profile.html#${u.handle}/following`)}">${ic("follow")}<span>All followed (${fol.length})</span></a>
         <hr><h4>Rooms</h4>
         ${rooms.map((r) => `<a class="si" href="${Paths.page(`browse.html?room=${r}`)}"><span>${r}</span><small>${works.filter((w) => w.room === r).length}</small></a>`).join("")}
+        <hr class="hl">${si("gear", "Settings", Paths.page("settings.html"))}
         <div class="drawer-extra"><hr><div style="display:flex;gap:10px;align-items:center;padding:4px 12px">${langGroup()}</div><div class="drow"><span id="thm-l">Dark theme</span><button type="button" class="sw" data-sw="theme" role="switch" aria-checked="${theme.dark}" aria-labelledby="thm-l"><i></i></button></div>${signed ? "" : `<div style="display:flex;gap:8px;padding:12px"><a class="btn btn--line" href="#" data-in style="flex:1">Log in</a><a class="btn btn--acc" href="#" data-in style="flex:1">Sign up</a></div>`}</div></div>`;
   }
 
@@ -149,7 +173,7 @@ window.NestShell = (function () {
 
   function footer() {
     const main = $("#main"); if (!main || $(".ft", main)) return;
-    main.insertAdjacentHTML("beforeend", `<footer class="ft" id="about"><div class="ft__brand">${MARK}<span><b>Hamster Nest</b><small>by Hamster Hub, a technology community</small></span></div><div class="ft__c"><h4>Contacts</h4><dl><dt>Facebook</dt><dd><a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook: Hamster Hub (opens in a new tab)">Hamster Hub</a></dd><dt>LINE</dt><dd><a href="https://line.me/R/ti/p/@smart-school" target="_blank" rel="noopener" aria-label="LINE: @smart-school (opens in a new tab)">@smart-school</a></dd><dt>Phone</dt><dd><a href="tel:0900602555" aria-label="Phone: 090-060-2555">090-060-2555</a></dd><dt>Instagram</dt><dd><a href="https://www.instagram.com/hamsterhub_ig" target="_blank" rel="noopener" aria-label="Instagram: hamsterhub_ig (opens in a new tab)">hamsterhub_ig</a></dd></dl></div><div class="ft__a"><span id="anim-l">Animations</span><button type="button" class="sw" data-sw="anim" role="switch" aria-checked="${motion.on}" aria-labelledby="anim-l"><i></i></button></div><p class="ft__note">Projects, names and numbers on this page are sample data.</p></footer>`);
+    main.insertAdjacentHTML("beforeend", `<footer class="ft" id="about"><div class="ft__brand">${MARK}<span><b>Hamster Nest</b><small>by Hamster Hub, a technology community</small></span></div><div class="ft__c"><h4>Contacts</h4><dl><dt>Facebook</dt><dd><a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook: Hamster Hub (opens in a new tab)">Hamster Hub</a></dd><dt>LINE</dt><dd><a href="https://line.me/R/ti/p/@smart-school" target="_blank" rel="noopener" aria-label="LINE: @smart-school (opens in a new tab)">@smart-school</a></dd><dt>Phone</dt><dd><a href="tel:0900602555" aria-label="Phone: 090-060-2555">090-060-2555</a></dd><dt>Instagram</dt><dd><a href="https://www.instagram.com/hamsterhub_ig" target="_blank" rel="noopener" aria-label="Instagram: hamsterhub_ig (opens in a new tab)">hamsterhub_ig</a></dd></dl></div><div class="ft__a"><a class="ft__set" href="${Paths.page("settings.html")}">${ic("gear")}Settings</a></div><p class="ft__note">Projects, names and numbers on this page are sample data.</p></footer>`);
   }
 
   let mode = "";
@@ -289,7 +313,11 @@ window.NestShell = (function () {
     addEventListener("nest:session", () => { render(); });
     addEventListener("nest:follows", () => sideMenu());
     addEventListener("nest:me", () => { $$(".acct-menu").forEach((m) => m.remove()); render(); });
-    addEventListener("storage", (e) => { if (e.key === "nest-theme" && e.newValue) theme.set(e.newValue === "dark"); if (e.key === "nest-lang" && e.newValue && e.newValue !== lang.cur) lang.set(e.newValue); });
+    addEventListener("storage", (e) => {
+      if (e.key === "nest-theme" || e.key === null) theme.paint(e.newValue === "dark" || (e.newValue !== "light" && darkMQ.matches));
+      if (e.key === "nest-motion") motion.apply();
+      if (e.key === "nest-lang" && e.newValue && e.newValue !== lang.cur) lang.set(e.newValue);
+    });
   }
 
   function render() {
