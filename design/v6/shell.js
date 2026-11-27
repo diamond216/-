@@ -141,7 +141,7 @@ window.NestShell = (function () {
     tb.innerHTML = `
       <div class="tb__l"><button type="button" class="ibtn" data-act="menu" aria-label="Menu" aria-expanded="false" aria-controls="side">${ic("menu")}</button><a class="mark" href="${Paths.home()}" aria-label="Hamster Nest home">${MARK}<span class="mark__w">Hamster Nest</span></a></div>
       <form class="srch" role="search" action="${Paths.page("browse.html")}"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;color:var(--t3)">${I.search}</svg><input type="search" name="q" placeholder="Search" aria-label="Search Hamster Nest" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
-      <div class="tb__r"><button type="button" class="ibtn ph-only" data-act="search" aria-label="Search">${ic("search")}</button>${signed ? `<button type="button" class="ibtn ph-only acct-ph" data-act="acct" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu, ${esc(u.name)}">${avatar(32)}</button>` : ""}${langGroup()}<button type="button" class="ibtn thm" aria-pressed="${theme.dark}" aria-label="Dark theme" title="Dark theme">${ic("lamp")}</button>${signed ? `<a class="btn btn--line" href="${Paths.page("post.html")}">${ic("plus")}Build</a><span class="acct-wrap"><button type="button" class="acct" data-act="acct" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu, ${esc(u.name)}">${avatar(32)}</button></span>` : `<a class="btn btn--ghost" href="#" data-in>Log in</a><a class="btn btn--ink" href="#" data-in>Sign up</a>`}</div>
+      <div class="tb__r"><button type="button" class="ibtn ph-only" data-act="search" aria-label="Search">${ic("search")}</button>${signed ? `<button type="button" class="ibtn ph-only acct-ph" data-act="acct" aria-haspopup="menu" aria-expanded="false" aria-controls="acct-menu" aria-label="Account menu, ${esc(u.name)}">${avatar(32)}</button>` : ""}${langGroup()}<button type="button" class="ibtn thm" aria-pressed="${theme.dark}" aria-label="Dark theme" title="Dark theme">${ic("lamp")}</button>${signed ? `<a class="btn btn--line" href="${Paths.page("post.html")}">${ic("plus")}Build</a><span class="acct-wrap"><button type="button" class="acct" data-act="acct" aria-haspopup="menu" aria-expanded="false" aria-controls="acct-menu" aria-label="Account menu, ${esc(u.name)}">${avatar(32)}</button></span>` : `<a class="btn btn--ghost" href="#" data-in>Log in</a><a class="btn btn--ink" href="#" data-in>Sign up</a>`}</div>
       <div class="srch-row"><button type="button" class="ibtn" data-act="search-close" aria-label="Close search">${ic("back")}</button><form class="srch" role="search" action="${Paths.page("browse.html")}"><input type="search" name="q" placeholder="Search" aria-label="Search Hamster Nest" autocomplete="off"><button type="button" class="ibtn" data-act="search-clear" style="width:30px;height:30px" aria-label="Clear">${ic("x")}</button></form></div>`;
   }
 
@@ -218,19 +218,63 @@ window.NestShell = (function () {
     dispatchEvent(new Event("resize"));
   }
 
-  const acctMenu = () => {
-    let m = $(".acct-menu"); if (m) return m;
-    const u = Session.user;
-    m = document.createElement("div"); m.className = "acct-menu"; m.setAttribute("role", "menu"); m.hidden = true;
-    m.innerHTML = `<a role="menuitem" href="${Paths.page(`profile.html#${u.handle}`)}">Your profile</a><a role="menuitem" href="${Paths.page("post.html")}">Build</a><a role="menuitem" href="${Paths.page(`profile.html#${u.handle}/following`)}">Following</a><hr><button type="button" role="menuitem" data-act="logout">Log out</button>`;
-    return m;
+  const Acct = {
+    btn: null, inerted: [],
+    get el() { return document.getElementById("acct-menu"); },
+    items() { return this.el ? $$(".am__it", this.el) : []; },
+    html(sheet) {
+      const u = Session.user, m = Me.get();
+      const n = Follows.list().filter((id) => works.some((w) => w.id === id)).length;
+      const row = (icon, label, href) => `<a class="am__it" role="menuitem" tabindex="-1" href="${href}">${ic(icon)}<span>${label}</span>${icon === "follow" && n ? `<small aria-hidden="true">${n}</small>` : ""}</a>`;
+      const who = `<div class="am__who" id="am-who">${avatar(40)}<span><b>${esc(m.name || u.name)}</b><small>@${esc(u.handle)}</small></span></div>`;
+      const items = `${row("user", "Your profile", Paths.page(`profile.html#${u.handle}`))}${row("plus", "Build", Paths.page("post.html"))}${row("follow", "Following", Paths.page(`profile.html#${u.handle}/following`))}${row("gear", "Settings", Paths.page("settings.html"))}<div class="am__sep" role="separator"></div><button class="am__it" role="menuitem" tabindex="-1" type="button" data-am="out">${ic("out")}<span>Log out</span></button>`;
+      return sheet
+        ? `<div class="sheet-scrim" data-am="scrim"></div><div class="sheet acct-sheet am" id="acct-menu" role="dialog" aria-modal="true" aria-label="Account menu"><div class="grab" aria-hidden="true"></div>${who}<button type="button" class="x" data-am="close" aria-label="Close">${ic("x")}</button><div class="am__sep" aria-hidden="true"></div><div role="menu" aria-labelledby="am-who">${items}</div></div>`
+        : `<div class="acct-menu am" id="acct-menu">${who}<div class="am__sep" aria-hidden="true"></div><div role="menu" aria-labelledby="am-who">${items}</div></div>`;
+    },
+    open(btn, last) {
+      this.close();
+      this.btn = btn;
+      const sheet = innerWidth < 600;
+      body.insertAdjacentHTML("beforeend", this.html(sheet));
+      const m = this.el;
+      if (sheet) {
+        this.inerted = [...body.children].filter((x) => x !== m && !x.matches("[data-am=scrim],script") && !x.inert);
+        this.inerted.forEach((x) => (x.inert = true));
+      } else {
+        const r = btn.getBoundingClientRect();
+        m.style.right = `${root.clientWidth - r.right}px`; m.style.top = `${r.bottom + 4}px`;
+      }
+      btn.setAttribute("aria-expanded", "true");
+      const it = this.items(); if (it.length) it[last ? it.length - 1 : 0].focus();
+    },
+    close(refocus) {
+      $$("#acct-menu,[data-am=scrim]").forEach((e) => e.remove());
+      this.inerted.forEach((x) => (x.inert = false)); this.inerted = [];
+      $$('[data-act="acct"]').forEach((b) => b.setAttribute("aria-expanded", "false"));
+      if (refocus && this.btn) this.btn.focus();
+    },
+    toggle(btn) { if (this.el) this.close(true); else this.open(btn); },
+    key(e) {
+      const it = this.items(), i = it.indexOf(document.activeElement);
+      const go = (k) => { e.preventDefault(); it[(k + it.length) % it.length].focus(); };
+      if (e.key === "ArrowDown") go(i + 1);
+      else if (e.key === "ArrowUp") go(i < 0 ? -1 : i - 1);
+      else if (e.key === "Home") go(0);
+      else if (e.key === "End") go(-1);
+      else if (e.key === "Escape") { e.preventDefault(); this.close(true); }
+      else if (e.key === "Tab") this.close(true);
+      else if (e.key === " " && i >= 0) { e.preventDefault(); it[i].click(); }
+      else if (e.key.length === 1 && /\S/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const ch = e.key.toLocaleLowerCase();
+        for (let k = 1; k <= it.length; k++) { const x = it[(i + k) % it.length]; if (x.textContent.trim().toLocaleLowerCase().startsWith(ch)) { e.preventDefault(); x.focus(); break; } }
+      }
+    },
   };
-  function toggleAcct(btn) {
-    const m = acctMenu(), host = btn.closest(".acct-wrap") || btn.parentElement;
-    if (m.parentElement !== host) host.append(m);
-    const open = m.hidden; m.hidden = !open;
-    $$('[data-act="acct"]').forEach((b) => b.setAttribute("aria-expanded", String(open && b === btn)));
-    if (open) { const f = $("a, button", m); if (f) f.focus(); }
+  function logout() {
+    Acct.close();
+    Session.signOut(); toast("Logged out");
+    const b = [...$$(".tb [data-in]"), ...$$(".tb [data-act=menu]")].find((x) => x.offsetParent !== null); if (b) b.focus();
   }
 
   const search = { input: null, alt: null, onSubmit: null, paint() { if (this.alt && this.alt.value !== this.input.value) this.alt.value = this.input.value; } };
@@ -269,8 +313,12 @@ window.NestShell = (function () {
   function wire() {
     document.addEventListener("click", (e) => {
       const t = e.target.closest("[data-act],[data-in],.thm,.sw,.lang button");
+      if (Acct.el && t && !t.matches('[data-act="acct"]')) Acct.close();
       if (!t) {
-        const m = $(".acct-menu"); if (m && !m.hidden && !e.target.closest(".acct-menu")) { m.hidden = true; $$('[data-act="acct"]').forEach((b) => b.setAttribute("aria-expanded", "false")); }
+        const am = e.target.closest("[data-am]");
+        if (am && am.dataset.am === "out") return logout();
+        if (am) return Acct.close(true);
+        if (Acct.el && (!e.target.closest("#acct-menu") || e.target.closest(".am__it"))) Acct.close();
         return;
       }
       if (t.matches("[data-in]")) { e.preventDefault(); Session.signIn(); toast(`Signed in as ${Session.user.name}`); return; }
@@ -284,13 +332,15 @@ window.NestShell = (function () {
       else if (a === "search") openSearch();
       else if (a === "search-close") closeSearch();
       else if (a === "search-clear") { search.input.value = ""; search.paint(); search.input.dispatchEvent(new Event("input", { bubbles: true })); if (search.alt) search.alt.focus(); }
-      else if (a === "acct") toggleAcct(t);
+      else if (a === "acct") Acct.toggle(t);
       else if (a === "logout") { Session.signOut(); toast("Logged out"); }
     });
     addEventListener("keydown", (e) => {
+      if (Acct.el) return Acct.key(e);
+      const ab = e.target.closest && e.target.closest('[data-act="acct"]');
+      if (ab && (e.key === "ArrowDown" || e.key === "ArrowUp")) { e.preventDefault(); return Acct.open(ab, e.key === "ArrowUp"); }
       if (e.key === "Escape") {
         if (body.classList.contains("m-drawer")) { closeDrawer(); return; }
-        const m = $(".acct-menu"); if (m && !m.hidden) { m.hidden = true; const b = $('[data-act="acct"][aria-expanded="true"]'); if (b) { b.setAttribute("aria-expanded", "false"); b.focus(); } }
       }
       if (e.key === "Tab" && body.classList.contains("m-drawer")) {
         const f = $$("#side a[href], #side button").filter((x) => x.offsetParent !== null);
@@ -312,7 +362,8 @@ window.NestShell = (function () {
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("nest:session", () => { render(); });
     addEventListener("nest:follows", () => sideMenu());
-    addEventListener("nest:me", () => { $$(".acct-menu").forEach((m) => m.remove()); render(); });
+    addEventListener("nest:me", () => { Acct.close(); render(); });
+    addEventListener("resize", () => { if (Acct.el) Acct.close(); });
     addEventListener("storage", (e) => {
       if (e.key === "nest-theme" || e.key === null) theme.paint(e.newValue === "dark" || (e.newValue !== "light" && darkMQ.matches));
       if (e.key === "nest-motion") motion.apply();
