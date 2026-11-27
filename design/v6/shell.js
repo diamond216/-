@@ -163,7 +163,16 @@ window.NestShell = (function () {
         <hr><h4>Rooms</h4>
         ${rooms.map((r) => `<a class="si" href="${Paths.page(`browse.html?room=${r}`)}"><span>${r}</span><small>${works.filter((w) => w.room === r).length}</small></a>`).join("")}
         <hr>${si("about", "About", Paths.home("#about"))}
-        <div class="drawer-extra"><hr><div style="display:flex;gap:10px;align-items:center;padding:4px 12px">${langGroup()}</div><div class="drow"><span id="thm-l">Dark theme</span><button type="button" class="sw" data-sw="theme" role="switch" aria-checked="${theme.dark}" aria-labelledby="thm-l"><i></i></button></div>${signed ? "" : `<div style="display:flex;gap:8px;padding:12px"><a class="btn btn--line" href="#" data-in style="flex:1">Log in</a><a class="btn btn--acc" href="#" data-in style="flex:1">Sign up</a></div>`}</div></div>`;
+        <div class="drawer-extra"><hr><div style="display:flex;gap:10px;align-items:center;padding:4px 12px">${langGroup()}</div><div class="drow"><span id="thm-l">Dark theme</span><button type="button" class="sw" data-sw="theme" role="switch" aria-checked="${theme.dark}" aria-labelledby="thm-l"><i></i></button></div>${signed ? "" : `<div style="display:flex;gap:8px;padding:12px"><a class="btn btn--line" href="#" data-in style="flex:1">Log in</a><a class="btn btn--acc" href="#" data-in style="flex:1">Sign up</a></div>`}</div>
+        <hr><section class="sfoot" tabindex="-1" aria-label="About Hamster Nest"><p><b>Hamster Nest</b><br><span>by Hamster Hub, a technology community</span></p><p class="sfoot__c">${CONTACTS.map(([k, v, href, ext]) => `<a href="${href}"${ext ? ' target="_blank" rel="noopener"' : ""} aria-label="${k}: ${v}${ext ? " (opens in a new tab)" : ""}">${k === "Phone" ? v : k}</a>`).join('<span aria-hidden="true"> · </span>')}</p><p><a href="${Paths.page("settings.html")}">Settings</a></p><p>Projects, names and numbers on this page are sample data.</p></section></div>`;
+  }
+  const CONTACTS = [["Facebook", "Hamster Hub", "https://www.facebook.com/", 1], ["LINE", "@smart-school", "https://line.me/R/ti/p/@smart-school", 1], ["Phone", "090-060-2555", "tel:0900602555", 0], ["Instagram", "hamsterhub_ig", "https://www.instagram.com/hamsterhub_ig", 1]];
+  function showAbout() {
+    const sf = $("#side .sfoot"), smooth = motion.on ? "smooth" : "auto";
+    if (!sf) return;
+    if (mode === "mini") { expanded = true; layout(); dispatchEvent(new Event("resize")); }
+    else if (mode !== "full" && !body.classList.contains("m-drawer")) openDrawer();
+    sf.scrollIntoView({ behavior: smooth, block: "end" }); sf.focus({ preventScroll: true });
   }
 
   function tabs() {
@@ -171,10 +180,6 @@ window.NestShell = (function () {
     t.innerHTML = `<a href="${Paths.page("browse.html")}"${page === "browse" ? ' aria-current="page"' : ""}>Browse</a><a href="${Paths.page("devlogs.html")}"${page === "devlogs" ? ' aria-current="page"' : ""}>Dev logs</a>`;
   }
 
-  function footer() {
-    const main = $("#main"); if (!main || $(".ft", main)) return;
-    main.insertAdjacentHTML("beforeend", `<footer class="ft" id="about"><div class="ft__brand">${MARK}<span><b>Hamster Nest</b><small>by Hamster Hub, a technology community</small></span></div><div class="ft__c"><h4>Contacts</h4><dl><dt>Facebook</dt><dd><a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook: Hamster Hub (opens in a new tab)">Hamster Hub</a></dd><dt>LINE</dt><dd><a href="https://line.me/R/ti/p/@smart-school" target="_blank" rel="noopener" aria-label="LINE: @smart-school (opens in a new tab)">@smart-school</a></dd><dt>Phone</dt><dd><a href="tel:0900602555" aria-label="Phone: 090-060-2555">090-060-2555</a></dd><dt>Instagram</dt><dd><a href="https://www.instagram.com/hamsterhub_ig" target="_blank" rel="noopener" aria-label="Instagram: hamsterhub_ig (opens in a new tab)">hamsterhub_ig</a></dd></dl></div><div class="ft__a"><a class="ft__set" href="${Paths.page("settings.html")}">${ic("gear")}Settings</a></div><p class="ft__note">Projects, names and numbers on this page are sample data.</p></footer>`);
-  }
 
   let mode = "";
   let expanded = null;
@@ -357,6 +362,9 @@ window.NestShell = (function () {
     const press = (el) => { if (!el) return; el.classList.remove("press"); void el.offsetWidth; el.classList.add("press"); clearTimeout(el._pt); el._pt = setTimeout(() => el.classList.remove("press"), 520); };
     const sideBtn = (t) => t && t.closest && t.closest("#side .si, #side .btn, #side .ibtn, #side .lang button, #side .sw");
     document.addEventListener("click", (e) => {
+      if (e.target.closest('#side a[href$="#about"]') && !e.ctrlKey && !e.metaKey && !e.shiftKey) { e.preventDefault(); showAbout(); }
+    });
+    document.addEventListener("click", (e) => {
       const f = e.target.closest('[data-act="follow"],[data-follow]'); if (!f) return;
       setTimeout(() => {
         const on = f.getAttribute("aria-pressed") === "true";
@@ -387,7 +395,8 @@ window.NestShell = (function () {
   }
 
   try { const l = localStorage.getItem("nest-lang"); if (l === "th") root.lang = "th"; } catch (e) {}
-  render(); footer(); motion.apply(); wire();
+  render(); motion.apply(); wire();
+  if (location.hash === "#about") addEventListener("load", () => setTimeout(showAbout, 0), { once: true });
   if (window.NestSession) window.NestSession.search = search;
   return { I, ic, MARK, SIL, avatar, face, Me, esc, wb, thai, Follows, theme, motion, lang, search, Paths, closeDrawer, layout };
 })();
