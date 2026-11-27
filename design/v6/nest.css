@@ -144,8 +144,9 @@ body.m-drawer.ph .drawer-extra{display:block;margin-top:24px}
 .ups{margin-top:32px}
 .ups h2{display:flex;align-items:baseline;gap:12px;margin:0 0 8px;font:500 18px/1.3 var(--f)}
 .cnt{font:400 13px/1 var(--mono);color:var(--t3)}
-.ups .upsbox{max-height:520px;overflow-y:auto;scrollbar-width:thin;padding-right:8px;-webkit-mask:linear-gradient(#000 88%,transparent)}
-.ups .upsbox:focus-visible{outline:2px solid var(--acc);outline-offset:4px;border-radius:8px}
+.ups .upsbox{max-height:520px;overflow-y:auto;scrollbar-width:none;padding-right:8px;-webkit-mask:linear-gradient(#000 88%,transparent)}
+.ups .upsbox::-webkit-scrollbar{display:none}
+.ups .upsbox:focus-visible{outline:2px solid var(--acc);outline-offset:4px;border-radius:8px;-webkit-mask:none;mask:none}
 .ups ol{list-style:none;margin:0 0 0 4px;padding:0 0 0 20px;border-left:2px solid var(--line)}
 .ups li{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;padding:12px 0 16px}
 .ups li::before{content:"";position:absolute;left:-26px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--page);border:2px solid var(--t3)}
