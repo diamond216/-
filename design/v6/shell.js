@@ -40,7 +40,8 @@ window.NestShell = (function () {
     out: '<path d="M14 5H6v14h8M10 12h10M17 9l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
   };
   const ic = (k, cls = "ico") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
-  const MARK = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="9" cy="10" r="6" fill="#F2A65A"/><circle cx="31" cy="10" r="6" fill="#F2A65A"/><circle cx="9" cy="10" r="3" fill="#F7C9A8"/><circle cx="31" cy="10" r="3" fill="#F7C9A8"/><ellipse cx="20" cy="22" rx="16" ry="14" fill="#F2A65A"/><ellipse cx="20" cy="27" rx="11" ry="9" fill="#FBEBDD"/><circle cx="14" cy="20" r="2" fill="#1A1A20"/><circle cx="26" cy="20" r="2" fill="#1A1A20"/><ellipse cx="20" cy="25" rx="2" ry="1.4" fill="#E8665A"/></svg>';
+  const IMG = new URL("img/", document.currentScript.src).href;
+  const MARK = `<img class="logo" src="${IMG}logo-mark.png" width="52" height="40" alt="" decoding="async">`;
   const SIL = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7" fill="var(--sil)"/><path d="M6 38c1.6-8.4 7.2-13 14-13s12.4 4.6 14 13z" fill="var(--sil)"/></svg>';
   const AVATAR_WORK = "cheek-pouch";
   const Me = {

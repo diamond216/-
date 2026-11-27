@@ -13,8 +13,9 @@ svg{display:block}
 .tb__l{display:flex;align-items:center;gap:4px}
 .ibtn{display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:8px;background:none;cursor:pointer;color:var(--t1);transition:background-color .15s var(--ease)}
 .ibtn:hover{background:var(--raised)}
-.mark{display:grid;place-items:center;width:40px;height:40px}
-.mark svg{width:32px;height:32px}
+.mark{display:grid;place-items:center;min-width:40px;height:40px}
+.logo{display:block;width:auto;height:36px}
+[data-theme=dark] .logo{filter:drop-shadow(0 0 .6px rgba(255,255,255,.7)) drop-shadow(0 0 3px rgba(255,255,255,.14))}
 .srch{display:flex;align-items:center;height:40px;border:1px solid transparent;border-radius:8px;background:var(--raised);padding:0 8px 0 12px;gap:8px;transition:background-color .15s var(--ease),border-color .15s var(--ease)}
 .srch:focus-within{background:var(--card);border-color:var(--t1)}
 .srch input{flex:1;min-width:0;border:0;outline:0;background:none;font:400 15px/1 var(--f);color:var(--t1)}
@@ -515,7 +516,7 @@ body.ph .pc__follow .fl{position:absolute;width:1px;height:1px;overflow:hidden;c
 .pc__follow{justify-content:center}.pc__follow .fl{display:block;margin:0;line-height:1}
 .tb .mark{display:flex;width:auto;gap:8px;padding:0 8px 0 4px;border-radius:8px}
 .mark__w{font:600 17px/1 var(--disp);letter-spacing:-.01em;color:var(--t1);white-space:nowrap}
-@media (max-width:599px){.mark__w{display:none}.tb .mark{padding:0;width:40px;justify-content:center}}
+@media (max-width:599px){.mark__w{display:none}.tb .mark{padding:0 2px;width:auto;justify-content:center}}
 #side .press{outline:2px solid var(--acc);outline-offset:2px}
 @keyframes press-ring{0%{outline-color:var(--acc);outline-offset:0}60%{outline-color:var(--acc);outline-offset:3px}100%{outline-color:transparent;outline-offset:5px}}
 @media (prefers-reduced-motion:no-preference){html:not(.calm) #side .press{animation:press-ring .5s var(--ease) forwards}}
